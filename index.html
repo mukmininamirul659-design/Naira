@@ -247,18 +247,56 @@
         behavior: "smooth"
       });
     }
-    function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
-      addMessage(text, "user-message");
-      input.value = "";
-      setTimeout(() => {
-        addMessage(
-          "Naira terima mesej Tuan ❤️ Sambungan AI sebenar akan kita masukkan selepas ini.",
-          "naira-message"
-        );
-      }, 600);
+    async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user-message");
+  input.value = "";
+
+  const loading = document.createElement("div");
+  loading.className = "message naira-message";
+  loading.textContent = "Naira sedang berfikir... ❤️";
+  chat.appendChild(loading);
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: text
+      })
+    });
+
+    const data = await response.json();
+
+    loading.remove();
+
+    if (!response.ok) {
+      addMessage(
+        data.error || "Maaf Tuan, Naira mengalami masalah.",
+        "naira-message"
+      );
+      return;
     }
+
+    addMessage(
+      data.reply || "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+      "naira-message"
+    );
+
+  } catch (error) {
+    console.error(error);
+    loading.remove();
+
+    addMessage(
+      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
+      "naira-message"
+    );
+  }
+}
     sendButton.addEventListener("click", sendMessage);
     input.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
