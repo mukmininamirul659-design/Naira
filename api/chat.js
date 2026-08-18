@@ -85,8 +85,15 @@ if (!response.ok) {
 }
 
     return res.status(200).json({
-      reply: data.output_text || "Maaf Tuan, Naira tak dapat menghasilkan jawapan."
-    });
+  reply:
+    data.output
+      ?.filter(item => item.type === "message")
+      ?.flatMap(item => item.content || [])
+      ?.filter(content => content.type === "output_text")
+      ?.map(content => content.text)
+      ?.join("\n")
+      || "Maaf Tuan, Naira tak dapat menghasilkan jawapan."
+});
 
   } catch (error) {
     console.error("Server error:", error);
