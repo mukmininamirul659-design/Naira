@@ -74,8 +74,6 @@ Jawab terus kepada mesej pengguna.
 
     const data = await response.json();
 
-console.log("OpenAI response:", JSON.stringify(data));
-
 if (!response.ok) {
   console.error("OpenAI API error:", data);
 
