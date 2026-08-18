@@ -74,13 +74,15 @@ Jawab terus kepada mesej pengguna.
 
     const data = await response.json();
 
-    if (!response.ok) {
-      console.error("OpenAI API error:", data);
+console.log("OpenAI response:", JSON.stringify(data));
 
-      return res.status(response.status).json({
-        error: "Naira gagal mendapatkan jawapan daripada AI."
-      });
-    }
+if (!response.ok) {
+  console.error("OpenAI API error:", data);
+
+  return res.status(response.status).json({
+    error: "Naira gagal mendapatkan jawapan daripada AI."
+  });
+}
 
     return res.status(200).json({
       reply: data.output_text || "Maaf Tuan, Naira tak dapat menghasilkan jawapan."
