@@ -252,7 +252,21 @@
   if (!text) return;
 
   addMessage(text, "user-message");
-  input.value = "";
+input.value = "";
+
+await fetch("https://naira-tawny.vercel.app/api/comments", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    comment: text
+  })
+});
+
+const loading = document.createElement("div");
+loading.className = "message naira-message";
+loading.textContent = "Naira sedang berfikir... ❤️";
 
   const loading = document.createElement("div");
   loading.className = "message naira-message";
