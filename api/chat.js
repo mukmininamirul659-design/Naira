@@ -484,24 +484,27 @@ Tulis terus sebagai fakta.
     // ------------------------------------------------------------
     // COLOR PREFERENCE
     // ------------------------------------------------------------
-    if (!memory) {
-      const colorMatch = lowerMessage.match(
-        /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
-      );
+    // ------------------------------------------------------------
+// COLOR PREFERENCE
+// ------------------------------------------------------------
+if (!memory) {
+  const colorMatch = lowerMessage.match(
+    /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
+  );
 
-      if (colorMatch) {
-        const color =
-          colorMatch[1].trim();
+  if (colorMatch) {
+    const color =
+      colorMatch[1].trim();
 
-        memory = {
-          text:
-            `Warna kegemaran Tuan ialah ${color}.`,
-          category: "preference",
-          subcategory: "color",
-          importance: 3
-        };
-      }
-    }
+    memory = {
+      text:
+        `Warna kegemaran Tuan ialah ${color}.`,
+      category: "preference",
+      subcategory: "color",
+      importance: 3
+    };
+  }
+}
 
     // ------------------------------------------------------------
     // SIMPLE "SAYA SUKA ..."
