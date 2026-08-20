@@ -5,10 +5,12 @@ export default async function handler(req, res) {
     "Access-Control-Allow-Origin",
     "https://mukmininamirul659-design.github.io"
   );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, OPTIONS"
   );
+
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
@@ -25,7 +27,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { action, memory, category, importance } = req.body || {};
+    const {
+      action,
+      memory,
+      category,
+      subcategory,
+      importance
+    } = req.body || {};
 
     const sql = neon(process.env.DATABASE_URL);
 
@@ -37,35 +45,87 @@ export default async function handler(req, res) {
         });
       }
 
-      await sql.query(
+      const result = await sql.query(
         `INSERT INTO naira_memory
-        (memory, category, importance)
-        VALUES ($1, $2, $3)`,
+        (memory, category, subcategory, importance)
+        VALUES ($1, $2, $3, $4)
+        RETURNING id, memory, category, subcategory, importance, created_at`,
         [
           memory.trim(),
           category || "general",
+          subcategory || "general",
           importance || 1
         ]
       );
 
       return res.status(200).json({
         success: true,
-        message: "Memory berjaya disimpan."
+        message: "Memory berjaya disimpan.",
+        memory: result[0]
       });
     }
 
-    // SEARCH MEMORY
-    if (action === "search") {
+    // GET ALL MEMORIES
+    if (action === "list") {
       const result = await sql.query(
-        `SELECT id, memory, category, importance, created_at
+        `SELECT
+          id,
+          memory,
+          category,
+          subcategory,
+          importance,
+          created_at,
+          updated_at
          FROM naira_memory
-         ORDER BY importance DESC, created_at DESC
-         LIMIT 20`
+         ORDER BY importance DESC, created_at DESC`
       );
 
       return res.status(200).json({
         success: true,
         memories: result
+      });
+    }
+
+    // SEARCH MEMORIES BY CATEGORY
+    if (action === "category") {
+      const result = await sql.query(
+        `SELECT
+          id,
+          memory,
+          category,
+          subcategory,
+          importance,
+          created_at,
+          updated_at
+         FROM naira_memory
+         WHERE category = $1
+         ORDER BY importance DESC, created_at DESC`,
+        [category || "general"]
+      );
+
+      return res.status(200).json({
+        success: true,
+        memories: result
+      });
+    }
+
+    // DELETE MEMORY
+    if (action === "delete") {
+      if (!memory) {
+        return res.status(400).json({
+          error: "ID memory diperlukan."
+        });
+      }
+
+      await sql.query(
+        `DELETE FROM naira_memory
+         WHERE id = $1`,
+        [memory]
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Memory berjaya dipadam."
       });
     }
 
