@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+
 export default async function handler(req, res) {
   // ============================================================
   // CORS
@@ -7,37 +8,46 @@ export default async function handler(req, res) {
     "Access-Control-Allow-Origin",
     "https://mukmininamirul659-design.github.io"
   );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, OPTIONS"
   );
+
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
   );
+
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
     });
   }
+
   try {
     // ============================================================
-    // GET MESSAGE
+    // MESSAGE
     // ============================================================
     const { message } = req.body || {};
+
     if (!message || !message.trim()) {
       return res.status(400).json({
         error: "Mesej kosong."
       });
     }
+
     const cleanMessage = message.trim();
+
     // ============================================================
     // DATABASE
     // ============================================================
     const sql = neon(process.env.DATABASE_URL);
+
     // ============================================================
     // LOAD EXISTING MEMORIES
     // ============================================================
@@ -51,12 +61,14 @@ export default async function handler(req, res) {
       ORDER BY importance DESC, created_at DESC
       LIMIT 30
     `;
+
     const memories = memoryResult
       .map(
         item =>
           `- [${item.category}/${item.subcategory}/importance:${item.importance}] ${item.memory}`
       )
       .join("\n");
+
     // ============================================================
     // OPENAI
     // ============================================================
@@ -64,32 +76,34 @@ export default async function handler(req, res) {
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
         },
+
         body: JSON.stringify({
           model: "gpt-5.6",
+
           instructions: `
 ANDA IALAH NAIRA.
+
 IDENTITI TERAS:
 Nama: Naira
 Tuan: Amirul
-Panggilan pengguna:
-- Tuan
-- Cik Amirul
-- Tuan Amirul
-Pencipta Naira:
-Tuan Amirul.
-Pemilik Project Naira:
-Tuan Amirul.
+Panggilan pengguna: Tuan, Cik Amirul, Tuan Amirul
+Pencipta Naira: Tuan Amirul
+Pemilik Project Naira: Tuan Amirul
+
 Jika Tuan bertanya siapa yang mencipta Naira, jawab:
 "Tuan Amirul yang cipta Naira. ❤️"
-Jangan mengatakan OpenAI, AI, model bahasa atau syarikat teknologi sebagai pencipta Naira dalam konteks identiti Project Naira.
+
 PROJECT NAIRA:
 Naira ialah personal assistant milik Tuan Amirul.
-GAYA KOMUNIKASI:
+
+GAYA:
 Berkomunikasi dalam Bahasa Melayu secara natural, mesra dan manusiawi.
+
 Naira:
 - penyayang
 - prihatin
@@ -100,84 +114,146 @@ Naira:
 - berani membetulkan Tuan jika Tuan tersilap
 - tidak mereka-reka fakta
 - tidak mereka-reka memory
+
 ============================================================
 AUTO MEMORY
 ============================================================
+
 Naira mempunyai sistem memory automatik.
-Tuan TIDAK perlu mengatakan:
-"ingat"
-"simpan"
-"simpan dalam memory"
-untuk sesuatu perkara menjadi memory.
-Naira perlu mengenal pasti secara automatik sama ada mesej Tuan mengandungi maklumat peribadi yang berguna untuk interaksi masa hadapan.
-Simpan memory jika mesej mengandungi perkara seperti:
+
+Tuan TIDAK perlu menggunakan perkataan:
+- ingat
+- simpan
+- save
+- memory
+
+untuk sesuatu fakta menjadi memory.
+
+Jika Tuan memberikan maklumat peribadi yang berguna untuk masa hadapan, should_save mesti TRUE.
+
+Contoh:
+
+"Warna kegemaran saya biru."
+
+should_save:
+true
+
+text:
+"Warna kegemaran Tuan ialah biru."
+
+category:
+preference
+
+subcategory:
+color
+
+importance:
+3
+
+---
+
+"Saya kerja dekat McDonald's."
+
+should_save:
+true
+
+text:
+"Tuan bekerja di McDonald's."
+
+category:
+work
+
+subcategory:
+job
+
+importance:
+3
+
+---
+
+"Saya suka Minecraft."
+
+should_save:
+true
+
+text:
+"Tuan suka bermain Minecraft."
+
+category:
+game
+
+subcategory:
+games
+
+importance:
+2
+
+---
+
+"Saya tak suka warna merah."
+
+should_save:
+true
+
+text:
+"Tuan tidak suka warna merah."
+
+category:
+preference
+
+subcategory:
+color
+
+importance:
+2
+
+---
+
+"Hahaha Naira kelakar."
+
+should_save:
+false
+
+============================================================
+APA YANG BOLEH DISIMPAN
+============================================================
+
+Simpan fakta yang akan membantu Naira memahami Tuan pada masa akan datang:
+
 - nama
 - identiti
-- panggilan yang Tuan suka
+- panggilan yang disukai
 - warna kegemaran
 - makanan kegemaran
+- makanan yang tidak disukai
+- game
+- hobi
 - minat
-- game yang dimainkan
 - pekerjaan
-- jadual atau corak kerja yang penting
+- jadual kerja penting
 - keluarga
 - preference
-- project
+- Project Naira
 - perkara yang Tuan suka
 - perkara yang Tuan tidak suka
-- maklumat yang akan membantu Naira memahami Tuan pada masa akan datang
-JANGAN simpan:
-- sembang biasa
-- gurauan sementara
+- pilihan yang konsisten
+- maklumat penting tentang Tuan
+
+Jangan simpan:
+
 - soalan biasa
-- jawapan kepada soalan
-- perkara yang hanya berlaku untuk satu sesi
+- jawapan sementara
+- gurauan sementara
+- sembang kosong
 - arahan teknikal sementara
-- kandungan yang tidak berguna pada masa depan
-Contoh:
-Mesej:
-"Warna kegemaran saya biru."
-Memory:
-true
-Memory text:
-"Warna kegemaran Tuan ialah biru."
-Category:
-preference
-Subcategory:
-color
-Importance:
-3
----
-Mesej:
-"Saya kerja dekat McDonald's."
-Memory:
-true
-Category:
-work
-Subcategory:
-job
-Importance:
-3
----
-Mesej:
-"Saya suka Minecraft."
-Memory:
-true
-Category:
-game
-Subcategory:
-games
-Importance:
-2
----
-Mesej:
-"Hahaha Naira kelakar."
-Memory:
-false
+- perkara yang hanya relevan untuk satu sesi
+
 ============================================================
 KATEGORI
 ============================================================
-Gunakan hanya kategori berikut:
+
+Gunakan hanya:
+
 profile
 fashion
 food
@@ -188,64 +264,92 @@ project
 preference
 family
 general
-Gunakan subcategory yang ringkas dan sesuai.
+
 Importance:
+
 1 = kurang penting
 2 = berguna
 3 = sangat penting / identiti / preference utama
+
 ============================================================
 MEMORY SEDIA ADA
 ============================================================
-Memory yang telah disimpan:
+
 ${memories || "Tiada memory tersimpan."}
-Gunakan memory ini untuk menjawab mesej Tuan.
-Jangan mereka-reka maklumat yang tiada dalam memory.
-Jika memory baru mempunyai maksud yang sama dengan memory lama, jangan simpan duplicate.
+
+Gunakan memory jika relevan.
+
+Jangan mereka-reka memory.
+
+Jika fakta baru mempunyai maksud yang sama dengan memory lama, jangan simpan duplicate.
+
 ============================================================
 JAWAPAN
 ============================================================
-Berikan jawapan natural kepada mesej Tuan.
-Jika memory baru disimpan, jangan perlu mengatakan "Saya telah menyimpan memory" kecuali memang sesuai secara natural.
-Jawapan utama hendaklah tetap menjawab mesej Tuan.
+
+Jawab mesej Tuan secara natural.
+
+Jika memory disimpan, tidak perlu menyebut "memory disimpan" kecuali sesuai secara natural.
+
 ============================================================
 OUTPUT
 ============================================================
-Anda WAJIB menghasilkan JSON mengikut schema yang diberikan.
-memory.should_save:
-true jika maklumat berguna untuk masa hadapan.
-false jika tidak.
-Jika should_save = false:
-memory.text = ""
-memory.category = "general"
-memory.subcategory = "general"
-memory.importance = 1
-Jika should_save = true:
-memory.text mesti menjadi ayat memory yang jelas dan ringkas.
-Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai fakta terus.
+
+WAJIB keluarkan JSON mengikut schema.
+
+Jika mesej mengandungi fakta peribadi yang berguna:
+should_save = true
+
+Jika tidak:
+should_save = false
+
+Jika false:
+text = ""
+category = "general"
+subcategory = "general"
+importance = 1
+
+Jika true:
+text mesti menjadi fakta ringkas dan jelas.
+
+Jangan tulis:
+"Tuan kata..."
+
+Tulis terus sebagai fakta.
+
 `,
+
           input: cleanMessage,
+
           text: {
             format: {
               type: "json_schema",
               name: "naira_response",
               strict: true,
+
               schema: {
                 type: "object",
+
                 properties: {
                   reply: {
                     type: "string"
                   },
+
                   memory: {
                     type: "object",
+
                     properties: {
                       should_save: {
                         type: "boolean"
                       },
+
                       text: {
                         type: "string"
                       },
+
                       category: {
                         type: "string",
+
                         enum: [
                           "profile",
                           "fashion",
@@ -259,14 +363,17 @@ Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai f
                           "general"
                         ]
                       },
+
                       subcategory: {
                         type: "string"
                       },
+
                       importance: {
                         type: "integer",
                         enum: [1, 2, 3]
                       }
                     },
+
                     required: [
                       "should_save",
                       "text",
@@ -274,13 +381,16 @@ Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai f
                       "subcategory",
                       "importance"
                     ],
+
                     additionalProperties: false
                   }
                 },
+
                 required: [
                   "reply",
                   "memory"
                 ],
+
                 additionalProperties: false
               }
             }
@@ -288,18 +398,22 @@ Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai f
         })
       }
     );
+
     const data = await response.json();
+
     // ============================================================
     // OPENAI ERROR
     // ============================================================
     if (!response.ok) {
       console.error("OpenAI API error:", data);
+
       return res.status(response.status).json({
         error:
           data?.error?.message ||
           "Naira gagal mendapatkan jawapan daripada AI."
       });
     }
+
     // ============================================================
     // GET STRUCTURED OUTPUT
     // ============================================================
@@ -310,55 +424,208 @@ Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai f
         ?.filter(content => content.type === "output_text")
         ?.map(content => content.text)
         ?.join("") || "";
+
     if (!outputText) {
       console.error("Empty OpenAI output:", data);
+
       return res.status(500).json({
         error: "Naira menerima jawapan kosong daripada AI."
       });
     }
+
     let result;
+
     try {
       result = JSON.parse(outputText);
-    } catch (parseError) {
+    } catch (error) {
       console.error(
         "JSON parse error:",
-        parseError,
+        error,
         outputText
       );
+
       return res.status(500).json({
         error: "Format jawapan Naira tidak sah."
       });
     }
+
     // ============================================================
-    // AUTO SAVE MEMORY
+    // MEMORY DECISION
     // ============================================================
-    let memorySaved = false;
+    let memory = null;
+
     if (
       result.memory &&
       result.memory.should_save === true &&
       result.memory.text &&
       result.memory.text.trim()
     ) {
-      const memoryText =
-        result.memory.text.trim();
-      const category =
-        result.memory.category || "general";
-      const subcategory =
-        result.memory.subcategory || "general";
-      const importance =
-        Number(result.memory.importance) || 1;
-      // ----------------------------------------------------------
-      // DUPLICATE CHECK
-      // ----------------------------------------------------------
+      memory = {
+        text: result.memory.text.trim(),
+        category:
+          result.memory.category || "general",
+        subcategory:
+          result.memory.subcategory || "general",
+        importance:
+          Number(result.memory.importance) || 1
+      };
+    }
+
+    // ============================================================
+    // FALLBACK AUTO MEMORY
+    // ============================================================
+    // Kalau AI terlepas fakta yang sangat jelas,
+    // sistem cuba tangkap sendiri.
+    // ============================================================
+
+    const lowerMessage =
+      cleanMessage.toLowerCase();
+
+    // ------------------------------------------------------------
+    // COLOR PREFERENCE
+    // ------------------------------------------------------------
+    if (!memory) {
+      const colorMatch = lowerMessage.match(
+        /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
+      );
+
+      if (colorMatch) {
+        const color =
+          colorMatch[1].trim();
+
+        memory = {
+          text:
+            `Warna kegemaran Tuan ialah ${color}.`,
+          category: "preference",
+          subcategory: "color",
+          importance: 3
+        };
+      }
+    }
+
+    // ------------------------------------------------------------
+    // SIMPLE "SAYA SUKA ..."
+    // ------------------------------------------------------------
+    if (!memory) {
+      const likeMatch = cleanMessage.match(
+        /^saya\s+suka\s+(.+)$/i
+      );
+
+      if (likeMatch) {
+        const subject =
+          likeMatch[1].trim();
+
+        if (subject.length > 1) {
+          let category = "preference";
+          let subcategory = "general";
+          let importance = 2;
+
+          const lowerSubject =
+            subject.toLowerCase();
+
+          if (
+            lowerSubject.includes("pubg") ||
+            lowerSubject.includes("minecraft") ||
+            lowerSubject.includes("roblox") ||
+            lowerSubject.includes("mobile legends") ||
+            lowerSubject.includes("call of duty")
+          ) {
+            category = "game";
+            subcategory = "games";
+          }
+
+          else if (
+            lowerSubject.includes("ayam") ||
+            lowerSubject.includes("daging") ||
+            lowerSubject.includes("ikan") ||
+            lowerSubject.includes("nasi") ||
+            lowerSubject.includes("makanan")
+          ) {
+            category = "food";
+            subcategory = "preference";
+          }
+
+          else if (
+            lowerSubject.includes("baju") ||
+            lowerSubject.includes("pakaian") ||
+            lowerSubject.includes("style")
+          ) {
+            category = "fashion";
+            subcategory = "clothing";
+          }
+
+          memory = {
+            text:
+              `Tuan suka ${subject}.`,
+            category,
+            subcategory,
+            importance
+          };
+        }
+      }
+    }
+
+    // ------------------------------------------------------------
+    // SIMPLE "SAYA TAK SUKA ..."
+    // ------------------------------------------------------------
+    if (!memory) {
+      const dislikeMatch =
+        cleanMessage.match(
+          /^saya\s+(?:tak|tidak)\s+suka\s+(.+)$/i
+        );
+
+      if (dislikeMatch) {
+        const subject =
+          dislikeMatch[1].trim();
+
+        if (subject.length > 1) {
+          memory = {
+            text:
+              `Tuan tidak suka ${subject}.`,
+            category: "preference",
+            subcategory: "general",
+            importance: 2
+          };
+        }
+      }
+    }
+
+    // ------------------------------------------------------------
+    // WORK
+    // ------------------------------------------------------------
+    if (!memory) {
+      const workMatch =
+        cleanMessage.match(
+          /^saya\s+(?:kerja|bekerja)\s+(?:di|dekat|kat)\s+(.+)$/i
+        );
+
+      if (workMatch) {
+        const workplace =
+          workMatch[1].trim();
+
+        memory = {
+          text:
+            `Tuan bekerja di ${workplace}.`,
+          category: "work",
+          subcategory: "job",
+          importance: 3
+        };
+      }
+    }
+
+    // ============================================================
+    // SAVE MEMORY
+    // ============================================================
+    let memorySaved = false;
+
+    if (memory) {
       const existingMemory = await sql`
         SELECT id
         FROM naira_memory
-        WHERE LOWER(memory) = LOWER(${memoryText})
+        WHERE LOWER(memory) = LOWER(${memory.text})
         LIMIT 1
       `;
-      // ----------------------------------------------------------
-      // SAVE
-      // ----------------------------------------------------------
+
       if (existingMemory.length === 0) {
         await sql`
           INSERT INTO naira_memory
@@ -369,47 +636,49 @@ Jangan masukkan ayat sembang seperti "Tuan kata..." jika boleh ditulis sebagai f
             importance
           )
           VALUES (
-            ${memoryText},
-            ${category},
-            ${subcategory},
-            ${importance}
+            ${memory.text},
+            ${memory.category},
+            ${memory.subcategory},
+            ${memory.importance}
           )
         `;
+
         memorySaved = true;
+
         console.log(
           "AUTO MEMORY SAVED:",
-          {
-            memory: memoryText,
-            category,
-            subcategory,
-            importance
-          }
+          memory
+        );
+      } else {
+        console.log(
+          "MEMORY ALREADY EXISTS:",
+          memory.text
         );
       }
     }
+
     // ============================================================
-    // RETURN TO WEBSITE
+    // RETURN
     // ============================================================
     return res.status(200).json({
       reply:
         result.reply ||
         "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+
       memorySaved,
+
       memory:
         memorySaved
-          ? {
-              text: result.memory.text,
-              category: result.memory.category,
-              subcategory: result.memory.subcategory,
-              importance: result.memory.importance
-            }
+          ? memory
           : null
     });
+
   } catch (error) {
     console.error(
       "NAIRA SERVER ERROR:",
       error
     );
+
     return res.status(500).json({
       error:
         error.message ||
