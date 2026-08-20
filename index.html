@@ -185,8 +185,10 @@
     }
     .mic:active,
     .send:active,
-    .memory-button:active {
-      transform: scale(.92);
+    .memory-button:active,
+    .memory-add:active,
+    .refresh-button:active {
+      transform: scale(.96);
     }
     .footer {
       text-align: center;
@@ -200,9 +202,9 @@
       position: fixed;
       inset: 0;
       z-index: 1000;
-      background: rgba(5, 6, 10, .82);
-      backdrop-filter: blur(14px);
-      padding: 20px;
+      background: rgba(5, 6, 10, .86);
+      backdrop-filter: blur(16px);
+      padding: 18px;
       overflow-y: auto;
     }
     .memory-panel.active {
@@ -215,22 +217,27 @@
       background:
         linear-gradient(
           145deg,
-          rgba(31, 34, 50, .98),
-          rgba(13, 15, 24, .98)
+          rgba(31, 34, 50, .99),
+          rgba(13, 15, 24, .99)
         );
       border: 1px solid rgba(255,255,255,.09);
       border-radius: 24px;
-      padding: 20px;
+      padding: 18px;
       box-shadow: 0 20px 60px rgba(0,0,0,.5);
     }
     .memory-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .memory-header h2 {
       font-size: 22px;
+    }
+    .memory-header p {
+      color: #858b9c;
+      font-size: 11px;
+      margin-top: 4px;
     }
     .close-memory {
       width: 40px;
@@ -239,13 +246,54 @@
       background: rgba(255,255,255,.08);
       font-size: 18px;
     }
+    .memory-tools {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+    .search-box {
+      flex: 1;
+      padding: 13px 14px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.08);
+      outline: none;
+      background: rgba(255,255,255,.06);
+      color: white;
+      font-size: 14px;
+    }
+    .search-box::placeholder {
+      color: #777d8d;
+    }
+    .refresh-button {
+      width: 47px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.08);
+      font-size: 17px;
+    }
+    .category-filter {
+      width: 100%;
+      padding: 12px 13px;
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.08);
+      outline: none;
+      background: #1b1e2b;
+      color: white;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
     .memory-add {
       width: 100%;
       padding: 14px;
       border-radius: 15px;
       background: linear-gradient(135deg, #8b5cf6, #4f46e5);
       font-size: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+    }
+    .memory-status {
+      text-align: center;
+      color: #7f8799;
+      font-size: 12px;
+      margin-bottom: 14px;
     }
     .memory-category {
       margin-bottom: 22px;
@@ -253,27 +301,34 @@
     .category-title {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
       font-size: 15px;
       margin-bottom: 9px;
       color: #cfd2dc;
+    }
+    .category-count {
+      color: #777d8d;
+      font-size: 11px;
     }
     .memory-card {
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.07);
       border-radius: 15px;
-      padding: 13px;
+      padding: 14px;
       margin-bottom: 8px;
     }
     .memory-text {
       font-size: 14px;
       line-height: 1.5;
-      margin-bottom: 10px;
+      margin-bottom: 9px;
     }
     .memory-meta {
       font-size: 11px;
       color: #858b9c;
-      margin-bottom: 10px;
+      margin-bottom: 11px;
+    }
+    .stars {
+      letter-spacing: 1px;
     }
     .memory-actions {
       display: flex;
@@ -281,7 +336,7 @@
     }
     .memory-actions button {
       flex: 1;
-      padding: 9px;
+      padding: 10px;
       border-radius: 10px;
       font-size: 12px;
       background: rgba(255,255,255,.08);
@@ -294,13 +349,87 @@
       text-align: center;
       color: #777d8d;
       font-size: 13px;
-      padding: 20px;
+      padding: 30px 15px;
     }
-    .memory-status {
-      text-align: center;
-      color: #7f8799;
+    /* MEMORY FORM */
+    .memory-form-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+      overflow-y: auto;
+    }
+    .memory-form-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .memory-form {
+      width: 100%;
+      max-width: 520px;
+      background: #171a26;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 25px 70px rgba(0,0,0,.55);
+    }
+    .memory-form h3 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    .memory-form-subtitle {
+      color: #858b9c;
       font-size: 12px;
-      margin-bottom: 15px;
+      margin-bottom: 18px;
+    }
+    .form-group {
+      margin-bottom: 13px;
+    }
+    .form-group label {
+      display: block;
+      color: #aeb3c1;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      color: white;
+      outline: none;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    .form-group textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+    .form-group select {
+      background: #1b1e2b;
+    }
+    .form-actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 18px;
+    }
+    .form-actions button {
+      flex: 1;
+      padding: 13px;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+    .cancel-button {
+      background: rgba(255,255,255,.08);
+    }
+    .save-button {
+      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
     }
     @media (max-height: 700px) {
       .welcome {
@@ -322,7 +451,8 @@
         <div>
           <h1>Naira</h1>
           <div class="status">
-            <span class="online">●</span> Personal Assistant
+            <span class="online">●</span>
+            Personal Assistant
           </div>
         </div>
       </div>
@@ -339,7 +469,10 @@
       <h2>Hai, Cik Amirul 👋</h2>
       <p>Naira ada dengan Tuan.</p>
     </section>
-    <section class="chat" id="chat">
+    <section
+      class="chat"
+      id="chat"
+    >
       <div class="message naira-message">
         Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
       </div>
@@ -377,7 +510,12 @@
   >
     <div class="memory-box">
       <div class="memory-header">
-        <h2>🧠 Memory Center</h2>
+        <div>
+          <h2>🧠 Memory Center</h2>
+          <p>
+            Ingatan yang Naira simpan tentang Tuan
+          </p>
+        </div>
         <button
           class="close-memory"
           id="closeMemory"
@@ -385,6 +523,59 @@
           ✕
         </button>
       </div>
+      <div class="memory-tools">
+        <input
+          class="search-box"
+          id="memorySearch"
+          type="search"
+          placeholder="🔍 Cari memory..."
+          autocomplete="off"
+        >
+        <button
+          class="refresh-button"
+          id="refreshMemory"
+        >
+          🔄
+        </button>
+      </div>
+      <select
+        class="category-filter"
+        id="categoryFilter"
+      >
+        <option value="all">
+          📂 Semua kategori
+        </option>
+        <option value="profile">
+          👤 Profile
+        </option>
+        <option value="fashion">
+          👕 Fashion
+        </option>
+        <option value="food">
+          🍔 Food
+        </option>
+        <option value="game">
+          🎮 Game
+        </option>
+        <option value="hobby">
+          🎨 Hobby
+        </option>
+        <option value="work">
+          💼 Work
+        </option>
+        <option value="project">
+          🚀 Project
+        </option>
+        <option value="preference">
+          ❤️ Preference
+        </option>
+        <option value="family">
+          👨‍👩‍👧 Family
+        </option>
+        <option value="general">
+          📁 General
+        </option>
+      </select>
       <div
         class="memory-status"
         id="memoryStatus"
@@ -400,6 +591,86 @@
       <div id="memoryList"></div>
     </div>
   </div>
+  <!-- MEMORY FORM -->
+  <div
+    class="memory-form-overlay"
+    id="memoryFormOverlay"
+  >
+    <div class="memory-form">
+      <h3 id="memoryFormTitle">
+        ➕ Tambah Memory
+      </h3>
+      <div class="memory-form-subtitle">
+        Tuan boleh kawal sendiri apa yang Naira simpan.
+      </div>
+      <div class="form-group">
+        <label for="memoryText">
+          Memory
+        </label>
+        <textarea
+          id="memoryText"
+          placeholder="Contoh: Tuan suka warna biru."
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="memoryCategory">
+          Kategori
+        </label>
+        <select id="memoryCategory">
+          <option value="profile">👤 Profile</option>
+          <option value="fashion">👕 Fashion</option>
+          <option value="food">🍔 Food</option>
+          <option value="game">🎮 Game</option>
+          <option value="hobby">🎨 Hobby</option>
+          <option value="work">💼 Work</option>
+          <option value="project">🚀 Project</option>
+          <option value="preference">❤️ Preference</option>
+          <option value="family">👨‍👩‍👧 Family</option>
+          <option value="general">📁 General</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="memorySubcategory">
+          Subkategori
+        </label>
+        <input
+          id="memorySubcategory"
+          type="text"
+          placeholder="Contoh: color"
+        >
+      </div>
+      <div class="form-group">
+        <label for="memoryImportance">
+          Importance
+        </label>
+        <select id="memoryImportance">
+          <option value="1">
+            ⭐ Biasa
+          </option>
+          <option value="2" selected>
+            ⭐⭐ Penting
+          </option>
+          <option value="3">
+            ⭐⭐⭐ Sangat penting
+          </option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button
+          class="cancel-button"
+          id="cancelMemory"
+        >
+          Batal
+        </button>
+        <button
+          class="save-button"
+          id="saveMemory"
+        >
+          💾 Simpan
+        </button>
+      </div>
+    </div>
+  </div>
   <script>
     const API_BASE =
       "https://naira-tawny.vercel.app";
@@ -407,23 +678,41 @@
        CHAT
     ================================= */
     const input =
-      document.getElementById("messageInput");
+      document.getElementById(
+        "messageInput"
+      );
     const sendButton =
-      document.getElementById("sendButton");
+      document.getElementById(
+        "sendButton"
+      );
     const chat =
-      document.getElementById("chat");
+      document.getElementById(
+        "chat"
+      );
     const micButton =
-      document.getElementById("micButton");
-    function addMessage(text, type) {
+      document.getElementById(
+        "micButton"
+      );
+    function addMessage(
+      text,
+      type
+    ) {
       const message =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
       message.className =
         "message " + type;
-      message.textContent = text;
-      chat.appendChild(message);
+      message.textContent =
+        text;
+      chat.appendChild(
+        message
+      );
       window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: "smooth"
+        top:
+          document.body.scrollHeight,
+        behavior:
+          "smooth"
       });
     }
     async function sendMessage() {
@@ -436,25 +725,33 @@
       );
       input.value = "";
       const loading =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
       loading.className =
         "message naira-message";
       loading.textContent =
         "Naira sedang berfikir... ❤️";
-      chat.appendChild(loading);
+      chat.appendChild(
+        loading
+      );
       try {
         const response =
           await fetch(
-            API_BASE + "/api/chat",
+            API_BASE +
+            "/api/chat",
             {
-              method: "POST",
+              method:
+                "POST",
               headers: {
                 "Content-Type":
                   "application/json"
               },
-              body: JSON.stringify({
-                message: text
-              })
+              body:
+                JSON.stringify({
+                  message:
+                    text
+                })
             }
           );
         const data =
@@ -489,7 +786,10 @@
     input.addEventListener(
       "keydown",
       function(event) {
-        if (event.key === "Enter") {
+        if (
+          event.key ===
+          "Enter"
+        ) {
           sendMessage();
         }
       }
@@ -501,8 +801,14 @@
       "click",
       function() {
         if (
-          !("webkitSpeechRecognition" in window) &&
-          !("SpeechRecognition" in window)
+          !(
+            "webkitSpeechRecognition"
+            in window
+          ) &&
+          !(
+            "SpeechRecognition"
+            in window
+          )
         ) {
           addMessage(
             "Voice recognition belum disokong oleh browser ini.",
@@ -525,7 +831,8 @@
         recognition.onresult =
           function(event) {
             input.value =
-              event.results[0][0].transcript;
+              event.results[0][0]
+                .transcript;
             micButton.textContent =
               "🎙️";
           };
@@ -564,10 +871,57 @@
       document.getElementById(
         "memoryStatus"
       );
+    const memorySearch =
+      document.getElementById(
+        "memorySearch"
+      );
+    const categoryFilter =
+      document.getElementById(
+        "categoryFilter"
+      );
+    const refreshMemory =
+      document.getElementById(
+        "refreshMemory"
+      );
     const addMemoryButton =
       document.getElementById(
         "addMemoryButton"
       );
+    const memoryFormOverlay =
+      document.getElementById(
+        "memoryFormOverlay"
+      );
+    const memoryFormTitle =
+      document.getElementById(
+        "memoryFormTitle"
+      );
+    const memoryText =
+      document.getElementById(
+        "memoryText"
+      );
+    const memoryCategory =
+      document.getElementById(
+        "memoryCategory"
+      );
+    const memorySubcategory =
+      document.getElementById(
+        "memorySubcategory"
+      );
+    const memoryImportance =
+      document.getElementById(
+        "memoryImportance"
+      );
+    const saveMemoryButton =
+      document.getElementById(
+        "saveMemory"
+      );
+    const cancelMemory =
+      document.getElementById(
+        "cancelMemory"
+      );
+    let allMemories = [];
+    let editingMemoryId =
+      null;
     memoryButton.addEventListener(
       "click",
       function() {
@@ -585,6 +939,21 @@
         );
       }
     );
+    refreshMemory.addEventListener(
+      "click",
+      loadMemories
+    );
+    memorySearch.addEventListener(
+      "input",
+      renderFilteredMemories
+    );
+    categoryFilter.addEventListener(
+      "change",
+      renderFilteredMemories
+    );
+    /* ================================
+       LOAD MEMORIES
+    ================================= */
     async function loadMemories() {
       memoryStatus.textContent =
         "Memuatkan memory...";
@@ -592,16 +961,20 @@
       try {
         const response =
           await fetch(
-            API_BASE + "/api/memory",
+            API_BASE +
+            "/api/memory",
             {
-              method: "POST",
+              method:
+                "POST",
               headers: {
                 "Content-Type":
                   "application/json"
               },
-              body: JSON.stringify({
-                action: "list"
-              })
+              body:
+                JSON.stringify({
+                  action:
+                    "list"
+                })
             }
           );
         const data =
@@ -612,26 +985,77 @@
             "Memory gagal dimuatkan."
           );
         }
+        allMemories =
+          data.memories ||
+          [];
         memoryStatus.textContent =
-          `${data.memories.length} memory disimpan`;
-        renderMemories(
-          data.memories
-        );
+          `${allMemories.length} memory disimpan`;
+        renderFilteredMemories();
       } catch (error) {
         console.error(error);
         memoryStatus.textContent =
           "Gagal memuatkan memory.";
         memoryList.innerHTML =
           `<div class="empty-memory">
-            ❌ ${error.message}
+            ❌ ${escapeHTML(error.message)}
           </div>`;
       }
     }
-    function renderMemories(memories) {
+    /* ================================
+       SEARCH + FILTER
+    ================================= */
+    function renderFilteredMemories() {
+      const search =
+        memorySearch.value
+          .trim()
+          .toLowerCase();
+      const category =
+        categoryFilter.value;
+      const filtered =
+        allMemories.filter(
+          function(memory) {
+            const matchesSearch =
+              !search ||
+              String(
+                memory.memory || ""
+              )
+              .toLowerCase()
+              .includes(search) ||
+              String(
+                memory.category || ""
+              )
+              .toLowerCase()
+              .includes(search) ||
+              String(
+                memory.subcategory || ""
+              )
+              .toLowerCase()
+              .includes(search);
+            const matchesCategory =
+              category === "all" ||
+              memory.category ===
+                category;
+            return (
+              matchesSearch &&
+              matchesCategory
+            );
+          }
+        );
+      renderMemories(
+        filtered
+      );
+    }
+    /* ================================
+       RENDER
+    ================================= */
+    function renderMemories(
+      memories
+    ) {
+      memoryList.innerHTML = "";
       if (!memories.length) {
         memoryList.innerHTML =
           `<div class="empty-memory">
-            Belum ada memory.
+            🧠 Tiada memory dijumpai.
           </div>`;
         return;
       }
@@ -650,16 +1074,26 @@
         }
       );
       const categoryInfo = {
-        profile: "👤 Profile",
-        fashion: "👕 Fashion",
-        food: "🍔 Food",
-        game: "🎮 Game",
-        hobby: "🎨 Hobby",
-        work: "💼 Work",
-        project: "🚀 Project",
-        preference: "❤️ Preference",
-        family: "👨‍👩‍👧 Family",
-        general: "📁 General"
+        profile:
+          "👤 Profile",
+        fashion:
+          "👕 Fashion",
+        food:
+          "🍔 Food",
+        game:
+          "🎮 Game",
+        hobby:
+          "🎨 Hobby",
+        work:
+          "💼 Work",
+        project:
+          "🚀 Project",
+        preference:
+          "❤️ Preference",
+        family:
+          "👨‍👩‍👧 Family",
+        general:
+          "📁 General"
       };
       Object.keys(groups)
         .forEach(
@@ -676,9 +1110,14 @@
               );
             title.className =
               "category-title";
-            title.textContent =
-              categoryInfo[category] ||
-              "📁 " + category;
+            title.innerHTML =
+              `<span>
+                ${categoryInfo[category] ||
+                "📁 " + escapeHTML(category)}
+              </span>
+              <span class="category-count">
+                ${groups[category].length}
+              </span>`;
             section.appendChild(
               title
             );
@@ -698,15 +1137,35 @@
                   text.className =
                     "memory-text";
                   text.textContent =
-                    memory.memory;
+                    memory.memory ||
+                    "";
+                  const stars =
+                    "⭐".repeat(
+                      Math.max(
+                        1,
+                        Math.min(
+                          3,
+                          Number(
+                            memory.importance
+                          ) || 1
+                        )
+                      )
+                    );
                   const meta =
                     document.createElement(
                       "div"
                     );
                   meta.className =
                     "memory-meta";
-                  meta.textContent =
-                    `${memory.subcategory || "general"} • Importance ${memory.importance}`;
+                  meta.innerHTML =
+                    `<span class="stars">
+                      ${stars}
+                    </span>
+                    &nbsp; • &nbsp;
+                    ${escapeHTML(
+                      memory.subcategory ||
+                      "general"
+                    )}`;
                   const actions =
                     document.createElement(
                       "div"
@@ -722,7 +1181,7 @@
                   edit.addEventListener(
                     "click",
                     function() {
-                      editMemory(
+                      openEditForm(
                         memory
                       );
                     }
@@ -770,55 +1229,146 @@
         );
     }
     /* ================================
-       ADD MEMORY
+       ADD FORM
     ================================= */
     addMemoryButton.addEventListener(
       "click",
+      function() {
+        editingMemoryId =
+          null;
+        memoryFormTitle.textContent =
+          "➕ Tambah Memory";
+        memoryText.value =
+          "";
+        memoryCategory.value =
+          "general";
+        memorySubcategory.value =
+          "general";
+        memoryImportance.value =
+          "2";
+        memoryFormOverlay.classList.add(
+          "active"
+        );
+        setTimeout(
+          function() {
+            memoryText.focus();
+          },
+          100
+        );
+      }
+    );
+    /* ================================
+       EDIT FORM
+    ================================= */
+    function openEditForm(
+      memory
+    ) {
+      editingMemoryId =
+        memory.id;
+      memoryFormTitle.textContent =
+        "✏️ Edit Memory";
+      memoryText.value =
+        memory.memory || "";
+      memoryCategory.value =
+        memory.category ||
+        "general";
+      memorySubcategory.value =
+        memory.subcategory ||
+        "general";
+      memoryImportance.value =
+        String(
+          memory.importance || 1
+        );
+      memoryFormOverlay.classList.add(
+        "active"
+      );
+      setTimeout(
+        function() {
+          memoryText.focus();
+        },
+        100
+      );
+    }
+    cancelMemory.addEventListener(
+      "click",
+      closeMemoryForm
+    );
+    memoryFormOverlay.addEventListener(
+      "click",
+      function(event) {
+        if (
+          event.target ===
+          memoryFormOverlay
+        ) {
+          closeMemoryForm();
+        }
+      }
+    );
+    function closeMemoryForm() {
+      memoryFormOverlay.classList.remove(
+        "active"
+      );
+      editingMemoryId =
+        null;
+    }
+    /* ================================
+       SAVE / UPDATE
+    ================================= */
+    saveMemoryButton.addEventListener(
+      "click",
       async function() {
-        const memory =
-          prompt(
-            "Apa yang Tuan mahu Naira ingat?"
+        const text =
+          memoryText.value.trim();
+        if (!text) {
+          alert(
+            "⚠️ Sila masukkan memory."
           );
-        if (!memory ||
-            !memory.trim()) {
           return;
         }
-        const category =
-          prompt(
-            "Kategori?\n\nprofile\nfashion\nfood\ngame\nhobby\nwork\nproject\npreference\nfamily\ngeneral",
-            "general"
-          ) || "general";
-        const subcategory =
-          prompt(
-            "Subkategori?",
-            "general"
-          ) || "general";
-        const importance =
-          prompt(
-            "Importance 1 - 3?",
-            "2"
-          ) || "2";
+        saveMemoryButton.disabled =
+          true;
+        saveMemoryButton.textContent =
+          "Menyimpan...";
         try {
+          const action =
+            editingMemoryId
+              ? "update"
+              : "save";
+          const body = {
+            action:
+              action,
+            memory:
+              text,
+            category:
+              memoryCategory.value,
+            subcategory:
+              memorySubcategory.value
+                .trim() ||
+              "general",
+            importance:
+              Number(
+                memoryImportance.value
+              )
+          };
+          if (editingMemoryId) {
+            body.id =
+              editingMemoryId;
+          }
           const response =
             await fetch(
-              API_BASE + "/api/memory",
+              API_BASE +
+              "/api/memory",
               {
-                method: "POST",
+                method:
+                  "POST",
                 headers: {
                   "Content-Type":
                     "application/json"
                 },
-                body: JSON.stringify({
-                  action: "save",
-                  memory:
-                    memory.trim(),
-                  category:
-                    category.trim(),
-                  subcategory:
-                    subcategory.trim(),
-                  importance:
-                    Number(importance)
-                })
+                body:
+                  JSON.stringify(
+                    body
+                  )
               }
             );
           const data =
@@ -829,114 +1379,54 @@
               "Memory gagal disimpan."
             );
           }
-          alert(
-            "✅ Memory berjaya disimpan."
-          );
-          loadMemories();
+          closeMemoryForm();
+          await loadMemories();
         } catch (error) {
+          console.error(error);
           alert(
-            "❌ " + error.message
+            "❌ " +
+            error.message
           );
+        } finally {
+          saveMemoryButton.disabled =
+            false;
+          saveMemoryButton.textContent =
+            "💾 Simpan";
         }
       }
     );
     /* ================================
-       EDIT MEMORY
+       DELETE
     ================================= */
-    async function editMemory(memory) {
-      const newMemory =
-        prompt(
-          "Edit memory:",
-          memory.memory
-        );
-      if (
-        !newMemory ||
-        !newMemory.trim()
-      ) {
-        return;
-      }
-      const newCategory =
-        prompt(
-          "Kategori:",
-          memory.category
-        ) || memory.category;
-      const newSubcategory =
-        prompt(
-          "Subkategori:",
-          memory.subcategory
-        ) || memory.subcategory;
-      const newImportance =
-        prompt(
-          "Importance 1 - 3:",
-          memory.importance
-        ) || memory.importance;
-      try {
-        const response =
-          await fetch(
-            API_BASE + "/api/memory",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-              body: JSON.stringify({
-                action: "update",
-                id: memory.id,
-                memory:
-                  newMemory.trim(),
-                category:
-                  newCategory.trim(),
-                subcategory:
-                  newSubcategory.trim(),
-                importance:
-                  Number(newImportance)
-              })
-            }
-          );
-        const data =
-          await response.json();
-        if (!response.ok) {
-          throw new Error(
-            data.error ||
-            "Memory gagal dikemaskini."
-          );
-        }
-        alert(
-          "✅ Memory berjaya dikemaskini."
-        );
-        loadMemories();
-      } catch (error) {
-        alert(
-          "❌ " + error.message
-        );
-      }
-    }
-    /* ================================
-       DELETE MEMORY
-    ================================= */
-    async function deleteMemory(id) {
-      const confirmDelete =
+    async function deleteMemory(
+      id
+    ) {
+      const confirmed =
         confirm(
-          "Tuan pasti mahu padam memory ini?"
+          "Tuan pasti mahu padam memory ini?\n\nNaira tidak akan menggunakan memory tersebut lagi."
         );
-      if (!confirmDelete) {
+      if (!confirmed) {
         return;
       }
       try {
         const response =
           await fetch(
-            API_BASE + "/api/memory",
+            API_BASE +
+            "/api/memory",
             {
-              method: "POST",
+              method:
+                "POST",
               headers: {
                 "Content-Type":
                   "application/json"
               },
-              body: JSON.stringify({
-                action: "delete",
-                id: id
-              })
+              body:
+                JSON.stringify({
+                  action:
+                    "delete",
+                  id:
+                    id
+                })
             }
           );
         const data =
@@ -947,15 +1437,42 @@
             "Memory gagal dipadam."
           );
         }
-        alert(
-          "🗑️ Memory berjaya dipadam."
-        );
-        loadMemories();
+        await loadMemories();
       } catch (error) {
+        console.error(error);
         alert(
-          "❌ " + error.message
+          "❌ " +
+          error.message
         );
       }
+    }
+    /* ================================
+       HTML SAFETY
+    ================================= */
+    function escapeHTML(
+      value
+    ) {
+      return String(value)
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
+        );
     }
   </script>
 </body>
