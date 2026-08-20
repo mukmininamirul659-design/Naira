@@ -272,20 +272,6 @@ input.value = "";
     })
   }
 );
-
-const dbData = await dbResponse.json();
-
-if (!dbResponse.ok) {
-  addMessage(
-    "🔴 Database gagal: " + (dbData.error || "Ralat tidak diketahui."),
-    "naira-message"
-  );
-} else {
-  addMessage(
-    "🟢 Database berjaya: " + (dbData.message || "Data disimpan."),
-    "naira-message"
-  );
-}
     
     const response = await fetch("/api/chat", {
       method: "POST",
