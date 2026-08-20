@@ -254,7 +254,13 @@
   addMessage(text, "user-message");
 input.value = "";
 
-await fetch("https://naira-tawny.vercel.app/api/comments", {
+  const loading = document.createElement("div");
+  loading.className = "message naira-message";
+  loading.textContent = "Naira sedang berfikir... ❤️";
+  chat.appendChild(loading);
+
+  try {
+    await fetch("https://naira-tawny.vercel.app/api/comments", {
   method: "POST",
   headers: {
     "Content-Type": "application/json"
@@ -263,17 +269,7 @@ await fetch("https://naira-tawny.vercel.app/api/comments", {
     comment: text
   })
 });
-
-const loading = document.createElement("div");
-loading.className = "message naira-message";
-loading.textContent = "Naira sedang berfikir... ❤️";
-
-  const loading = document.createElement("div");
-  loading.className = "message naira-message";
-  loading.textContent = "Naira sedang berfikir... ❤️";
-  chat.appendChild(loading);
-
-  try {
+    
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
