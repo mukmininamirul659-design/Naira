@@ -54,7 +54,7 @@ export default async function handler(req, res) {
     console.error("Database error:", error);
 
     return res.status(500).json({
-      error: "Gagal menyimpan komen."
-    });
+  error: error.message || "Gagal menyimpan komen."
+});
   }
 }
