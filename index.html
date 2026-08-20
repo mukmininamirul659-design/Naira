@@ -260,15 +260,32 @@ input.value = "";
   chat.appendChild(loading);
 
   try {
-    await fetch("https://naira-tawny.vercel.app/api/comments", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    comment: text
-  })
-});
+    const dbResponse = await fetch(
+  "https://naira-tawny.vercel.app/api/comments",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      comment: text
+    })
+  }
+);
+
+const dbData = await dbResponse.json();
+
+if (!dbResponse.ok) {
+  addMessage(
+    "🔴 Database gagal: " + (dbData.error || "Ralat tidak diketahui."),
+    "naira-message"
+  );
+} else {
+  addMessage(
+    "🟢 Database berjaya: " + (dbData.message || "Data disimpan."),
+    "naira-message"
+  );
+}
     
     const response = await fetch("/api/chat", {
       method: "POST",
