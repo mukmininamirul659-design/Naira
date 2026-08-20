@@ -40,10 +40,10 @@ export default async function handler(req, res) {
     const sql = neon(process.env.DATABASE_URL);
 
     // Save comment into PostgreSQL
-    await sql(
-      "INSERT INTO comments (comment) VALUES ($1)",
-      [comment.trim()]
-    );
+    await sql.query(
+  "INSERT INTO comments (comment) VALUES ($1)",
+  [comment.trim()]
+);
 
     return res.status(200).json({
       success: true,
