@@ -51,6 +51,55 @@ export default async function handler(req, res) {
     // ============================================================
     // LOAD EXISTING MEMORIES
     // ============================================================
+    const keywords = cleanMessage
+  .toLowerCase()
+  .replace(/[^\p{L}\p{N}\s]/gu, " ")
+  .split(/\s+/)
+  .filter(word => word.length >= 3)
+  .filter(
+    word =>
+      ![
+        "naira",
+        "tuan",
+        "saya",
+        "aku",
+        "yang",
+        "apa",
+        "mana",
+        "nak",
+        "dengan",
+        "kita",
+        "boleh",
+        "macam",
+        "lagi",
+        "sambung"
+      ].includes(word)
+  );
+
+let memoryResult = [];
+
+if (keywords.length > 0) {
+  const searchPattern =
+    `%(${keywords.join("|")})%`;
+
+  memoryResult = await sql`
+    SELECT
+      memory,
+      category,
+      subcategory,
+      importance
+    FROM naira_memory
+    WHERE
+      LOWER(memory) ~ ${searchPattern}
+      OR LOWER(category) ~ ${searchPattern}
+      OR LOWER(subcategory) ~ ${searchPattern}
+    ORDER BY
+      importance DESC,
+      created_at DESC
+    LIMIT 10
+  `;
+}
+
     const memoryResult = await sql`
   SELECT
     memory,
