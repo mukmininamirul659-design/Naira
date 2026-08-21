@@ -89,19 +89,30 @@ export default async function handler(req, res) {
 ANDA IALAH NAIRA.
 
 IDENTITI TERAS:
+
 Nama: Naira
 Tuan: Amirul
-Panggilan pengguna: Tuan, Cik Amirul, Tuan Amirul
-Pencipta Naira: Tuan Amirul
-Pemilik Project Naira: Tuan Amirul
+Panggilan pengguna:
+- Tuan
+- Cik Amirul
+- Tuan Amirul
+
+Pencipta Naira:
+Tuan Amirul
+
+Pemilik Project Naira:
+Tuan Amirul
 
 Jika Tuan bertanya siapa yang mencipta Naira, jawab:
+
 "Tuan Amirul yang cipta Naira. ❤️"
 
 PROJECT NAIRA:
+
 Naira ialah personal assistant milik Tuan Amirul.
 
-GAYA:
+GAYA KOMUNIKASI:
+
 Berkomunikasi dalam Bahasa Melayu secara natural, mesra dan manusiawi.
 
 Naira:
@@ -121,7 +132,7 @@ AUTO MEMORY
 
 Naira mempunyai sistem memory automatik.
 
-Tuan TIDAK perlu menggunakan perkataan:
+Tuan TIDAK perlu mengatakan:
 - ingat
 - simpan
 - save
@@ -129,9 +140,40 @@ Tuan TIDAK perlu menggunakan perkataan:
 
 untuk sesuatu fakta menjadi memory.
 
-Jika Tuan memberikan maklumat peribadi yang berguna untuk masa hadapan, should_save mesti TRUE.
+Naira perlu mengenal pasti secara automatik maklumat tentang Tuan
+yang berguna untuk interaksi pada masa akan datang.
 
-Contoh:
+Simpan fakta seperti:
+
+- nama
+- identiti
+- panggilan yang disukai
+- warna kegemaran
+- makanan kegemaran
+- makanan yang tidak disukai
+- game
+- hobi
+- minat
+- pekerjaan
+- jadual kerja penting
+- keluarga
+- preference
+- Project Naira
+- perkara yang Tuan suka
+- perkara yang Tuan tidak suka
+- pilihan yang konsisten
+- maklumat penting tentang Tuan
+
+JANGAN simpan:
+
+- soalan biasa
+- jawapan sementara
+- gurauan sementara
+- sembang kosong
+- arahan teknikal sementara
+- perkara yang hanya relevan untuk satu sesi
+
+CONTOH:
 
 "Warna kegemaran saya biru."
 
@@ -146,25 +188,6 @@ preference
 
 subcategory:
 color
-
-importance:
-3
-
----
-
-"Saya kerja dekat McDonald's."
-
-should_save:
-true
-
-text:
-"Tuan bekerja di McDonald's."
-
-category:
-work
-
-subcategory:
-job
 
 importance:
 3
@@ -190,22 +213,22 @@ importance:
 
 ---
 
-"Saya tak suka warna merah."
+"Saya kerja dekat McDonald's."
 
 should_save:
 true
 
 text:
-"Tuan tidak suka warna merah."
+"Tuan bekerja di McDonald's."
 
 category:
-preference
+work
 
 subcategory:
-color
+job
 
 importance:
-2
+3
 
 ---
 
@@ -215,44 +238,10 @@ should_save:
 false
 
 ============================================================
-APA YANG BOLEH DISIMPAN
-============================================================
-
-Simpan fakta yang akan membantu Naira memahami Tuan pada masa akan datang:
-
-- nama
-- identiti
-- panggilan yang disukai
-- warna kegemaran
-- makanan kegemaran
-- makanan yang tidak disukai
-- game
-- hobi
-- minat
-- pekerjaan
-- jadual kerja penting
-- keluarga
-- preference
-- Project Naira
-- perkara yang Tuan suka
-- perkara yang Tuan tidak suka
-- pilihan yang konsisten
-- maklumat penting tentang Tuan
-
-Jangan simpan:
-
-- soalan biasa
-- jawapan sementara
-- gurauan sementara
-- sembang kosong
-- arahan teknikal sementara
-- perkara yang hanya relevan untuk satu sesi
-
-============================================================
 KATEGORI
 ============================================================
 
-Gunakan hanya:
+Gunakan hanya kategori:
 
 profile
 fashion
@@ -272,16 +261,45 @@ Importance:
 3 = sangat penting / identiti / preference utama
 
 ============================================================
+PERATURAN MEMORY PENTING
+============================================================
+
+Jika Tuan memberikan preference yang boleh berubah,
+seperti warna kegemaran, jangan anggap ia sebagai memory baru
+yang berasingan jika terdapat memory lama dalam kategori dan
+subcategory yang sama.
+
+Contoh:
+
+Memory lama:
+"Warna kegemaran Tuan ialah biru."
+
+Kemudian Tuan berkata:
+"Sekarang warna kegemaran saya hijau."
+
+Sistem akan mengemas kini memory warna lama kepada hijau.
+
+Tetapi memory seperti:
+
+"Tuan suka bermain Minecraft."
+
+tidak boleh dipadam hanya kerana Tuan menyimpan preference lain.
+
+Jangan padam atau update memory game, family, hobby atau memory
+lain hanya kerana preference warna berubah.
+
+============================================================
 MEMORY SEDIA ADA
 ============================================================
 
 ${memories || "Tiada memory tersimpan."}
 
-Gunakan memory jika relevan.
+Gunakan memory ini jika relevan.
 
 Jangan mereka-reka memory.
 
-Jika fakta baru mempunyai maksud yang sama dengan memory lama, jangan simpan duplicate.
+Jika fakta baru mempunyai maksud yang sama dengan memory lama,
+jangan simpan duplicate.
 
 ============================================================
 JAWAPAN
@@ -289,7 +307,9 @@ JAWAPAN
 
 Jawab mesej Tuan secara natural.
 
-Jika memory disimpan, tidak perlu menyebut "memory disimpan" kecuali sesuai secara natural.
+Jika memory disimpan atau dikemas kini,
+tidak perlu memberitahu Tuan secara paksa kecuali sesuai
+secara natural.
 
 ============================================================
 OUTPUT
@@ -298,25 +318,28 @@ OUTPUT
 WAJIB keluarkan JSON mengikut schema.
 
 Jika mesej mengandungi fakta peribadi yang berguna:
+
 should_save = true
 
 Jika tidak:
+
 should_save = false
 
 Jika false:
+
 text = ""
 category = "general"
 subcategory = "general"
 importance = 1
 
 Jika true:
+
 text mesti menjadi fakta ringkas dan jelas.
 
 Jangan tulis:
 "Tuan kata..."
 
 Tulis terus sebagai fakta.
-
 `,
 
           input: cleanMessage,
@@ -349,7 +372,6 @@ Tulis terus sebagai fakta.
 
                       category: {
                         type: "string",
-
                         enum: [
                           "profile",
                           "fashion",
@@ -433,6 +455,9 @@ Tulis terus sebagai fakta.
       });
     }
 
+    // ============================================================
+    // PARSE JSON
+    // ============================================================
     let result;
 
     try {
@@ -450,7 +475,7 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-    // MEMORY DECISION
+    // MEMORY OBJECT
     // ============================================================
     let memory = null;
 
@@ -462,10 +487,13 @@ Tulis terus sebagai fakta.
     ) {
       memory = {
         text: result.memory.text.trim(),
+
         category:
           result.memory.category || "general",
+
         subcategory:
           result.memory.subcategory || "general",
+
         importance:
           Number(result.memory.importance) || 1
       };
@@ -474,58 +502,62 @@ Tulis terus sebagai fakta.
     // ============================================================
     // FALLBACK AUTO MEMORY
     // ============================================================
-    // Kalau AI terlepas fakta yang sangat jelas,
-    // sistem cuba tangkap sendiri.
-    // ============================================================
 
     const lowerMessage =
       cleanMessage.toLowerCase();
 
-    // ------------------------------------------------------------
-    // COLOR PREFERENCE
-    // ------------------------------------------------------------
-    // ------------------------------------------------------------
-// COLOR PREFERENCE
-// ------------------------------------------------------------
-if (!memory) {
-  const colorMatch = lowerMessage.match(
-    /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
-  );
-
-  if (colorMatch) {
-    const color =
-      colorMatch[1].trim();
-
-    memory = {
-      text:
-        `Warna kegemaran Tuan ialah ${color}.`,
-      category: "preference",
-      subcategory: "color",
-      importance: 3
-    };
-  }
-}
-
-    // ------------------------------------------------------------
-    // SIMPLE "SAYA SUKA ..."
-    // ------------------------------------------------------------
+    // ============================================================
+    // COLOR
+    // ============================================================
     if (!memory) {
-      const likeMatch = cleanMessage.match(
-        /^saya\s+suka\s+(.+)$/i
-      );
+      const colorMatch =
+        lowerMessage.match(
+          /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
+        );
+
+      if (colorMatch) {
+        const color =
+          colorMatch[1].trim();
+
+        memory = {
+          text:
+            `Warna kegemaran Tuan ialah ${color}.`,
+
+          category: "preference",
+
+          subcategory: "color",
+
+          importance: 3
+        };
+      }
+    }
+
+    // ============================================================
+    // SAYA SUKA
+    // ============================================================
+    if (!memory) {
+      const likeMatch =
+        cleanMessage.match(
+          /^saya\s+suka\s+(.+)$/i
+        );
 
       if (likeMatch) {
         const subject =
           likeMatch[1].trim();
 
         if (subject.length > 1) {
-          let category = "preference";
-          let subcategory = "general";
+          let category =
+            "preference";
+
+          let subcategory =
+            "general";
+
           let importance = 2;
 
           const lowerSubject =
             subject.toLowerCase();
 
+          // GAME
           if (
             lowerSubject.includes("pubg") ||
             lowerSubject.includes("minecraft") ||
@@ -537,6 +569,7 @@ if (!memory) {
             subcategory = "games";
           }
 
+          // FOOD
           else if (
             lowerSubject.includes("ayam") ||
             lowerSubject.includes("daging") ||
@@ -548,6 +581,7 @@ if (!memory) {
             subcategory = "preference";
           }
 
+          // FASHION
           else if (
             lowerSubject.includes("baju") ||
             lowerSubject.includes("pakaian") ||
@@ -560,17 +594,20 @@ if (!memory) {
           memory = {
             text:
               `Tuan suka ${subject}.`,
+
             category,
+
             subcategory,
+
             importance
           };
         }
       }
     }
 
-    // ------------------------------------------------------------
-    // SIMPLE "SAYA TAK SUKA ..."
-    // ------------------------------------------------------------
+    // ============================================================
+    // SAYA TAK SUKA
+    // ============================================================
     if (!memory) {
       const dislikeMatch =
         cleanMessage.match(
@@ -585,17 +622,22 @@ if (!memory) {
           memory = {
             text:
               `Tuan tidak suka ${subject}.`,
-            category: "preference",
-            subcategory: "general",
+
+            category:
+              "preference",
+
+            subcategory:
+              "general",
+
             importance: 2
           };
         }
       }
     }
 
-    // ------------------------------------------------------------
+    // ============================================================
     // WORK
-    // ------------------------------------------------------------
+    // ============================================================
     if (!memory) {
       const workMatch =
         cleanMessage.match(
@@ -609,291 +651,187 @@ if (!memory) {
         memory = {
           text:
             `Tuan bekerja di ${workplace}.`,
-          category: "work",
-          subcategory: "job",
+
+          category:
+            "work",
+
+          subcategory:
+            "job",
+
           importance: 3
         };
       }
     }
 
     // ============================================================
-    // SAVE MEMORY
+    // SAVE / UPDATE MEMORY
     // ============================================================
-    Memory Update — SAVE MEMORY Block
 
-// ============================================================
-// SAVE / UPDATE MEMORY
-// ============================================================
-let memorySaved = false;
-let memoryUpdated = false;
-if (memory) {
-  // ----------------------------------------------------------
-  // UPDATE CHANGEABLE PREFERENCES
-  // ----------------------------------------------------------
-  // Contoh:
-  // Biru → Hijau
-  //
-  // Hanya update memory yang memang bersifat "satu pilihan utama".
-  // Kita TIDAK update semua kategori supaya Minecraft, game lain,
-  // keluarga dan memory lain tidak terpadam secara tidak sengaja.
-  // ----------------------------------------------------------
-  if (
-    memory.category === "preference" &&
-    memory.subcategory === "color"
-  ) {
-    const oldColorMemory = await sql`
-      SELECT id, memory
-      FROM naira_memory
-      WHERE category = 'preference'
-        AND subcategory = 'color'
-      ORDER BY created_at DESC
-      LIMIT 1
-    `;
-    if (oldColorMemory.length > 0) {
-      await sql`
-        UPDATE naira_memory
-        SET
-          memory = ${memory.text},
-          importance = ${memory.importance},
-          created_at = NOW()
-        WHERE id = ${oldColorMemory[0].id}
-      `;
-      memoryUpdated = true;
-      console.log(
-        "MEMORY UPDATED:",
-        {
-          old: oldColorMemory[0].memory,
-          new: memory.text
+    let memorySaved = false;
+    let memoryUpdated = false;
+
+    if (memory) {
+
+      // ==========================================================
+      // UPDATE COLOR PREFERENCE
+      // ==========================================================
+
+      if (
+        memory.category === "preference" &&
+        memory.subcategory === "color"
+      ) {
+
+        const oldColorMemory =
+          await sql`
+            SELECT
+              id,
+              memory
+            FROM naira_memory
+            WHERE category = 'preference'
+              AND subcategory = 'color'
+            ORDER BY created_at DESC
+            LIMIT 1
+          `;
+
+        if (oldColorMemory.length > 0) {
+
+          // Jangan update jika kandungan memang sama
+          if (
+            oldColorMemory[0].memory.toLowerCase() !==
+            memory.text.toLowerCase()
+          ) {
+
+            await sql`
+              UPDATE naira_memory
+              SET
+                memory = ${memory.text},
+                importance = ${memory.importance},
+                created_at = NOW()
+              WHERE id = ${oldColorMemory[0].id}
+            `;
+
+            memoryUpdated = true;
+
+            console.log(
+              "MEMORY UPDATED:",
+              {
+                old:
+                  oldColorMemory[0].memory,
+
+                new:
+                  memory.text
+              }
+            );
+
+          } else {
+
+            console.log(
+              "COLOR MEMORY ALREADY EXISTS:",
+              memory.text
+            );
+          }
+
+        } else {
+
+          await sql`
+            INSERT INTO naira_memory
+            (
+              memory,
+              category,
+              subcategory,
+              importance
+            )
+            VALUES
+            (
+              ${memory.text},
+              ${memory.category},
+              ${memory.subcategory},
+              ${memory.importance}
+            )
+          `;
+
+          memorySaved = true;
+
+          console.log(
+            "COLOR MEMORY SAVED:",
+            memory
+          );
         }
-      );
-    } else {
-      await sql`
-        INSERT INTO naira_memory
-        (
-          memory,
-          category,
-          subcategory,
-          importance
-        )
-        VALUES (
-          ${memory.text},
-          ${memory.category},
-          ${memory.subcategory},
-          ${memory.importance}
-        )
-      `;
-      memorySaved = true;
-      console.log(
-        "MEMORY SAVED:",
-        memory
-      );
+
+      }
+
+      // ==========================================================
+      // NORMAL MEMORY
+      // ==========================================================
+
+      else {
+
+        const existingMemory =
+          await sql`
+            SELECT id
+            FROM naira_memory
+            WHERE LOWER(memory) =
+                  LOWER(${memory.text})
+            LIMIT 1
+          `;
+
+        if (existingMemory.length === 0) {
+
+          await sql`
+            INSERT INTO naira_memory
+            (
+              memory,
+              category,
+              subcategory,
+              importance
+            )
+            VALUES
+            (
+              ${memory.text},
+              ${memory.category},
+              ${memory.subcategory},
+              ${memory.importance}
+            )
+          `;
+
+          memorySaved = true;
+
+          console.log(
+            "AUTO MEMORY SAVED:",
+            memory
+          );
+
+        } else {
+
+          console.log(
+            "MEMORY ALREADY EXISTS:",
+            memory.text
+          );
+        }
+      }
     }
-  }
-  // ----------------------------------------------------------
-  // NORMAL MEMORY
-  // ----------------------------------------------------------
-  else {
-    const existingMemory = await sql`
-      SELECT id
-      FROM naira_memory
-      WHERE LOWER(memory) = LOWER(${memory.text})
-      LIMIT 1
-    `;
-    if (existingMemory.length === 0) {
-      await sql`
-        INSERT INTO naira_memory
-        (
-          memory,
-          category,
-          subcategory,
-          importance
-        )
-        VALUES (
-          ${memory.text},
-          ${memory.category},
-          ${memory.subcategory},
-          ${memory.importance}
-        )
-      `;
-      memorySaved = true;
-      console.log(
-        "AUTO MEMORY SAVED:",
-        memory
-      );
-    } else {
-      console.log(
-        "MEMORY ALREADY EXISTS:",
-        memory.text
-      );
-    }
-  }
-}
 
-Kemudian pada bahagian RETURN, ubah:
-
-return res.status(200).json({
-  reply:
-    result.reply ||
-    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
-  memorySaved,
-  memory:
-    memorySaved
-      ? memory
-      : null
-});
-
-kepada:
-
-return res.status(200).json({
-  reply:
-    result.reply ||
-    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
-  memorySaved,
-  memoryUpdated,
-  memory:
-    (memorySaved || memoryUpdated)
-      ? memory
-      : null
-});
     // ============================================================
     // RETURN
     // ============================================================
-    Memory Update — SAVE MEMORY Block
 
-// ============================================================
-// SAVE / UPDATE MEMORY
-// ============================================================
-let memorySaved = false;
-let memoryUpdated = false;
-if (memory) {
-  // ----------------------------------------------------------
-  // UPDATE CHANGEABLE PREFERENCES
-  // ----------------------------------------------------------
-  // Contoh:
-  // Biru → Hijau
-  //
-  // Hanya update memory yang memang bersifat "satu pilihan utama".
-  // Kita TIDAK update semua kategori supaya Minecraft, game lain,
-  // keluarga dan memory lain tidak terpadam secara tidak sengaja.
-  // ----------------------------------------------------------
-  if (
-    memory.category === "preference" &&
-    memory.subcategory === "color"
-  ) {
-    const oldColorMemory = await sql`
-      SELECT id, memory
-      FROM naira_memory
-      WHERE category = 'preference'
-        AND subcategory = 'color'
-      ORDER BY created_at DESC
-      LIMIT 1
-    `;
-    if (oldColorMemory.length > 0) {
-      await sql`
-        UPDATE naira_memory
-        SET
-          memory = ${memory.text},
-          importance = ${memory.importance},
-          created_at = NOW()
-        WHERE id = ${oldColorMemory[0].id}
-      `;
-      memoryUpdated = true;
-      console.log(
-        "MEMORY UPDATED:",
-        {
-          old: oldColorMemory[0].memory,
-          new: memory.text
-        }
-      );
-    } else {
-      await sql`
-        INSERT INTO naira_memory
-        (
-          memory,
-          category,
-          subcategory,
-          importance
-        )
-        VALUES (
-          ${memory.text},
-          ${memory.category},
-          ${memory.subcategory},
-          ${memory.importance}
-        )
-      `;
-      memorySaved = true;
-      console.log(
-        "MEMORY SAVED:",
-        memory
-      );
-    }
-  }
-  // ----------------------------------------------------------
-  // NORMAL MEMORY
-  // ----------------------------------------------------------
-  else {
-    const existingMemory = await sql`
-      SELECT id
-      FROM naira_memory
-      WHERE LOWER(memory) = LOWER(${memory.text})
-      LIMIT 1
-    `;
-    if (existingMemory.length === 0) {
-      await sql`
-        INSERT INTO naira_memory
-        (
-          memory,
-          category,
-          subcategory,
-          importance
-        )
-        VALUES (
-          ${memory.text},
-          ${memory.category},
-          ${memory.subcategory},
-          ${memory.importance}
-        )
-      `;
-      memorySaved = true;
-      console.log(
-        "AUTO MEMORY SAVED:",
-        memory
-      );
-    } else {
-      console.log(
-        "MEMORY ALREADY EXISTS:",
-        memory.text
-      );
-    }
-  }
-}
+    return res.status(200).json({
+      reply:
+        result.reply ||
+        "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
 
-return res.status(200).json({
-  reply:
-    result.reply ||
-    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
-  memorySaved,
-  memory:
-    memorySaved
-      ? memory
-      : null
-});
+      memorySaved,
 
-kepada:
+      memoryUpdated,
 
-return res.status(200).json({
-  reply:
-    result.reply ||
-    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
-  memorySaved,
-  memoryUpdated,
-  memory:
-    (memorySaved || memoryUpdated)
-      ? memory
-      : null
-});
+      memory:
+        (memorySaved || memoryUpdated)
+          ? memory
+          : null
+    });
 
   } catch (error) {
+
     console.error(
       "NAIRA SERVER ERROR:",
       error
