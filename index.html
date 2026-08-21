@@ -441,6 +441,79 @@
         height: 85px;
       }
     }
+    
+    /* TYPING INDICATOR */
+
+.typing-indicator {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  min-width: 58px;
+
+  min-height: 42px;
+
+  padding: 13px 16px;
+
+}
+
+.typing-indicator span {
+
+  width: 7px;
+
+  height: 7px;
+
+  background: #9ca3af;
+
+  border-radius: 50%;
+
+  display: block;
+
+  animation: typingBounce 1.4s infinite ease-in-out;
+
+}
+
+.typing-indicator span:nth-child(1) {
+
+  animation-delay: 0s;
+
+}
+
+.typing-indicator span:nth-child(2) {
+
+  animation-delay: 0.2s;
+
+}
+
+.typing-indicator span:nth-child(3) {
+
+  animation-delay: 0.4s;
+
+}
+
+@keyframes typingBounce {
+
+  0%, 60%, 100% {
+
+    transform: translateY(0);
+
+    opacity: 0.4;
+
+  }
+
+  30% {
+
+    transform: translateY(-5px);
+
+    opacity: 1;
+
+  }
+
+}
+    
   </style>
 </head>
 <body>
@@ -725,16 +798,18 @@
       );
       input.value = "";
       const loading =
-        document.createElement(
-          "div"
-        );
-      loading.className =
-        "message naira-message";
-      loading.textContent =
-        "Naira sedang berfikir... ❤️";
-      chat.appendChild(
-        loading
-      );
+  document.createElement("div");
+
+loading.className =
+  "message naira-message typing-indicator";
+
+loading.innerHTML = `
+  <span></span>
+  <span></span>
+  <span></span>
+`;
+
+chat.appendChild(loading);
       try {
         const response =
           await fetch(
