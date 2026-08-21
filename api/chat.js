@@ -619,62 +619,279 @@ if (!memory) {
     // ============================================================
     // SAVE MEMORY
     // ============================================================
-    let memorySaved = false;
+    Memory Update — SAVE MEMORY Block
 
-    if (memory) {
-      const existingMemory = await sql`
-        SELECT id
-        FROM naira_memory
-        WHERE LOWER(memory) = LOWER(${memory.text})
-        LIMIT 1
+// ============================================================
+// SAVE / UPDATE MEMORY
+// ============================================================
+let memorySaved = false;
+let memoryUpdated = false;
+if (memory) {
+  // ----------------------------------------------------------
+  // UPDATE CHANGEABLE PREFERENCES
+  // ----------------------------------------------------------
+  // Contoh:
+  // Biru → Hijau
+  //
+  // Hanya update memory yang memang bersifat "satu pilihan utama".
+  // Kita TIDAK update semua kategori supaya Minecraft, game lain,
+  // keluarga dan memory lain tidak terpadam secara tidak sengaja.
+  // ----------------------------------------------------------
+  if (
+    memory.category === "preference" &&
+    memory.subcategory === "color"
+  ) {
+    const oldColorMemory = await sql`
+      SELECT id, memory
+      FROM naira_memory
+      WHERE category = 'preference'
+        AND subcategory = 'color'
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+    if (oldColorMemory.length > 0) {
+      await sql`
+        UPDATE naira_memory
+        SET
+          memory = ${memory.text},
+          importance = ${memory.importance},
+          created_at = NOW()
+        WHERE id = ${oldColorMemory[0].id}
       `;
-
-      if (existingMemory.length === 0) {
-        await sql`
-          INSERT INTO naira_memory
-          (
-            memory,
-            category,
-            subcategory,
-            importance
-          )
-          VALUES (
-            ${memory.text},
-            ${memory.category},
-            ${memory.subcategory},
-            ${memory.importance}
-          )
-        `;
-
-        memorySaved = true;
-
-        console.log(
-          "AUTO MEMORY SAVED:",
-          memory
-        );
-      } else {
-        console.log(
-          "MEMORY ALREADY EXISTS:",
-          memory.text
-        );
-      }
+      memoryUpdated = true;
+      console.log(
+        "MEMORY UPDATED:",
+        {
+          old: oldColorMemory[0].memory,
+          new: memory.text
+        }
+      );
+    } else {
+      await sql`
+        INSERT INTO naira_memory
+        (
+          memory,
+          category,
+          subcategory,
+          importance
+        )
+        VALUES (
+          ${memory.text},
+          ${memory.category},
+          ${memory.subcategory},
+          ${memory.importance}
+        )
+      `;
+      memorySaved = true;
+      console.log(
+        "MEMORY SAVED:",
+        memory
+      );
     }
+  }
+  // ----------------------------------------------------------
+  // NORMAL MEMORY
+  // ----------------------------------------------------------
+  else {
+    const existingMemory = await sql`
+      SELECT id
+      FROM naira_memory
+      WHERE LOWER(memory) = LOWER(${memory.text})
+      LIMIT 1
+    `;
+    if (existingMemory.length === 0) {
+      await sql`
+        INSERT INTO naira_memory
+        (
+          memory,
+          category,
+          subcategory,
+          importance
+        )
+        VALUES (
+          ${memory.text},
+          ${memory.category},
+          ${memory.subcategory},
+          ${memory.importance}
+        )
+      `;
+      memorySaved = true;
+      console.log(
+        "AUTO MEMORY SAVED:",
+        memory
+      );
+    } else {
+      console.log(
+        "MEMORY ALREADY EXISTS:",
+        memory.text
+      );
+    }
+  }
+}
 
+Kemudian pada bahagian RETURN, ubah:
+
+return res.status(200).json({
+  reply:
+    result.reply ||
+    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+  memorySaved,
+  memory:
+    memorySaved
+      ? memory
+      : null
+});
+
+kepada:
+
+return res.status(200).json({
+  reply:
+    result.reply ||
+    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+  memorySaved,
+  memoryUpdated,
+  memory:
+    (memorySaved || memoryUpdated)
+      ? memory
+      : null
+});
     // ============================================================
     // RETURN
     // ============================================================
-    return res.status(200).json({
-      reply:
-        result.reply ||
-        "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+    Memory Update — SAVE MEMORY Block
 
-      memorySaved,
+// ============================================================
+// SAVE / UPDATE MEMORY
+// ============================================================
+let memorySaved = false;
+let memoryUpdated = false;
+if (memory) {
+  // ----------------------------------------------------------
+  // UPDATE CHANGEABLE PREFERENCES
+  // ----------------------------------------------------------
+  // Contoh:
+  // Biru → Hijau
+  //
+  // Hanya update memory yang memang bersifat "satu pilihan utama".
+  // Kita TIDAK update semua kategori supaya Minecraft, game lain,
+  // keluarga dan memory lain tidak terpadam secara tidak sengaja.
+  // ----------------------------------------------------------
+  if (
+    memory.category === "preference" &&
+    memory.subcategory === "color"
+  ) {
+    const oldColorMemory = await sql`
+      SELECT id, memory
+      FROM naira_memory
+      WHERE category = 'preference'
+        AND subcategory = 'color'
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+    if (oldColorMemory.length > 0) {
+      await sql`
+        UPDATE naira_memory
+        SET
+          memory = ${memory.text},
+          importance = ${memory.importance},
+          created_at = NOW()
+        WHERE id = ${oldColorMemory[0].id}
+      `;
+      memoryUpdated = true;
+      console.log(
+        "MEMORY UPDATED:",
+        {
+          old: oldColorMemory[0].memory,
+          new: memory.text
+        }
+      );
+    } else {
+      await sql`
+        INSERT INTO naira_memory
+        (
+          memory,
+          category,
+          subcategory,
+          importance
+        )
+        VALUES (
+          ${memory.text},
+          ${memory.category},
+          ${memory.subcategory},
+          ${memory.importance}
+        )
+      `;
+      memorySaved = true;
+      console.log(
+        "MEMORY SAVED:",
+        memory
+      );
+    }
+  }
+  // ----------------------------------------------------------
+  // NORMAL MEMORY
+  // ----------------------------------------------------------
+  else {
+    const existingMemory = await sql`
+      SELECT id
+      FROM naira_memory
+      WHERE LOWER(memory) = LOWER(${memory.text})
+      LIMIT 1
+    `;
+    if (existingMemory.length === 0) {
+      await sql`
+        INSERT INTO naira_memory
+        (
+          memory,
+          category,
+          subcategory,
+          importance
+        )
+        VALUES (
+          ${memory.text},
+          ${memory.category},
+          ${memory.subcategory},
+          ${memory.importance}
+        )
+      `;
+      memorySaved = true;
+      console.log(
+        "AUTO MEMORY SAVED:",
+        memory
+      );
+    } else {
+      console.log(
+        "MEMORY ALREADY EXISTS:",
+        memory.text
+      );
+    }
+  }
+}
 
-      memory:
-        memorySaved
-          ? memory
-          : null
-    });
+return res.status(200).json({
+  reply:
+    result.reply ||
+    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+  memorySaved,
+  memory:
+    memorySaved
+      ? memory
+      : null
+});
+
+kepada:
+
+return res.status(200).json({
+  reply:
+    result.reply ||
+    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+  memorySaved,
+  memoryUpdated,
+  memory:
+    (memorySaved || memoryUpdated)
+      ? memory
+      : null
+});
 
   } catch (error) {
     console.error(
