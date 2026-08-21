@@ -52,15 +52,19 @@ export default async function handler(req, res) {
     // LOAD EXISTING MEMORIES
     // ============================================================
     const memoryResult = await sql`
-      SELECT
-        memory,
-        category,
-        subcategory,
-        importance
-      FROM naira_memory
-      ORDER BY importance DESC, created_at DESC
-      LIMIT 10
-    `;
+  SELECT
+    memory,
+    category,
+    subcategory,
+    importance
+  FROM naira_memory
+  WHERE
+    memory ILIKE ${`%${cleanMessage}%`}
+    OR category ILIKE ${`%${cleanMessage}%`}
+    OR subcategory ILIKE ${`%${cleanMessage}%`}
+  ORDER BY importance DESC, created_at DESC
+  LIMIT 10
+`;
 
     const memories = memoryResult
       .map(
