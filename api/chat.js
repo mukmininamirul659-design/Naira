@@ -83,7 +83,7 @@ export default async function handler(req, res) {
         },
 
         body: JSON.stringify({
-          model: "gpt-5.6",
+          model: "gpt-5.6-luna",
 
           instructions: `
 ANDA IALAH NAIRA.
