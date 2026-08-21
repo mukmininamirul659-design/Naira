@@ -59,7 +59,7 @@ export default async function handler(req, res) {
         importance
       FROM naira_memory
       ORDER BY importance DESC, created_at DESC
-      LIMIT 30
+      LIMIT 15
     `;
 
     const memories = memoryResult
