@@ -59,10 +59,19 @@ export default async function handler(req, res) {
     importance
   FROM naira_memory
   WHERE
-    memory ILIKE ${`%${cleanMessage}%`}
-    OR category ILIKE ${`%${cleanMessage}%`}
-    OR subcategory ILIKE ${`%${cleanMessage}%`}
-  ORDER BY importance DESC, created_at DESC
+    to_tsvector(
+      'simple',
+      COALESCE(memory, '') || ' ' ||
+      COALESCE(category, '') || ' ' ||
+      COALESCE(subcategory, '')
+    )
+    @@ plainto_tsquery(
+      'simple',
+      ${cleanMessage}
+    )
+  ORDER BY
+    importance DESC,
+    created_at DESC
   LIMIT 10
 `;
 
