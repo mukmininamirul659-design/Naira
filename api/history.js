@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+
 export default async function handler(req, res) {
   // ============================================================
   // CORS
@@ -7,17 +8,21 @@ export default async function handler(req, res) {
     "Access-Control-Allow-Origin",
     "https://mukmininamirul659-design.github.io"
   );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "GET, PATCH, DELETE, OPTIONS"
   );
+
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
   );
+
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
+
   try {
     // ============================================================
     // DATABASE
@@ -28,7 +33,9 @@ export default async function handler(req, res) {
         error: "DATABASE_URL belum ditetapkan di Vercel."
       });
     }
+
     const sql = neon(process.env.DATABASE_URL);
+
     // ============================================================
     // GET — HISTORY
     // ============================================================
@@ -38,11 +45,12 @@ export default async function handler(req, res) {
         conversationId,
         search
       } = req.query || {};
-      // ========================================================
-      // OPEN SINGLE CONVERSATION
-      // ========================================================
+
+      // ==========================================================
+      // OPEN ONE COMPLETE CONVERSATION
+      // ==========================================================
       if (conversationId) {
-        const conversation = await sql`
+        const messages = await sql`
           SELECT
             id,
             conversation_id,
@@ -54,22 +62,25 @@ export default async function handler(req, res) {
             created_at
           FROM naira_conversations
           WHERE conversation_id = ${conversationId}
-          ORDER BY created_at ASC
+          ORDER BY created_at ASC, id ASC
         `;
+
         return res.status(200).json({
           success: true,
           conversationId,
-          count: conversation.length,
-          conversations: conversation
+          count: messages.length,
+          conversations: messages
         });
       }
-      // ========================================================
-      // SEARCH
-      // ========================================================
+
+      // ==========================================================
+      // SEARCH — ONE CARD PER CONVERSATION
+      // ==========================================================
       if (search && search.trim()) {
         const searchText = `%${search.trim()}%`;
+
         const conversations = await sql`
-          SELECT
+          SELECT DISTINCT ON (conversation_id)
             id,
             conversation_id,
             title,
@@ -85,24 +96,34 @@ export default async function handler(req, res) {
             OR naira_response ILIKE ${searchText}
             OR category ILIKE ${searchText}
             OR subcategory ILIKE ${searchText}
-          ORDER BY created_at DESC
-          LIMIT 100
+          ORDER BY
+            conversation_id,
+            created_at DESC,
+            id DESC
         `;
+
+        conversations.sort(
+          (a, b) =>
+            new Date(b.created_at) -
+            new Date(a.created_at)
+        );
+
         return res.status(200).json({
           success: true,
           count: conversations.length,
           conversations
         });
       }
-      // ========================================================
-      // CATEGORY FILTER
-      // ========================================================
+
+      // ==========================================================
+      // CATEGORY FILTER — ONE CARD PER CONVERSATION
+      // ==========================================================
       if (
         category &&
         category !== "all"
       ) {
         const conversations = await sql`
-          SELECT
+          SELECT DISTINCT ON (conversation_id)
             id,
             conversation_id,
             title,
@@ -113,20 +134,34 @@ export default async function handler(req, res) {
             created_at
           FROM naira_conversations
           WHERE category = ${category}
-          ORDER BY created_at DESC
-          LIMIT 100
+          ORDER BY
+            conversation_id,
+            created_at DESC,
+            id DESC
         `;
+
+        conversations.sort(
+          (a, b) =>
+            new Date(b.created_at) -
+            new Date(a.created_at)
+        );
+
         return res.status(200).json({
           success: true,
           count: conversations.length,
           conversations
         });
       }
-      // ========================================================
+
+      // ==========================================================
       // ALL HISTORY
-      // ========================================================
+      //
+      // IMPORTANT:
+      // DISTINCT ON memastikan:
+      // 1 conversation = 1 history card
+      // ==========================================================
       const conversations = await sql`
-        SELECT
+        SELECT DISTINCT ON (conversation_id)
           id,
           conversation_id,
           title,
@@ -136,15 +171,26 @@ export default async function handler(req, res) {
           subcategory,
           created_at
         FROM naira_conversations
-        ORDER BY created_at DESC
-        LIMIT 100
+        ORDER BY
+          conversation_id,
+          created_at DESC,
+          id DESC
       `;
+
+      // Sort conversation terbaru dahulu
+      conversations.sort(
+        (a, b) =>
+          new Date(b.created_at) -
+          new Date(a.created_at)
+      );
+
       return res.status(200).json({
         success: true,
         count: conversations.length,
         conversations
       });
     }
+
     // ============================================================
     // PATCH — EDIT CONVERSATION TITLE
     // ============================================================
@@ -153,12 +199,14 @@ export default async function handler(req, res) {
         conversationId,
         title
       } = req.body || {};
+
       if (!conversationId) {
         return res.status(400).json({
           success: false,
           error: "conversationId diperlukan."
         });
       }
+
       if (
         typeof title !== "string" ||
         !title.trim()
@@ -168,7 +216,12 @@ export default async function handler(req, res) {
           error: "Title tidak boleh kosong."
         });
       }
-      const cleanTitle = title.trim();
+
+      const cleanTitle =
+        title.trim();
+
+      // Update SEMUA row dalam conversation
+      // supaya title kekal sama untuk keseluruhan conversation.
       const updated = await sql`
         UPDATE naira_conversations
         SET title = ${cleanTitle}
@@ -183,18 +236,27 @@ export default async function handler(req, res) {
           subcategory,
           created_at
       `;
+
       if (!updated.length) {
         return res.status(404).json({
           success: false,
           error: "Conversation tidak dijumpai."
         });
       }
+
       return res.status(200).json({
         success: true,
-        message: "Conversation title berjaya dikemaskini.",
-        conversation: updated[0]
+        message:
+          "Conversation title berjaya dikemaskini.",
+        conversation: {
+          conversationId,
+          title: cleanTitle,
+          messageCount:
+            updated.length
+        }
       });
     }
+
     // ============================================================
     // DELETE — DELETE ENTIRE CONVERSATION
     // ============================================================
@@ -202,29 +264,37 @@ export default async function handler(req, res) {
       const {
         conversationId
       } = req.body || {};
+
       if (!conversationId) {
         return res.status(400).json({
           success: false,
           error: "conversationId diperlukan."
         });
       }
+
       const deleted = await sql`
         DELETE FROM naira_conversations
         WHERE conversation_id = ${conversationId}
         RETURNING id
       `;
+
       if (!deleted.length) {
         return res.status(404).json({
           success: false,
           error: "Conversation tidak dijumpai."
         });
       }
+
       return res.status(200).json({
         success: true,
-        message: "Conversation berjaya dipadam.",
-        deletedCount: deleted.length
+        message:
+          "Conversation berjaya dipadam.",
+        conversationId,
+        deletedCount:
+          deleted.length
       });
     }
+
     // ============================================================
     // METHOD NOT ALLOWED
     // ============================================================
@@ -232,11 +302,13 @@ export default async function handler(req, res) {
       success: false,
       error: "Method not allowed."
     });
+
   } catch (error) {
     console.error(
       "NAIRA HISTORY ERROR:",
       error
     );
+
     return res.status(500).json({
       success: false,
       error:
