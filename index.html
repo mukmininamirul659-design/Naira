@@ -811,29 +811,26 @@
     Naira • Personal Assistant
   </div>
 </main>
-<!-- ============================================================
-     CONVERSATION HISTORY
-============================================================ -->
-<div
-  class="overlay"
-  id="historyPanel"
->
-  <div class="panel-box">
-    <div class="panel-header">
+<!-- CONVERSATION HISTORY -->
+<div class="history-panel" id="historyPanel">
+  <div class="history-box">
+
+    <div class="history-header">
       <div>
-        <h2>💬 Conversation History</h2>
-        <p>
-          Semua perbualan Tuan dengan Naira
-        </p>
+        <h2>🕘 Conversation History</h2>
+        <p>Semua perbualan Tuan dengan Naira</p>
       </div>
+
       <button
-        class="close-button"
+        class="close-history"
         id="closeHistory"
       >
         ✕
       </button>
     </div>
+
     <div class="history-tools">
+
       <input
         class="history-search"
         id="historySearch"
@@ -841,46 +838,34 @@
         placeholder="🔍 Cari conversation..."
         autocomplete="off"
       >
+
       <button
-        class="tool-button"
+        class="history-refresh"
         id="refreshHistory"
       >
         🔄
       </button>
+
     </div>
-    <select
-      class="history-filter"
-      id="historyCategory"
+
+    <button
+      class="new-conversation"
+      id="newConversation"
     >
-      <option value="all">
-        📂 Semua kategori
-      </option>
-      <option value="profile">
-        👤 Profile
-      </option>
-      <option value="food">
-        🍔 Food
-      </option>
-      <option value="game">
-        🎮 Game
-      </option>
-      <option value="project">
-        🚀 Project
-      </option>
-      <option value="work">
-        💼 Work
-      </option>
-      <option value="general">
-        📁 General
-      </option>
-    </select>
+      ＋ New Conversation
+    </button>
+
     <div
       class="history-status"
       id="historyStatus"
     >
       Memuatkan history...
     </div>
-    <div id="historyList"></div>
+
+    <div
+      id="historyList"
+    ></div>
+
   </div>
 </div>
 <!-- ============================================================
