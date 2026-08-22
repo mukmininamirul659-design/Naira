@@ -1,4 +1,4 @@
-=import { neon } from "@neondatabase/serverless";
+import { neon } from "@neondatabase/serverless";
 import { randomUUID } from "node:crypto";
 
 export default async function handler(req, res) {
@@ -37,9 +37,9 @@ export default async function handler(req, res) {
     // ============================================================
 
     const {
-  message,
-  conversationId
-} = req.body || {};
+      message,
+      conversationId
+    } = req.body || {};
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -49,9 +49,10 @@ export default async function handler(req, res) {
 
     const cleanMessage = message.trim();
     const lowerMessage = cleanMessage.toLowerCase();
-const activeConversationId =
-  conversationId || randomUUID();
-  
+
+    const activeConversationId =
+      conversationId || randomUUID();
+
     // ============================================================
     // DATABASE
     // ============================================================
@@ -94,10 +95,6 @@ const activeConversationId =
 
       let deletedResult = [];
 
-      // ----------------------------------------------------------
-      // DELETE COLOR
-      // ----------------------------------------------------------
-
       if (
         action.action_type === "delete_memory" &&
         action.target_type === "category" &&
@@ -115,10 +112,6 @@ const activeConversationId =
         `;
       }
 
-      // ----------------------------------------------------------
-      // DELETE GAME
-      // ----------------------------------------------------------
-
       else if (
         action.action_type === "delete_memory" &&
         action.target_type === "category" &&
@@ -135,10 +128,6 @@ const activeConversationId =
         `;
       }
 
-      // ----------------------------------------------------------
-      // DELETE WORK
-      // ----------------------------------------------------------
-
       else if (
         action.action_type === "delete_memory" &&
         action.target_type === "work"
@@ -153,10 +142,6 @@ const activeConversationId =
             subcategory
         `;
       }
-
-      // ----------------------------------------------------------
-      // DELETE FOOD
-      // ----------------------------------------------------------
 
       else if (
         action.action_type === "delete_memory" &&
@@ -174,10 +159,6 @@ const activeConversationId =
         `;
       }
 
-      // ----------------------------------------------------------
-      // DELETE FASHION
-      // ----------------------------------------------------------
-
       else if (
         action.action_type === "delete_memory" &&
         action.target_type === "category" &&
@@ -193,10 +174,6 @@ const activeConversationId =
             subcategory
         `;
       }
-
-      // ----------------------------------------------------------
-      // DELETE FAMILY
-      // ----------------------------------------------------------
 
       else if (
         action.action_type === "delete_memory" &&
@@ -214,10 +191,6 @@ const activeConversationId =
         `;
       }
 
-      // ----------------------------------------------------------
-      // DELETE ALL
-      // ----------------------------------------------------------
-
       else if (
         action.action_type === "delete_memory" &&
         action.target_type === "all"
@@ -231,10 +204,6 @@ const activeConversationId =
             subcategory
         `;
       }
-
-      // ----------------------------------------------------------
-      // DELETE SPECIFIC TARGET
-      // ----------------------------------------------------------
 
       else if (
         action.action_type === "delete_memory" &&
@@ -267,10 +236,6 @@ const activeConversationId =
         }
       }
 
-      // ----------------------------------------------------------
-      // REMOVE PENDING ACTION
-      // ----------------------------------------------------------
-
       await sql`
         DELETE FROM naira_pending_actions
         WHERE id = ${action.id}
@@ -292,7 +257,9 @@ const activeConversationId =
 
         pendingMemory: null,
         pendingDelete: null,
-        memory: null
+        memory: null,
+
+        conversationId: activeConversationId
       });
     }
 
@@ -320,7 +287,9 @@ const activeConversationId =
 
         pendingMemory: null,
         pendingDelete: null,
-        memory: null
+        memory: null,
+
+        conversationId: activeConversationId
       });
     }
 
@@ -338,10 +307,7 @@ const activeConversationId =
       let targetValue = null;
       let confirmationText = "";
 
-      // ==========================================================
       // COLOR
-      // ==========================================================
-
       if (
         /warna/i.test(cleanMessage) &&
         /(kegemaran|favorite|fav)/i.test(cleanMessage)
@@ -353,10 +319,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory tentang warna kegemaran Tuan? 🗑️💜";
       }
 
-      // ==========================================================
       // GAME
-      // ==========================================================
-
       else if (
         /(game|games|permainan|main|gaming)/i.test(cleanMessage)
       ) {
@@ -367,10 +330,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory berkaitan game? 🎮";
       }
 
-      // ==========================================================
       // WORK
-      // ==========================================================
-
       else if (
         /(kerja|pekerjaan|tempat kerja|work|job)/i.test(cleanMessage)
       ) {
@@ -381,10 +341,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory berkaitan pekerjaan Tuan? 💼";
       }
 
-      // ==========================================================
       // FOOD
-      // ==========================================================
-
       else if (
         /(makanan|food|masakan|minuman|drink)/i.test(cleanMessage)
       ) {
@@ -395,10 +352,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory berkaitan makanan? 🍽️";
       }
 
-      // ==========================================================
       // FASHION
-      // ==========================================================
-
       else if (
         /(baju|pakaian|fashion|style|fesyen)/i.test(cleanMessage)
       ) {
@@ -409,10 +363,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory berkaitan fashion dan pakaian? 👕";
       }
 
-      // ==========================================================
       // FAMILY
-      // ==========================================================
-
       else if (
         /(keluarga|family|isteri|anak|wife|baby)/i.test(cleanMessage)
       ) {
@@ -423,10 +374,7 @@ const activeConversationId =
           "Tuan nak Naira padam semua memory berkaitan keluarga? 💜";
       }
 
-      // ==========================================================
       // ALL MEMORY
-      // ==========================================================
-
       else {
         const forgetAll =
           /^(?:naira[\s,]*)?(?:lupakan|lupa|padam|hapus|delete|forget)\s+(?:semua\s+)?(?:memory|memori)(?:\s+saya)?[.!?]*$/i
@@ -443,10 +391,7 @@ const activeConversationId =
         }
       }
 
-      // ==========================================================
       // GENERAL TARGET
-      // ==========================================================
-
       if (!targetType) {
         const forgetTarget = cleanMessage
           .replace(
@@ -473,10 +418,7 @@ const activeConversationId =
         }
       }
 
-      // ==========================================================
-      // CREATE PENDING DELETE REQUEST
-      // ==========================================================
-
+      // CREATE PENDING DELETE
       if (targetType) {
         await sql`
           DELETE FROM naira_pending_actions
@@ -517,122 +459,125 @@ const activeConversationId =
             targetValue
           },
 
-          memory: null
+          memory: null,
+
+          conversationId: activeConversationId
         });
       }
     }
 
-// ============================================================
-// MEMORY MANAGEMENT
-// ============================================================
+    // ============================================================
+    // MEMORY MANAGEMENT
+    // ============================================================
 
-const isMemoryManagementRequest =
-  /(apa yang naira ingat|naira ingat apa|apa memory|apa memori|tunjukkan memory|tunjukkan memori|senaraikan memory|senaraikan memori|apa yang naira simpan|memory saya|memori saya)/i
-    .test(cleanMessage);
+    const isMemoryManagementRequest =
+      /(apa yang naira ingat|naira ingat apa|apa memory|apa memori|tunjukkan memory|tunjukkan memori|senaraikan memory|senaraikan memori|apa yang naira simpan|memory saya|memori saya)/i
+        .test(cleanMessage);
 
-if (isMemoryManagementRequest) {
+    if (isMemoryManagementRequest) {
+      const allMemories = await sql`
+        SELECT
+          id,
+          memory,
+          category,
+          subcategory,
+          importance,
+          created_at
+        FROM naira_memory
+        ORDER BY
+          importance DESC,
+          created_at DESC
+      `;
 
-  const allMemories = await sql`
-    SELECT
-      id,
-      memory,
-      category,
-      subcategory,
-      importance,
-      created_at
-    FROM naira_memory
-    ORDER BY
-      importance DESC,
-      created_at DESC
-  `;
+      if (allMemories.length === 0) {
+        return res.status(200).json({
+          reply:
+            "Buat masa ini, Naira belum mempunyai sebarang memory tersimpan tentang Tuan. 🧠💜",
 
-  if (allMemories.length === 0) {
-    return res.status(200).json({
-      reply:
-        "Buat masa ini, Naira belum mempunyai sebarang memory tersimpan tentang Tuan. 🧠💜",
+          memoryManagement: true,
+          memoryCount: 0,
 
-      memoryManagement: true,
-      memoryCount: 0,
+          memorySaved: false,
+          memoryUpdated: false,
+          memoryDeleted: false,
+          deletedCount: 0,
 
-      memorySaved: false,
-      memoryUpdated: false,
-      memoryDeleted: false,
-      deletedCount: 0,
+          memoryConfirmationRequired: false,
+          memoryBlocked: false,
 
-      memoryConfirmationRequired: false,
-      memoryBlocked: false,
+          pendingMemory: null,
+          pendingDelete: null,
+          memory: null,
 
-      pendingMemory: null,
-      pendingDelete: null,
-      memory: null
-    });
-  }
+          conversationId: activeConversationId
+        });
+      }
 
-  const categoryNames = {
-    profile: "👤 Profile",
-    preference: "❤️ Preference",
-    personal: "🏠 Personal",
-    work: "💼 Work",
-    project: "🚀 Project",
-    game: "🎮 Game",
-    hobby: "🎯 Hobby",
-    fashion: "👕 Fashion",
-    food: "🍽️ Food",
-    family: "👨‍👩‍👧 Family",
-    general: "📌 General"
-  };
+      const categoryNames = {
+        profile: "👤 Profile",
+        preference: "❤️ Preference",
+        personal: "🏠 Personal",
+        work: "💼 Work",
+        project: "🚀 Project",
+        game: "🎮 Game",
+        hobby: "🎯 Hobby",
+        fashion: "👕 Fashion",
+        food: "🍽️ Food",
+        family: "👨‍👩‍👧 Family",
+        general: "📌 General"
+      };
 
-  const grouped = {};
+      const grouped = {};
 
-  for (const item of allMemories) {
+      for (const item of allMemories) {
+        const category =
+          item.category || "general";
 
-    const category =
-      item.category || "general";
+        if (!grouped[category]) {
+          grouped[category] = [];
+        }
 
-    if (!grouped[category]) {
-      grouped[category] = [];
+        grouped[category].push(item.memory);
+      }
+
+      let memoryText =
+        "🧠 Memory yang Naira simpan tentang Tuan:\n\n";
+
+      for (const category of Object.keys(grouped)) {
+        memoryText +=
+          `${categoryNames[category] || category}\n`;
+
+        for (const memory of grouped[category]) {
+          memoryText += `• ${memory}\n`;
+        }
+
+        memoryText += "\n";
+      }
+
+      memoryText +=
+        `📊 Jumlah memory: ${allMemories.length}`;
+
+      return res.status(200).json({
+        reply: memoryText,
+
+        memoryManagement: true,
+        memoryCount: allMemories.length,
+
+        memorySaved: false,
+        memoryUpdated: false,
+        memoryDeleted: false,
+        deletedCount: 0,
+
+        memoryConfirmationRequired: false,
+        memoryBlocked: false,
+
+        pendingMemory: null,
+        pendingDelete: null,
+        memory: null,
+
+        conversationId: activeConversationId
+      });
     }
-
-    grouped[category].push(item.memory);
-  }
-
-  let memoryText =
-    "🧠 Memory yang Naira simpan tentang Tuan:\n\n";
-
-  for (const category of Object.keys(grouped)) {
-
-    memoryText +=
-      `${categoryNames[category] || category}\n`;
-
-    for (const memory of grouped[category]) {
-      memoryText += `• ${memory}\n`;
-    }
-
-    memoryText += "\n";
-  }
-
-  memoryText +=
-    `📊 Jumlah memory: ${allMemories.length}`;
-
-  return res.status(200).json({
-    reply: memoryText,
-
-    memoryManagement: true,
-    memoryCount: allMemories.length,
-
-    memorySaved: false,
-    memoryUpdated: false,
-    memoryDeleted: false,
-    deletedCount: 0,
-
-    memoryConfirmationRequired: false,
-    memoryBlocked: false,
-
-    pendingMemory: null,
-    pendingDelete: null,
-    memory: null
-  });
-}
 
     // ============================================================
     // SMART MEMORY SEARCH
@@ -642,9 +587,7 @@ if (isMemoryManagementRequest) {
       lowerMessage
         .replace(/[^\p{L}\p{N}\s]/gu, " ")
         .split(/\s+/)
-        .filter(
-          word => word.length >= 3
-        )
+        .filter(word => word.length >= 3)
         .filter(
           word =>
             ![
@@ -710,17 +653,20 @@ if (isMemoryManagementRequest) {
     // ============================================================
 
     const response = await fetch(
-  "https://api.openai.com/v1/responses",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
-    },
-    body: JSON.stringify({
-      model: "gpt-5.6-luna",
+      "https://api.openai.com/v1/responses",
+      {
+        method: "POST",
 
-      instructions: `
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization":
+            `Bearer ${process.env.OPENAI_API_KEY}`
+        },
+
+        body: JSON.stringify({
+          model: "gpt-5.6-luna",
+
+          instructions: `
 ANDA IALAH NAIRA.
 
 Nama: Naira
@@ -824,84 +770,84 @@ Jangan tulis "Tuan kata..."
 Tulis terus sebagai fakta.
 `,
 
-      input: cleanMessage,
+          input: cleanMessage,
 
-      text: {
-        format: {
-          type: "json_schema",
-          name: "naira_response",
-          strict: true,
+          text: {
+            format: {
+              type: "json_schema",
+              name: "naira_response",
+              strict: true,
 
-          schema: {
-            type: "object",
-
-            properties: {
-              reply: {
-                type: "string"
-              },
-
-              memory: {
+              schema: {
                 type: "object",
 
                 properties: {
-                  should_save: {
-                    type: "boolean"
-                  },
-
-                  text: {
+                  reply: {
                     type: "string"
                   },
 
-                  category: {
-                    type: "string",
-                    enum: [
-                      "profile",
-                      "fashion",
-                      "food",
-                      "game",
-                      "hobby",
-                      "work",
-                      "project",
-                      "preference",
-                      "family",
-                      "general"
-                    ]
-                  },
+                  memory: {
+                    type: "object",
 
-                  subcategory: {
-                    type: "string"
-                  },
+                    properties: {
+                      should_save: {
+                        type: "boolean"
+                      },
 
-                  importance: {
-                    type: "integer",
-                    enum: [1, 2, 3]
+                      text: {
+                        type: "string"
+                      },
+
+                      category: {
+                        type: "string",
+                        enum: [
+                          "profile",
+                          "fashion",
+                          "food",
+                          "game",
+                          "hobby",
+                          "work",
+                          "project",
+                          "preference",
+                          "family",
+                          "general"
+                        ]
+                      },
+
+                      subcategory: {
+                        type: "string"
+                      },
+
+                      importance: {
+                        type: "integer",
+                        enum: [1, 2, 3]
+                      }
+                    },
+
+                    required: [
+                      "should_save",
+                      "text",
+                      "category",
+                      "subcategory",
+                      "importance"
+                    ],
+
+                    additionalProperties: false
                   }
                 },
 
                 required: [
-                  "should_save",
-                  "text",
-                  "category",
-                  "subcategory",
-                  "importance"
+                  "reply",
+                  "memory"
                 ],
 
                 additionalProperties: false
               }
-            },
-
-            required: [
-              "reply",
-              "memory"
-            ],
-
-            additionalProperties: false
+            }
           }
-        }
+        })
       }
-    })
-  }
-);
+    );
 
     // ============================================================
     // OPENAI ERROR
@@ -1082,7 +1028,7 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-    // FALLBACK AUTO MEMORY
+    // FALLBACK AUTO MEMORY - COLOR
     // ============================================================
 
     if (
@@ -1107,6 +1053,10 @@ Tulis terus sebagai fakta.
         };
       }
     }
+
+    // ============================================================
+    // FALLBACK AUTO MEMORY - LIKE
+    // ============================================================
 
     if (
       !memory &&
@@ -1143,7 +1093,9 @@ Tulis terus sebagai fakta.
           ) {
             category = "game";
             subcategory = "games";
-          } else if (
+          }
+
+          else if (
             lowerSubject.includes("ayam") ||
             lowerSubject.includes("daging") ||
             lowerSubject.includes("ikan") ||
@@ -1152,7 +1104,9 @@ Tulis terus sebagai fakta.
           ) {
             category = "food";
             subcategory = "preference";
-          } else if (
+          }
+
+          else if (
             lowerSubject.includes("baju") ||
             lowerSubject.includes("pakaian") ||
             lowerSubject.includes("style")
@@ -1171,6 +1125,10 @@ Tulis terus sebagai fakta.
         }
       }
     }
+
+    // ============================================================
+    // FALLBACK AUTO MEMORY - DISLIKE
+    // ============================================================
 
     if (
       !memory &&
@@ -1199,6 +1157,10 @@ Tulis terus sebagai fakta.
         }
       }
     }
+
+    // ============================================================
+    // FALLBACK AUTO MEMORY - WORK
+    // ============================================================
 
     if (
       !memory &&
@@ -1289,7 +1251,9 @@ Tulis terus sebagai fakta.
 
           memorySaved = true;
         }
-      } else {
+      }
+
+      else {
         const existingMemory =
           await sql`
             SELECT id
@@ -1325,78 +1289,78 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-// SAVE CONVERSATION HISTORY
-// ============================================================
+    // SAVE CONVERSATION HISTORY
+    // ============================================================
 
-await sql`
-  INSERT INTO naira_conversations
-  (
-    conversation_id,
-    title,
-    user_message,
-    naira_response,
-    category,
-    subcategory
-  )
-  VALUES
-  (
-    ${activeConversationId},
-    ${result.reply
-      ? result.reply.slice(0, 60)
-      : "New Conversation"},
-    ${cleanMessage},
-    ${result.reply || ""},
-    'general',
-    'general'
-  )
-`;
+    await sql`
+      INSERT INTO naira_conversations
+      (
+        conversation_id,
+        title,
+        user_message,
+        naira_response,
+        category,
+        subcategory
+      )
+      VALUES
+      (
+        ${activeConversationId},
+        ${
+          result.reply
+            ? result.reply.slice(0, 60)
+            : "New Conversation"
+        },
+        ${cleanMessage},
+        ${result.reply || ""},
+        'general',
+        'general'
+      )
+    `;
 
-// ============================================================
-// RETURN
-// ============================================================
+    // ============================================================
+    // RETURN
+    // ============================================================
 
-return res.status(200).json({
-  reply:
-    result.reply ||
-    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+    return res.status(200).json({
+      reply:
+        result.reply ||
+        "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
 
-  conversationId:
-    activeConversationId,
+      conversationId:
+        activeConversationId,
 
-  memorySaved,
-  memoryUpdated,
+      memorySaved,
+      memoryUpdated,
 
-  memoryDeleted: false,
-  deletedCount: 0,
+      memoryDeleted: false,
+      deletedCount: 0,
 
-  memoryConfirmationRequired,
-  memoryBlocked,
+      memoryConfirmationRequired,
+      memoryBlocked,
 
-  pendingMemory:
-    memoryConfirmationRequired
-      ? memory
-      : null,
+      pendingMemory:
+        memoryConfirmationRequired
+          ? memory
+          : null,
 
-  pendingDelete: null,
+      pendingDelete: null,
 
-  memory:
-    memorySaved || memoryUpdated
-      ? memory
-      : null
-});
+      memory:
+        memorySaved || memoryUpdated
+          ? memory
+          : null
+    });
 
-} catch (error) {
+  } catch (error) {
+    console.error(
+      "NAIRA SERVER ERROR:",
+      error
+    );
 
-  console.error(
-    "NAIRA SERVER ERROR:",
-    error
-  );
-
-  return res.status(500).json({
-    error:
-      error.message ||
-      "Berlaku masalah pada server Naira."
-  });
-}
-
+    return res.status(500).json({
+      error:
+        error.message ||
+        "Berlaku masalah pada server Naira."
+    });
+  }
 }
