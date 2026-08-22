@@ -1,4 +1,5 @@
-import { neon } from "@neondatabase/serverless";
+=import { neon } from "@neondatabase/serverless";
+import { randomUUID } from "node:crypto";
 
 export default async function handler(req, res) {
   // ============================================================
@@ -49,7 +50,7 @@ export default async function handler(req, res) {
     const cleanMessage = message.trim();
     const lowerMessage = cleanMessage.toLowerCase();
 const activeConversationId =
-  conversationId || crypto.randomUUID();
+  conversationId || randomUUID();
   
     // ============================================================
     // DATABASE
@@ -1383,3 +1384,19 @@ return res.status(200).json({
       ? memory
       : null
 });
+
+} catch (error) {
+
+  console.error(
+    "NAIRA SERVER ERROR:",
+    error
+  );
+
+  return res.status(500).json({
+    error:
+      error.message ||
+      "Berlaku masalah pada server Naira."
+  });
+}
+
+}
