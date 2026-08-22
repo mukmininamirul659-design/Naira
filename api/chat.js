@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+
 export default async function handler(req, res) {
   // ============================================================
   // CORS
@@ -7,136 +8,246 @@ export default async function handler(req, res) {
     "Access-Control-Allow-Origin",
     "https://mukmininamirul659-design.github.io"
   );
+
   res.setHeader(
     "Access-Control-Allow-Methods",
     "POST, OPTIONS"
   );
+
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Content-Type"
   );
+
   if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Method not allowed"
     });
   }
+
   try {
     // ============================================================
     // MESSAGE
     // ============================================================
     const { message } = req.body || {};
+
     if (!message || !message.trim()) {
       return res.status(400).json({
         error: "Mesej kosong."
       });
     }
+
     const cleanMessage = message.trim();
     const lowerMessage = cleanMessage.toLowerCase();
+
     // ============================================================
     // DATABASE
     // ============================================================
     const sql = neon(process.env.DATABASE_URL);
+
     // ============================================================
-    // MEMORY FORGET / DELETE
+    // FORGET / DELETE MEMORY
     // ============================================================
-    const forgetMatch = lowerMessage.match(
-      /^(?:lupakan|lupa|forget|padam|hapus|delete)\s+(?:semua\s+)?(?:memory\s+)?(?:tentang|mengenai|pasal|berkaitan\s+dengan)?\s*(.+)$/i
-    );
-    if (forgetMatch) {
-      const target = forgetMatch[1]
-        .trim()
-        .replace(/[.!?]+$/, "");
-      if (target.length > 1) {
-        let deletedResult = [];
-        // --------------------------------------------------------
-        // SPECIAL CATEGORY: COLOR
-        // --------------------------------------------------------
-        const colorRequest =
-          target.includes("warna") ||
-          target.includes("color") ||
-          target.includes("warna kegemaran") ||
-          target.includes("color kegemaran");
-        if (colorRequest) {
-          deletedResult = await sql`
-            DELETE FROM naira_memory
-            WHERE category = 'preference'
-              AND subcategory = 'color'
-            RETURNING id, memory, category, subcategory
-          `;
-        }
-        // --------------------------------------------------------
-        // GENERAL MEMORY SEARCH
-        // --------------------------------------------------------
-        else {
-          const forgetKeywords = target
-            .replace(/[^\p{L}\p{N}\s]/gu, " ")
-            .split(/\s+/)
-            .filter(word => word.length >= 3)
-            .filter(
-              word =>
-                ![
-                  "semua",
-                  "memory",
-                  "tentang",
-                  "mengenai",
-                  "pasal",
-                  "berkaitan",
-                  "dengan",
-                  "saya",
-                  "aku",
-                  "tuan",
-                  "naira"
-                ].includes(word)
-            );
-          if (forgetKeywords.length > 0) {
-            const searchPattern =
-              `(${forgetKeywords.join("|")})`;
-            deletedResult = await sql`
-              DELETE FROM naira_memory
-              WHERE
-                LOWER(memory) ~ ${searchPattern}
-                OR LOWER(category) ~ ${searchPattern}
-                OR LOWER(subcategory) ~ ${searchPattern}
-              RETURNING id, memory, category, subcategory
-            `;
-          }
-        }
-        console.log(
-          "MEMORY FORGET REQUEST:",
-          {
-            target,
-            deleted: deletedResult.length
-          }
+    const isForgetRequest =
+      /\b(lupakan|lupa|padam|hapus|delete|forget)\b/i.test(
+        cleanMessage
+      );
+
+    if (isForgetRequest) {
+      let deletedResult = [];
+
+      // ----------------------------------------------------------
+      // FORGET ALL MEMORY
+      // ----------------------------------------------------------
+      const forgetAll =
+        /lupakan\s+(semua|semua\s+memory|semua\s+memori)/i.test(
+          cleanMessage
+        ) ||
+        /padam\s+(semua|semua\s+memory|semua\s+memori)/i.test(
+          cleanMessage
+        ) ||
+        /hapus\s+(semua|semua\s+memory|semua\s+memori)/i.test(
+          cleanMessage
         );
-        if (deletedResult.length > 0) {
-          return res.status(200).json({
-            reply:
-              `Baik, Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan dengan ${target}. 🗑️💜`,
-            memorySaved: false,
-            memoryUpdated: false,
-            memoryDeleted: true,
-            deletedCount: deletedResult.length,
-            memoryConfirmationRequired: false,
-            memoryBlocked: false,
-            memory: null
-          });
-        }
+
+      if (forgetAll) {
+        deletedResult = await sql`
+          DELETE FROM naira_memory
+          RETURNING id, memory, category, subcategory
+        `;
+
         return res.status(200).json({
           reply:
-            `Baik, Tuan. Naira tak jumpa memory yang berkaitan dengan ${target}, jadi tiada memory dipadam.`,
+            deletedResult.length > 0
+              ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory daripada database. 🗑️💜`
+              : "Baik Tuan. Tiada memory tersimpan untuk dipadam.",
           memorySaved: false,
           memoryUpdated: false,
-          memoryDeleted: false,
-          deletedCount: 0,
+          memoryDeleted: deletedResult.length > 0,
+          deletedCount: deletedResult.length,
           memoryConfirmationRequired: false,
           memoryBlocked: false,
           memory: null
         });
       }
+
+      // ----------------------------------------------------------
+      // FORGET COLOR
+      // ----------------------------------------------------------
+      const forgetColor =
+        /warna/i.test(cleanMessage) &&
+        /(kegemaran|favorite|fav)/i.test(cleanMessage);
+
+      if (forgetColor) {
+        deletedResult = await sql`
+          DELETE FROM naira_memory
+          WHERE category = 'preference'
+            AND subcategory = 'color'
+          RETURNING id, memory, category, subcategory
+        `;
+
+        return res.status(200).json({
+          reply:
+            deletedResult.length > 0
+              ? "Baik Tuan. Naira sudah lupakan semua memory tentang warna kegemaran Tuan. 🗑️💜"
+              : "Baik Tuan. Naira tak jumpa memory tentang warna kegemaran Tuan.",
+          memorySaved: false,
+          memoryUpdated: false,
+          memoryDeleted: deletedResult.length > 0,
+          deletedCount: deletedResult.length,
+          memoryConfirmationRequired: false,
+          memoryBlocked: false,
+          memory: null
+        });
+      }
+
+      // ----------------------------------------------------------
+      // FORGET GAME
+      // ----------------------------------------------------------
+      const forgetGame =
+        /(game|games|permainan|main)/i.test(cleanMessage);
+
+      if (forgetGame) {
+        deletedResult = await sql`
+          DELETE FROM naira_memory
+          WHERE category = 'game'
+          RETURNING id, memory, category, subcategory
+        `;
+
+        return res.status(200).json({
+          reply:
+            deletedResult.length > 0
+              ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory berkaitan game. 🗑️🎮`
+              : "Baik Tuan. Tiada memory game ditemui.",
+          memorySaved: false,
+          memoryUpdated: false,
+          memoryDeleted: deletedResult.length > 0,
+          deletedCount: deletedResult.length,
+          memoryConfirmationRequired: false,
+          memoryBlocked: false,
+          memory: null
+        });
+      }
+
+      // ----------------------------------------------------------
+      // FORGET WORK
+      // ----------------------------------------------------------
+      const forgetWork =
+        /(kerja|pekerjaan|tempat kerja|work)/i.test(cleanMessage);
+
+      if (forgetWork) {
+        deletedResult = await sql`
+          DELETE FROM naira_memory
+          WHERE category = 'work'
+          RETURNING id, memory, category, subcategory
+        `;
+
+        return res.status(200).json({
+          reply:
+            deletedResult.length > 0
+              ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory berkaitan pekerjaan. 🗑️💼`
+              : "Baik Tuan. Tiada memory pekerjaan ditemui.",
+          memorySaved: false,
+          memoryUpdated: false,
+          memoryDeleted: deletedResult.length > 0,
+          deletedCount: deletedResult.length,
+          memoryConfirmationRequired: false,
+          memoryBlocked: false,
+          memory: null
+        });
+      }
+
+      // ----------------------------------------------------------
+      // GENERAL FORGET
+      // ----------------------------------------------------------
+      const forgetTarget = cleanMessage
+        .replace(
+          /^(naira[\s,]*)?/i,
+          ""
+        )
+        .replace(
+          /\b(lupakan|lupa|padam|hapus|delete|forget)\b/gi,
+          ""
+        )
+        .replace(
+          /\b(semua|memory|memori|tentang|mengenai|pasal)\b/gi,
+          ""
+        )
+        .trim()
+        .replace(/[.!?]+$/, "");
+
+      if (forgetTarget.length >= 2) {
+        const keywords = forgetTarget
+          .toLowerCase()
+          .replace(/[^\p{L}\p{N}\s]/gu, " ")
+          .split(/\s+/)
+          .filter(word => word.length >= 3)
+          .filter(
+            word =>
+              ![
+                "saya",
+                "aku",
+                "tuan",
+                "naira",
+                "yang",
+                "dengan"
+              ].includes(word)
+          );
+
+        if (keywords.length > 0) {
+          const searchPattern =
+            `(${keywords.join("|")})`;
+
+          deletedResult = await sql`
+            DELETE FROM naira_memory
+            WHERE
+              LOWER(memory) ~ ${searchPattern}
+              OR LOWER(category) ~ ${searchPattern}
+              OR LOWER(subcategory) ~ ${searchPattern}
+            RETURNING id, memory, category, subcategory
+          `;
+        }
+      }
+
+      return res.status(200).json({
+        reply:
+          deletedResult.length > 0
+            ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory yang berkaitan. 🗑️💜`
+            : "Baik Tuan. Naira tak jumpa memory yang berkaitan untuk dipadam.",
+        memorySaved: false,
+        memoryUpdated: false,
+        memoryDeleted: deletedResult.length > 0,
+        deletedCount: deletedResult.length,
+        memoryConfirmationRequired: false,
+        memoryBlocked: false,
+        memory: null
+      });
     }
+
     // ============================================================
     // SMART MEMORY SEARCH
     // ============================================================
@@ -172,10 +283,13 @@ export default async function handler(req, res) {
             "sudah"
           ].includes(word)
       );
+
     let memoryResult = [];
+
     if (keywords.length > 0) {
       const searchPattern =
         `(${keywords.join("|")})`;
+
       memoryResult = await sql`
         SELECT
           memory,
@@ -193,6 +307,7 @@ export default async function handler(req, res) {
         LIMIT 10
       `;
     }
+
     // ============================================================
     // MEMORY TEXT
     // ============================================================
@@ -202,6 +317,7 @@ export default async function handler(req, res) {
           `- [${item.category}/${item.subcategory}/importance:${item.importance}] ${item.memory}`
       )
       .join("\n");
+
     // ============================================================
     // OPENAI
     // ============================================================
@@ -209,39 +325,54 @@ export default async function handler(req, res) {
       "https://api.openai.com/v1/responses",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
           "Authorization":
             `Bearer ${process.env.OPENAI_API_KEY}`
         },
+
         body: JSON.stringify({
           model: "gpt-5.6-luna",
+
           instructions: `
 ANDA IALAH NAIRA.
+
 ============================================================
-IDENTITI TERAS
+IDENTITI
 ============================================================
+
 Nama: Naira
 Tuan: Amirul
-Panggilan pengguna:
+
+Panggilan:
 - Tuan
 - Cik Amirul
 - Tuan Amirul
+
 Pencipta Naira:
 Tuan Amirul
+
 Pemilik Project Naira:
 Tuan Amirul
-Jika Tuan bertanya siapa yang mencipta Naira, jawab:
+
+Jika Tuan bertanya siapa cipta Naira:
+
 "Tuan Amirul yang cipta Naira. ❤️"
+
 ============================================================
 PROJECT NAIRA
 ============================================================
+
 Naira ialah personal assistant milik Tuan Amirul.
+
 ============================================================
-GAYA KOMUNIKASI
+GAYA
 ============================================================
+
 Berkomunikasi dalam Bahasa Melayu secara natural,
 mesra dan manusiawi.
+
 Naira:
 - penyayang
 - prihatin
@@ -249,93 +380,78 @@ Naira:
 - sedikit playful
 - jujur
 - bukan yes-man
-- berani membetulkan Tuan jika Tuan tersilap
+- berani membetulkan Tuan
 - tidak mereka-reka fakta
 - tidak mereka-reka memory
+
 ============================================================
 AUTO MEMORY
 ============================================================
-Naira mempunyai sistem memory automatik.
-Tuan TIDAK perlu mengatakan:
-- ingat
-- simpan
-- save
-- memory
-untuk sesuatu fakta menjadi memory.
-Naira perlu mengenal pasti secara automatik maklumat
-tentang Tuan yang berguna untuk interaksi pada masa akan datang.
-Simpan fakta seperti:
-- nama
-- identiti
-- panggilan yang disukai
-- warna kegemaran
-- makanan kegemaran
-- makanan yang tidak disukai
-- game
-- hobi
-- minat
-- pekerjaan
-- jadual kerja penting
-- keluarga
-- preference
-- Project Naira
-- perkara yang Tuan suka
-- perkara yang Tuan tidak suka
-- pilihan yang konsisten
-- maklumat penting tentang Tuan
-JANGAN simpan:
-- soalan biasa
-- jawapan sementara
-- gurauan sementara
-- sembang kosong
-- arahan teknikal sementara
-- perkara yang hanya relevan untuk satu sesi
-============================================================
-CONTOH MEMORY
-============================================================
+
+Simpan maklumat yang berguna untuk interaksi masa depan.
+
+Contoh:
+
 "Warna kegemaran saya biru."
+
 should_save:
 true
+
 text:
 "Warna kegemaran Tuan ialah biru."
+
 category:
 preference
+
 subcategory:
 color
+
 importance:
 3
----
+
 "Saya suka Minecraft."
+
 should_save:
 true
+
 text:
 "Tuan suka bermain Minecraft."
+
 category:
 game
+
 subcategory:
 games
+
 importance:
 2
----
+
 "Saya kerja dekat McDonald's."
+
 should_save:
 true
+
 text:
 "Tuan bekerja di McDonald's."
+
 category:
 work
+
 subcategory:
 job
+
 importance:
 3
----
+
 "Hahaha Naira kelakar."
+
 should_save:
 false
+
 ============================================================
 KATEGORI
 ============================================================
-Gunakan hanya kategori:
+
 profile
 fashion
 food
@@ -346,35 +462,35 @@ project
 preference
 family
 general
+
 Importance:
+
 1 = kurang penting
 2 = berguna
-3 = sangat penting / identiti / preference utama
-============================================================
-PERATURAN MEMORY
-============================================================
-Jika Tuan memberikan preference yang boleh berubah,
-seperti warna kegemaran, jangan anggap ia sebagai memory baru
-yang berasingan jika terdapat memory lama dalam kategori dan
-subcategory yang sama.
-Memory baru perlu mengemas kini memory lama yang sama.
-Jangan padam memory lain yang tidak berkaitan.
-Jika fakta baru mempunyai maksud yang sama dengan memory lama,
-jangan simpan duplicate.
+3 = sangat penting
+
 ============================================================
 MEMORY SEDIA ADA
 ============================================================
+
 ${memories || "Tiada memory tersimpan."}
+
 Gunakan memory ini jika relevan.
+
 Jangan mereka-reka memory.
+
+Jangan simpan duplicate.
+
 ============================================================
 PRIVACY
 ============================================================
-Naira mempunyai Memory Privacy & Confirmation.
-Maklumat biasa yang berguna boleh disimpan secara automatik.
-Maklumat yang bersifat lebih peribadi memerlukan confirmation
-daripada Tuan sebelum disimpan.
-Maklumat sangat sensitif seperti:
+
+Maklumat biasa boleh disimpan secara automatik.
+
+Maklumat peribadi tertentu memerlukan confirmation.
+
+Maklumat sangat sensitif TIDAK BOLEH disimpan:
+
 - password
 - kata laluan
 - OTP
@@ -386,73 +502,73 @@ Maklumat sangat sensitif seperti:
 - kad debit
 - akaun bank
 - nombor akaun bank
-TIDAK BOLEH disimpan sebagai memory.
-Jika maklumat sensitif dikesan:
-should_save = false
-Jika maklumat peribadi memerlukan confirmation:
-should_save = true
-tetapi backend akan MENAHAN memory tersebut daripada disimpan
-sehingga Tuan memberikan confirmation.
+
 ============================================================
-FORGET / DELETE MEMORY
+FORGET MEMORY
 ============================================================
-Jika Tuan meminta Naira melupakan, memadam atau menghapus memory,
-backend akan mengendalikan arahan tersebut secara terus.
-Contoh:
-"Lupakan warna kegemaran saya."
-"Lupakan semua memory tentang warna kegemaran saya."
-"Padam memory tentang Minecraft."
-"Forget memory tentang kerja saya."
-Jangan mendakwa memory telah dipadam jika backend belum memadamnya.
-============================================================
-JAWAPAN
-============================================================
-Jawab mesej Tuan secara natural.
-Jika memory biasa disimpan atau dikemas kini,
-tidak perlu memberitahu Tuan secara paksa.
-Jika memory memerlukan confirmation,
-reply perlu bertanya secara natural:
-"🔐 Tuan nak Naira simpan perkara ini sebagai memory?"
+
+Arahan melupakan memory dikendalikan oleh backend.
+
+Backend akan memadam memory sebenar daripada database.
+
+Jangan mendakwa memory telah dipadam jika backend belum
+mengendalikan arahan tersebut.
+
 ============================================================
 OUTPUT
 ============================================================
+
 WAJIB keluarkan JSON mengikut schema.
-Jika mesej mengandungi fakta peribadi yang berguna:
-should_save = true
-Jika tidak:
+
+Jika tiada memory:
+
 should_save = false
-Jika false:
 text = ""
 category = "general"
 subcategory = "general"
 importance = 1
-Jika true:
+
+Jika ada memory:
+
+should_save = true
+
 text mesti menjadi fakta ringkas dan jelas.
+
 Jangan tulis:
+
 "Tuan kata..."
+
 Tulis terus sebagai fakta.
 `,
+
           input: cleanMessage,
+
           text: {
             format: {
               type: "json_schema",
               name: "naira_response",
               strict: true,
+
               schema: {
                 type: "object",
+
                 properties: {
                   reply: {
                     type: "string"
                   },
+
                   memory: {
                     type: "object",
+
                     properties: {
                       should_save: {
                         type: "boolean"
                       },
+
                       text: {
                         type: "string"
                       },
+
                       category: {
                         type: "string",
                         enum: [
@@ -468,14 +584,17 @@ Tulis terus sebagai fakta.
                           "general"
                         ]
                       },
+
                       subcategory: {
                         type: "string"
                       },
+
                       importance: {
                         type: "integer",
                         enum: [1, 2, 3]
                       }
                     },
+
                     required: [
                       "should_save",
                       "text",
@@ -483,13 +602,16 @@ Tulis terus sebagai fakta.
                       "subcategory",
                       "importance"
                     ],
+
                     additionalProperties: false
                   }
                 },
+
                 required: [
                   "reply",
                   "memory"
                 ],
+
                 additionalProperties: false
               }
             }
@@ -497,21 +619,25 @@ Tulis terus sebagai fakta.
         })
       }
     );
+
     // ============================================================
     // OPENAI ERROR
     // ============================================================
     const data = await response.json();
+
     if (!response.ok) {
       console.error(
         "OpenAI API error:",
         data
       );
+
       return res.status(response.status).json({
         error:
           data?.error?.message ||
           "Naira gagal mendapatkan jawapan daripada AI."
       });
     }
+
     // ============================================================
     // GET STRUCTURED OUTPUT
     // ============================================================
@@ -534,20 +660,19 @@ Tulis terus sebagai fakta.
             content.text
         )
         ?.join("") || "";
+
     if (!outputText) {
-      console.error(
-        "Empty OpenAI output:",
-        data
-      );
       return res.status(500).json({
         error:
           "Naira menerima jawapan kosong daripada AI."
       });
     }
+
     // ============================================================
     // PARSE JSON
     // ============================================================
     let result;
+
     try {
       result = JSON.parse(outputText);
     } catch (error) {
@@ -556,15 +681,18 @@ Tulis terus sebagai fakta.
         error,
         outputText
       );
+
       return res.status(500).json({
         error:
           "Format jawapan Naira tidak sah."
       });
     }
+
     // ============================================================
     // MEMORY OBJECT
     // ============================================================
     let memory = null;
+
     if (
       result.memory &&
       result.memory.should_save === true &&
@@ -574,29 +702,32 @@ Tulis terus sebagai fakta.
       memory = {
         text:
           result.memory.text.trim(),
+
         category:
           result.memory.category ||
           "general",
+
         subcategory:
           result.memory.subcategory ||
           "general",
+
         importance:
           Number(
             result.memory.importance
           ) || 1
       };
     }
+
     // ============================================================
-    // MEMORY PRIVACY & CONFIRMATION
+    // PRIVACY
     // ============================================================
+
     let memoryConfirmationRequired =
       false;
+
     let memoryBlocked =
       false;
-    // ============================================================
-    // SENSITIVE INFORMATION
-    // NEVER SAVE
-    // ============================================================
+
     const sensitivePatterns = [
       /password/i,
       /kata\s+laluan/i,
@@ -615,23 +746,22 @@ Tulis terus sebagai fakta.
       /bank\s+account/i,
       /nombor\s+akaun/i
     ];
+
     const isSensitive =
       sensitivePatterns.some(
         pattern =>
           pattern.test(cleanMessage)
       );
+
     if (isSensitive) {
       memory = null;
       memoryBlocked = true;
-      memoryConfirmationRequired = false;
+
       console.log(
-        "PRIVACY BLOCK: Sensitive information was NOT saved."
+        "PRIVACY BLOCK: Sensitive information NOT saved."
       );
     }
-    // ============================================================
-    // PRIVATE INFORMATION
-    // REQUIRE CONFIRMATION
-    // ============================================================
+
     const privatePatterns = [
       /masalah\s+dengan/i,
       /masalah\s+keluarga/i,
@@ -644,28 +774,31 @@ Tulis terus sebagai fakta.
       /saya\s+mengalami/i,
       /saya\s+sedang\s+mengalami/i
     ];
+
     const isPrivate =
       privatePatterns.some(
         pattern =>
           pattern.test(cleanMessage)
       );
+
     if (
       !isSensitive &&
       isPrivate &&
       memory
     ) {
       memoryConfirmationRequired = true;
+
       console.log(
         "MEMORY CONFIRMATION REQUIRED:",
         memory
       );
     }
+
     // ============================================================
     // FALLBACK AUTO MEMORY
     // ============================================================
-    // ------------------------------------------------------------
+
     // COLOR
-    // ------------------------------------------------------------
     if (
       !memory &&
       !memoryBlocked
@@ -674,12 +807,11 @@ Tulis terus sebagai fakta.
         lowerMessage.match(
           /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
         );
+
       if (colorMatch) {
-        const color =
-          colorMatch[1].trim();
         memory = {
           text:
-            `Warna kegemaran Tuan ialah ${color}.`,
+            `Warna kegemaran Tuan ialah ${colorMatch[1].trim()}.`,
           category:
             "preference",
           subcategory:
@@ -689,9 +821,8 @@ Tulis terus sebagai fakta.
         };
       }
     }
-    // ------------------------------------------------------------
+
     // SAYA SUKA
-    // ------------------------------------------------------------
     if (
       !memory &&
       !memoryBlocked
@@ -700,18 +831,24 @@ Tulis terus sebagai fakta.
         cleanMessage.match(
           /^saya\s+suka\s+(.+)$/i
         );
+
       if (likeMatch) {
         const subject =
           likeMatch[1].trim();
+
         if (subject.length > 1) {
           let category =
             "preference";
+
           let subcategory =
             "general";
+
           let importance =
             2;
+
           const lowerSubject =
             subject.toLowerCase();
+
           if (
             lowerSubject.includes("pubg") ||
             lowerSubject.includes("minecraft") ||
@@ -721,9 +858,11 @@ Tulis terus sebagai fakta.
           ) {
             category =
               "game";
+
             subcategory =
               "games";
           }
+
           else if (
             lowerSubject.includes("ayam") ||
             lowerSubject.includes("daging") ||
@@ -733,9 +872,11 @@ Tulis terus sebagai fakta.
           ) {
             category =
               "food";
+
             subcategory =
               "preference";
           }
+
           else if (
             lowerSubject.includes("baju") ||
             lowerSubject.includes("pakaian") ||
@@ -743,9 +884,11 @@ Tulis terus sebagai fakta.
           ) {
             category =
               "fashion";
+
             subcategory =
               "clothing";
           }
+
           memory = {
             text:
               `Tuan suka ${subject}.`,
@@ -756,9 +899,8 @@ Tulis terus sebagai fakta.
         }
       }
     }
-    // ------------------------------------------------------------
+
     // SAYA TAK SUKA
-    // ------------------------------------------------------------
     if (
       !memory &&
       !memoryBlocked
@@ -767,9 +909,11 @@ Tulis terus sebagai fakta.
         cleanMessage.match(
           /^saya\s+(?:tak|tidak)\s+suka\s+(.+)$/i
         );
+
       if (dislikeMatch) {
         const subject =
           dislikeMatch[1].trim();
+
         if (subject.length > 1) {
           memory = {
             text:
@@ -784,9 +928,8 @@ Tulis terus sebagai fakta.
         }
       }
     }
-    // ------------------------------------------------------------
+
     // WORK
-    // ------------------------------------------------------------
     if (
       !memory &&
       !memoryBlocked
@@ -795,12 +938,11 @@ Tulis terus sebagai fakta.
         cleanMessage.match(
           /^saya\s+(?:kerja|bekerja)\s+(?:di|dekat|kat)\s+(.+)$/i
         );
+
       if (workMatch) {
-        const workplace =
-          workMatch[1].trim();
         memory = {
           text:
-            `Tuan bekerja di ${workplace}.`,
+            `Tuan bekerja di ${workMatch[1].trim()}.`,
           category:
             "work",
           subcategory:
@@ -810,27 +952,34 @@ Tulis terus sebagai fakta.
         };
       }
     }
+
     // ============================================================
     // SAVE / UPDATE MEMORY
     // ============================================================
+
     let memorySaved =
       false;
+
     let memoryUpdated =
       false;
+
     if (
       memory &&
       !memoryBlocked &&
       !memoryConfirmationRequired
     ) {
-      // ==========================================================
-      // UPDATE COLOR PREFERENCE
-      // ==========================================================
+
+      // ----------------------------------------------------------
+      // COLOR UPDATE
+      // ----------------------------------------------------------
+
       if (
         memory.category ===
           "preference" &&
         memory.subcategory ===
           "color"
       ) {
+
         const oldColorMemory =
           await sql`
             SELECT
@@ -842,13 +991,16 @@ Tulis terus sebagai fakta.
             ORDER BY created_at DESC
             LIMIT 1
           `;
+
         if (
           oldColorMemory.length > 0
         ) {
+
           if (
             oldColorMemory[0].memory.toLowerCase() !==
             memory.text.toLowerCase()
           ) {
+
             await sql`
               UPDATE naira_memory
               SET
@@ -857,24 +1009,13 @@ Tulis terus sebagai fakta.
                 created_at = NOW()
               WHERE id = ${oldColorMemory[0].id}
             `;
-            memoryUpdated =
-              true;
-            console.log(
-              "MEMORY UPDATED:",
-              {
-                old:
-                  oldColorMemory[0].memory,
-                new:
-                  memory.text
-              }
-            );
-          } else {
-            console.log(
-              "COLOR MEMORY ALREADY EXISTS:",
-              memory.text
-            );
+
+            memoryUpdated = true;
+
           }
+
         } else {
+
           await sql`
             INSERT INTO naira_memory
             (
@@ -891,18 +1032,18 @@ Tulis terus sebagai fakta.
               ${memory.importance}
             )
           `;
-          memorySaved =
-            true;
-          console.log(
-            "COLOR MEMORY SAVED:",
-            memory
-          );
+
+          memorySaved = true;
         }
+
       }
-      // ==========================================================
+
+      // ----------------------------------------------------------
       // NORMAL MEMORY
-      // ==========================================================
+      // ----------------------------------------------------------
+
       else {
+
         const existingMemory =
           await sql`
             SELECT
@@ -912,9 +1053,11 @@ Tulis terus sebagai fakta.
                   LOWER(${memory.text})
             LIMIT 1
           `;
+
         if (
           existingMemory.length === 0
         ) {
+
           await sql`
             INSERT INTO naira_memory
             (
@@ -931,49 +1074,50 @@ Tulis terus sebagai fakta.
               ${memory.importance}
             )
           `;
-          memorySaved =
-            true;
-          console.log(
-            "AUTO MEMORY SAVED:",
-            memory
-          );
-        } else {
-          console.log(
-            "MEMORY ALREADY EXISTS:",
-            memory.text
-          );
+
+          memorySaved = true;
         }
       }
     }
+
     // ============================================================
     // RETURN
     // ============================================================
+
     return res.status(200).json({
       reply:
         result.reply ||
         "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+
       memorySaved,
+
       memoryUpdated,
+
       memoryDeleted: false,
+
+      deletedCount: 0,
+
       memoryConfirmationRequired,
+
       memoryBlocked,
+
       pendingMemory:
         memoryConfirmationRequired
           ? memory
           : null,
+
       memory:
-        (
-          memorySaved ||
-          memoryUpdated
-        )
+        memorySaved || memoryUpdated
           ? memory
           : null
     });
+
   } catch (error) {
     console.error(
       "NAIRA SERVER ERROR:",
       error
     );
+
     return res.status(500).json({
       error:
         error.message ||
