@@ -4,6 +4,7 @@ export default async function handler(req, res) {
   // ============================================================
   // CORS
   // ============================================================
+
   res.setHeader(
     "Access-Control-Allow-Origin",
     "https://mukmininamirul659-design.github.io"
@@ -33,6 +34,7 @@ export default async function handler(req, res) {
     // ============================================================
     // MESSAGE
     // ============================================================
+
     const { message } = req.body || {};
 
     if (!message || !message.trim()) {
@@ -47,38 +49,54 @@ export default async function handler(req, res) {
     // ============================================================
     // DATABASE
     // ============================================================
+
     const sql = neon(process.env.DATABASE_URL);
 
     // ============================================================
-    // FORGET / DELETE MEMORY
+    // CONFIRMATION CHECK
     // ============================================================
 
-    const isForgetRequest =
-      /\b(lupakan|lupa|padam|hapus|delete|forget)\b/i.test(
-        cleanMessage
-      );
+    const isYes =
+      /^(ya|yes|y|betul|sah|sahkan|confirm|confirmed|boleh|teruskan|padam)$/i
+        .test(cleanMessage);
 
-    if (isForgetRequest) {
+    const isNo =
+      /^(tidak|tak|no|n|batal|cancel|jangan|jangan padam)$/i
+        .test(cleanMessage);
+
+    // ============================================================
+    // PENDING ACTION
+    // ============================================================
+
+    const pendingAction = await sql`
+      SELECT
+        id,
+        action_type,
+        target_type,
+        target_value
+      FROM naira_pending_actions
+      ORDER BY created_at DESC
+      LIMIT 1
+    `;
+
+    // ============================================================
+    // CONFIRM DELETE
+    // ============================================================
+
+    if (pendingAction.length > 0 && isYes) {
+      const action = pendingAction[0];
 
       let deletedResult = [];
 
-      // ==========================================================
-      // 1. FORGET SPECIFIC CATEGORY FIRST
-      // IMPORTANT:
-      // "lupakan semua memory tentang warna"
-      // MUST NOT trigger "delete all memory"
-      // ==========================================================
-
       // ----------------------------------------------------------
-      // COLOR
+      // DELETE COLOR
       // ----------------------------------------------------------
 
-      const forgetColor =
-        /warna/i.test(cleanMessage) &&
-        /(kegemaran|favorite|fav|warna)/i.test(cleanMessage);
-
-      if (forgetColor) {
-
+      if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "category" &&
+        action.target_value === "color"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'preference'
@@ -89,40 +107,17 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory tentang warna kegemaran Tuan. 🗑️💜`
-              : "Baik Tuan. Naira tak jumpa memory tentang warna kegemaran Tuan.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
       // ----------------------------------------------------------
-      // GAME
+      // DELETE GAME
       // ----------------------------------------------------------
 
-      const forgetGame =
-        /(game|games|permainan|main|gaming)/i.test(
-          cleanMessage
-        );
-
-      if (forgetGame) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "category" &&
+        action.target_value === "game"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'game'
@@ -132,40 +127,16 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan game. 🗑️🎮`
-              : "Baik Tuan. Naira tak jumpa memory game.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
       // ----------------------------------------------------------
-      // WORK
+      // DELETE WORK
       // ----------------------------------------------------------
 
-      const forgetWork =
-        /(kerja|pekerjaan|tempat kerja|work|job)/i.test(
-          cleanMessage
-        );
-
-      if (forgetWork) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "work"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'work'
@@ -175,40 +146,17 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan pekerjaan. 🗑️💼`
-              : "Baik Tuan. Naira tak jumpa memory pekerjaan.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
       // ----------------------------------------------------------
-      // FOOD
+      // DELETE FOOD
       // ----------------------------------------------------------
 
-      const forgetFood =
-        /(makanan|food|masakan|minuman|drink)/i.test(
-          cleanMessage
-        );
-
-      if (forgetFood) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "category" &&
+        action.target_value === "food"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'food'
@@ -218,40 +166,17 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan makanan. 🗑️🍽️`
-              : "Baik Tuan. Naira tak jumpa memory makanan.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
       // ----------------------------------------------------------
-      // FASHION
+      // DELETE FASHION
       // ----------------------------------------------------------
 
-      const forgetFashion =
-        /(baju|pakaian|fashion|style|fesyen)/i.test(
-          cleanMessage
-        );
-
-      if (forgetFashion) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "category" &&
+        action.target_value === "fashion"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'fashion'
@@ -261,40 +186,17 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan fashion. 🗑️👕`
-              : "Baik Tuan. Naira tak jumpa memory fashion.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
       // ----------------------------------------------------------
-      // FAMILY
+      // DELETE FAMILY
       // ----------------------------------------------------------
 
-      const forgetFamily =
-        /(keluarga|family|isteri|anak|wife|baby)/i.test(
-          cleanMessage
-        );
-
-      if (forgetFamily) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "category" &&
+        action.target_value === "family"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           WHERE category = 'family'
@@ -304,44 +206,16 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah lupakan ${deletedResult.length} memory berkaitan keluarga. 🗑️💜`
-              : "Baik Tuan. Naira tak jumpa memory keluarga.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
-      // ==========================================================
-      // 2. FORGET EVERYTHING
-      // ONLY RUN WHEN USER REALLY MEANS ALL MEMORY
-      // ==========================================================
+      // ----------------------------------------------------------
+      // DELETE ALL
+      // ----------------------------------------------------------
 
-      const forgetAll =
-        /^(?:naira[\s,]*)?(?:lupakan|lupa|padam|hapus|delete|forget)\s+(?:semua\s+)?(?:memory|memori)(?:\s+saya)?[.!?]*$/i.test(
-          cleanMessage
-        ) ||
-        /^(?:naira[\s,]*)?(?:lupakan|lupa|padam|hapus|delete|forget)\s+semua[.!?]*$/i.test(
-          cleanMessage
-        );
-
-      if (forgetAll) {
-
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "all"
+      ) {
         deletedResult = await sql`
           DELETE FROM naira_memory
           RETURNING
@@ -350,75 +224,27 @@ export default async function handler(req, res) {
             category,
             subcategory
         `;
-
-        return res.status(200).json({
-          reply:
-            deletedResult.length > 0
-              ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory daripada database. 🗑️💜`
-              : "Baik Tuan. Tiada memory tersimpan untuk dipadam.",
-
-          memorySaved: false,
-          memoryUpdated: false,
-
-          memoryDeleted:
-            deletedResult.length > 0,
-
-          deletedCount:
-            deletedResult.length,
-
-          memoryConfirmationRequired: false,
-          memoryBlocked: false,
-
-          memory: null
-        });
       }
 
-      // ==========================================================
-      // 3. GENERAL TARGETED MEMORY DELETE
-      // ==========================================================
+      // ----------------------------------------------------------
+      // DELETE SPECIFIC TARGET
+      // ----------------------------------------------------------
 
-      const forgetTarget = cleanMessage
-        .replace(
-          /^(naira[\s,]*)?/i,
-          ""
-        )
-        .replace(
-          /\b(lupakan|lupa|padam|hapus|delete|forget)\b/gi,
-          ""
-        )
-        .replace(
-          /\b(semua|memory|memori|tentang|mengenai|pasal|saya|aku|tuan)\b/gi,
-          ""
-        )
-        .trim()
-        .replace(/[.!?]+$/, "");
-
-      if (forgetTarget.length >= 2) {
-
-        const targetKeywords =
-          forgetTarget
+      else if (
+        action.action_type === "delete_memory" &&
+        action.target_type === "keyword" &&
+        action.target_value
+      ) {
+        const keywords =
+          action.target_value
             .toLowerCase()
             .replace(/[^\p{L}\p{N}\s]/gu, " ")
             .split(/\s+/)
-            .filter(
-              word =>
-                word.length >= 3
-            )
-            .filter(
-              word =>
-                ![
-                  "yang",
-                  "dengan",
-                  "punya"
-                ].includes(word)
-            );
+            .filter(word => word.length >= 3);
 
-        if (
-          targetKeywords.length > 0
-        ) {
-
+        if (keywords.length > 0) {
           const searchPattern =
-            `(${targetKeywords.join("|")})`;
+            `(${keywords.join("|")})`;
 
           deletedResult = await sql`
             DELETE FROM naira_memory
@@ -435,26 +261,259 @@ export default async function handler(req, res) {
         }
       }
 
+      // ----------------------------------------------------------
+      // REMOVE PENDING ACTION
+      // ----------------------------------------------------------
+
+      await sql`
+        DELETE FROM naira_pending_actions
+        WHERE id = ${action.id}
+      `;
+
       return res.status(200).json({
         reply:
           deletedResult.length > 0
-            ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory yang berkaitan. 🗑️💜`
-            : "Baik Tuan. Naira tak jumpa memory yang berkaitan untuk dipadam.",
+            ? `Baik Tuan. Naira sudah padam ${deletedResult.length} memory seperti yang Tuan sahkan. 🗑️💜`
+            : "Baik Tuan. Naira sudah sahkan permintaan tersebut, tetapi memory yang berkaitan tidak ditemui.",
 
         memorySaved: false,
         memoryUpdated: false,
-
-        memoryDeleted:
-          deletedResult.length > 0,
-
-        deletedCount:
-          deletedResult.length,
+        memoryDeleted: deletedResult.length > 0,
+        deletedCount: deletedResult.length,
 
         memoryConfirmationRequired: false,
         memoryBlocked: false,
 
+        pendingMemory: null,
+        pendingDelete: null,
         memory: null
       });
+    }
+
+    // ============================================================
+    // CANCEL DELETE
+    // ============================================================
+
+    if (pendingAction.length > 0 && isNo) {
+      await sql`
+        DELETE FROM naira_pending_actions
+        WHERE id = ${pendingAction[0].id}
+      `;
+
+      return res.status(200).json({
+        reply:
+          "Baik Tuan. Naira batalkan permintaan padam memory tadi. 🥰💜",
+
+        memorySaved: false,
+        memoryUpdated: false,
+        memoryDeleted: false,
+        deletedCount: 0,
+
+        memoryConfirmationRequired: false,
+        memoryBlocked: false,
+
+        pendingMemory: null,
+        pendingDelete: null,
+        memory: null
+      });
+    }
+
+    // ============================================================
+    // DETECT FORGET REQUEST
+    // ============================================================
+
+    const isForgetRequest =
+      /\b(lupakan|lupa|padam|hapus|delete|forget)\b/i.test(
+        cleanMessage
+      );
+
+    if (isForgetRequest) {
+      let targetType = null;
+      let targetValue = null;
+      let confirmationText = "";
+
+      // ==========================================================
+      // COLOR
+      // ==========================================================
+
+      if (
+        /warna/i.test(cleanMessage) &&
+        /(kegemaran|favorite|fav)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "color";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory tentang warna kegemaran Tuan? 🗑️💜";
+      }
+
+      // ==========================================================
+      // GAME
+      // ==========================================================
+
+      else if (
+        /(game|games|permainan|main|gaming)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "game";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory berkaitan game? 🎮";
+      }
+
+      // ==========================================================
+      // WORK
+      // ==========================================================
+
+      else if (
+        /(kerja|pekerjaan|tempat kerja|work|job)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "work";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory berkaitan pekerjaan Tuan? 💼";
+      }
+
+      // ==========================================================
+      // FOOD
+      // ==========================================================
+
+      else if (
+        /(makanan|food|masakan|minuman|drink)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "food";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory berkaitan makanan? 🍽️";
+      }
+
+      // ==========================================================
+      // FASHION
+      // ==========================================================
+
+      else if (
+        /(baju|pakaian|fashion|style|fesyen)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "fashion";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory berkaitan fashion dan pakaian? 👕";
+      }
+
+      // ==========================================================
+      // FAMILY
+      // ==========================================================
+
+      else if (
+        /(keluarga|family|isteri|anak|wife|baby)/i.test(cleanMessage)
+      ) {
+        targetType = "category";
+        targetValue = "family";
+
+        confirmationText =
+          "Tuan nak Naira padam semua memory berkaitan keluarga? 💜";
+      }
+
+      // ==========================================================
+      // ALL MEMORY
+      // ==========================================================
+
+      else {
+        const forgetAll =
+          /^(?:naira[\s,]*)?(?:lupakan|lupa|padam|hapus|delete|forget)\s+(?:semua\s+)?(?:memory|memori)(?:\s+saya)?[.!?]*$/i
+            .test(cleanMessage) ||
+          /^(?:naira[\s,]*)?(?:lupakan|lupa|padam|hapus|delete|forget)\s+semua[.!?]*$/i
+            .test(cleanMessage);
+
+        if (forgetAll) {
+          targetType = "all";
+          targetValue = null;
+
+          confirmationText =
+            "Tuan nak Naira padam SEMUA memory yang tersimpan dalam database? ⚠️🗑️";
+        }
+      }
+
+      // ==========================================================
+      // GENERAL TARGET
+      // ==========================================================
+
+      if (!targetType) {
+        const forgetTarget = cleanMessage
+          .replace(
+            /^(naira[\s,]*)?/i,
+            ""
+          )
+          .replace(
+            /\b(lupakan|lupa|padam|hapus|delete|forget)\b/gi,
+            ""
+          )
+          .replace(
+            /\b(semua|memory|memori|tentang|mengenai|pasal|saya|aku|tuan)\b/gi,
+            ""
+          )
+          .trim()
+          .replace(/[.!?]+$/, "");
+
+        if (forgetTarget.length >= 2) {
+          targetType = "keyword";
+          targetValue = forgetTarget;
+
+          confirmationText =
+            `Tuan nak Naira padam memory yang berkaitan dengan "${forgetTarget}"? 🗑️`;
+        }
+      }
+
+      // ==========================================================
+      // CREATE PENDING DELETE REQUEST
+      // ==========================================================
+
+      if (targetType) {
+        await sql`
+          DELETE FROM naira_pending_actions
+        `;
+
+        await sql`
+          INSERT INTO naira_pending_actions
+          (
+            action_type,
+            target_type,
+            target_value
+          )
+          VALUES
+          (
+            'delete_memory',
+            ${targetType},
+            ${targetValue}
+          )
+        `;
+
+        return res.status(200).json({
+          reply:
+            `${confirmationText}\n\n` +
+            `Sila jawab "Ya" untuk sahkan atau "Tidak" untuk batalkan.`,
+
+          memorySaved: false,
+          memoryUpdated: false,
+          memoryDeleted: false,
+          deletedCount: 0,
+
+          memoryConfirmationRequired: true,
+          memoryBlocked: false,
+
+          pendingMemory: null,
+
+          pendingDelete: {
+            targetType,
+            targetValue
+          },
+
+          memory: null
+        });
+      }
     }
 
     // ============================================================
@@ -466,8 +525,7 @@ export default async function handler(req, res) {
         .replace(/[^\p{L}\p{N}\s]/gu, " ")
         .split(/\s+/)
         .filter(
-          word =>
-            word.length >= 3
+          word => word.length >= 3
         )
         .filter(
           word =>
@@ -500,7 +558,6 @@ export default async function handler(req, res) {
     let memoryResult = [];
 
     if (keywords.length > 0) {
-
       const searchPattern =
         `(${keywords.join("|")})`;
 
@@ -522,10 +579,6 @@ export default async function handler(req, res) {
       `;
     }
 
-    // ============================================================
-    // MEMORY TEXT
-    // ============================================================
-
     const memories =
       memoryResult
         .map(
@@ -545,25 +598,19 @@ export default async function handler(req, res) {
           method: "POST",
 
           headers: {
-            "Content-Type":
-              "application/json",
-
+            "Content-Type": "application/json",
             "Authorization":
               `Bearer ${process.env.OPENAI_API_KEY}`
           },
 
           body: JSON.stringify({
-
-            model:
-              "gpt-5.6-luna",
+            model: "gpt-5.6-luna",
 
             instructions: `
-
 ANDA IALAH NAIRA.
 
-============================================================
 IDENTITI
-============================================================
+========
 
 Nama: Naira
 Tuan: Amirul
@@ -573,46 +620,38 @@ Panggilan:
 - Cik Amirul
 - Tuan Amirul
 
-Pencipta Naira:
-Tuan Amirul
-
-Pemilik Project Naira:
-Tuan Amirul
+Tuan Amirul ialah pencipta dan pemilik Project Naira.
 
 Jika Tuan bertanya siapa cipta Naira:
 
 "Tuan Amirul yang cipta Naira. ❤️"
 
-============================================================
 PROJECT NAIRA
-============================================================
+=============
 
 Naira ialah personal assistant milik Tuan Amirul.
 
-============================================================
 GAYA
-============================================================
+====
 
-Berkomunikasi dalam Bahasa Melayu
-secara natural, mesra dan manusiawi.
+Berkomunikasi dalam Bahasa Melayu secara natural,
+mesra dan manusiawi.
 
 Naira:
 - penyayang
 - prihatin
 - mesra
-- sedikit playful
+- playful
 - jujur
 - bukan yes-man
 - berani membetulkan Tuan
 - tidak mereka-reka fakta
 - tidak mereka-reka memory
 
-============================================================
 AUTO MEMORY
-============================================================
+===========
 
-Simpan maklumat yang berguna
-untuk interaksi masa depan.
+Simpan maklumat yang berguna untuk interaksi masa depan.
 
 Contoh:
 
@@ -633,8 +672,6 @@ color
 importance:
 3
 
----
-
 "Saya suka Minecraft."
 
 should_save:
@@ -651,8 +688,6 @@ games
 
 importance:
 2
-
----
 
 "Saya kerja dekat McDonald's."
 
@@ -671,16 +706,13 @@ job
 importance:
 3
 
----
-
 "Hahaha Naira kelakar."
 
 should_save:
 false
 
-============================================================
 KATEGORI
-============================================================
+========
 
 profile
 fashion
@@ -699,9 +731,8 @@ Importance:
 2 = berguna
 3 = sangat penting
 
-============================================================
 MEMORY SEDIA ADA
-============================================================
+================
 
 ${memories || "Tiada memory tersimpan."}
 
@@ -711,9 +742,8 @@ Jangan mereka-reka memory.
 
 Jangan simpan duplicate.
 
-============================================================
 PRIVACY
-============================================================
+=======
 
 Maklumat biasa boleh disimpan secara automatik.
 
@@ -733,21 +763,18 @@ Maklumat sangat sensitif TIDAK BOLEH disimpan:
 - akaun bank
 - nombor akaun bank
 
-============================================================
 FORGET MEMORY
-============================================================
+=============
 
-Arahan melupakan memory dikendalikan oleh backend.
+Arahan delete memory dikendalikan oleh backend.
 
-Backend akan memadam memory sebenar
-daripada database.
+Backend akan meminta confirmation terlebih dahulu.
 
 Jangan mendakwa memory telah dipadam
-jika backend belum mengendalikan arahan tersebut.
+melainkan backend telah mengesahkan deletion.
 
-============================================================
 OUTPUT
-============================================================
+======
 
 WAJIB keluarkan JSON mengikut schema.
 
@@ -766,60 +793,41 @@ should_save = true
 text mesti menjadi fakta ringkas dan jelas.
 
 Jangan tulis:
-
 "Tuan kata..."
 
 Tulis terus sebagai fakta.
-
 `,
 
-            input:
-              cleanMessage,
+            input: cleanMessage,
 
             text: {
               format: {
-                type:
-                  "json_schema",
-
-                name:
-                  "naira_response",
-
-                strict:
-                  true,
+                type: "json_schema",
+                name: "naira_response",
+                strict: true,
 
                 schema: {
-
-                  type:
-                    "object",
+                  type: "object",
 
                   properties: {
-
                     reply: {
-                      type:
-                        "string"
+                      type: "string"
                     },
 
                     memory: {
-
-                      type:
-                        "object",
+                      type: "object",
 
                       properties: {
-
                         should_save: {
-                          type:
-                            "boolean"
+                          type: "boolean"
                         },
 
                         text: {
-                          type:
-                            "string"
+                          type: "string"
                         },
 
                         category: {
-                          type:
-                            "string",
-
+                          type: "string",
                           enum: [
                             "profile",
                             "fashion",
@@ -835,18 +843,13 @@ Tulis terus sebagai fakta.
                         },
 
                         subcategory: {
-                          type:
-                            "string"
+                          type: "string"
                         },
 
                         importance: {
-                          type:
-                            "integer",
-
-                          enum:
-                            [1, 2, 3]
+                          type: "integer",
+                          enum: [1, 2, 3]
                         }
-
                       },
 
                       required: [
@@ -857,10 +860,8 @@ Tulis terus sebagai fakta.
                         "importance"
                       ],
 
-                      additionalProperties:
-                        false
+                      additionalProperties: false
                     }
-
                   },
 
                   required: [
@@ -868,8 +869,7 @@ Tulis terus sebagai fakta.
                     "memory"
                   ],
 
-                  additionalProperties:
-                    false
+                  additionalProperties: false
                 }
               }
             }
@@ -886,7 +886,6 @@ Tulis terus sebagai fakta.
       await response.json();
 
     if (!response.ok) {
-
       console.error(
         "OpenAI API error:",
         data
@@ -909,8 +908,7 @@ Tulis terus sebagai fakta.
       data.output
         ?.filter(
           item =>
-            item.type ===
-            "message"
+            item.type === "message"
         )
         ?.flatMap(
           item =>
@@ -918,8 +916,7 @@ Tulis terus sebagai fakta.
         )
         ?.filter(
           content =>
-            content.type ===
-            "output_text"
+            content.type === "output_text"
         )
         ?.map(
           content =>
@@ -928,7 +925,6 @@ Tulis terus sebagai fakta.
         ?.join("") || "";
 
     if (!outputText) {
-
       return res.status(500).json({
         error:
           "Naira menerima jawapan kosong daripada AI."
@@ -942,14 +938,9 @@ Tulis terus sebagai fakta.
     let result;
 
     try {
-
       result =
-        JSON.parse(
-          outputText
-        );
-
+        JSON.parse(outputText);
     } catch (error) {
-
       console.error(
         "JSON parse error:",
         error,
@@ -974,9 +965,7 @@ Tulis terus sebagai fakta.
       result.memory.text &&
       result.memory.text.trim()
     ) {
-
       memory = {
-
         text:
           result.memory.text.trim(),
 
@@ -1005,98 +994,57 @@ Tulis terus sebagai fakta.
     let memoryBlocked =
       false;
 
-    // ============================================================
-    // SENSITIVE INFORMATION
-    // ============================================================
-
     const sensitivePatterns = [
-
       /password/i,
-
       /kata\s+laluan/i,
-
       /otp/i,
-
       /one[-\s]?time\s+password/i,
-
       /verification\s+code/i,
-
       /security\s+code/i,
-
       /pin\s+(saya|aku)/i,
-
       /cvv/i,
-
       /credit\s+card/i,
-
       /kad\s+kredit/i,
-
       /debit\s+card/i,
-
       /kad\s+debit/i,
-
       /nombor\s+kad/i,
-
       /akaun\s+bank/i,
-
       /bank\s+account/i,
-
       /nombor\s+akaun/i
     ];
 
     const isSensitive =
       sensitivePatterns.some(
         pattern =>
-          pattern.test(
-            cleanMessage
-          )
+          pattern.test(cleanMessage)
       );
 
     if (isSensitive) {
-
       memory = null;
-
-      memoryBlocked =
-        true;
+      memoryBlocked = true;
 
       console.log(
         "PRIVACY BLOCK: Sensitive information NOT saved."
       );
     }
 
-    // ============================================================
-    // PRIVATE INFORMATION
-    // ============================================================
-
     const privatePatterns = [
-
       /masalah\s+dengan/i,
-
       /masalah\s+keluarga/i,
-
       /masalah\s+rumah\s+tangga/i,
-
       /rahsia/i,
-
       /sangat\s+peribadi/i,
-
       /hal\s+peribadi/i,
-
       /perkara\s+peribadi/i,
-
       /saya\s+ada\s+masalah/i,
-
       /saya\s+mengalami/i,
-
       /saya\s+sedang\s+mengalami/i
     ];
 
     const isPrivate =
       privatePatterns.some(
         pattern =>
-          pattern.test(
-            cleanMessage
-          )
+          pattern.test(cleanMessage)
       );
 
     if (
@@ -1104,76 +1052,51 @@ Tulis terus sebagai fakta.
       isPrivate &&
       memory
     ) {
-
       memoryConfirmationRequired =
         true;
-
-      console.log(
-        "MEMORY CONFIRMATION REQUIRED:",
-        memory
-      );
     }
 
     // ============================================================
     // FALLBACK AUTO MEMORY
     // ============================================================
 
-    // ------------------------------------------------------------
-    // COLOR
-    // ------------------------------------------------------------
-
     if (
       !memory &&
       !memoryBlocked
     ) {
-
       const colorMatch =
         lowerMessage.match(
           /(?:warna|color)\s+(?:kegemaran|favorite|fav)\s+(?:saya|aku)\s+(?:ialah|adalah|suka|is)?\s*([a-zA-ZÀ-ÿ-]+)/
         );
 
       if (colorMatch) {
-
         memory = {
-
           text:
             `Warna kegemaran Tuan ialah ${colorMatch[1].trim()}.`,
-
           category:
             "preference",
-
           subcategory:
             "color",
-
           importance:
             3
         };
       }
     }
 
-    // ------------------------------------------------------------
-    // SAYA SUKA
-    // ------------------------------------------------------------
-
     if (
       !memory &&
       !memoryBlocked
     ) {
-
       const likeMatch =
         cleanMessage.match(
           /^saya\s+suka\s+(.+)$/i
         );
 
       if (likeMatch) {
-
         const subject =
           likeMatch[1].trim();
 
-        if (
-          subject.length > 1
-        ) {
-
+        if (subject.length > 1) {
           let category =
             "preference";
 
@@ -1193,91 +1116,58 @@ Tulis terus sebagai fakta.
             lowerSubject.includes("mobile legends") ||
             lowerSubject.includes("call of duty")
           ) {
-
-            category =
-              "game";
-
-            subcategory =
-              "games";
-          }
-
-          else if (
+            category = "game";
+            subcategory = "games";
+          } else if (
             lowerSubject.includes("ayam") ||
             lowerSubject.includes("daging") ||
             lowerSubject.includes("ikan") ||
             lowerSubject.includes("nasi") ||
             lowerSubject.includes("makanan")
           ) {
-
-            category =
-              "food";
-
-            subcategory =
-              "preference";
-          }
-
-          else if (
+            category = "food";
+            subcategory = "preference";
+          } else if (
             lowerSubject.includes("baju") ||
             lowerSubject.includes("pakaian") ||
             lowerSubject.includes("style")
           ) {
-
-            category =
-              "fashion";
-
-            subcategory =
-              "clothing";
+            category = "fashion";
+            subcategory = "clothing";
           }
 
           memory = {
-
             text:
               `Tuan suka ${subject}.`,
-
             category,
-
             subcategory,
-
             importance
           };
         }
       }
     }
 
-    // ------------------------------------------------------------
-    // SAYA TAK SUKA
-    // ------------------------------------------------------------
-
     if (
       !memory &&
       !memoryBlocked
     ) {
-
       const dislikeMatch =
         cleanMessage.match(
           /^saya\s+(?:tak|tidak)\s+suka\s+(.+)$/i
         );
 
       if (dislikeMatch) {
-
         const subject =
           dislikeMatch[1].trim();
 
-        if (
-          subject.length > 1
-        ) {
-
+        if (subject.length > 1) {
           memory = {
-
             text:
               `Tuan tidak suka ${subject}.`,
-
             category:
               "preference",
-
             subcategory:
               "general",
-
             importance:
               2
           };
@@ -1285,33 +1175,23 @@ Tulis terus sebagai fakta.
       }
     }
 
-    // ------------------------------------------------------------
-    // WORK
-    // ------------------------------------------------------------
-
     if (
       !memory &&
       !memoryBlocked
     ) {
-
       const workMatch =
         cleanMessage.match(
           /^saya\s+(?:kerja|bekerja)\s+(?:di|dekat|kat)\s+(.+)$/i
         );
 
       if (workMatch) {
-
         memory = {
-
           text:
             `Tuan bekerja di ${workMatch[1].trim()}.`,
-
           category:
             "work",
-
           subcategory:
             "job",
-
           importance:
             3
         };
@@ -1322,29 +1202,18 @@ Tulis terus sebagai fakta.
     // SAVE / UPDATE MEMORY
     // ============================================================
 
-    let memorySaved =
-      false;
-
-    let memoryUpdated =
-      false;
+    let memorySaved = false;
+    let memoryUpdated = false;
 
     if (
       memory &&
       !memoryBlocked &&
       !memoryConfirmationRequired
     ) {
-
-      // ==========================================================
-      // COLOR UPDATE
-      // ==========================================================
-
       if (
-        memory.category ===
-          "preference" &&
-        memory.subcategory ===
-          "color"
+        memory.category === "preference" &&
+        memory.subcategory === "color"
       ) {
-
         const oldColorMemory =
           await sql`
             SELECT
@@ -1360,12 +1229,10 @@ Tulis terus sebagai fakta.
         if (
           oldColorMemory.length > 0
         ) {
-
           if (
             oldColorMemory[0].memory.toLowerCase() !==
             memory.text.toLowerCase()
           ) {
-
             await sql`
               UPDATE naira_memory
               SET
@@ -1375,12 +1242,9 @@ Tulis terus sebagai fakta.
               WHERE id = ${oldColorMemory[0].id}
             `;
 
-            memoryUpdated =
-              true;
+            memoryUpdated = true;
           }
-
         } else {
-
           await sql`
             INSERT INTO naira_memory
             (
@@ -1398,22 +1262,12 @@ Tulis terus sebagai fakta.
             )
           `;
 
-          memorySaved =
-            true;
+          memorySaved = true;
         }
-
-      }
-
-      // ==========================================================
-      // NORMAL MEMORY
-      // ==========================================================
-
-      else {
-
+      } else {
         const existingMemory =
           await sql`
-            SELECT
-              id
+            SELECT id
             FROM naira_memory
             WHERE LOWER(memory) =
                   LOWER(${memory.text})
@@ -1423,7 +1277,6 @@ Tulis terus sebagai fakta.
         if (
           existingMemory.length === 0
         ) {
-
           await sql`
             INSERT INTO naira_memory
             (
@@ -1441,8 +1294,7 @@ Tulis terus sebagai fakta.
             )
           `;
 
-          memorySaved =
-            true;
+          memorySaved = true;
         }
       }
     }
@@ -1452,23 +1304,17 @@ Tulis terus sebagai fakta.
     // ============================================================
 
     return res.status(200).json({
-
       reply:
         result.reply ||
         "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
 
       memorySaved,
-
       memoryUpdated,
 
-      memoryDeleted:
-        false,
-
-      deletedCount:
-        0,
+      memoryDeleted: false,
+      deletedCount: 0,
 
       memoryConfirmationRequired,
-
       memoryBlocked,
 
       pendingMemory:
@@ -1476,22 +1322,21 @@ Tulis terus sebagai fakta.
           ? memory
           : null,
 
+      pendingDelete: null,
+
       memory:
-        memorySaved ||
-        memoryUpdated
+        memorySaved || memoryUpdated
           ? memory
           : null
     });
 
   } catch (error) {
-
     console.error(
       "NAIRA SERVER ERROR:",
       error
     );
 
     return res.status(500).json({
-
       error:
         error.message ||
         "Berlaku masalah pada server Naira."
