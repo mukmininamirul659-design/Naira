@@ -649,6 +649,34 @@ export default async function handler(req, res) {
         .join("\n");
 
     // ============================================================
+    // CONVERSATION HISTORY
+    // ============================================================
+
+    let conversationHistory = [];
+
+    if (conversationId) {
+      conversationHistory = await sql`
+        SELECT
+          user_message,
+          naira_response
+        FROM naira_conversations
+        WHERE conversation_id = ${activeConversationId}
+        ORDER BY created_at ASC
+        LIMIT 20
+      `;
+    }
+
+    const historyText =
+      conversationHistory.length > 0
+        ? conversationHistory
+            .map(
+              item =>
+                `Tuan: ${item.user_message}\nNaira: ${item.naira_response}`
+            )
+            .join("\n\n")
+        : "Tiada sejarah perbualan sebelumnya.";
+
+    // ============================================================
     // OPENAI
     // ============================================================
 
@@ -700,6 +728,14 @@ Gunakan memory hanya jika relevan.
 
 Jangan mereka-reka memory.
 Jangan simpan duplicate.
+
+SEJARAH PERBUALAN:
+
+${historyText}
+
+Gunakan sejarah perbualan hanya untuk memahami kesinambungan conversation ini.
+
+Jangan anggap maklumat daripada sejarah sebagai memory kekal jika ia tidak relevan.
 
 AUTO MEMORY:
 
@@ -1289,102 +1325,102 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-// CONVERSATION CATEGORY DETECTION
-// ============================================================
+    // CONVERSATION CATEGORY DETECTION
+    // ============================================================
 
-let conversationCategory = "general";
-let conversationSubcategory = "general";
+    let conversationCategory = "general";
+    let conversationSubcategory = "general";
 
-if (
-  /(resepi|resipi|masak|makanan|makan|ayam|daging|ikan|udang|sotong|nasi|sambal|air fryer|minuman|food|recipe)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "food";
-  conversationSubcategory = "recipe";
-}
+    if (
+      /(resepi|resipi|masak|makanan|makan|ayam|daging|ikan|udang|sotong|nasi|sambal|air fryer|minuman|food|recipe)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "food";
+      conversationSubcategory = "recipe";
+    }
 
-else if (
-  /(game|games|gaming|permainan|minecraft|roblox|pubg|mobile legends|call of duty)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "game";
-  conversationSubcategory = "gaming";
-}
+    else if (
+      /(game|games|gaming|permainan|minecraft|roblox|pubg|mobile legends|call of duty)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "game";
+      conversationSubcategory = "gaming";
+    }
 
-else if (
-  /(baju|pakaian|fashion|fesyen|style|outfit|warna|colour|color)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "fashion";
-  conversationSubcategory = "clothing";
-}
+    else if (
+      /(baju|pakaian|fashion|fesyen|style|outfit|warna|colour|color)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "fashion";
+      conversationSubcategory = "clothing";
+    }
 
-else if (
-  /(kerja|pekerjaan|shift|jadual kerja|schedule|mcdonald|manager|crew|crew leader)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "work";
-  conversationSubcategory = "job";
-}
+    else if (
+      /(kerja|pekerjaan|shift|jadual kerja|schedule|mcdonald|manager|crew|crew leader)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "work";
+      conversationSubcategory = "job";
+    }
 
-else if (
-  /(naira|project naira|projek naira|database|neon|vercel|github|api|coding|code|programming|deploy|deployment)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "project";
-  conversationSubcategory = "naira";
-}
+    else if (
+      /(naira|project naira|projek naira|database|neon|vercel|github|api|coding|code|programming|deploy|deployment)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "project";
+      conversationSubcategory = "naira";
+    }
 
-else if (
-  /(isteri|wife|anak|baby|keluarga|family|suami|bini)/i
-    .test(cleanMessage)
-) {
-  conversationCategory = "family";
-  conversationSubcategory = "family";
-}
+    else if (
+      /(isteri|wife|anak|baby|keluarga|family|suami|bini)/i
+        .test(cleanMessage)
+    ) {
+      conversationCategory = "family";
+      conversationSubcategory = "family";
+    }
 
-// ============================================================
-// CONVERSATION TITLE
-// ============================================================
+    // ============================================================
+    // CONVERSATION TITLE
+    // ============================================================
 
-let conversationTitle =
-  cleanMessage
-    .replace(/\s+/g, " ")
-    .trim();
+    let conversationTitle =
+      cleanMessage
+        .replace(/\s+/g, " ")
+        .trim();
 
-if (conversationTitle.length > 60) {
-  conversationTitle =
-    conversationTitle.slice(0, 60).trim() + "...";
-}
+    if (conversationTitle.length > 60) {
+      conversationTitle =
+        conversationTitle.slice(0, 60).trim() + "...";
+    }
 
-if (!conversationTitle) {
-  conversationTitle = "New Conversation";
-}
+    if (!conversationTitle) {
+      conversationTitle = "New Conversation";
+    }
 
-// ============================================================
-// SAVE CONVERSATION HISTORY
-// ============================================================
+    // ============================================================
+    // SAVE CONVERSATION HISTORY
+    // ============================================================
 
-await sql`
-  INSERT INTO naira_conversations
-  (
-    conversation_id,
-    title,
-    user_message,
-    naira_response,
-    category,
-    subcategory
-  )
-  VALUES
-  (
-    ${activeConversationId},
-    ${conversationTitle},
-    ${cleanMessage},
-    ${result.reply || ""},
-    ${conversationCategory},
-    ${conversationSubcategory}
-  )
-`;
+    await sql`
+      INSERT INTO naira_conversations
+      (
+        conversation_id,
+        title,
+        user_message,
+        naira_response,
+        category,
+        subcategory
+      )
+      VALUES
+      (
+        ${activeConversationId},
+        ${conversationTitle},
+        ${cleanMessage},
+        ${result.reply || ""},
+        ${conversationCategory},
+        ${conversationSubcategory}
+      )
+    `;
 
     // ============================================================
     // RETURN
