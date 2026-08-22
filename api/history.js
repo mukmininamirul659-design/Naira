@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET, OPTIONS"
+    "GET, PATCH, DELETE, OPTIONS"
   );
 
   res.setHeader(
@@ -24,35 +24,124 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  if (req.method !== "GET") {
-    return res.status(405).json({
-      error: "Method not allowed"
-    });
-  }
+  // ============================================================
+  // DATABASE
+  // ============================================================
 
   try {
-    // ============================================================
-    // DATABASE
-    // ============================================================
-
     const sql = neon(process.env.DATABASE_URL);
 
     // ============================================================
-    // QUERY PARAMETERS
+    // GET
     // ============================================================
 
-    const {
-      category,
-      conversationId,
-      search
-    } = req.query || {};
+    if (req.method === "GET") {
+      const {
+        category,
+        conversationId,
+        search
+      } = req.query || {};
 
-    // ============================================================
-    // GET SINGLE CONVERSATION
-    // ============================================================
+      // ----------------------------------------------------------
+      // OPEN SINGLE CONVERSATION
+      // ----------------------------------------------------------
 
-    if (conversationId) {
-      const conversation = await sql`
+      if (conversationId) {
+        const conversation = await sql`
+          SELECT
+            id,
+            conversation_id,
+            title,
+            user_message,
+            naira_response,
+            category,
+            subcategory,
+            created_at
+          FROM naira_conversations
+          WHERE conversation_id = ${conversationId}
+          ORDER BY created_at ASC
+        `;
+
+        return res.status(200).json({
+          success: true,
+          conversationId,
+          count: conversation.length,
+          conversations: conversation
+        });
+      }
+
+      // ----------------------------------------------------------
+      // SEARCH
+      // ----------------------------------------------------------
+
+      if (search && search.trim()) {
+        const searchText =
+          `%${search.trim()}%`;
+
+        const conversations = await sql`
+          SELECT
+            id,
+            conversation_id,
+            title,
+            user_message,
+            naira_response,
+            category,
+            subcategory,
+            created_at
+          FROM naira_conversations
+          WHERE
+            title ILIKE ${searchText}
+            OR user_message ILIKE ${searchText}
+            OR naira_response ILIKE ${searchText}
+            OR category ILIKE ${searchText}
+            OR subcategory ILIKE ${searchText}
+          ORDER BY created_at DESC
+          LIMIT 100
+        `;
+
+        return res.status(200).json({
+          success: true,
+          count: conversations.length,
+          conversations
+        });
+      }
+
+      // ----------------------------------------------------------
+      // CATEGORY
+      // ----------------------------------------------------------
+
+      if (
+        category &&
+        category !== "all"
+      ) {
+        const conversations = await sql`
+          SELECT
+            id,
+            conversation_id,
+            title,
+            user_message,
+            naira_response,
+            category,
+            subcategory,
+            created_at
+          FROM naira_conversations
+          WHERE category = ${category}
+          ORDER BY created_at DESC
+          LIMIT 100
+        `;
+
+        return res.status(200).json({
+          success: true,
+          count: conversations.length,
+          conversations
+        });
+      }
+
+      // ----------------------------------------------------------
+      // ALL HISTORY
+      // ----------------------------------------------------------
+
+      const conversations = await sql`
         SELECT
           id,
           conversation_id,
@@ -63,31 +152,52 @@ export default async function handler(req, res) {
           subcategory,
           created_at
         FROM naira_conversations
-        WHERE conversation_id = ${conversationId}
-        ORDER BY created_at ASC
+        ORDER BY created_at DESC
+        LIMIT 100
       `;
 
       return res.status(200).json({
         success: true,
-        conversationId,
-        count: conversation.length,
-        conversations: conversation
+        count: conversations.length,
+        conversations
       });
     }
 
     // ============================================================
-    // SEARCH / CATEGORY FILTER
+    // PATCH — EDIT CONVERSATION TITLE
     // ============================================================
 
-    let conversations;
+    if (req.method === "PATCH") {
+      const {
+        conversationId,
+        title
+      } = req.body || {};
 
-    if (search && search.trim()) {
+      if (!conversationId) {
+        return res.status(400).json({
+          success: false,
+          error: "conversationId diperlukan."
+        });
+      }
 
-      const searchText =
-        `%${search.trim()}%`;
+      if (
+        typeof title !== "string" ||
+        !title.trim()
+      ) {
+        return res.status(400).json({
+          success: false,
+          error: "Title tidak boleh kosong."
+        });
+      }
 
-      conversations = await sql`
-        SELECT
+      const cleanTitle =
+        title.trim();
+
+      const updated = await sql`
+        UPDATE naira_conversations
+        SET title = ${cleanTitle}
+        WHERE conversation_id = ${conversationId}
+        RETURNING
           id,
           conversation_id,
           title,
@@ -96,62 +206,65 @@ export default async function handler(req, res) {
           category,
           subcategory,
           created_at
-        FROM naira_conversations
-        WHERE
-          title ILIKE ${searchText}
-          OR user_message ILIKE ${searchText}
-          OR naira_response ILIKE ${searchText}
-        ORDER BY created_at DESC
-        LIMIT 100
       `;
 
-    } else if (
-      category &&
-      category !== "all"
-    ) {
+      if (!updated.length) {
+        return res.status(404).json({
+          success: false,
+          error: "Conversation tidak dijumpai."
+        });
+      }
 
-      conversations = await sql`
-        SELECT
-          id,
-          conversation_id,
-          title,
-          user_message,
-          naira_response,
-          category,
-          subcategory,
-          created_at
-        FROM naira_conversations
-        WHERE category = ${category}
-        ORDER BY created_at DESC
-        LIMIT 100
-      `;
-
-    } else {
-
-      conversations = await sql`
-        SELECT
-          id,
-          conversation_id,
-          title,
-          user_message,
-          naira_response,
-          category,
-          subcategory,
-          created_at
-        FROM naira_conversations
-        ORDER BY created_at DESC
-        LIMIT 100
-      `;
+      return res.status(200).json({
+        success: true,
+        message: "Conversation title berjaya dikemaskini.",
+        conversation: updated[0]
+      });
     }
 
     // ============================================================
-    // RETURN
+    // DELETE — DELETE ENTIRE CONVERSATION
     // ============================================================
 
-    return res.status(200).json({
-      success: true,
-      count: conversations.length,
-      conversations
+    if (req.method === "DELETE") {
+      const {
+        conversationId
+      } = req.body || {};
+
+      if (!conversationId) {
+        return res.status(400).json({
+          success: false,
+          error: "conversationId diperlukan."
+        });
+      }
+
+      const deleted = await sql`
+        DELETE FROM naira_conversations
+        WHERE conversation_id = ${conversationId}
+        RETURNING id
+      `;
+
+      if (!deleted.length) {
+        return res.status(404).json({
+          success: false,
+          error: "Conversation tidak dijumpai."
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Conversation berjaya dipadam.",
+        deletedCount: deleted.length
+      });
+    }
+
+    // ============================================================
+    // METHOD NOT ALLOWED
+    // ============================================================
+
+    return res.status(405).json({
+      success: false,
+      error: "Method not allowed."
     });
 
   } catch (error) {
@@ -165,7 +278,7 @@ export default async function handler(req, res) {
       success: false,
       error:
         error.message ||
-        "Gagal mendapatkan conversation history."
+        "Gagal menguruskan conversation history."
     });
   }
 }
