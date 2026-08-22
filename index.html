@@ -555,6 +555,191 @@
         height: 85px;
       }
     }
+    
+    /* ============================================================
+   CONVERSATION HISTORY
+============================================================ */
+
+.history-panel {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1500;
+  background: rgba(5, 6, 10, .88);
+  backdrop-filter: blur(16px);
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.history-panel.active {
+  display: block;
+}
+
+.history-box {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 34, 50, .99),
+      rgba(13, 15, 24, .99)
+    );
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.history-header h2 {
+  font-size: 22px;
+}
+
+.history-header p {
+  color: #858b9c;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.close-history {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.08);
+  font-size: 18px;
+}
+
+.history-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.history-search {
+  flex: 1;
+  padding: 13px 14px;
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,.08);
+  outline: none;
+  background: rgba(255,255,255,.06);
+  color: white;
+  font-size: 14px;
+}
+
+.history-search::placeholder {
+  color: #777d8d;
+}
+
+.history-refresh {
+  width: 47px;
+  border-radius: 13px;
+  background: rgba(255,255,255,.08);
+  font-size: 17px;
+}
+
+.new-conversation {
+  width: 100%;
+  padding: 14px;
+  border-radius: 15px;
+  background: linear-gradient(
+    135deg,
+    #8b5cf6,
+    #4f46e5
+  );
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.history-status {
+  text-align: center;
+  color: #7f8799;
+  font-size: 12px;
+  margin-bottom: 14px;
+}
+
+.history-day {
+  margin-bottom: 22px;
+}
+
+.history-day-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #cfd2dc;
+  font-size: 14px;
+  margin-bottom: 9px;
+}
+
+.history-day-count {
+  color: #777d8d;
+  font-size: 11px;
+}
+
+.history-card {
+  position: relative;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 15px;
+  padding: 14px;
+  margin-bottom: 8px;
+}
+
+.history-card:active {
+  transform: scale(.99);
+}
+
+.history-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 7px;
+}
+
+.history-preview {
+  color: #a7adbd;
+  font-size: 12px;
+  line-height: 1.45;
+  margin-bottom: 9px;
+}
+
+.history-meta {
+  color: #777d8d;
+  font-size: 10px;
+}
+
+.history-actions {
+  display: flex;
+  gap: 7px;
+  margin-top: 11px;
+}
+
+.history-actions button {
+  flex: 1;
+  padding: 9px;
+  border-radius: 9px;
+  background: rgba(255,255,255,.08);
+  font-size: 11px;
+}
+
+.history-actions .history-delete {
+  background: rgba(239,68,68,.18);
+  color: #ff9b9b;
+}
+
+.empty-history {
+  text-align: center;
+  color: #777d8d;
+  font-size: 13px;
+  padding: 35px 15px;
+}
+    
   </style>
 </head>
 <body>
