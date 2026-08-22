@@ -4,12 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Naira — Personal Assistant</title>
+
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
+
     body {
       min-height: 100vh;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -19,11 +21,13 @@
       display: flex;
       justify-content: center;
     }
+
     button {
       border: none;
       cursor: pointer;
       color: white;
     }
+
     .app {
       width: 100%;
       max-width: 600px;
@@ -32,18 +36,22 @@
       flex-direction: column;
       padding: 22px 18px;
     }
+
     /* ================= HEADER ================= */
+
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 8px 4px 20px;
     }
+
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
     }
+
     .avatar {
       width: 46px;
       height: 46px;
@@ -55,22 +63,27 @@
       box-shadow: 0 0 25px rgba(124, 92, 246, .45);
       font-size: 22px;
     }
+
     .brand h1 {
       font-size: 21px;
       font-weight: 650;
     }
+
     .status {
       font-size: 12px;
       color: #9ca3af;
       margin-top: 3px;
     }
+
     .online {
       color: #65e6a8;
     }
+
     .header-buttons {
       display: flex;
       gap: 8px;
     }
+
     .header-button {
       width: 44px;
       height: 44px;
@@ -79,12 +92,15 @@
       border: 1px solid rgba(255,255,255,.08);
       font-size: 19px;
     }
+
     /* ================= WELCOME ================= */
+
     .welcome {
       text-align: center;
       margin-top: 45px;
       margin-bottom: 35px;
     }
+
     .welcome-orb {
       width: 110px;
       height: 110px;
@@ -103,23 +119,29 @@
         0 0 80px rgba(79, 70, 229, .18);
       animation: breathe 3s ease-in-out infinite;
     }
+
     @keyframes breathe {
       0%, 100% {
         transform: scale(1);
       }
+
       50% {
         transform: scale(1.06);
       }
     }
+
     .welcome h2 {
       font-size: 28px;
       margin-bottom: 9px;
     }
+
     .welcome p {
       color: #a7adbd;
       font-size: 15px;
     }
+
     /* ================= CHAT ================= */
+
     .chat {
       flex: 1;
       display: flex;
@@ -127,6 +149,7 @@
       gap: 12px;
       padding-bottom: 20px;
     }
+
     .message {
       max-width: 82%;
       padding: 13px 16px;
@@ -136,6 +159,7 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+
     .naira-message {
       align-self: flex-start;
       background: rgba(255,255,255,.08);
@@ -143,12 +167,15 @@
       color: #e8eaf0;
       border-bottom-left-radius: 5px;
     }
+
     .user-message {
       align-self: flex-end;
       background: linear-gradient(135deg, #6d4df5, #4f46e5);
       border-bottom-right-radius: 5px;
     }
+
     /* ================= INPUT ================= */
+
     .input-area {
       display: flex;
       gap: 9px;
@@ -160,6 +187,7 @@
       backdrop-filter: blur(18px);
       box-shadow: 0 12px 35px rgba(0,0,0,.3);
     }
+
     #messageInput {
       flex: 1;
       border: none;
@@ -169,9 +197,11 @@
       font-size: 15px;
       padding: 10px;
     }
+
     #messageInput::placeholder {
       color: #777d8d;
     }
+
     .mic,
     .send {
       width: 43px;
@@ -182,20 +212,30 @@
       justify-content: center;
       font-size: 18px;
     }
+
     .mic {
       background: rgba(255,255,255,.08);
     }
+
     .send {
       background: linear-gradient(135deg, #8b5cf6, #4f46e5);
       box-shadow: 0 5px 18px rgba(99, 72, 220, .35);
     }
+
+    .send:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
     .footer {
       text-align: center;
       color: #5f6472;
       font-size: 10px;
       margin-top: 12px;
     }
+
     /* ================= TYPING ================= */
+
     .typing-indicator {
       display: flex;
       align-items: center;
@@ -204,6 +244,7 @@
       min-height: 42px;
       padding: 13px 16px;
     }
+
     .typing-indicator span {
       width: 7px;
       height: 7px;
@@ -212,26 +253,33 @@
       display: block;
       animation: typingBounce 1.4s infinite ease-in-out;
     }
+
     .typing-indicator span:nth-child(1) {
       animation-delay: 0s;
     }
+
     .typing-indicator span:nth-child(2) {
       animation-delay: .2s;
     }
+
     .typing-indicator span:nth-child(3) {
       animation-delay: .4s;
     }
+
     @keyframes typingBounce {
       0%, 60%, 100% {
         transform: translateY(0);
         opacity: .4;
       }
+
       30% {
         transform: translateY(-5px);
         opacity: 1;
       }
     }
-    /* ================= OVERLAY ================= */
+
+    /* ================= GENERAL OVERLAY ================= */
+
     .overlay {
       display: none;
       position: fixed;
@@ -242,9 +290,11 @@
       padding: 18px;
       overflow-y: auto;
     }
+
     .overlay.active {
       display: block;
     }
+
     .panel-box {
       width: 100%;
       max-width: 600px;
@@ -260,33 +310,89 @@
       padding: 18px;
       box-shadow: 0 20px 60px rgba(0,0,0,.5);
     }
+
     .panel-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 16px;
     }
+
     .panel-header h2 {
       font-size: 22px;
     }
+
     .panel-header p {
       color: #858b9c;
       font-size: 11px;
       margin-top: 4px;
     }
-    .close-button {
+
+    .close-button,
+    .close-history {
       width: 40px;
       height: 40px;
       border-radius: 50%;
       background: rgba(255,255,255,.08);
       font-size: 18px;
     }
+
     /* ================= HISTORY ================= */
+
+    .history-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1500;
+      background: rgba(5, 6, 10, .88);
+      backdrop-filter: blur(16px);
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .history-panel.active {
+      display: block;
+    }
+
+    .history-box {
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(31, 34, 50, .99),
+          rgba(13, 15, 24, .99)
+        );
+      border: 1px solid rgba(255,255,255,.09);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+
+    .history-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .history-header h2 {
+      font-size: 22px;
+    }
+
+    .history-header p {
+      color: #858b9c;
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
     .history-tools {
       display: flex;
       gap: 8px;
       margin-bottom: 10px;
     }
+
     .history-search {
       flex: 1;
       padding: 13px 14px;
@@ -297,66 +403,94 @@
       color: white;
       font-size: 14px;
     }
+
     .history-search::placeholder {
       color: #777d8d;
     }
-    .tool-button {
+
+    .history-refresh {
       width: 47px;
       border-radius: 13px;
       background: rgba(255,255,255,.08);
       font-size: 17px;
     }
-    .history-filter {
+
+    .new-conversation {
       width: 100%;
-      padding: 12px 13px;
-      border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
-      outline: none;
-      background: #1b1e2b;
-      color: white;
-      font-size: 13px;
-      margin-bottom: 12px;
+      padding: 14px;
+      border-radius: 15px;
+      background: linear-gradient(
+        135deg,
+        #8b5cf6,
+        #4f46e5
+      );
+      font-size: 14px;
+      margin-bottom: 14px;
     }
+
     .history-status {
       text-align: center;
       color: #7f8799;
       font-size: 12px;
       margin-bottom: 14px;
     }
+
+    .history-day {
+      margin-bottom: 22px;
+    }
+
+    .history-day-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #cfd2dc;
+      font-size: 14px;
+      margin-bottom: 9px;
+    }
+
+    .history-day-count {
+      color: #777d8d;
+      font-size: 11px;
+    }
+
     .history-card {
+      position: relative;
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.07);
       border-radius: 15px;
       padding: 14px;
-      margin-bottom: 9px;
-      cursor: pointer;
-      transition: .2s;
+      margin-bottom: 8px;
     }
+
     .history-card:active {
-      transform: scale(.985);
+      transform: scale(.99);
     }
+
     .history-title {
       font-size: 14px;
       font-weight: 600;
       line-height: 1.4;
       margin-bottom: 7px;
     }
+
     .history-preview {
-      color: #aeb3c1;
+      color: #a7adbd;
       font-size: 12px;
-      line-height: 1.4;
-      margin-bottom: 10px;
+      line-height: 1.45;
+      margin-bottom: 9px;
     }
+
     .history-meta {
       color: #777d8d;
       font-size: 10px;
-      line-height: 1.5;
     }
+
     .history-actions {
       display: flex;
       gap: 7px;
-      margin-top: 10px;
+      margin-top: 11px;
     }
+
     .history-actions button {
       flex: 1;
       padding: 9px;
@@ -364,22 +498,27 @@
       background: rgba(255,255,255,.08);
       font-size: 11px;
     }
-    .history-actions .danger {
+
+    .history-actions .history-delete {
       background: rgba(239,68,68,.18);
       color: #ff9b9b;
     }
-    .empty-state {
+
+    .empty-history {
       text-align: center;
       color: #777d8d;
       font-size: 13px;
-      padding: 30px 15px;
+      padding: 35px 15px;
     }
+
     /* ================= MEMORY ================= */
+
     .memory-tools {
       display: flex;
       gap: 8px;
       margin-bottom: 10px;
     }
+
     .search-box {
       flex: 1;
       padding: 13px 14px;
@@ -390,9 +529,18 @@
       color: white;
       font-size: 14px;
     }
+
     .search-box::placeholder {
       color: #777d8d;
     }
+
+    .tool-button {
+      width: 47px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.08);
+      font-size: 17px;
+    }
+
     .category-filter {
       width: 100%;
       padding: 12px 13px;
@@ -404,6 +552,7 @@
       font-size: 13px;
       margin-bottom: 12px;
     }
+
     .memory-add {
       width: 100%;
       padding: 14px;
@@ -412,15 +561,18 @@
       font-size: 14px;
       margin-bottom: 16px;
     }
+
     .memory-status {
       text-align: center;
       color: #7f8799;
       font-size: 12px;
       margin-bottom: 14px;
     }
+
     .memory-category {
       margin-bottom: 22px;
     }
+
     .category-title {
       display: flex;
       align-items: center;
@@ -429,10 +581,12 @@
       margin-bottom: 9px;
       color: #cfd2dc;
     }
+
     .category-count {
       color: #777d8d;
       font-size: 11px;
     }
+
     .memory-card {
       background: rgba(255,255,255,.06);
       border: 1px solid rgba(255,255,255,.07);
@@ -440,20 +594,24 @@
       padding: 14px;
       margin-bottom: 8px;
     }
+
     .memory-text {
       font-size: 14px;
       line-height: 1.5;
       margin-bottom: 9px;
     }
+
     .memory-meta {
       font-size: 11px;
       color: #858b9c;
       margin-bottom: 11px;
     }
+
     .memory-actions {
       display: flex;
       gap: 8px;
     }
+
     .memory-actions button {
       flex: 1;
       padding: 10px;
@@ -461,11 +619,14 @@
       font-size: 12px;
       background: rgba(255,255,255,.08);
     }
+
     .memory-actions .delete {
       background: rgba(239,68,68,.18);
       color: #ff9b9b;
     }
-    /* ================= FORM ================= */
+
+    /* ================= MEMORY FORM ================= */
+
     .memory-form-overlay {
       display: none;
       position: fixed;
@@ -476,11 +637,13 @@
       padding: 18px;
       overflow-y: auto;
     }
+
     .memory-form-overlay.active {
       display: flex;
       align-items: center;
       justify-content: center;
     }
+
     .memory-form {
       width: 100%;
       max-width: 520px;
@@ -490,24 +653,29 @@
       padding: 20px;
       box-shadow: 0 25px 70px rgba(0,0,0,.55);
     }
+
     .memory-form h3 {
       font-size: 20px;
       margin-bottom: 5px;
     }
+
     .memory-form-subtitle {
       color: #858b9c;
       font-size: 12px;
       margin-bottom: 18px;
     }
+
     .form-group {
       margin-bottom: 13px;
     }
+
     .form-group label {
       display: block;
       color: #aeb3c1;
       font-size: 12px;
       margin-bottom: 6px;
     }
+
     .form-group input,
     .form-group select,
     .form-group textarea {
@@ -521,241 +689,73 @@
       font-family: inherit;
       font-size: 14px;
     }
+
     .form-group textarea {
       min-height: 90px;
       resize: vertical;
     }
+
     .form-group select {
       background: #1b1e2b;
     }
+
     .form-actions {
       display: flex;
       gap: 9px;
       margin-top: 18px;
     }
+
     .form-actions button {
       flex: 1;
       padding: 13px;
       border-radius: 12px;
       font-size: 13px;
     }
+
     .cancel-button {
       background: rgba(255,255,255,.08);
     }
+
     .save-button {
       background: linear-gradient(135deg, #8b5cf6, #4f46e5);
     }
+
     @media (max-height: 700px) {
       .welcome {
         margin-top: 20px;
         margin-bottom: 20px;
       }
+
       .welcome-orb {
         width: 85px;
         height: 85px;
       }
     }
-    
-    /* ============================================================
-   CONVERSATION HISTORY
-============================================================ */
-
-.history-panel {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1500;
-  background: rgba(5, 6, 10, .88);
-  backdrop-filter: blur(16px);
-  padding: 18px;
-  overflow-y: auto;
-}
-
-.history-panel.active {
-  display: block;
-}
-
-.history-box {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(31, 34, 50, .99),
-      rgba(13, 15, 24, .99)
-    );
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 24px;
-  padding: 18px;
-  box-shadow: 0 20px 60px rgba(0,0,0,.5);
-}
-
-.history-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.history-header h2 {
-  font-size: 22px;
-}
-
-.history-header p {
-  color: #858b9c;
-  font-size: 11px;
-  margin-top: 4px;
-}
-
-.close-history {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.08);
-  font-size: 18px;
-}
-
-.history-tools {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.history-search {
-  flex: 1;
-  padding: 13px 14px;
-  border-radius: 13px;
-  border: 1px solid rgba(255,255,255,.08);
-  outline: none;
-  background: rgba(255,255,255,.06);
-  color: white;
-  font-size: 14px;
-}
-
-.history-search::placeholder {
-  color: #777d8d;
-}
-
-.history-refresh {
-  width: 47px;
-  border-radius: 13px;
-  background: rgba(255,255,255,.08);
-  font-size: 17px;
-}
-
-.new-conversation {
-  width: 100%;
-  padding: 14px;
-  border-radius: 15px;
-  background: linear-gradient(
-    135deg,
-    #8b5cf6,
-    #4f46e5
-  );
-  font-size: 14px;
-  margin-bottom: 14px;
-}
-
-.history-status {
-  text-align: center;
-  color: #7f8799;
-  font-size: 12px;
-  margin-bottom: 14px;
-}
-
-.history-day {
-  margin-bottom: 22px;
-}
-
-.history-day-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  color: #cfd2dc;
-  font-size: 14px;
-  margin-bottom: 9px;
-}
-
-.history-day-count {
-  color: #777d8d;
-  font-size: 11px;
-}
-
-.history-card {
-  position: relative;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 15px;
-  padding: 14px;
-  margin-bottom: 8px;
-}
-
-.history-card:active {
-  transform: scale(.99);
-}
-
-.history-title {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  margin-bottom: 7px;
-}
-
-.history-preview {
-  color: #a7adbd;
-  font-size: 12px;
-  line-height: 1.45;
-  margin-bottom: 9px;
-}
-
-.history-meta {
-  color: #777d8d;
-  font-size: 10px;
-}
-
-.history-actions {
-  display: flex;
-  gap: 7px;
-  margin-top: 11px;
-}
-
-.history-actions button {
-  flex: 1;
-  padding: 9px;
-  border-radius: 9px;
-  background: rgba(255,255,255,.08);
-  font-size: 11px;
-}
-
-.history-actions .history-delete {
-  background: rgba(239,68,68,.18);
-  color: #ff9b9b;
-}
-
-.empty-history {
-  text-align: center;
-  color: #777d8d;
-  font-size: 13px;
-  padding: 35px 15px;
-}
-    
   </style>
 </head>
+
 <body>
+
 <main class="app">
+
+  <!-- ================= HEADER ================= -->
+
   <header>
     <div class="brand">
       <div class="avatar">N</div>
+
       <div>
         <h1>Naira</h1>
+
         <div class="status">
           <span class="online">●</span>
           Personal Assistant
         </div>
       </div>
     </div>
+
     <div class="header-buttons">
+
       <button
         class="header-button"
         id="historyButton"
@@ -763,6 +763,7 @@
       >
         💬
       </button>
+
       <button
         class="header-button"
         id="memoryButton"
@@ -770,22 +771,46 @@
       >
         🧠
       </button>
+
     </div>
   </header>
+
+
+  <!-- ================= WELCOME ================= -->
+
   <section class="welcome">
+
     <div class="welcome-orb"></div>
-    <h2>Hai, Cik Amirul 👋</h2>
-    <p>Naira ada dengan Tuan.</p>
+
+    <h2>
+      Hai, Cik Amirul 👋
+    </h2>
+
+    <p>
+      Naira ada dengan Tuan.
+    </p>
+
   </section>
+
+
+  <!-- ================= CHAT ================= -->
+
   <section
     class="chat"
     id="chat"
   >
+
     <div class="message naira-message">
       Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
     </div>
+
   </section>
+
+
+  <!-- ================= INPUT ================= -->
+
   <div class="input-area">
+
     <button
       class="mic"
       id="micButton"
@@ -793,12 +818,14 @@
     >
       🎙️
     </button>
+
     <input
       id="messageInput"
       type="text"
       placeholder="Cakap dengan Naira..."
       autocomplete="off"
     >
+
     <button
       class="send"
       id="sendButton"
@@ -806,19 +833,40 @@
     >
       ➤
     </button>
+
   </div>
+
+
   <div class="footer">
     Naira • Personal Assistant
   </div>
+
 </main>
-<!-- CONVERSATION HISTORY -->
-<div class="history-panel" id="historyPanel">
+
+
+<!-- ============================================================
+     CONVERSATION HISTORY
+============================================================ -->
+
+<div
+  class="history-panel"
+  id="historyPanel"
+>
+
   <div class="history-box">
 
     <div class="history-header">
+
       <div>
-        <h2>🕘 Conversation History</h2>
-        <p>Semua perbualan Tuan dengan Naira</p>
+
+        <h2>
+          🕘 Conversation History
+        </h2>
+
+        <p>
+          Semua perbualan Tuan dengan Naira
+        </p>
+
       </div>
 
       <button
@@ -827,7 +875,9 @@
       >
         ✕
       </button>
+
     </div>
+
 
     <div class="history-tools">
 
@@ -848,12 +898,14 @@
 
     </div>
 
+
     <button
       class="new-conversation"
       id="newConversation"
     >
       ＋ New Conversation
     </button>
+
 
     <div
       class="history-status"
@@ -862,35 +914,53 @@
       Memuatkan history...
     </div>
 
+
     <div
       id="historyList"
     ></div>
 
   </div>
+
 </div>
+
+
 <!-- ============================================================
      MEMORY CENTER
 ============================================================ -->
+
 <div
   class="overlay"
   id="memoryPanel"
 >
+
   <div class="panel-box">
+
     <div class="panel-header">
+
       <div>
-        <h2>🧠 Memory Center</h2>
+
+        <h2>
+          🧠 Memory Center
+        </h2>
+
         <p>
           Ingatan yang Naira simpan tentang Tuan
         </p>
+
       </div>
+
       <button
         class="close-button"
         id="closeMemory"
       >
         ✕
       </button>
+
     </div>
+
+
     <div class="memory-tools">
+
       <input
         class="search-box"
         id="memorySearch"
@@ -898,168 +968,285 @@
         placeholder="🔍 Cari memory..."
         autocomplete="off"
       >
+
       <button
         class="tool-button"
         id="refreshMemory"
       >
         🔄
       </button>
+
     </div>
+
+
     <select
       class="category-filter"
       id="categoryFilter"
     >
+
       <option value="all">
         📂 Semua kategori
       </option>
+
       <option value="profile">
         👤 Profile
       </option>
+
       <option value="fashion">
         👕 Fashion
       </option>
+
       <option value="food">
         🍔 Food
       </option>
+
       <option value="game">
         🎮 Game
       </option>
+
       <option value="hobby">
         🎨 Hobby
       </option>
+
       <option value="work">
         💼 Work
       </option>
+
       <option value="project">
         🚀 Project
       </option>
+
       <option value="preference">
         ❤️ Preference
       </option>
+
       <option value="family">
         👨‍👩‍👧 Family
       </option>
+
       <option value="general">
         📁 General
       </option>
+
     </select>
+
+
     <div
       class="memory-status"
       id="memoryStatus"
     >
       Memuatkan memory...
     </div>
+
+
     <button
       class="memory-add"
       id="addMemoryButton"
     >
       ＋ Tambah Memory
     </button>
+
+
     <div id="memoryList"></div>
+
   </div>
+
 </div>
+
+
 <!-- ============================================================
      MEMORY FORM
 ============================================================ -->
+
 <div
   class="memory-form-overlay"
   id="memoryFormOverlay"
 >
+
   <div class="memory-form">
+
     <h3 id="memoryFormTitle">
       ➕ Tambah Memory
     </h3>
+
     <div class="memory-form-subtitle">
       Tuan boleh kawal sendiri apa yang Naira simpan.
     </div>
+
+
     <div class="form-group">
+
       <label for="memoryText">
         Memory
       </label>
+
       <textarea
         id="memoryText"
         placeholder="Contoh: Tuan suka warna biru."
       ></textarea>
+
     </div>
+
+
     <div class="form-group">
+
       <label for="memoryCategory">
         Kategori
       </label>
+
       <select id="memoryCategory">
-        <option value="profile">👤 Profile</option>
-        <option value="fashion">👕 Fashion</option>
-        <option value="food">🍔 Food</option>
-        <option value="game">🎮 Game</option>
-        <option value="hobby">🎨 Hobby</option>
-        <option value="work">💼 Work</option>
-        <option value="project">🚀 Project</option>
-        <option value="preference">❤️ Preference</option>
-        <option value="family">👨‍👩‍👧 Family</option>
-        <option value="general">📁 General</option>
+
+        <option value="profile">
+          👤 Profile
+        </option>
+
+        <option value="fashion">
+          👕 Fashion
+        </option>
+
+        <option value="food">
+          🍔 Food
+        </option>
+
+        <option value="game">
+          🎮 Game
+        </option>
+
+        <option value="hobby">
+          🎨 Hobby
+        </option>
+
+        <option value="work">
+          💼 Work
+        </option>
+
+        <option value="project">
+          🚀 Project
+        </option>
+
+        <option value="preference">
+          ❤️ Preference
+        </option>
+
+        <option value="family">
+          👨‍👩‍👧 Family
+        </option>
+
+        <option value="general">
+          📁 General
+        </option>
+
       </select>
+
     </div>
+
+
     <div class="form-group">
+
       <label for="memorySubcategory">
         Subkategori
       </label>
+
       <input
         id="memorySubcategory"
         type="text"
         placeholder="Contoh: color"
       >
+
     </div>
+
+
     <div class="form-group">
+
       <label for="memoryImportance">
         Importance
       </label>
+
       <select id="memoryImportance">
+
         <option value="1">
           ⭐ Biasa
         </option>
+
         <option value="2" selected>
           ⭐⭐ Penting
         </option>
+
         <option value="3">
           ⭐⭐⭐ Sangat penting
         </option>
+
       </select>
+
     </div>
+
+
     <div class="form-actions">
+
       <button
         class="cancel-button"
         id="cancelMemory"
       >
         Batal
       </button>
+
       <button
         class="save-button"
         id="saveMemory"
       >
         💾 Simpan
       </button>
+
     </div>
+
   </div>
+
 </div>
+
+
 <script>
+
+/* ============================================================
+   API
+============================================================ */
+
 const API_BASE =
   "https://naira-tawny.vercel.app";
+
+
 /* ============================================================
    BASIC HELPERS
 ============================================================ */
+
 function escapeHTML(value) {
+
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+
 }
+
+
 function formatDate(dateValue) {
+
   const date =
     new Date(dateValue);
-  if (Number.isNaN(date.getTime())) {
-    return String(dateValue || "");
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return String(
+      dateValue || ""
+    );
+
   }
+
   return new Intl.DateTimeFormat(
     "ms-MY",
     {
@@ -1071,140 +1258,260 @@ function formatDate(dateValue) {
       minute: "2-digit"
     }
   ).format(date);
+
 }
+
+
 /* ============================================================
    CHAT
 ============================================================ */
+
 const input =
   document.getElementById(
     "messageInput"
   );
+
 const sendButton =
   document.getElementById(
     "sendButton"
   );
+
 const chat =
   document.getElementById(
     "chat"
   );
+
 const micButton =
   document.getElementById(
     "micButton"
   );
+
+
 function addMessage(
   text,
   type
 ) {
+
   const message =
     document.createElement(
       "div"
     );
+
   message.className =
     "message " + type;
+
   message.textContent =
     text;
+
   chat.appendChild(
     message
   );
-  window.scrollTo({
-    top:
-      document.body.scrollHeight,
-    behavior:
-      "smooth"
-  });
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
 }
+
+
 async function sendMessage() {
+
   const text =
     input.value.trim();
-  if (!text) return;
+
+  if (!text) {
+    return;
+  }
+
+
   addMessage(
     text,
     "user-message"
   );
+
   input.value = "";
+
+  sendButton.disabled =
+    true;
+
+
   const loading =
     document.createElement(
       "div"
     );
+
   loading.className =
     "message naira-message typing-indicator";
+
   loading.innerHTML = `
     <span></span>
     <span></span>
     <span></span>
   `;
+
   chat.appendChild(
     loading
   );
+
+
   try {
+
+    console.log(
+      "Sending message to:",
+      API_BASE + "/api/chat"
+    );
+
+
     const response =
       await fetch(
-        API_BASE +
-        "/api/chat",
+        API_BASE + "/api/chat",
         {
           method: "POST",
+
           headers: {
             "Content-Type":
               "application/json"
           },
+
           body:
             JSON.stringify({
-              message:
-                text
+              message: text
             })
         }
       );
-    const data =
-      await response.json();
+
+
+    const contentType =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+
+    let data;
+
+
+    if (
+      contentType.includes(
+        "application/json"
+      )
+    ) {
+
+      data =
+        await response.json();
+
+    } else {
+
+      const raw =
+        await response.text();
+
+      data = {
+        error:
+          raw ||
+          "Server tidak memberikan JSON."
+      };
+
+    }
+
+
     loading.remove();
+
+
     if (!response.ok) {
+
+      console.error(
+        "Chat API error:",
+        response.status,
+        data
+      );
+
       addMessage(
         data.error ||
-        "Maaf Tuan, Naira mengalami masalah.",
+        `Server error (${response.status}).`,
         "naira-message"
       );
+
       return;
+
     }
-    addMessage(
+
+
+    const reply =
       data.reply ||
-      "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+      data.output ||
+      data.message ||
+      "Maaf Tuan, Naira tak dapat menghasilkan jawapan.";
+
+
+    addMessage(
+      reply,
       "naira-message"
     );
-    /*
-      History akan disimpan oleh backend.
-      Selepas chat baru, history boleh
-      di-refresh semula.
-    */
+
+
+    console.log(
+      "Naira reply received:",
+      data
+    );
+
+
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      "CHAT ERROR:",
+      error
+    );
+
     loading.remove();
+
     addMessage(
       "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
       "naira-message"
     );
+
+  } finally {
+
+    sendButton.disabled =
+      false;
+
+    input.focus();
+
   }
+
 }
+
+
 sendButton.addEventListener(
   "click",
   sendMessage
 );
+
+
 input.addEventListener(
   "keydown",
   function(event) {
+
     if (
-      event.key ===
-      "Enter"
+      event.key === "Enter" &&
+      !event.shiftKey
     ) {
+
+      event.preventDefault();
+
       sendMessage();
+
     }
+
   }
 );
+
+
 /* ============================================================
    VOICE
 ============================================================ */
+
 micButton.addEventListener(
   "click",
   function() {
+
     if (
       !(
         "webkitSpeechRecognition"
@@ -1215,1050 +1522,140 @@ micButton.addEventListener(
         in window
       )
     ) {
+
       addMessage(
         "Voice recognition belum disokong oleh browser ini.",
         "naira-message"
       );
+
       return;
+
     }
+
+
     const SpeechRecognition =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
+
+
     const recognition =
       new SpeechRecognition();
+
+
     recognition.lang =
       "ms-MY";
+
     recognition.interimResults =
       false;
-    recognition.start();
-    micButton.textContent =
-      "🔴";
+
+
+    try {
+
+      recognition.start();
+
+      micButton.textContent =
+        "🔴";
+
+    } catch (error) {
+
+      console.error(
+        "Voice start error:",
+        error
+      );
+
+    }
+
+
     recognition.onresult =
       function(event) {
+
         input.value =
           event.results[0][0]
             .transcript;
+
         micButton.textContent =
           "🎙️";
+
       };
+
+
     recognition.onerror =
-      function() {
+      function(error) {
+
+        console.error(
+          "Voice error:",
+          error
+        );
+
         micButton.textContent =
           "🎙️";
+
       };
+
+
     recognition.onend =
       function() {
+
         micButton.textContent =
           "🎙️";
+
       };
+
   }
 );
+
+
 /* ============================================================
    CONVERSATION HISTORY
 ============================================================ */
+
 const historyButton =
   document.getElementById(
     "historyButton"
   );
+
 const historyPanel =
   document.getElementById(
     "historyPanel"
   );
+
 const closeHistory =
   document.getElementById(
     "closeHistory"
   );
+
 const historyList =
   document.getElementById(
     "historyList"
   );
+
 const historyStatus =
   document.getElementById(
     "historyStatus"
   );
+
 const historySearch =
   document.getElementById(
     "historySearch"
   );
-const historyCategory =
-  document.getElementById(
-    "historyCategory"
-  );
+
 const refreshHistory =
   document.getElementById(
     "refreshHistory"
   );
-let allHistory = [];
-historyButton.addEventListener(
-  "click",
-  function() {
-    historyPanel.classList.add(
-      "active"
-    );
-    loadHistory();
-  }
-);
-closeHistory.addEventListener(
-  "click",
-  function() {
-    historyPanel.classList.remove(
-      "active"
-    );
-  }
-);
-refreshHistory.addEventListener(
-  "click",
-  loadHistory
-);
-historySearch.addEventListener(
-  "input",
-  renderHistory
-);
-historyCategory.addEventListener(
-  "change",
-  renderHistory
-);
-async function loadHistory() {
-  historyStatus.textContent =
-    "Memuatkan history...";
-  historyList.innerHTML =
-    "";
-  try {
-    const params =
-      new URLSearchParams();
-    const search =
-      historySearch.value.trim();
-    const category =
-      historyCategory.value;
-    if (search) {
-      params.set(
-        "search",
-        search
-      );
-    }
-    if (
-      category &&
-      category !== "all"
-    ) {
-      params.set(
-        "category",
-        category
-      );
-    }
-    const url =
-      API_BASE +
-      "/api/history" +
-      (
-        params.toString()
-          ? "?" + params.toString()
-          : ""
-      );
-    const response =
-      await fetch(url);
-    const data =
-      await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "History gagal dimuatkan."
-      );
-    }
-    allHistory =
-      data.conversations ||
-      [];
-    historyStatus.textContent =
-      `${allHistory.length} conversation`;
-    renderHistory();
-  } catch (error) {
-    console.error(error);
-    historyStatus.textContent =
-      "Gagal memuatkan history.";
-    historyList.innerHTML = `
-      <div class="empty-state">
-        ❌ ${escapeHTML(error.message)}
-      </div>
-    `;
-  }
-}
-function renderHistory() {
-  const search =
-    historySearch.value
-      .trim()
-      .toLowerCase();
-  const category =
-    historyCategory.value;
-  const filtered =
-    allHistory.filter(
-      function(item) {
-        const text =
-          [
-            item.title,
-            item.user_message,
-            item.naira_response,
-            item.category,
-            item.subcategory
-          ]
-          .join(" ")
-          .toLowerCase();
-        const matchesSearch =
-          !search ||
-          text.includes(search);
-        const matchesCategory =
-          category === "all" ||
-          item.category === category;
-        return (
-          matchesSearch &&
-          matchesCategory
-        );
-      }
-    );
-  historyList.innerHTML =
-    "";
-  if (!filtered.length) {
-    historyList.innerHTML = `
-      <div class="empty-state">
-        💬 Tiada conversation dijumpai.
-      </div>
-    `;
-    return;
-  }
-  filtered.forEach(
-    function(item) {
-      const card =
-        document.createElement(
-          "div"
-        );
-      card.className =
-        "history-card";
-      const title =
-        document.createElement(
-          "div"
-        );
-      title.className =
-        "history-title";
-      title.textContent =
-        item.title ||
-        item.user_message ||
-        "Conversation";
-      const preview =
-        document.createElement(
-          "div"
-        );
-      preview.className =
-        "history-preview";
-      preview.textContent =
-        item.user_message ||
-        "";
-      const meta =
-        document.createElement(
-          "div"
-        );
-      meta.className =
-        "history-meta";
-      meta.innerHTML = `
-        📅 ${escapeHTML(
-          formatDate(item.created_at)
-        )}
-        <br>
-        📂 ${escapeHTML(
-          item.category || "general"
-        )}
-        ${item.subcategory
-          ? " • " +
-            escapeHTML(
-              item.subcategory
-            )
-          : ""}
-      `;
-      const actions =
-        document.createElement(
-          "div"
-        );
-      actions.className =
-        "history-actions";
-      const openButton =
-        document.createElement(
-          "button"
-        );
-      openButton.textContent =
-        "📖 Buka";
-      openButton.addEventListener(
-        "click",
-        function(event) {
-          event.stopPropagation();
-          openConversation(
-            item.conversation_id
-          );
-        }
-      );
-      const editButton =
-        document.createElement(
-          "button"
-        );
-      editButton.textContent =
-        "✏️ Edit";
-      editButton.addEventListener(
-        "click",
-        function(event) {
-          event.stopPropagation();
-          alert(
-            "Edit title akan kita sambungkan pada backend history selepas ini."
-          );
-        }
-      );
-      const deleteButton =
-        document.createElement(
-          "button"
-        );
-      deleteButton.className =
-        "danger";
-      deleteButton.textContent =
-        "🗑️ Delete";
-      deleteButton.addEventListener(
-        "click",
-        function(event) {
-          event.stopPropagation();
-          alert(
-            "Delete history akan kita sambungkan pada backend history selepas ini."
-          );
-        }
-      );
-      actions.appendChild(
-        openButton
-      );
-      actions.appendChild(
-        editButton
-      );
-      actions.appendChild(
-        deleteButton
-      );
-      card.appendChild(
-        title
-      );
-      card.appendChild(
-        preview
-      );
-      card.appendChild(
-        meta
-      );
-      card.appendChild(
-        actions
-      );
-      historyList.appendChild(
-        card
-      );
-    }
-  );
-}
-async function openConversation(
-  conversationId
-) {
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/history?conversationId=" +
-        encodeURIComponent(
-          conversationId
-        )
-      );
-    const data =
-      await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "Conversation gagal dibuka."
-      );
-    }
-    historyPanel.classList.remove(
-      "active"
-    );
-    chat.innerHTML =
-      "";
-    const messages =
-      data.conversations ||
-      [];
-    messages.forEach(
-      function(item) {
-        if (
-          item.user_message
-        ) {
-          addMessage(
-            item.user_message,
-            "user-message"
-          );
-        }
-        if (
-          item.naira_response
-        ) {
-          addMessage(
-            item.naira_response,
-            "naira-message"
-          );
-        }
-      }
-    );
-    if (!messages.length) {
-      addMessage(
-        "Conversation ini kosong.",
-        "naira-message"
-      );
-    }
-  } catch (error) {
-    console.error(error);
-    alert(
-      "❌ " +
-      error.message
-    );
-  }
-}
-/* ============================================================
-   MEMORY CENTER
-============================================================ */
-const memoryButton =
-  document.getElementById(
-    "memoryButton"
-  );
-const memoryPanel =
-  document.getElementById(
-    "memoryPanel"
-  );
-const closeMemory =
-  document.getElementById(
-    "closeMemory"
-  );
-const memoryList =
-  document.getElementById(
-    "memoryList"
-  );
-const memoryStatus =
-  document.getElementById(
-    "memoryStatus"
-  );
-const memorySearch =
-  document.getElementById(
-    "memorySearch"
-  );
-const categoryFilter =
-  document.getElementById(
-    "categoryFilter"
-  );
-const refreshMemory =
-  document.getElementById(
-    "refreshMemory"
-  );
-const addMemoryButton =
-  document.getElementById(
-    "addMemoryButton"
-  );
-const memoryFormOverlay =
-  document.getElementById(
-    "memoryFormOverlay"
-  );
-const memoryFormTitle =
-  document.getElementById(
-    "memoryFormTitle"
-  );
-const memoryText =
-  document.getElementById(
-    "memoryText"
-  );
-const memoryCategory =
-  document.getElementById(
-    "memoryCategory"
-  );
-const memorySubcategory =
-  document.getElementById(
-    "memorySubcategory"
-  );
-const memoryImportance =
-  document.getElementById(
-    "memoryImportance"
-  );
-const saveMemoryButton =
-  document.getElementById(
-    "saveMemory"
-  );
-const cancelMemory =
-  document.getElementById(
-    "cancelMemory"
-  );
-let allMemories = [];
-let editingMemoryId =
-  null;
-memoryButton.addEventListener(
-  "click",
-  function() {
-    memoryPanel.classList.add(
-      "active"
-    );
-    loadMemories();
-  }
-);
-closeMemory.addEventListener(
-  "click",
-  function() {
-    memoryPanel.classList.remove(
-      "active"
-    );
-  }
-);
-refreshMemory.addEventListener(
-  "click",
-  loadMemories
-);
-memorySearch.addEventListener(
-  "input",
-  renderFilteredMemories
-);
-categoryFilter.addEventListener(
-  "change",
-  renderFilteredMemories
-);
-async function loadMemories() {
-  memoryStatus.textContent =
-    "Memuatkan memory...";
-  memoryList.innerHTML =
-    "";
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/memory",
-        {
-          method:
-            "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              action:
-                "list"
-            })
-        }
-      );
-    const data =
-      await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "Memory gagal dimuatkan."
-      );
-    }
-    allMemories =
-      data.memories ||
-      [];
-    memoryStatus.textContent =
-      `${allMemories.length} memory disimpan`;
-    renderFilteredMemories();
-  } catch (error) {
-    console.error(error);
-    memoryStatus.textContent =
-      "Gagal memuatkan memory.";
-    memoryList.innerHTML = `
-      <div class="empty-state">
-        ❌ ${escapeHTML(error.message)}
-      </div>
-    `;
-  }
-}
-function renderFilteredMemories() {
-  const search =
-    memorySearch.value
-      .trim()
-      .toLowerCase();
-  const category =
-    categoryFilter.value;
-  const filtered =
-    allMemories.filter(
-      function(memory) {
-        const matchesSearch =
-          !search ||
-          String(
-            memory.memory || ""
-          )
-          .toLowerCase()
-          .includes(search) ||
-          String(
-            memory.category || ""
-          )
-          .toLowerCase()
-          .includes(search) ||
-          String(
-            memory.subcategory || ""
-          )
-          .toLowerCase()
-          .includes(search);
-        const matchesCategory =
-          category === "all" ||
-          memory.category ===
-            category;
-        return (
-          matchesSearch &&
-          matchesCategory
-        );
-      }
-    );
-  renderMemories(
-    filtered
-  );
-}
-function renderMemories(
-  memories
-) {
-  memoryList.innerHTML =
-    "";
-  if (!memories.length) {
-    memoryList.innerHTML = `
-      <div class="empty-state">
-        🧠 Tiada memory dijumpai.
-      </div>
-    `;
-    return;
-  }
-  const groups = {};
-  memories.forEach(
-    function(memory) {
-      const category =
-        memory.category ||
-        "general";
-      if (!groups[category]) {
-        groups[category] =
-          [];
-      }
-      groups[category].push(
-        memory
-      );
-    }
-  );
-  const categoryInfo = {
-    profile:
-      "👤 Profile",
-    fashion:
-      "👕 Fashion",
-    food:
-      "🍔 Food",
-    game:
-      "🎮 Game",
-    hobby:
-      "🎨 Hobby",
-    work:
-      "💼 Work",
-    project:
-      "🚀 Project",
-    preference:
-      "❤️ Preference",
-    family:
-      "👨‍👩‍👧 Family",
-    general:
-      "📁 General"
-  };
-  Object.keys(groups)
-    .forEach(
-      function(category) {
-        const section =
-          document.createElement(
-            "div"
-          );
-        section.className =
-          "memory-category";
-        const title =
-          document.createElement(
-            "div"
-          );
-        title.className =
-          "category-title";
-        title.innerHTML = `
-          <span>
-            ${
-              categoryInfo[
-                category
-              ] ||
-              "📁 " +
-              escapeHTML(
-                category
-              )
-            }
-          </span>
-          <span class="category-count">
-            ${groups[category].length}
-          </span>
-        `;
-        section.appendChild(
-          title
-        );
-        groups[category]
-          .forEach(
-            function(memory) {
-              const card =
-                document.createElement(
-                  "div"
-                );
-              card.className =
-                "memory-card";
-              const text =
-                document.createElement(
-                  "div"
-                );
-              text.className =
-                "memory-text";
-              text.textContent =
-                memory.memory ||
-                "";
-              const stars =
-                "⭐".repeat(
-                  Math.max(
-                    1,
-                    Math.min(
-                      3,
-                      Number(
-                        memory.importance
-                      ) || 1
-                    )
-                  )
-                );
-              const meta =
-                document.createElement(
-                  "div"
-                );
-              meta.className =
-                "memory-meta";
-              meta.innerHTML = `
-                <span>
-                  ${stars}
-                </span>
-                &nbsp; • &nbsp;
-                ${escapeHTML(
-                  memory.subcategory ||
-                  "general"
-                )}
-              `;
-              const actions =
-                document.createElement(
-                  "div"
-                );
-              actions.className =
-                "memory-actions";
-              const edit =
-                document.createElement(
-                  "button"
-                );
-              edit.textContent =
-                "✏️ Edit";
-              edit.addEventListener(
-                "click",
-                function() {
-                  openEditForm(
-                    memory
-                  );
-                }
-              );
-              const deleteButton =
-                document.createElement(
-                  "button"
-                );
-              deleteButton.className =
-                "delete";
-              deleteButton.textContent =
-                "🗑️ Delete";
-              deleteButton.addEventListener(
-                "click",
-                function() {
-                  deleteMemory(
-                    memory.id
-                  );
-                }
-              );
-              actions.appendChild(
-                edit
-              );
-              actions.appendChild(
-                deleteButton
-              );
-              card.appendChild(
-                text
-              );
-              card.appendChild(
-                meta
-              );
-              card.appendChild(
-                actions
-              );
-              section.appendChild(
-                card
-              );
-            }
-          );
-        memoryList.appendChild(
-          section
-        );
-      }
-    );
-}
-/* ============================================================
-   MEMORY FORM
-============================================================ */
-addMemoryButton.addEventListener(
-  "click",
-  function() {
-    editingMemoryId =
-      null;
-    memoryFormTitle.textContent =
-      "➕ Tambah Memory";
-    memoryText.value =
-      "";
-    memoryCategory.value =
-      "general";
-    memorySubcategory.value =
-      "general";
-    memoryImportance.value =
-      "2";
-    memoryFormOverlay.classList.add(
-      "active"
-    );
-    setTimeout(
-      function() {
-        memoryText.focus();
-      },
-      100
-    );
-  }
-);
-function openEditForm(
-  memory
-) {
-  editingMemoryId =
-    memory.id;
-  memoryFormTitle.textContent =
-    "✏️ Edit Memory";
-  memoryText.value =
-    memory.memory ||
-    "";
-  memoryCategory.value =
-    memory.category ||
-    "general";
-  memorySubcategory.value =
-    memory.subcategory ||
-    "general";
-  memoryImportance.value =
-    String(
-      memory.importance ||
-      1
-    );
-  memoryFormOverlay.classList.add(
-    "active"
-  );
-  setTimeout(
-    function() {
-      memoryText.focus();
-    },
-    100
-  );
-}
-cancelMemory.addEventListener(
-  "click",
-  closeMemoryForm
-);
-memoryFormOverlay.addEventListener(
-  "click",
-  function(event) {
-    if (
-      event.target ===
-      memoryFormOverlay
-    ) {
-      closeMemoryForm();
-    }
-  }
-);
-function closeMemoryForm() {
-  memoryFormOverlay.classList.remove(
-    "active"
-  );
-  editingMemoryId =
-    null;
-}
-/* ============================================================
-   SAVE / UPDATE MEMORY
-============================================================ */
-saveMemoryButton.addEventListener(
-  "click",
-  async function() {
-    const text =
-      memoryText.value.trim();
-    if (!text) {
-      alert(
-        "⚠️ Sila masukkan memory."
-      );
-      return;
-    }
-    saveMemoryButton.disabled =
-      true;
-    saveMemoryButton.textContent =
-      "Menyimpan...";
-    try {
-      const action =
-        editingMemoryId
-          ? "update"
-          : "save";
-      const body = {
-        action:
-          action,
-        memory:
-          text,
-        category:
-          memoryCategory.value,
-        subcategory:
-          memorySubcategory.value
-            .trim() ||
-          "general",
-        importance:
-          Number(
-            memoryImportance.value
-          )
-      };
-      if (editingMemoryId) {
-        body.id =
-          editingMemoryId;
-      }
-      const response =
-        await fetch(
-          API_BASE +
-          "/api/memory",
-          {
-            method:
-              "POST",
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-            body:
-              JSON.stringify(
-                body
-              )
-          }
-        );
-      const data =
-        await response.json();
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-          "Memory gagal disimpan."
-        );
-      }
-      closeMemoryForm();
-      await loadMemories();
-    } catch (error) {
-      console.error(error);
-      alert(
-        "❌ " +
-        error.message
-      );
-    } finally {
-      saveMemoryButton.disabled =
-        false;
-      saveMemoryButton.textContent =
-        "💾 Simpan";
-    }
-  }
-);
-/* ============================================================
-   DELETE MEMORY
-============================================================ */
-async function deleteMemory(
-  id
-) {
-  const confirmed =
-    confirm(
-      "Tuan pasti mahu padam memory ini?\n\nNaira tidak akan menggunakan memory tersebut lagi."
-    );
-  if (!confirmed) {
-    return;
-  }
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/memory",
-        {
-          method:
-            "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              action:
-                "delete",
-              id:
-                id
-            })
-        }
-      );
-    const data =
-      await response.json();
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-        "Memory gagal dipadam."
-      );
-    }
-    await loadMemories();
-  } catch (error) {
-    console.error(error);
-    alert(
-      "❌ " +
-      error.message
-    );
-  }
-}
-/* ============================================================
-   INITIAL
-============================================================ */
-console.log(
-  "Naira Personal Assistant loaded."
-);
-
-/* ============================================================
-   CONVERSATION HISTORY
-============================================================ */
-
-const historyButton =
-  document.getElementById("historyButton");
-
-const historyPanel =
-  document.getElementById("historyPanel");
-
-const closeHistory =
-  document.getElementById("closeHistory");
-
-const historyList =
-  document.getElementById("historyList");
-
-const historyStatus =
-  document.getElementById("historyStatus");
-
-const historySearch =
-  document.getElementById("historySearch");
-
-const refreshHistory =
-  document.getElementById("refreshHistory");
 
 const newConversation =
-  document.getElementById("newConversation");
+  document.getElementById(
+    "newConversation"
+  );
+
 
 let allHistory = [];
 
 
-/* ================================
-   OPEN HISTORY
-================================ */
-
 historyButton.addEventListener(
   "click",
-  function () {
+  function() {
 
     historyPanel.classList.add(
       "active"
@@ -2270,13 +1667,9 @@ historyButton.addEventListener(
 );
 
 
-/* ================================
-   CLOSE HISTORY
-================================ */
-
 closeHistory.addEventListener(
   "click",
-  function () {
+  function() {
 
     historyPanel.classList.remove(
       "active"
@@ -2286,61 +1679,102 @@ closeHistory.addEventListener(
 );
 
 
-/* ================================
-   REFRESH
-================================ */
-
 refreshHistory.addEventListener(
   "click",
   loadHistory
 );
 
 
-/* ================================
-   SEARCH
-================================ */
-
 historySearch.addEventListener(
   "input",
   renderHistory
 );
 
-
-/* ================================
-   LOAD HISTORY
-================================ */
 
 async function loadHistory() {
 
   historyStatus.textContent =
     "Memuatkan conversation...";
 
-  historyList.innerHTML = "";
+  historyList.innerHTML =
+    "";
+
 
   try {
 
     const params =
       new URLSearchParams();
 
+
     const search =
       historySearch.value.trim();
 
+
     if (search) {
+
       params.set(
         "search",
         search
       );
+
     }
 
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/history?" +
-        params.toString()
+
+    const query =
+      params.toString();
+
+
+    const url =
+      API_BASE +
+      "/api/history" +
+      (
+        query
+          ? "?" + query
+          : ""
       );
 
-    const data =
-      await response.json();
+
+    console.log(
+      "Loading history:",
+      url
+    );
+
+
+    const response =
+      await fetch(url);
+
+
+    const contentType =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+
+    let data;
+
+
+    if (
+      contentType.includes(
+        "application/json"
+      )
+    ) {
+
+      data =
+        await response.json();
+
+    } else {
+
+      const raw =
+        await response.text();
+
+      data = {
+        error:
+          raw ||
+          "History server tidak memberikan JSON."
+      };
+
+    }
+
 
     if (!response.ok) {
 
@@ -2351,37 +1785,41 @@ async function loadHistory() {
 
     }
 
+
     allHistory =
       data.conversations ||
       [];
 
+
     historyStatus.textContent =
       `${allHistory.length} conversation`;
 
+
     renderHistory();
+
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "HISTORY ERROR:",
+      error
+    );
+
 
     historyStatus.textContent =
       "Gagal memuatkan history.";
 
-    historyList.innerHTML =
-      `
+
+    historyList.innerHTML = `
       <div class="empty-history">
         ❌ ${escapeHTML(error.message)}
       </div>
-      `;
+    `;
 
   }
 
 }
 
-
-/* ================================
-   RENDER HISTORY
-================================ */
 
 function renderHistory() {
 
@@ -2390,98 +1828,84 @@ function renderHistory() {
       .trim()
       .toLowerCase();
 
+
   const filtered =
     allHistory.filter(
-      function (conversation) {
+      function(conversation) {
 
         if (!search) {
           return true;
         }
 
-        return (
 
-          String(
-            conversation.title ||
-            ""
-          )
-          .toLowerCase()
-          .includes(search)
+        const searchableText =
+          [
+            conversation.title,
+            conversation.user_message,
+            conversation.naira_response,
+            conversation.category,
+            conversation.subcategory
+          ]
+          .join(" ")
+          .toLowerCase();
 
-          ||
 
-          String(
-            conversation.user_message ||
-            ""
-          )
-          .toLowerCase()
-          .includes(search)
-
-          ||
-
-          String(
-            conversation.naira_response ||
-            ""
-          )
-          .toLowerCase()
-          .includes(search)
-
-          ||
-
-          String(
-            conversation.category ||
-            ""
-          )
-          .toLowerCase()
-          .includes(search)
-
+        return searchableText.includes(
+          search
         );
 
       }
     );
 
-  historyList.innerHTML = "";
+
+  historyList.innerHTML =
+    "";
+
 
   if (!filtered.length) {
 
-    historyList.innerHTML =
-      `
+    historyList.innerHTML = `
       <div class="empty-history">
         🕘 Tiada conversation dijumpai.
       </div>
-      `;
+    `;
 
     return;
 
   }
 
 
-  /* ================================
-     GROUP BY DATE
-  ================================= */
-
   const groups = {};
 
+
   filtered.forEach(
-    function (conversation) {
+    function(conversation) {
 
       const date =
         new Date(
           conversation.created_at
         );
 
+
       const dateKey =
         date.toLocaleDateString(
           "ms-MY",
           {
+            weekday: "long",
             year: "numeric",
             month: "long",
             day: "numeric"
           }
         );
 
+
       if (!groups[dateKey]) {
-        groups[dateKey] = [];
+
+        groups[dateKey] =
+          [];
+
       }
+
 
       groups[dateKey].push(
         conversation
@@ -2491,16 +1915,13 @@ function renderHistory() {
   );
 
 
-  /* ================================
-     RENDER GROUPS
-  ================================= */
-
   Object.keys(groups)
     .forEach(
-      function (dateKey) {
+      function(dateKey) {
 
         const conversations =
           groups[dateKey];
+
 
         const day =
           document.createElement(
@@ -2511,34 +1932,33 @@ function renderHistory() {
           "history-day";
 
 
-        const title =
+        const dayTitle =
           document.createElement(
             "div"
           );
 
-        title.className =
+        dayTitle.className =
           "history-day-title";
 
-        title.innerHTML =
-          `
-          <span>📅 ${escapeHTML(
-            dateKey
-          )}</span>
+
+        dayTitle.innerHTML = `
+          <span>
+            📅 ${escapeHTML(dateKey)}
+          </span>
 
           <span class="history-day-count">
             ${conversations.length}
           </span>
-          `;
-
-        day.appendChild(title);
+        `;
 
 
-        /* ================================
-           CARDS
-        ================================= */
+        day.appendChild(
+          dayTitle
+        );
+
 
         conversations.forEach(
-          function (conversation) {
+          function(conversation) {
 
             const card =
               document.createElement(
@@ -2580,6 +2000,7 @@ function renderHistory() {
                 conversation.created_at
               );
 
+
             const time =
               date.toLocaleTimeString(
                 "ms-MY",
@@ -2605,10 +2026,6 @@ function renderHistory() {
               }`;
 
 
-            /* ================================
-               ACTIONS
-            ================================= */
-
             const actions =
               document.createElement(
                 "div"
@@ -2626,9 +2043,12 @@ function renderHistory() {
             openButton.textContent =
               "👁️ Buka";
 
+
             openButton.addEventListener(
               "click",
-              function () {
+              function(event) {
+
+                event.stopPropagation();
 
                 openConversation(
                   conversation.conversation_id
@@ -2646,9 +2066,12 @@ function renderHistory() {
             editButton.textContent =
               "✏️ Edit";
 
+
             editButton.addEventListener(
               "click",
-              function () {
+              function(event) {
+
+                event.stopPropagation();
 
                 editConversation(
                   conversation
@@ -2669,9 +2092,12 @@ function renderHistory() {
             deleteButton.textContent =
               "🗑️ Delete";
 
+
             deleteButton.addEventListener(
               "click",
-              function () {
+              function(event) {
+
+                event.stopPropagation();
 
                 deleteConversation(
                   conversation.conversation_id
@@ -2710,6 +2136,7 @@ function renderHistory() {
               actions
             );
 
+
             day.appendChild(
               card
             );
@@ -2728,13 +2155,20 @@ function renderHistory() {
 }
 
 
-/* ================================
-   OPEN CONVERSATION
-================================ */
-
 async function openConversation(
   conversationId
 ) {
+
+  if (!conversationId) {
+
+    alert(
+      "❌ Conversation ID tidak dijumpai."
+    );
+
+    return;
+
+  }
+
 
   try {
 
@@ -2747,8 +2181,10 @@ async function openConversation(
         )
       );
 
+
     const data =
       await response.json();
+
 
     if (!response.ok) {
 
@@ -2759,18 +2195,23 @@ async function openConversation(
 
     }
 
+
     const messages =
       data.conversations ||
       [];
+
 
     historyPanel.classList.remove(
       "active"
     );
 
-    chat.innerHTML = "";
+
+    chat.innerHTML =
+      "";
+
 
     messages.forEach(
-      function (message) {
+      function(message) {
 
         if (
           message.user_message
@@ -2782,6 +2223,7 @@ async function openConversation(
           );
 
         }
+
 
         if (
           message.naira_response
@@ -2797,9 +2239,24 @@ async function openConversation(
       }
     );
 
+
+    if (!messages.length) {
+
+      addMessage(
+        "Conversation ini kosong.",
+        "naira-message"
+      );
+
+    }
+
+
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "OPEN CONVERSATION ERROR:",
+      error
+    );
+
 
     alert(
       "❌ " +
@@ -2811,33 +2268,36 @@ async function openConversation(
 }
 
 
-/* ================================
-   NEW CONVERSATION
-================================ */
-
 newConversation.addEventListener(
   "click",
-  function () {
+  function() {
 
     const confirmed =
       confirm(
         "Mulakan conversation baru dengan Naira?"
       );
 
+
     if (!confirmed) {
       return;
     }
 
-    chat.innerHTML =
-      `
+
+    chat.innerHTML = `
       <div class="message naira-message">
         Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
       </div>
-      `;
+    `;
+
 
     historyPanel.classList.remove(
       "active"
     );
+
+
+    input.value =
+      "";
+
 
     input.focus();
 
@@ -2845,11 +2305,7 @@ newConversation.addEventListener(
 );
 
 
-/* ================================
-   EDIT TITLE
-================================ */
-
-async function editConversation(
+function editConversation(
   conversation
 ) {
 
@@ -2857,11 +2313,13 @@ async function editConversation(
     conversation.title ||
     "Conversation Naira";
 
+
   const newTitle =
     prompt(
       "Masukkan tajuk baru:",
       currentTitle
     );
+
 
   if (
     newTitle === null ||
@@ -2872,55 +2330,981 @@ async function editConversation(
 
   }
 
-  /*
-    Edit title akan kita sambungkan
-    kepada endpoint update selepas
-    API update history siap.
-  */
 
   alert(
-    "Tajuk baru disediakan: " +
+    "Tajuk baru: " +
     newTitle.trim() +
-    "\n\nAPI edit history akan kita sambungkan pada step seterusnya."
+    "\n\nAPI edit history akan kita sambungkan selepas endpoint update siap."
   );
 
 }
 
 
-/* ================================
-   DELETE CONVERSATION
-================================ */
-
-async function deleteConversation(
+function deleteConversation(
   conversationId
 ) {
+
+  if (!conversationId) {
+
+    alert(
+      "❌ Conversation ID tidak dijumpai."
+    );
+
+    return;
+
+  }
+
 
   const confirmed =
     confirm(
       "Tuan pasti mahu padam conversation ini?"
     );
 
+
   if (!confirmed) {
     return;
   }
 
-  /*
-    Jangan delete database dahulu.
-    API delete history belum kita
-    sambungkan dalam step ini.
-  */
 
   alert(
-    "API delete history akan kita sambungkan pada step seterusnya."
+    "API delete history belum disambungkan. Database belum dipadam."
   );
 
 }
 
 
 /* ============================================================
-   END CONVERSATION HISTORY
+   MEMORY CENTER
 ============================================================ */
 
+const memoryButton =
+  document.getElementById(
+    "memoryButton"
+  );
+
+const memoryPanel =
+  document.getElementById(
+    "memoryPanel"
+  );
+
+const closeMemory =
+  document.getElementById(
+    "closeMemory"
+  );
+
+const memoryList =
+  document.getElementById(
+    "memoryList"
+  );
+
+const memoryStatus =
+  document.getElementById(
+    "memoryStatus"
+  );
+
+const memorySearch =
+  document.getElementById(
+    "memorySearch"
+  );
+
+const categoryFilter =
+  document.getElementById(
+    "categoryFilter"
+  );
+
+const refreshMemory =
+  document.getElementById(
+    "refreshMemory"
+  );
+
+const addMemoryButton =
+  document.getElementById(
+    "addMemoryButton"
+  );
+
+const memoryFormOverlay =
+  document.getElementById(
+    "memoryFormOverlay"
+  );
+
+const memoryFormTitle =
+  document.getElementById(
+    "memoryFormTitle"
+  );
+
+const memoryText =
+  document.getElementById(
+    "memoryText"
+  );
+
+const memoryCategory =
+  document.getElementById(
+    "memoryCategory"
+  );
+
+const memorySubcategory =
+  document.getElementById(
+    "memorySubcategory"
+  );
+
+const memoryImportance =
+  document.getElementById(
+    "memoryImportance"
+  );
+
+const saveMemoryButton =
+  document.getElementById(
+    "saveMemory"
+  );
+
+const cancelMemory =
+  document.getElementById(
+    "cancelMemory"
+  );
+
+
+let allMemories = [];
+
+let editingMemoryId =
+  null;
+
+
+memoryButton.addEventListener(
+  "click",
+  function() {
+
+    memoryPanel.classList.add(
+      "active"
+    );
+
+    loadMemories();
+
+  }
+);
+
+
+closeMemory.addEventListener(
+  "click",
+  function() {
+
+    memoryPanel.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+
+refreshMemory.addEventListener(
+  "click",
+  loadMemories
+);
+
+
+memorySearch.addEventListener(
+  "input",
+  renderFilteredMemories
+);
+
+
+categoryFilter.addEventListener(
+  "change",
+  renderFilteredMemories
+);
+
+
+async function loadMemories() {
+
+  memoryStatus.textContent =
+    "Memuatkan memory...";
+
+  memoryList.innerHTML =
+    "";
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE + "/api/memory",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              action: "list"
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Memory gagal dimuatkan."
+      );
+
+    }
+
+
+    allMemories =
+      data.memories ||
+      [];
+
+
+    memoryStatus.textContent =
+      `${allMemories.length} memory disimpan`;
+
+
+    renderFilteredMemories();
+
+
+  } catch (error) {
+
+    console.error(
+      "MEMORY LOAD ERROR:",
+      error
+    );
+
+
+    memoryStatus.textContent =
+      "Gagal memuatkan memory.";
+
+
+    memoryList.innerHTML = `
+      <div class="empty-history">
+        ❌ ${escapeHTML(error.message)}
+      </div>
+    `;
+
+  }
+
+}
+
+
+function renderFilteredMemories() {
+
+  const search =
+    memorySearch.value
+      .trim()
+      .toLowerCase();
+
+
+  const category =
+    categoryFilter.value;
+
+
+  const filtered =
+    allMemories.filter(
+      function(memory) {
+
+        const memoryTextValue =
+          String(
+            memory.memory || ""
+          )
+          .toLowerCase();
+
+
+        const memoryCategoryValue =
+          String(
+            memory.category || ""
+          )
+          .toLowerCase();
+
+
+        const memorySubcategoryValue =
+          String(
+            memory.subcategory || ""
+          )
+          .toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          memoryTextValue.includes(
+            search
+          ) ||
+          memoryCategoryValue.includes(
+            search
+          ) ||
+          memorySubcategoryValue.includes(
+            search
+          );
+
+
+        const matchesCategory =
+          category === "all" ||
+          memory.category ===
+            category;
+
+
+        return (
+          matchesSearch &&
+          matchesCategory
+        );
+
+      }
+    );
+
+
+  renderMemories(
+    filtered
+  );
+
+}
+
+
+function renderMemories(
+  memories
+) {
+
+  memoryList.innerHTML =
+    "";
+
+
+  if (!memories.length) {
+
+    memoryList.innerHTML = `
+      <div class="empty-history">
+        🧠 Tiada memory dijumpai.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  const groups = {};
+
+
+  memories.forEach(
+    function(memory) {
+
+      const category =
+        memory.category ||
+        "general";
+
+
+      if (!groups[category]) {
+
+        groups[category] =
+          [];
+
+      }
+
+
+      groups[category].push(
+        memory
+      );
+
+    }
+  );
+
+
+  const categoryInfo = {
+
+    profile:
+      "👤 Profile",
+
+    fashion:
+      "👕 Fashion",
+
+    food:
+      "🍔 Food",
+
+    game:
+      "🎮 Game",
+
+    hobby:
+      "🎨 Hobby",
+
+    work:
+      "💼 Work",
+
+    project:
+      "🚀 Project",
+
+    preference:
+      "❤️ Preference",
+
+    family:
+      "👨‍👩‍👧 Family",
+
+    general:
+      "📁 General"
+
+  };
+
+
+  Object.keys(groups)
+    .forEach(
+      function(category) {
+
+        const section =
+          document.createElement(
+            "div"
+          );
+
+        section.className =
+          "memory-category";
+
+
+        const title =
+          document.createElement(
+            "div"
+          );
+
+        title.className =
+          "category-title";
+
+
+        title.innerHTML = `
+          <span>
+            ${
+              categoryInfo[category] ||
+              "📁 " +
+              escapeHTML(category)
+            }
+          </span>
+
+          <span class="category-count">
+            ${groups[category].length}
+          </span>
+        `;
+
+
+        section.appendChild(
+          title
+        );
+
+
+        groups[category]
+          .forEach(
+            function(memory) {
+
+              const card =
+                document.createElement(
+                  "div"
+                );
+
+              card.className =
+                "memory-card";
+
+
+              const text =
+                document.createElement(
+                  "div"
+                );
+
+              text.className =
+                "memory-text";
+
+              text.textContent =
+                memory.memory ||
+                "";
+
+
+              const stars =
+                "⭐".repeat(
+                  Math.max(
+                    1,
+                    Math.min(
+                      3,
+                      Number(
+                        memory.importance
+                      ) || 1
+                    )
+                  )
+                );
+
+
+              const meta =
+                document.createElement(
+                  "div"
+                );
+
+              meta.className =
+                "memory-meta";
+
+
+              meta.innerHTML = `
+                ${stars}
+                &nbsp; • &nbsp;
+                ${escapeHTML(
+                  memory.subcategory ||
+                  "general"
+                )}
+              `;
+
+
+              const actions =
+                document.createElement(
+                  "div"
+                );
+
+              actions.className =
+                "memory-actions";
+
+
+              const edit =
+                document.createElement(
+                  "button"
+                );
+
+              edit.textContent =
+                "✏️ Edit";
+
+
+              edit.addEventListener(
+                "click",
+                function() {
+
+                  openEditForm(
+                    memory
+                  );
+
+                }
+              );
+
+
+              const deleteButton =
+                document.createElement(
+                  "button"
+                );
+
+              deleteButton.className =
+                "delete";
+
+              deleteButton.textContent =
+                "🗑️ Delete";
+
+
+              deleteButton.addEventListener(
+                "click",
+                function() {
+
+                  deleteMemory(
+                    memory.id
+                  );
+
+                }
+              );
+
+
+              actions.appendChild(
+                edit
+              );
+
+              actions.appendChild(
+                deleteButton
+              );
+
+
+              card.appendChild(
+                text
+              );
+
+              card.appendChild(
+                meta
+              );
+
+              card.appendChild(
+                actions
+              );
+
+
+              section.appendChild(
+                card
+              );
+
+            }
+          );
+
+
+        memoryList.appendChild(
+          section
+        );
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   MEMORY FORM
+============================================================ */
+
+addMemoryButton.addEventListener(
+  "click",
+  function() {
+
+    editingMemoryId =
+      null;
+
+
+    memoryFormTitle.textContent =
+      "➕ Tambah Memory";
+
+
+    memoryText.value =
+      "";
+
+
+    memoryCategory.value =
+      "general";
+
+
+    memorySubcategory.value =
+      "general";
+
+
+    memoryImportance.value =
+      "2";
+
+
+    memoryFormOverlay.classList.add(
+      "active"
+    );
+
+
+    setTimeout(
+      function() {
+
+        memoryText.focus();
+
+      },
+      100
+    );
+
+  }
+);
+
+
+function openEditForm(
+  memory
+) {
+
+  editingMemoryId =
+    memory.id;
+
+
+  memoryFormTitle.textContent =
+    "✏️ Edit Memory";
+
+
+  memoryText.value =
+    memory.memory ||
+    "";
+
+
+  memoryCategory.value =
+    memory.category ||
+    "general";
+
+
+  memorySubcategory.value =
+    memory.subcategory ||
+    "general";
+
+
+  memoryImportance.value =
+    String(
+      memory.importance ||
+      1
+    );
+
+
+  memoryFormOverlay.classList.add(
+    "active"
+  );
+
+
+  setTimeout(
+    function() {
+
+      memoryText.focus();
+
+    },
+    100
+  );
+
+}
+
+
+cancelMemory.addEventListener(
+  "click",
+  closeMemoryForm
+);
+
+
+memoryFormOverlay.addEventListener(
+  "click",
+  function(event) {
+
+    if (
+      event.target ===
+      memoryFormOverlay
+    ) {
+
+      closeMemoryForm();
+
+    }
+
+  }
+);
+
+
+function closeMemoryForm() {
+
+  memoryFormOverlay.classList.remove(
+    "active"
+  );
+
+  editingMemoryId =
+    null;
+
+}
+
+
+/* ============================================================
+   SAVE / UPDATE MEMORY
+============================================================ */
+
+saveMemoryButton.addEventListener(
+  "click",
+  async function() {
+
+    const text =
+      memoryText.value.trim();
+
+
+    if (!text) {
+
+      alert(
+        "⚠️ Sila masukkan memory."
+      );
+
+      return;
+
+    }
+
+
+    saveMemoryButton.disabled =
+      true;
+
+
+    saveMemoryButton.textContent =
+      "Menyimpan...";
+
+
+    try {
+
+      const action =
+        editingMemoryId
+          ? "update"
+          : "save";
+
+
+      const body = {
+
+        action:
+          action,
+
+        memory:
+          text,
+
+        category:
+          memoryCategory.value,
+
+        subcategory:
+          memorySubcategory.value
+            .trim() ||
+          "general",
+
+        importance:
+          Number(
+            memoryImportance.value
+          )
+
+      };
+
+
+      if (editingMemoryId) {
+
+        body.id =
+          editingMemoryId;
+
+      }
+
+
+      const response =
+        await fetch(
+          API_BASE + "/api/memory",
+          {
+            method: "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                body
+              )
+          }
+        );
+
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "Memory gagal disimpan."
+        );
+
+      }
+
+
+      closeMemoryForm();
+
+      await loadMemories();
+
+
+    } catch (error) {
+
+      console.error(
+        "MEMORY SAVE ERROR:",
+        error
+      );
+
+
+      alert(
+        "❌ " +
+        error.message
+      );
+
+
+    } finally {
+
+      saveMemoryButton.disabled =
+        false;
+
+      saveMemoryButton.textContent =
+        "💾 Simpan";
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   DELETE MEMORY
+============================================================ */
+
+async function deleteMemory(
+  id
+) {
+
+  const confirmed =
+    confirm(
+      "Tuan pasti mahu padam memory ini?\n\nNaira tidak akan menggunakan memory tersebut lagi."
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE + "/api/memory",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              action: "delete",
+              id: id
+            })
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Memory gagal dipadam."
+      );
+
+    }
+
+
+    await loadMemories();
+
+
+  } catch (error) {
+
+    console.error(
+      "MEMORY DELETE ERROR:",
+      error
+    );
+
+
+    alert(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   INITIAL
+============================================================ */
+
+console.log(
+  "Naira Personal Assistant loaded successfully."
+);
+
+console.log(
+  "Chat API:",
+  API_BASE + "/api/chat"
+);
+
 </script>
+
 </body>
 </html>
