@@ -35,7 +35,10 @@ export default async function handler(req, res) {
     // MESSAGE
     // ============================================================
 
-    const { message } = req.body || {};
+    const {
+  message,
+  conversationId
+} = req.body || {};
 
     if (!message || !message.trim()) {
       return res.status(400).json({
@@ -45,7 +48,9 @@ export default async function handler(req, res) {
 
     const cleanMessage = message.trim();
     const lowerMessage = cleanMessage.toLowerCase();
-
+const activeConversationId =
+  conversationId || crypto.randomUUID();
+  
     // ============================================================
     // DATABASE
     // ============================================================
@@ -1319,46 +1324,62 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-    // RETURN
-    // ============================================================
+// SAVE CONVERSATION HISTORY
+// ============================================================
 
-    return res.status(200).json({
-      reply:
-        result.reply ||
-        "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
+await sql`
+  INSERT INTO naira_conversations
+  (
+    conversation_id,
+    title,
+    user_message,
+    naira_response,
+    category,
+    subcategory
+  )
+  VALUES
+  (
+    ${activeConversationId},
+    ${result.reply
+      ? result.reply.slice(0, 60)
+      : "New Conversation"},
+    ${cleanMessage},
+    ${result.reply || ""},
+    'general',
+    'general'
+  )
+`;
 
-      memorySaved,
-      memoryUpdated,
+// ============================================================
+// RETURN
+// ============================================================
 
-      memoryDeleted: false,
-      deletedCount: 0,
+return res.status(200).json({
+  reply:
+    result.reply ||
+    "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
 
-      memoryConfirmationRequired,
-      memoryBlocked,
+  conversationId:
+    activeConversationId,
 
-      pendingMemory:
-        memoryConfirmationRequired
-          ? memory
-          : null,
+  memorySaved,
+  memoryUpdated,
 
-      pendingDelete: null,
+  memoryDeleted: false,
+  deletedCount: 0,
 
-      memory:
-        memorySaved || memoryUpdated
-          ? memory
-          : null
-    });
+  memoryConfirmationRequired,
+  memoryBlocked,
 
-  } catch (error) {
-    console.error(
-      "NAIRA SERVER ERROR:",
-      error
-    );
+  pendingMemory:
+    memoryConfirmationRequired
+      ? memory
+      : null,
 
-    return res.status(500).json({
-      error:
-        error.message ||
-        "Berlaku masalah pada server Naira."
-    });
-  }
-}
+  pendingDelete: null,
+
+  memory:
+    memorySaved || memoryUpdated
+      ? memory
+      : null
+});
