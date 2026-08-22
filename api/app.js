@@ -4,6 +4,10 @@
 // ============================================================
 const API_BASE = "https://naira-tawny.vercel.app";
 // ============================================================
+// CONVERSATION STATE
+// ============================================================
+let currentConversationId = null;
+// ============================================================
 // DOM
 // ============================================================
 const input = document.getElementById("messageInput");
@@ -15,7 +19,8 @@ const micButton = document.getElementById("micButton");
 // ============================================================
 function addMessage(text, type) {
   const message = document.createElement("div");
-  message.className = "message " + type;
+  message.className =
+    "message " + type;
   message.textContent = text;
   chat.appendChild(message);
   window.scrollTo({
@@ -28,7 +33,8 @@ function addMessage(text, type) {
 // TYPING INDICATOR
 // ============================================================
 function createTypingIndicator() {
-  const loading = document.createElement("div");
+  const loading =
+    document.createElement("div");
   loading.className =
     "message naira-message typing-indicator";
   loading.innerHTML = `
@@ -47,26 +53,52 @@ function createTypingIndicator() {
 // SEND MESSAGE
 // ============================================================
 async function sendMessage() {
-  const text = input.value.trim();
+  const text =
+    input.value.trim();
   if (!text) return;
-  addMessage(text, "user-message");
+  addMessage(
+    text,
+    "user-message"
+  );
   input.value = "";
-  const loading = createTypingIndicator();
+  const loading =
+    createTypingIndicator();
   try {
-    const response = await fetch(
-      API_BASE + "/api/chat",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: text
-        })
-      }
-    );
-    const data = await response.json();
+    // ========================================================
+    // REQUEST BODY
+    // ========================================================
+    const requestBody = {
+      message: text
+    };
+    // Hantar conversation ID jika conversation sedang aktif
+    if (currentConversationId) {
+      requestBody.conversationId =
+        currentConversationId;
+    }
+    // ========================================================
+    // API REQUEST
+    // ========================================================
+    const response =
+      await fetch(
+        API_BASE + "/api/chat",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+          body:
+            JSON.stringify(
+              requestBody
+            )
+        }
+      );
+    const data =
+      await response.json();
     loading.remove();
+    // ========================================================
+    // ERROR
+    // ========================================================
     if (!response.ok) {
       addMessage(
         data.error ||
@@ -75,17 +107,55 @@ async function sendMessage() {
       );
       return;
     }
+    // ========================================================
+    // SAVE CONVERSATION ID
+    // ========================================================
+    if (
+      data.conversationId
+    ) {
+      currentConversationId =
+        data.conversationId;
+      // Simpan supaya conversation
+      // kekal selepas page refresh
+      try {
+        localStorage.setItem(
+          "nairaConversationId",
+          currentConversationId
+        );
+      } catch (storageError) {
+        console.warn(
+          "LOCAL STORAGE ERROR:",
+          storageError
+        );
+      }
+    }
+    // ========================================================
+    // ADD NAIRA RESPONSE
+    // ========================================================
     addMessage(
       data.reply ||
         "Maaf Tuan, Naira tak dapat menghasilkan jawapan.",
       "naira-message"
     );
-    // Beritahu History Center supaya refresh
+    // ========================================================
+    // HISTORY REFRESH
+    // ========================================================
     window.dispatchEvent(
-      new CustomEvent("naira:conversation-created")
+      new CustomEvent(
+        "naira:conversation-created",
+        {
+          detail: {
+            conversationId:
+              currentConversationId
+          }
+        }
+      )
     );
   } catch (error) {
-    console.error("CHAT ERROR:", error);
+    console.error(
+      "CHAT ERROR:",
+      error
+    );
     loading.remove();
     addMessage(
       "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
@@ -93,6 +163,89 @@ async function sendMessage() {
     );
   }
 }
+// ============================================================
+// LOAD SAVED CONVERSATION ID
+// ============================================================
+function loadConversationId() {
+  try {
+    const savedId =
+      localStorage.getItem(
+        "nairaConversationId"
+      );
+    if (savedId) {
+      currentConversationId =
+        savedId;
+    }
+  } catch (error) {
+    console.warn(
+      "LOAD CONVERSATION ID ERROR:",
+      error
+    );
+  }
+}
+// ============================================================
+// NEW CONVERSATION
+// ============================================================
+function newConversation() {
+  currentConversationId =
+    null;
+  try {
+    localStorage.removeItem(
+      "nairaConversationId"
+    );
+  } catch (error) {
+    console.warn(
+      "CLEAR CONVERSATION ERROR:",
+      error
+    );
+  }
+  if (chat) {
+    chat.innerHTML = "";
+  }
+  window.dispatchEvent(
+    new CustomEvent(
+      "naira:new-conversation"
+    )
+  );
+}
+// ============================================================
+// OPEN EXISTING CONVERSATION
+// ============================================================
+function setConversationId(
+  conversationId
+) {
+  if (!conversationId) {
+    return;
+  }
+  currentConversationId =
+    conversationId;
+  try {
+    localStorage.setItem(
+      "nairaConversationId",
+      currentConversationId
+    );
+  } catch (error) {
+    console.warn(
+      "SAVE CONVERSATION ERROR:",
+      error
+    );
+  }
+}
+// ============================================================
+// GET CURRENT CONVERSATION ID
+// ============================================================
+function getConversationId() {
+  return currentConversationId;
+}
+// ============================================================
+// EXPOSE APP FUNCTIONS
+// ============================================================
+window.nairaApp = {
+  sendMessage,
+  newConversation,
+  setConversationId,
+  getConversationId
+};
 // ============================================================
 // SEND BUTTON
 // ============================================================
@@ -109,7 +262,11 @@ if (input) {
   input.addEventListener(
     "keydown",
     function (event) {
-      if (event.key === "Enter") {
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+        event.preventDefault();
         sendMessage();
       }
     }
@@ -123,8 +280,14 @@ if (micButton) {
     "click",
     function () {
       if (
-        !("webkitSpeechRecognition" in window) &&
-        !("SpeechRecognition" in window)
+        !(
+          "webkitSpeechRecognition"
+          in window
+        ) &&
+        !(
+          "SpeechRecognition"
+          in window
+        )
       ) {
         addMessage(
           "Voice recognition belum disokong oleh browser ini.",
@@ -137,22 +300,55 @@ if (micButton) {
         window.webkitSpeechRecognition;
       const recognition =
         new SpeechRecognition();
-      recognition.lang = "ms-MY";
-      recognition.interimResults = false;
-      recognition.continuous = false;
-      recognition.start();
-      micButton.textContent = "🔴";
-      recognition.onresult = function (event) {
-        input.value =
-          event.results[0][0].transcript;
-        micButton.textContent = "🎙️";
-      };
-      recognition.onerror = function () {
-        micButton.textContent = "🎙️";
-      };
-      recognition.onend = function () {
-        micButton.textContent = "🎙️";
-      };
+      recognition.lang =
+        "ms-MY";
+      recognition.interimResults =
+        false;
+      recognition.continuous =
+        false;
+      try {
+        recognition.start();
+        micButton.textContent =
+          "🔴";
+      } catch (error) {
+        console.error(
+          "VOICE START ERROR:",
+          error
+        );
+        micButton.textContent =
+          "🎙️";
+      }
+      recognition.onresult =
+        function (event) {
+          const transcript =
+            event.results[0][0]
+              .transcript;
+          if (input) {
+            input.value =
+              transcript;
+            input.focus();
+          }
+          micButton.textContent =
+            "🎙️";
+        };
+      recognition.onerror =
+        function (event) {
+          console.error(
+            "VOICE ERROR:",
+            event
+          );
+          micButton.textContent =
+            "🎙️";
+        };
+      recognition.onend =
+        function () {
+          micButton.textContent =
+            "🎙️";
+        };
     }
   );
 }
+// ============================================================
+// INITIALIZE
+// ============================================================
+loadConversationId();
