@@ -1289,33 +1289,102 @@ Tulis terus sebagai fakta.
     }
 
     // ============================================================
-    // SAVE CONVERSATION HISTORY
-    // ============================================================
+// CONVERSATION CATEGORY DETECTION
+// ============================================================
 
-    await sql`
-      INSERT INTO naira_conversations
-      (
-        conversation_id,
-        title,
-        user_message,
-        naira_response,
-        category,
-        subcategory
-      )
-      VALUES
-      (
-        ${activeConversationId},
-        ${
-          result.reply
-            ? result.reply.slice(0, 60)
-            : "New Conversation"
-        },
-        ${cleanMessage},
-        ${result.reply || ""},
-        'general',
-        'general'
-      )
-    `;
+let conversationCategory = "general";
+let conversationSubcategory = "general";
+
+if (
+  /(resepi|resipi|masak|makanan|makan|ayam|daging|ikan|udang|sotong|nasi|sambal|air fryer|minuman|food|recipe)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "food";
+  conversationSubcategory = "recipe";
+}
+
+else if (
+  /(game|games|gaming|permainan|minecraft|roblox|pubg|mobile legends|call of duty)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "game";
+  conversationSubcategory = "gaming";
+}
+
+else if (
+  /(baju|pakaian|fashion|fesyen|style|outfit|warna|colour|color)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "fashion";
+  conversationSubcategory = "clothing";
+}
+
+else if (
+  /(kerja|pekerjaan|shift|jadual kerja|schedule|mcdonald|manager|crew|crew leader)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "work";
+  conversationSubcategory = "job";
+}
+
+else if (
+  /(naira|project naira|projek naira|database|neon|vercel|github|api|coding|code|programming|deploy|deployment)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "project";
+  conversationSubcategory = "naira";
+}
+
+else if (
+  /(isteri|wife|anak|baby|keluarga|family|suami|bini)/i
+    .test(cleanMessage)
+) {
+  conversationCategory = "family";
+  conversationSubcategory = "family";
+}
+
+// ============================================================
+// CONVERSATION TITLE
+// ============================================================
+
+let conversationTitle =
+  cleanMessage
+    .replace(/\s+/g, " ")
+    .trim();
+
+if (conversationTitle.length > 60) {
+  conversationTitle =
+    conversationTitle.slice(0, 60).trim() + "...";
+}
+
+if (!conversationTitle) {
+  conversationTitle = "New Conversation";
+}
+
+// ============================================================
+// SAVE CONVERSATION HISTORY
+// ============================================================
+
+await sql`
+  INSERT INTO naira_conversations
+  (
+    conversation_id,
+    title,
+    user_message,
+    naira_response,
+    category,
+    subcategory
+  )
+  VALUES
+  (
+    ${activeConversationId},
+    ${conversationTitle},
+    ${cleanMessage},
+    ${result.reply || ""},
+    ${conversationCategory},
+    ${conversationSubcategory}
+  )
+`;
 
     // ============================================================
     // RETURN
