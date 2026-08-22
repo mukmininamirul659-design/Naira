@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Naira — Personal Assistant</title>
 
   <style>
@@ -14,9 +15,20 @@
 
     body {
       min-height: 100vh;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
       background:
-        radial-gradient(circle at top, #26304d 0%, #10131c 45%, #07080d 100%);
+        radial-gradient(
+          circle at top,
+          #26304d 0%,
+          #10131c 45%,
+          #07080d 100%
+        );
+
       color: white;
       display: flex;
       justify-content: center;
@@ -28,12 +40,19 @@
       color: white;
     }
 
+    button:disabled {
+      opacity: .55;
+      cursor: not-allowed;
+    }
+
     .app {
       width: 100%;
       max-width: 600px;
       min-height: 100vh;
+
       display: flex;
       flex-direction: column;
+
       padding: 22px 18px;
     }
 
@@ -43,6 +62,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding: 8px 4px 20px;
     }
 
@@ -55,12 +75,23 @@
     .avatar {
       width: 46px;
       height: 46px;
+
       border-radius: 50%;
+
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
-      box-shadow: 0 0 25px rgba(124, 92, 246, .45);
+
+      background:
+        linear-gradient(
+          135deg,
+          #8b5cf6,
+          #4f46e5
+        );
+
+      box-shadow:
+        0 0 25px rgba(124, 92, 246, .45);
+
       font-size: 22px;
     }
 
@@ -87,9 +118,15 @@
     .header-button {
       width: 44px;
       height: 44px;
+
       border-radius: 50%;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
       font-size: 19px;
     }
 
@@ -97,6 +134,7 @@
 
     .welcome {
       text-align: center;
+
       margin-top: 45px;
       margin-bottom: 35px;
     }
@@ -104,8 +142,11 @@
     .welcome-orb {
       width: 110px;
       height: 110px;
+
       margin: 0 auto 25px;
+
       border-radius: 50%;
+
       background:
         radial-gradient(
           circle at 35% 30%,
@@ -114,10 +155,13 @@
           #4338ca 70%,
           #17122e
         );
+
       box-shadow:
         0 0 35px rgba(139, 92, 246, .45),
         0 0 80px rgba(79, 70, 229, .18);
-      animation: breathe 3s ease-in-out infinite;
+
+      animation:
+        breathe 3s ease-in-out infinite;
     }
 
     @keyframes breathe {
@@ -144,33 +188,53 @@
 
     .chat {
       flex: 1;
+
       display: flex;
       flex-direction: column;
+
       gap: 12px;
+
       padding-bottom: 20px;
     }
 
     .message {
       max-width: 82%;
+
       padding: 13px 16px;
+
       border-radius: 18px;
+
       font-size: 14px;
       line-height: 1.5;
+
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     .naira-message {
       align-self: flex-start;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.08);
+
+      border:
+        1px solid rgba(255,255,255,.06);
+
       color: #e8eaf0;
+
       border-bottom-left-radius: 5px;
     }
 
     .user-message {
       align-self: flex-end;
-      background: linear-gradient(135deg, #6d4df5, #4f46e5);
+
+      background:
+        linear-gradient(
+          135deg,
+          #6d4df5,
+          #4f46e5
+        );
+
       border-bottom-right-radius: 5px;
     }
 
@@ -180,21 +244,35 @@
       display: flex;
       gap: 9px;
       align-items: center;
+
       padding: 10px;
-      background: rgba(20, 22, 32, .82);
-      border: 1px solid rgba(255,255,255,.09);
+
+      background:
+        rgba(20, 22, 32, .82);
+
+      border:
+        1px solid rgba(255,255,255,.09);
+
       border-radius: 22px;
+
       backdrop-filter: blur(18px);
-      box-shadow: 0 12px 35px rgba(0,0,0,.3);
+
+      box-shadow:
+        0 12px 35px rgba(0,0,0,.3);
     }
 
     #messageInput {
       flex: 1;
+
       border: none;
       outline: none;
+
       background: transparent;
+
       color: white;
+
       font-size: 15px;
+
       padding: 10px;
     }
 
@@ -206,31 +284,41 @@
     .send {
       width: 43px;
       height: 43px;
+
       border-radius: 50%;
+
       display: flex;
       align-items: center;
       justify-content: center;
+
       font-size: 18px;
+      flex-shrink: 0;
     }
 
     .mic {
-      background: rgba(255,255,255,.08);
+      background:
+        rgba(255,255,255,.08);
     }
 
     .send {
-      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
-      box-shadow: 0 5px 18px rgba(99, 72, 220, .35);
-    }
+      background:
+        linear-gradient(
+          135deg,
+          #8b5cf6,
+          #4f46e5
+        );
 
-    .send:disabled {
-      opacity: .55;
-      cursor: not-allowed;
+      box-shadow:
+        0 5px 18px rgba(99, 72, 220, .35);
     }
 
     .footer {
       text-align: center;
+
       color: #5f6472;
+
       font-size: 10px;
+
       margin-top: 12px;
     }
 
@@ -239,19 +327,27 @@
     .typing-indicator {
       display: flex;
       align-items: center;
+
       gap: 5px;
+
       min-width: 58px;
       min-height: 42px;
+
       padding: 13px 16px;
     }
 
     .typing-indicator span {
       width: 7px;
       height: 7px;
+
       background: #9ca3af;
+
       border-radius: 50%;
+
       display: block;
-      animation: typingBounce 1.4s infinite ease-in-out;
+
+      animation:
+        typingBounce 1.4s infinite ease-in-out;
     }
 
     .typing-indicator span:nth-child(1) {
@@ -278,53 +374,83 @@
       }
     }
 
-    /* ================= GENERAL OVERLAY ================= */
+    /* ================= OVERLAY ================= */
 
-    .overlay {
+    .overlay,
+    .history-panel,
+    .memory-form-overlay {
       display: none;
+
       position: fixed;
+
       inset: 0;
+
       z-index: 1000;
-      background: rgba(5, 6, 10, .88);
+
+      background:
+        rgba(5, 6, 10, .88);
+
       backdrop-filter: blur(16px);
+
       padding: 18px;
+
       overflow-y: auto;
     }
 
-    .overlay.active {
+    .overlay.active,
+    .history-panel.active,
+    .memory-form-overlay.active {
       display: block;
     }
 
-    .panel-box {
+    /* ================= PANELS ================= */
+
+    .panel-box,
+    .history-box {
       width: 100%;
       max-width: 600px;
+
       margin: 0 auto;
+
       background:
         linear-gradient(
           145deg,
           rgba(31, 34, 50, .99),
           rgba(13, 15, 24, .99)
         );
-      border: 1px solid rgba(255,255,255,.09);
+
+      border:
+        1px solid rgba(255,255,255,.09);
+
       border-radius: 24px;
+
       padding: 18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.5);
     }
 
-    .panel-header {
+    .panel-header,
+    .history-header {
       display: flex;
+
       justify-content: space-between;
       align-items: center;
+
       margin-bottom: 16px;
     }
 
-    .panel-header h2 {
+    .panel-header h2,
+    .history-header h2 {
       font-size: 22px;
     }
 
-    .panel-header p {
+    .panel-header p,
+    .history-header p {
       color: #858b9c;
+
       font-size: 11px;
+
       margin-top: 4px;
     }
 
@@ -332,75 +458,46 @@
     .close-history {
       width: 40px;
       height: 40px;
+
       border-radius: 50%;
-      background: rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
+
       font-size: 18px;
     }
 
     /* ================= HISTORY ================= */
 
     .history-panel {
-      display: none;
-      position: fixed;
-      inset: 0;
       z-index: 1500;
-      background: rgba(5, 6, 10, .88);
-      backdrop-filter: blur(16px);
-      padding: 18px;
-      overflow-y: auto;
-    }
-
-    .history-panel.active {
-      display: block;
-    }
-
-    .history-box {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      background:
-        linear-gradient(
-          145deg,
-          rgba(31, 34, 50, .99),
-          rgba(13, 15, 24, .99)
-        );
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.5);
-    }
-
-    .history-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-
-    .history-header h2 {
-      font-size: 22px;
-    }
-
-    .history-header p {
-      color: #858b9c;
-      font-size: 11px;
-      margin-top: 4px;
     }
 
     .history-tools {
       display: flex;
+
       gap: 8px;
+
       margin-bottom: 10px;
     }
 
     .history-search {
       flex: 1;
+
       padding: 13px 14px;
+
       border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
       outline: none;
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.06);
+
       color: white;
+
       font-size: 14px;
     }
 
@@ -410,28 +507,42 @@
 
     .history-refresh {
       width: 47px;
+
       border-radius: 13px;
-      background: rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
+
       font-size: 17px;
     }
 
     .new-conversation {
       width: 100%;
+
       padding: 14px;
+
       border-radius: 15px;
-      background: linear-gradient(
-        135deg,
-        #8b5cf6,
-        #4f46e5
-      );
+
+      background:
+        linear-gradient(
+          135deg,
+          #8b5cf6,
+          #4f46e5
+        );
+
       font-size: 14px;
+
       margin-bottom: 14px;
     }
 
-    .history-status {
+    .history-status,
+    .memory-status {
       text-align: center;
+
       color: #7f8799;
+
       font-size: 12px;
+
       margin-bottom: 14px;
     }
 
@@ -441,73 +552,101 @@
 
     .history-day-title {
       display: flex;
+
       justify-content: space-between;
       align-items: center;
+
       color: #cfd2dc;
+
       font-size: 14px;
+
       margin-bottom: 9px;
     }
 
     .history-day-count {
       color: #777d8d;
+
       font-size: 11px;
     }
 
     .history-card {
       position: relative;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 14px;
-      margin-bottom: 8px;
-    }
 
-    .history-card:active {
-      transform: scale(.99);
+      background:
+        rgba(255,255,255,.06);
+
+      border:
+        1px solid rgba(255,255,255,.07);
+
+      border-radius: 15px;
+
+      padding: 14px;
+
+      margin-bottom: 8px;
     }
 
     .history-title {
       font-size: 14px;
+
       font-weight: 600;
+
       line-height: 1.4;
+
       margin-bottom: 7px;
     }
 
     .history-preview {
       color: #a7adbd;
+
       font-size: 12px;
+
       line-height: 1.45;
+
       margin-bottom: 9px;
     }
 
     .history-meta {
       color: #777d8d;
+
       font-size: 10px;
     }
 
     .history-actions {
       display: flex;
+
       gap: 7px;
+
       margin-top: 11px;
     }
 
     .history-actions button {
       flex: 1;
+
       padding: 9px;
+
       border-radius: 9px;
-      background: rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
+
       font-size: 11px;
     }
 
     .history-actions .history-delete {
-      background: rgba(239,68,68,.18);
+      background:
+        rgba(239,68,68,.18);
+
       color: #ff9b9b;
     }
 
-    .empty-history {
+    .empty-history,
+    .empty-state {
       text-align: center;
+
       color: #777d8d;
+
       font-size: 13px;
+
       padding: 35px 15px;
     }
 
@@ -515,18 +654,29 @@
 
     .memory-tools {
       display: flex;
+
       gap: 8px;
+
       margin-bottom: 10px;
     }
 
     .search-box {
       flex: 1;
+
       padding: 13px 14px;
+
       border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
       outline: none;
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.06);
+
       color: white;
+
       font-size: 14px;
     }
 
@@ -536,37 +686,53 @@
 
     .tool-button {
       width: 47px;
+
       border-radius: 13px;
-      background: rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
+
       font-size: 17px;
     }
 
     .category-filter {
       width: 100%;
+
       padding: 12px 13px;
+
       border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
       outline: none;
+
       background: #1b1e2b;
+
       color: white;
+
       font-size: 13px;
+
       margin-bottom: 12px;
     }
 
     .memory-add {
       width: 100%;
-      padding: 14px;
-      border-radius: 15px;
-      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
 
-    .memory-status {
-      text-align: center;
-      color: #7f8799;
-      font-size: 12px;
-      margin-bottom: 14px;
+      padding: 14px;
+
+      border-radius: 15px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #8b5cf6,
+          #4f46e5
+        );
+
+      font-size: 14px;
+
+      margin-bottom: 16px;
     }
 
     .memory-category {
@@ -575,93 +741,120 @@
 
     .category-title {
       display: flex;
+
       align-items: center;
       justify-content: space-between;
+
       font-size: 15px;
+
       margin-bottom: 9px;
+
       color: #cfd2dc;
     }
 
     .category-count {
       color: #777d8d;
+
       font-size: 11px;
     }
 
     .memory-card {
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.07);
+      background:
+        rgba(255,255,255,.06);
+
+      border:
+        1px solid rgba(255,255,255,.07);
+
       border-radius: 15px;
+
       padding: 14px;
+
       margin-bottom: 8px;
     }
 
     .memory-text {
       font-size: 14px;
+
       line-height: 1.5;
+
       margin-bottom: 9px;
     }
 
     .memory-meta {
       font-size: 11px;
+
       color: #858b9c;
+
       margin-bottom: 11px;
     }
 
     .memory-actions {
       display: flex;
+
       gap: 8px;
     }
 
     .memory-actions button {
       flex: 1;
+
       padding: 10px;
+
       border-radius: 10px;
+
       font-size: 12px;
-      background: rgba(255,255,255,.08);
+
+      background:
+        rgba(255,255,255,.08);
     }
 
     .memory-actions .delete {
-      background: rgba(239,68,68,.18);
+      background:
+        rgba(239,68,68,.18);
+
       color: #ff9b9b;
     }
 
     /* ================= MEMORY FORM ================= */
 
     .memory-form-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
       z-index: 2000;
-      background: rgba(0,0,0,.75);
-      backdrop-filter: blur(10px);
-      padding: 18px;
-      overflow-y: auto;
+
+      align-items: center;
+      justify-content: center;
     }
 
     .memory-form-overlay.active {
       display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .memory-form {
       width: 100%;
       max-width: 520px;
+
       background: #171a26;
-      border: 1px solid rgba(255,255,255,.09);
+
+      border:
+        1px solid rgba(255,255,255,.09);
+
       border-radius: 22px;
+
       padding: 20px;
-      box-shadow: 0 25px 70px rgba(0,0,0,.55);
+
+      box-shadow:
+        0 25px 70px rgba(0,0,0,.55);
     }
 
     .memory-form h3 {
       font-size: 20px;
+
       margin-bottom: 5px;
     }
 
     .memory-form-subtitle {
       color: #858b9c;
+
       font-size: 12px;
+
       margin-bottom: 18px;
     }
 
@@ -671,8 +864,11 @@
 
     .form-group label {
       display: block;
+
       color: #aeb3c1;
+
       font-size: 12px;
+
       margin-bottom: 6px;
     }
 
@@ -680,18 +876,29 @@
     .form-group select,
     .form-group textarea {
       width: 100%;
-      border: 1px solid rgba(255,255,255,.09);
+
+      border:
+        1px solid rgba(255,255,255,.09);
+
       border-radius: 12px;
-      background: rgba(255,255,255,.06);
+
+      background:
+        rgba(255,255,255,.06);
+
       color: white;
+
       outline: none;
+
       padding: 12px;
+
       font-family: inherit;
+
       font-size: 14px;
     }
 
     .form-group textarea {
       min-height: 90px;
+
       resize: vertical;
     }
 
@@ -701,26 +908,40 @@
 
     .form-actions {
       display: flex;
+
       gap: 9px;
+
       margin-top: 18px;
     }
 
     .form-actions button {
       flex: 1;
+
       padding: 13px;
+
       border-radius: 12px;
+
       font-size: 13px;
     }
 
     .cancel-button {
-      background: rgba(255,255,255,.08);
+      background:
+        rgba(255,255,255,.08);
     }
 
     .save-button {
-      background: linear-gradient(135deg, #8b5cf6, #4f46e5);
+      background:
+        linear-gradient(
+          135deg,
+          #8b5cf6,
+          #4f46e5
+        );
     }
 
+    /* ================= MOBILE ================= */
+
     @media (max-height: 700px) {
+
       .welcome {
         margin-top: 20px;
         margin-bottom: 20px;
@@ -738,20 +959,29 @@
 
 <main class="app">
 
-  <!-- ================= HEADER ================= -->
+  <!-- HEADER -->
 
   <header>
+
     <div class="brand">
-      <div class="avatar">N</div>
+
+      <div class="avatar">
+        N
+      </div>
 
       <div>
-        <h1>Naira</h1>
+
+        <h1>
+          Naira
+        </h1>
 
         <div class="status">
           <span class="online">●</span>
           Personal Assistant
         </div>
+
       </div>
+
     </div>
 
     <div class="header-buttons">
@@ -773,10 +1003,11 @@
       </button>
 
     </div>
+
   </header>
 
 
-  <!-- ================= WELCOME ================= -->
+  <!-- WELCOME -->
 
   <section class="welcome">
 
@@ -793,7 +1024,7 @@
   </section>
 
 
-  <!-- ================= CHAT ================= -->
+  <!-- CHAT -->
 
   <section
     class="chat"
@@ -807,7 +1038,7 @@
   </section>
 
 
-  <!-- ================= INPUT ================= -->
+  <!-- INPUT -->
 
   <div class="input-area">
 
@@ -830,6 +1061,7 @@
       class="send"
       id="sendButton"
       aria-label="Send"
+      type="button"
     >
       ➤
     </button>
@@ -872,6 +1104,7 @@
       <button
         class="close-history"
         id="closeHistory"
+        type="button"
       >
         ✕
       </button>
@@ -892,6 +1125,7 @@
       <button
         class="history-refresh"
         id="refreshHistory"
+        type="button"
       >
         🔄
       </button>
@@ -902,6 +1136,7 @@
     <button
       class="new-conversation"
       id="newConversation"
+      type="button"
     >
       ＋ New Conversation
     </button>
@@ -915,9 +1150,7 @@
     </div>
 
 
-    <div
-      id="historyList"
-    ></div>
+    <div id="historyList"></div>
 
   </div>
 
@@ -952,6 +1185,7 @@
       <button
         class="close-button"
         id="closeMemory"
+        type="button"
       >
         ✕
       </button>
@@ -972,6 +1206,7 @@
       <button
         class="tool-button"
         id="refreshMemory"
+        type="button"
       >
         🔄
       </button>
@@ -1042,6 +1277,7 @@
     <button
       class="memory-add"
       id="addMemoryButton"
+      type="button"
     >
       ＋ Tambah Memory
     </button>
@@ -1168,7 +1404,10 @@
           ⭐ Biasa
         </option>
 
-        <option value="2" selected>
+        <option
+          value="2"
+          selected
+        >
           ⭐⭐ Penting
         </option>
 
@@ -1186,6 +1425,7 @@
       <button
         class="cancel-button"
         id="cancelMemory"
+        type="button"
       >
         Batal
       </button>
@@ -1193,6 +1433,7 @@
       <button
         class="save-button"
         id="saveMemory"
+        type="button"
       >
         💾 Simpan
       </button>
@@ -1207,7 +1448,7 @@
 <script>
 
 /* ============================================================
-   API
+   CONFIG
 ============================================================ */
 
 const API_BASE =
@@ -1215,7 +1456,7 @@ const API_BASE =
 
 
 /* ============================================================
-   BASIC HELPERS
+   HELPERS
 ============================================================ */
 
 function escapeHTML(value) {
@@ -1263,7 +1504,7 @@ function formatDate(dateValue) {
 
 
 /* ============================================================
-   CHAT
+   CHAT ELEMENTS
 ============================================================ */
 
 const input =
@@ -1287,6 +1528,10 @@ const micButton =
   );
 
 
+/* ============================================================
+   ADD MESSAGE
+============================================================ */
+
 function addMessage(
   text,
   type
@@ -1307,11 +1552,17 @@ function addMessage(
     message
   );
 
-  chat.scrollTop =
-    chat.scrollHeight;
+  message.scrollIntoView({
+    behavior: "smooth",
+    block: "end"
+  });
 
 }
 
+
+/* ============================================================
+   SEND MESSAGE
+============================================================ */
 
 async function sendMessage() {
 
@@ -1323,16 +1574,26 @@ async function sendMessage() {
   }
 
 
+  /* Show user's message */
+
   addMessage(
     text,
     "user-message"
   );
 
+
+  /* Clear input */
+
   input.value = "";
+
+
+  /* Disable send */
 
   sendButton.disabled =
     true;
 
+
+  /* Typing */
 
   const loading =
     document.createElement(
@@ -1380,33 +1641,35 @@ async function sendMessage() {
       );
 
 
-    const contentType =
-      response.headers.get(
-        "content-type"
-      ) || "";
+    const raw =
+      await response.text();
+
+    console.log(
+      "API status:",
+      response.status
+    );
+
+    console.log(
+      "API response:",
+      raw
+    );
 
 
-    let data;
+    let data = {};
 
-
-    if (
-      contentType.includes(
-        "application/json"
-      )
-    ) {
+    try {
 
       data =
-        await response.json();
+        raw
+          ? JSON.parse(raw)
+          : {};
 
-    } else {
-
-      const raw =
-        await response.text();
+    } catch {
 
       data = {
         error:
           raw ||
-          "Server tidak memberikan JSON."
+          "Server memberikan response yang tidak sah."
       };
 
     }
@@ -1417,40 +1680,36 @@ async function sendMessage() {
 
     if (!response.ok) {
 
-      console.error(
-        "Chat API error:",
-        response.status,
-        data
-      );
-
       addMessage(
         data.error ||
-        `Server error (${response.status}).`,
+          `Server error (${response.status})`,
         "naira-message"
       );
 
       return;
-
     }
 
 
-    const reply =
-      data.reply ||
-      data.output ||
-      data.message ||
-      "Maaf Tuan, Naira tak dapat menghasilkan jawapan.";
-
-
     addMessage(
-      reply,
+      data.reply ||
+        data.message ||
+        "Maaf Tuan, Naira tak menerima jawapan daripada server.",
       "naira-message"
     );
 
 
-    console.log(
-      "Naira reply received:",
-      data
-    );
+    /* Refresh history in background */
+
+    if (
+      typeof loadHistory ===
+      "function"
+    ) {
+
+      loadHistory(
+        true
+      );
+
+    }
 
 
   } catch (error) {
@@ -1463,7 +1722,8 @@ async function sendMessage() {
     loading.remove();
 
     addMessage(
-      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
+      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
+      error.message,
       "naira-message"
     );
 
@@ -1479,19 +1739,27 @@ async function sendMessage() {
 }
 
 
+/* ============================================================
+   SEND BUTTON
+============================================================ */
+
 sendButton.addEventListener(
   "click",
   sendMessage
 );
 
 
+/* ============================================================
+   ENTER TO SEND
+============================================================ */
+
 input.addEventListener(
   "keydown",
   function(event) {
 
     if (
-      event.key === "Enter" &&
-      !event.shiftKey
+      event.key ===
+      "Enter"
     ) {
 
       event.preventDefault();
@@ -1512,16 +1780,12 @@ micButton.addEventListener(
   "click",
   function() {
 
-    if (
-      !(
-        "webkitSpeechRecognition"
-        in window
-      ) &&
-      !(
-        "SpeechRecognition"
-        in window
-      )
-    ) {
+    const Recognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+
+    if (!Recognition) {
 
       addMessage(
         "Voice recognition belum disokong oleh browser ini.",
@@ -1533,19 +1797,17 @@ micButton.addEventListener(
     }
 
 
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-
     const recognition =
-      new SpeechRecognition();
+      new Recognition();
 
 
     recognition.lang =
       "ms-MY";
 
     recognition.interimResults =
+      false;
+
+    recognition.continuous =
       false;
 
 
@@ -1558,10 +1820,7 @@ micButton.addEventListener(
 
     } catch (error) {
 
-      console.error(
-        "Voice start error:",
-        error
-      );
+      console.error(error);
 
     }
 
@@ -1576,16 +1835,13 @@ micButton.addEventListener(
         micButton.textContent =
           "🎙️";
 
+        input.focus();
+
       };
 
 
     recognition.onerror =
-      function(error) {
-
-        console.error(
-          "Voice error:",
-          error
-        );
+      function() {
 
         micButton.textContent =
           "🎙️";
@@ -1606,7 +1862,7 @@ micButton.addEventListener(
 
 
 /* ============================================================
-   CONVERSATION HISTORY
+   HISTORY ELEMENTS
 ============================================================ */
 
 const historyButton =
@@ -1649,9 +1905,12 @@ const newConversation =
     "newConversation"
   );
 
-
 let allHistory = [];
 
+
+/* ============================================================
+   OPEN HISTORY
+============================================================ */
 
 historyButton.addEventListener(
   "click",
@@ -1667,6 +1926,10 @@ historyButton.addEventListener(
 );
 
 
+/* ============================================================
+   CLOSE HISTORY
+============================================================ */
+
 closeHistory.addEventListener(
   "click",
   function() {
@@ -1679,11 +1942,23 @@ closeHistory.addEventListener(
 );
 
 
+/* ============================================================
+   REFRESH HISTORY
+============================================================ */
+
 refreshHistory.addEventListener(
   "click",
-  loadHistory
+  function() {
+
+    loadHistory();
+
+  }
 );
 
+
+/* ============================================================
+   SEARCH HISTORY
+============================================================ */
 
 historySearch.addEventListener(
   "input",
@@ -1691,23 +1966,33 @@ historySearch.addEventListener(
 );
 
 
-async function loadHistory() {
+/* ============================================================
+   LOAD HISTORY
+============================================================ */
 
-  historyStatus.textContent =
-    "Memuatkan conversation...";
+async function loadHistory(
+  silent = false
+) {
 
-  historyList.innerHTML =
-    "";
+  if (!silent) {
+
+    historyStatus.textContent =
+      "Memuatkan conversation...";
+
+    historyList.innerHTML =
+      "";
+
+  }
 
 
   try {
 
-    const params =
-      new URLSearchParams();
-
-
     const search =
       historySearch.value.trim();
+
+
+    const params =
+      new URLSearchParams();
 
 
     if (search) {
@@ -1734,44 +2019,26 @@ async function loadHistory() {
       );
 
 
-    console.log(
-      "Loading history:",
-      url
-    );
-
-
     const response =
       await fetch(url);
 
 
-    const contentType =
-      response.headers.get(
-        "content-type"
-      ) || "";
+    const raw =
+      await response.text();
 
 
-    let data;
+    let data = {};
 
-
-    if (
-      contentType.includes(
-        "application/json"
-      )
-    ) {
+    try {
 
       data =
-        await response.json();
+        raw
+          ? JSON.parse(raw)
+          : {};
 
-    } else {
+    } catch {
 
-      const raw =
-        await response.text();
-
-      data = {
-        error:
-          raw ||
-          "History server tidak memberikan JSON."
-      };
+      data = {};
 
     }
 
@@ -1780,7 +2047,7 @@ async function loadHistory() {
 
       throw new Error(
         data.error ||
-        "History gagal dimuatkan."
+        `History error (${response.status})`
       );
 
     }
@@ -1810,16 +2077,27 @@ async function loadHistory() {
       "Gagal memuatkan history.";
 
 
-    historyList.innerHTML = `
-      <div class="empty-history">
-        ❌ ${escapeHTML(error.message)}
-      </div>
-    `;
+    if (!silent) {
+
+      historyList.innerHTML =
+        `
+        <div class="empty-history">
+          ❌ ${escapeHTML(
+            error.message
+          )}
+        </div>
+        `;
+
+    }
 
   }
 
 }
 
+
+/* ============================================================
+   RENDER HISTORY
+============================================================ */
 
 function renderHistory() {
 
@@ -1838,7 +2116,7 @@ function renderHistory() {
         }
 
 
-        const searchableText =
+        const text =
           [
             conversation.title,
             conversation.user_message,
@@ -1850,7 +2128,7 @@ function renderHistory() {
           .toLowerCase();
 
 
-        return searchableText.includes(
+        return text.includes(
           search
         );
 
@@ -1864,11 +2142,12 @@ function renderHistory() {
 
   if (!filtered.length) {
 
-    historyList.innerHTML = `
+    historyList.innerHTML =
+      `
       <div class="empty-history">
         🕘 Tiada conversation dijumpai.
       </div>
-    `;
+      `;
 
     return;
 
@@ -1891,10 +2170,14 @@ function renderHistory() {
         date.toLocaleDateString(
           "ms-MY",
           {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric"
+            weekday:
+              "long",
+            year:
+              "numeric",
+            month:
+              "long",
+            day:
+              "numeric"
           }
         );
 
@@ -1941,15 +2224,18 @@ function renderHistory() {
           "history-day-title";
 
 
-        dayTitle.innerHTML = `
+        dayTitle.innerHTML =
+          `
           <span>
-            📅 ${escapeHTML(dateKey)}
+            📅 ${escapeHTML(
+              dateKey
+            )}
           </span>
 
           <span class="history-day-count">
             ${conversations.length}
           </span>
-        `;
+          `;
 
 
         day.appendChild(
@@ -2005,8 +2291,10 @@ function renderHistory() {
               date.toLocaleTimeString(
                 "ms-MY",
                 {
-                  hour: "2-digit",
-                  minute: "2-digit"
+                  hour:
+                    "2-digit",
+                  minute:
+                    "2-digit"
                 }
               );
 
@@ -2035,10 +2323,15 @@ function renderHistory() {
               "history-actions";
 
 
+            /* OPEN */
+
             const openButton =
               document.createElement(
                 "button"
               );
+
+            openButton.type =
+              "button";
 
             openButton.textContent =
               "👁️ Buka";
@@ -2058,10 +2351,15 @@ function renderHistory() {
             );
 
 
+            /* EDIT */
+
             const editButton =
               document.createElement(
                 "button"
               );
+
+            editButton.type =
+              "button";
 
             editButton.textContent =
               "✏️ Edit";
@@ -2081,10 +2379,15 @@ function renderHistory() {
             );
 
 
+            /* DELETE */
+
             const deleteButton =
               document.createElement(
                 "button"
               );
+
+            deleteButton.type =
+              "button";
 
             deleteButton.className =
               "history-delete";
@@ -2155,6 +2458,10 @@ function renderHistory() {
 }
 
 
+/* ============================================================
+   OPEN CONVERSATION
+============================================================ */
+
 async function openConversation(
   conversationId
 ) {
@@ -2182,8 +2489,24 @@ async function openConversation(
       );
 
 
-    const data =
-      await response.json();
+    const raw =
+      await response.text();
+
+
+    let data = {};
+
+    try {
+
+      data =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    } catch {
+
+      data = {};
+
+    }
 
 
     if (!response.ok) {
@@ -2253,7 +2576,7 @@ async function openConversation(
   } catch (error) {
 
     console.error(
-      "OPEN CONVERSATION ERROR:",
+      "OPEN HISTORY ERROR:",
       error
     );
 
@@ -2267,6 +2590,10 @@ async function openConversation(
 
 }
 
+
+/* ============================================================
+   NEW CONVERSATION
+============================================================ */
 
 newConversation.addEventListener(
   "click",
@@ -2283,11 +2610,12 @@ newConversation.addEventListener(
     }
 
 
-    chat.innerHTML = `
+    chat.innerHTML =
+      `
       <div class="message naira-message">
         Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
       </div>
-    `;
+      `;
 
 
     historyPanel.classList.remove(
@@ -2298,14 +2626,17 @@ newConversation.addEventListener(
     input.value =
       "";
 
-
     input.focus();
 
   }
 );
 
 
-function editConversation(
+/* ============================================================
+   EDIT HISTORY
+============================================================ */
+
+async function editConversation(
   conversation
 ) {
 
@@ -2334,24 +2665,22 @@ function editConversation(
   alert(
     "Tajuk baru: " +
     newTitle.trim() +
-    "\n\nAPI edit history akan kita sambungkan selepas endpoint update siap."
+    "\n\nAPI edit history belum disambungkan."
   );
 
 }
 
 
-function deleteConversation(
+/* ============================================================
+   DELETE HISTORY
+============================================================ */
+
+async function deleteConversation(
   conversationId
 ) {
 
   if (!conversationId) {
-
-    alert(
-      "❌ Conversation ID tidak dijumpai."
-    );
-
     return;
-
   }
 
 
@@ -2367,14 +2696,14 @@ function deleteConversation(
 
 
   alert(
-    "API delete history belum disambungkan. Database belum dipadam."
+    "API delete history belum disambungkan."
   );
 
 }
 
 
 /* ============================================================
-   MEMORY CENTER
+   MEMORY ELEMENTS
 ============================================================ */
 
 const memoryButton =
@@ -2469,6 +2798,10 @@ let editingMemoryId =
   null;
 
 
+/* ============================================================
+   OPEN MEMORY
+============================================================ */
+
 memoryButton.addEventListener(
   "click",
   function() {
@@ -2483,6 +2816,10 @@ memoryButton.addEventListener(
 );
 
 
+/* ============================================================
+   CLOSE MEMORY
+============================================================ */
+
 closeMemory.addEventListener(
   "click",
   function() {
@@ -2495,11 +2832,19 @@ closeMemory.addEventListener(
 );
 
 
+/* ============================================================
+   REFRESH MEMORY
+============================================================ */
+
 refreshMemory.addEventListener(
   "click",
   loadMemories
 );
 
+
+/* ============================================================
+   SEARCH MEMORY
+============================================================ */
 
 memorySearch.addEventListener(
   "input",
@@ -2507,11 +2852,19 @@ memorySearch.addEventListener(
 );
 
 
+/* ============================================================
+   FILTER MEMORY
+============================================================ */
+
 categoryFilter.addEventListener(
   "change",
   renderFilteredMemories
 );
 
+
+/* ============================================================
+   LOAD MEMORIES
+============================================================ */
 
 async function loadMemories() {
 
@@ -2528,7 +2881,8 @@ async function loadMemories() {
       await fetch(
         API_BASE + "/api/memory",
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
@@ -2537,21 +2891,38 @@ async function loadMemories() {
 
           body:
             JSON.stringify({
-              action: "list"
+              action:
+                "list"
             })
         }
       );
 
 
-    const data =
-      await response.json();
+    const raw =
+      await response.text();
+
+
+    let data = {};
+
+    try {
+
+      data =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    } catch {
+
+      data = {};
+
+    }
 
 
     if (!response.ok) {
 
       throw new Error(
         data.error ||
-        "Memory gagal dimuatkan."
+        `Memory error (${response.status})`
       );
 
     }
@@ -2572,7 +2943,7 @@ async function loadMemories() {
   } catch (error) {
 
     console.error(
-      "MEMORY LOAD ERROR:",
+      "MEMORY ERROR:",
       error
     );
 
@@ -2581,16 +2952,23 @@ async function loadMemories() {
       "Gagal memuatkan memory.";
 
 
-    memoryList.innerHTML = `
-      <div class="empty-history">
-        ❌ ${escapeHTML(error.message)}
+    memoryList.innerHTML =
+      `
+      <div class="empty-state">
+        ❌ ${escapeHTML(
+          error.message
+        )}
       </div>
-    `;
+      `;
 
   }
 
 }
 
+
+/* ============================================================
+   FILTERED MEMORIES
+============================================================ */
 
 function renderFilteredMemories() {
 
@@ -2608,38 +2986,19 @@ function renderFilteredMemories() {
     allMemories.filter(
       function(memory) {
 
-        const memoryTextValue =
-          String(
-            memory.memory || ""
-          )
-          .toLowerCase();
-
-
-        const memoryCategoryValue =
-          String(
-            memory.category || ""
-          )
-          .toLowerCase();
-
-
-        const memorySubcategoryValue =
-          String(
-            memory.subcategory || ""
-          )
+        const text =
+          [
+            memory.memory,
+            memory.category,
+            memory.subcategory
+          ]
+          .join(" ")
           .toLowerCase();
 
 
         const matchesSearch =
           !search ||
-          memoryTextValue.includes(
-            search
-          ) ||
-          memoryCategoryValue.includes(
-            search
-          ) ||
-          memorySubcategoryValue.includes(
-            search
-          );
+          text.includes(search);
 
 
         const matchesCategory =
@@ -2664,6 +3023,10 @@ function renderFilteredMemories() {
 }
 
 
+/* ============================================================
+   RENDER MEMORIES
+============================================================ */
+
 function renderMemories(
   memories
 ) {
@@ -2674,11 +3037,12 @@ function renderMemories(
 
   if (!memories.length) {
 
-    memoryList.innerHTML = `
-      <div class="empty-history">
+    memoryList.innerHTML =
+      `
+      <div class="empty-state">
         🧠 Tiada memory dijumpai.
       </div>
-    `;
+      `;
 
     return;
 
@@ -2769,19 +3133,24 @@ function renderMemories(
           "category-title";
 
 
-        title.innerHTML = `
+        title.innerHTML =
+          `
           <span>
             ${
-              categoryInfo[category] ||
+              categoryInfo[
+                category
+              ] ||
               "📁 " +
-              escapeHTML(category)
+              escapeHTML(
+                category
+              )
             }
           </span>
 
           <span class="category-count">
             ${groups[category].length}
           </span>
-        `;
+          `;
 
 
         section.appendChild(
@@ -2838,14 +3207,15 @@ function renderMemories(
                 "memory-meta";
 
 
-              meta.innerHTML = `
+              meta.innerHTML =
+                `
                 ${stars}
                 &nbsp; • &nbsp;
                 ${escapeHTML(
                   memory.subcategory ||
                   "general"
                 )}
-              `;
+                `;
 
 
               const actions =
@@ -2861,6 +3231,9 @@ function renderMemories(
                 document.createElement(
                   "button"
                 );
+
+              edit.type =
+                "button";
 
               edit.textContent =
                 "✏️ Edit";
@@ -2882,6 +3255,9 @@ function renderMemories(
                 document.createElement(
                   "button"
                 );
+
+              deleteButton.type =
+                "button";
 
               deleteButton.className =
                 "delete";
@@ -2943,7 +3319,7 @@ function renderMemories(
 
 
 /* ============================================================
-   MEMORY FORM
+   ADD MEMORY
 ============================================================ */
 
 addMemoryButton.addEventListener(
@@ -2991,6 +3367,10 @@ addMemoryButton.addEventListener(
   }
 );
 
+
+/* ============================================================
+   EDIT MEMORY FORM
+============================================================ */
 
 function openEditForm(
   memory
@@ -3043,6 +3423,10 @@ function openEditForm(
 }
 
 
+/* ============================================================
+   CLOSE MEMORY FORM
+============================================================ */
+
 cancelMemory.addEventListener(
   "click",
   closeMemoryForm
@@ -3071,6 +3455,7 @@ function closeMemoryForm() {
   memoryFormOverlay.classList.remove(
     "active"
   );
+
 
   editingMemoryId =
     null;
@@ -3153,7 +3538,8 @@ saveMemoryButton.addEventListener(
         await fetch(
           API_BASE + "/api/memory",
           {
-            method: "POST",
+            method:
+              "POST",
 
             headers: {
               "Content-Type":
@@ -3168,15 +3554,31 @@ saveMemoryButton.addEventListener(
         );
 
 
-      const data =
-        await response.json();
+      const raw =
+        await response.text();
+
+
+      let data = {};
+
+      try {
+
+        data =
+          raw
+            ? JSON.parse(raw)
+            : {};
+
+      } catch {
+
+        data = {};
+
+      }
 
 
       if (!response.ok) {
 
         throw new Error(
           data.error ||
-          "Memory gagal disimpan."
+          `Memory gagal disimpan (${response.status})`
         );
 
       }
@@ -3190,7 +3592,7 @@ saveMemoryButton.addEventListener(
     } catch (error) {
 
       console.error(
-        "MEMORY SAVE ERROR:",
+        "SAVE MEMORY ERROR:",
         error
       );
 
@@ -3240,7 +3642,8 @@ async function deleteMemory(
       await fetch(
         API_BASE + "/api/memory",
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
@@ -3249,22 +3652,41 @@ async function deleteMemory(
 
           body:
             JSON.stringify({
-              action: "delete",
-              id: id
+              action:
+                "delete",
+
+              id:
+                id
             })
         }
       );
 
 
-    const data =
-      await response.json();
+    const raw =
+      await response.text();
+
+
+    let data = {};
+
+    try {
+
+      data =
+        raw
+          ? JSON.parse(raw)
+          : {};
+
+    } catch {
+
+      data = {};
+
+    }
 
 
     if (!response.ok) {
 
       throw new Error(
         data.error ||
-        "Memory gagal dipadam."
+        `Memory gagal dipadam (${response.status})`
       );
 
     }
@@ -3276,7 +3698,7 @@ async function deleteMemory(
   } catch (error) {
 
     console.error(
-      "MEMORY DELETE ERROR:",
+      "DELETE MEMORY ERROR:",
       error
     );
 
@@ -3292,7 +3714,7 @@ async function deleteMemory(
 
 
 /* ============================================================
-   INITIAL
+   FINAL INITIALIZATION
 ============================================================ */
 
 console.log(
@@ -3300,8 +3722,8 @@ console.log(
 );
 
 console.log(
-  "Chat API:",
-  API_BASE + "/api/chat"
+  "API:",
+  API_BASE
 );
 
 </script>
