@@ -516,6 +516,118 @@ export default async function handler(req, res) {
       }
     }
 
+// ============================================================
+// MEMORY MANAGEMENT
+// ============================================================
+
+const isMemoryManagementRequest =
+  /(apa yang naira ingat|naira ingat apa|apa memory|apa memori|tunjukkan memory|tunjukkan memori|senaraikan memory|senaraikan memori|apa yang naira simpan|memory saya|memori saya)/i
+    .test(cleanMessage);
+
+if (isMemoryManagementRequest) {
+
+  const allMemories = await sql`
+    SELECT
+      id,
+      memory,
+      category,
+      subcategory,
+      importance,
+      created_at
+    FROM naira_memory
+    ORDER BY
+      importance DESC,
+      created_at DESC
+  `;
+
+  if (allMemories.length === 0) {
+    return res.status(200).json({
+      reply:
+        "Buat masa ini, Naira belum mempunyai sebarang memory tersimpan tentang Tuan. 🧠💜",
+
+      memoryManagement: true,
+      memoryCount: 0,
+
+      memorySaved: false,
+      memoryUpdated: false,
+      memoryDeleted: false,
+      deletedCount: 0,
+
+      memoryConfirmationRequired: false,
+      memoryBlocked: false,
+
+      pendingMemory: null,
+      pendingDelete: null,
+      memory: null
+    });
+  }
+
+  const categoryNames = {
+    profile: "👤 Profile",
+    preference: "❤️ Preference",
+    personal: "🏠 Personal",
+    work: "💼 Work",
+    project: "🚀 Project",
+    game: "🎮 Game",
+    hobby: "🎯 Hobby",
+    fashion: "👕 Fashion",
+    food: "🍽️ Food",
+    family: "👨‍👩‍👧 Family",
+    general: "📌 General"
+  };
+
+  const grouped = {};
+
+  for (const item of allMemories) {
+
+    const category =
+      item.category || "general";
+
+    if (!grouped[category]) {
+      grouped[category] = [];
+    }
+
+    grouped[category].push(item.memory);
+  }
+
+  let memoryText =
+    "🧠 Memory yang Naira simpan tentang Tuan:\n\n";
+
+  for (const category of Object.keys(grouped)) {
+
+    memoryText +=
+      `${categoryNames[category] || category}\n`;
+
+    for (const memory of grouped[category]) {
+      memoryText += `• ${memory}\n`;
+    }
+
+    memoryText += "\n";
+  }
+
+  memoryText +=
+    `📊 Jumlah memory: ${allMemories.length}`;
+
+  return res.status(200).json({
+    reply: memoryText,
+
+    memoryManagement: true,
+    memoryCount: allMemories.length,
+
+    memorySaved: false,
+    memoryUpdated: false,
+    memoryDeleted: false,
+    deletedCount: 0,
+
+    memoryConfirmationRequired: false,
+    memoryBlocked: false,
+
+    pendingMemory: null,
+    pendingDelete: null,
+    memory: null
+  });
+}
+
     // ============================================================
     // SMART MEMORY SEARCH
     // ============================================================
