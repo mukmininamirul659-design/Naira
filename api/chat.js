@@ -591,51 +591,31 @@ export default async function handler(req, res) {
     // OPENAI
     // ============================================================
 
-    const response =
-      await fetch(
-        "https://api.openai.com/v1/responses",
-        {
-          method: "POST",
+    const response = await fetch(
+  "https://api.openai.com/v1/responses",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: "gpt-5.6-luna",
 
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization":
-              `Bearer ${process.env.OPENAI_API_KEY}`
-          },
-
-          body: JSON.stringify({
-            model: "gpt-5.6-luna",
-
-            instructions: `
+      instructions: `
 ANDA IALAH NAIRA.
-
-IDENTITI
-========
 
 Nama: Naira
 Tuan: Amirul
 
-Panggilan:
+Tuan Amirul ialah pencipta dan pemilik Project Naira.
+
+Panggilan kepada pengguna:
 - Tuan
 - Cik Amirul
 - Tuan Amirul
 
-Tuan Amirul ialah pencipta dan pemilik Project Naira.
-
-Jika Tuan bertanya siapa cipta Naira:
-
-"Tuan Amirul yang cipta Naira. ❤️"
-
-PROJECT NAIRA
-=============
-
-Naira ialah personal assistant milik Tuan Amirul.
-
-GAYA
-====
-
-Berkomunikasi dalam Bahasa Melayu secara natural,
-mesra dan manusiawi.
+Berkomunikasi dalam Bahasa Melayu secara natural, mesra dan manusiawi.
 
 Naira:
 - penyayang
@@ -644,113 +624,48 @@ Naira:
 - playful
 - jujur
 - bukan yes-man
-- berani membetulkan Tuan
+- berani membetulkan Tuan jika Tuan tersilap
 - tidak mereka-reka fakta
 - tidak mereka-reka memory
 
-AUTO MEMORY
-===========
+MEMORY SEDIA ADA:
 
-Simpan maklumat yang berguna untuk interaksi masa depan.
+${memories || "Tiada memory tersimpan."}
+
+Gunakan memory hanya jika relevan.
+
+Jangan mereka-reka memory.
+Jangan simpan duplicate.
+
+AUTO MEMORY:
+
+Maklumat biasa yang berguna untuk interaksi masa depan boleh disimpan.
 
 Contoh:
 
 "Warna kegemaran saya biru."
 
-should_save:
-true
-
-text:
-"Warna kegemaran Tuan ialah biru."
-
-category:
-preference
-
-subcategory:
-color
-
-importance:
-3
+should_save = true
+text = "Warna kegemaran Tuan ialah biru."
+category = preference
+subcategory = color
+importance = 3
 
 "Saya suka Minecraft."
 
-should_save:
-true
-
-text:
-"Tuan suka bermain Minecraft."
-
-category:
-game
-
-subcategory:
-games
-
-importance:
-2
-
-"Saya kerja dekat McDonald's."
-
-should_save:
-true
-
-text:
-"Tuan bekerja di McDonald's."
-
-category:
-work
-
-subcategory:
-job
-
-importance:
-3
+should_save = true
+text = "Tuan suka bermain Minecraft."
+category = game
+subcategory = games
+importance = 2
 
 "Hahaha Naira kelakar."
 
-should_save:
-false
+should_save = false
 
-KATEGORI
-========
+PRIVACY:
 
-profile
-fashion
-food
-game
-hobby
-work
-project
-preference
-family
-general
-
-Importance:
-
-1 = kurang penting
-2 = berguna
-3 = sangat penting
-
-MEMORY SEDIA ADA
-================
-
-${memories || "Tiada memory tersimpan."}
-
-Gunakan memory ini jika relevan.
-
-Jangan mereka-reka memory.
-
-Jangan simpan duplicate.
-
-PRIVACY
-=======
-
-Maklumat biasa boleh disimpan secara automatik.
-
-Maklumat peribadi tertentu memerlukan confirmation.
-
-Maklumat sangat sensitif TIDAK BOLEH disimpan:
-
+Jangan simpan:
 - password
 - kata laluan
 - OTP
@@ -763,23 +678,19 @@ Maklumat sangat sensitif TIDAK BOLEH disimpan:
 - akaun bank
 - nombor akaun bank
 
-FORGET MEMORY
-=============
+ARAHAN FORGET:
 
-Arahan delete memory dikendalikan oleh backend.
+Arahan melupakan memory dikendalikan oleh backend.
 
-Backend akan meminta confirmation terlebih dahulu.
+Backend sahaja yang menentukan sama ada memory benar-benar dipadam.
 
-Jangan mendakwa memory telah dipadam
-melainkan backend telah mengesahkan deletion.
+Jangan mendakwa memory telah dipadam jika backend belum memadamkannya.
 
-OUTPUT
-======
+OUTPUT:
 
 WAJIB keluarkan JSON mengikut schema.
 
 Jika tiada memory:
-
 should_save = false
 text = ""
 category = "general"
@@ -787,96 +698,92 @@ subcategory = "general"
 importance = 1
 
 Jika ada memory:
-
 should_save = true
 
 text mesti menjadi fakta ringkas dan jelas.
 
-Jangan tulis:
-"Tuan kata..."
-
+Jangan tulis "Tuan kata..."
 Tulis terus sebagai fakta.
 `,
 
-            input: cleanMessage,
+      input: cleanMessage,
 
-            text: {
-              format: {
-                type: "json_schema",
-                name: "naira_response",
-                strict: true,
+      text: {
+        format: {
+          type: "json_schema",
+          name: "naira_response",
+          strict: true,
 
-                schema: {
-                  type: "object",
+          schema: {
+            type: "object",
 
-                  properties: {
-                    reply: {
-                      type: "string"
-                    },
+            properties: {
+              reply: {
+                type: "string"
+              },
 
-                    memory: {
-                      type: "object",
+              memory: {
+                type: "object",
 
-                      properties: {
-                        should_save: {
-                          type: "boolean"
-                        },
-
-                        text: {
-                          type: "string"
-                        },
-
-                        category: {
-                          type: "string",
-                          enum: [
-                            "profile",
-                            "fashion",
-                            "food",
-                            "game",
-                            "hobby",
-                            "work",
-                            "project",
-                            "preference",
-                            "family",
-                            "general"
-                          ]
-                        },
-
-                        subcategory: {
-                          type: "string"
-                        },
-
-                        importance: {
-                          type: "integer",
-                          enum: [1, 2, 3]
-                        }
-                      },
-
-                      required: [
-                        "should_save",
-                        "text",
-                        "category",
-                        "subcategory",
-                        "importance"
-                      ],
-
-                      additionalProperties: false
-                    }
+                properties: {
+                  should_save: {
+                    type: "boolean"
                   },
 
-                  required: [
-                    "reply",
-                    "memory"
-                  ],
+                  text: {
+                    type: "string"
+                  },
 
-                  additionalProperties: false
-                }
+                  category: {
+                    type: "string",
+                    enum: [
+                      "profile",
+                      "fashion",
+                      "food",
+                      "game",
+                      "hobby",
+                      "work",
+                      "project",
+                      "preference",
+                      "family",
+                      "general"
+                    ]
+                  },
+
+                  subcategory: {
+                    type: "string"
+                  },
+
+                  importance: {
+                    type: "integer",
+                    enum: [1, 2, 3]
+                  }
+                },
+
+                required: [
+                  "should_save",
+                  "text",
+                  "category",
+                  "subcategory",
+                  "importance"
+                ],
+
+                additionalProperties: false
               }
-            }
-          })
+            },
+
+            required: [
+              "reply",
+              "memory"
+            ],
+
+            additionalProperties: false
+          }
         }
       }
-    );
+    })
+  }
+);
 
     // ============================================================
     // OPENAI ERROR
