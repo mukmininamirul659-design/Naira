@@ -2220,6 +2220,707 @@ async function deleteMemory(
 console.log(
   "Naira Personal Assistant loaded."
 );
+
+/* ============================================================
+   CONVERSATION HISTORY
+============================================================ */
+
+const historyButton =
+  document.getElementById("historyButton");
+
+const historyPanel =
+  document.getElementById("historyPanel");
+
+const closeHistory =
+  document.getElementById("closeHistory");
+
+const historyList =
+  document.getElementById("historyList");
+
+const historyStatus =
+  document.getElementById("historyStatus");
+
+const historySearch =
+  document.getElementById("historySearch");
+
+const refreshHistory =
+  document.getElementById("refreshHistory");
+
+const newConversation =
+  document.getElementById("newConversation");
+
+let allHistory = [];
+
+
+/* ================================
+   OPEN HISTORY
+================================ */
+
+historyButton.addEventListener(
+  "click",
+  function () {
+
+    historyPanel.classList.add(
+      "active"
+    );
+
+    loadHistory();
+
+  }
+);
+
+
+/* ================================
+   CLOSE HISTORY
+================================ */
+
+closeHistory.addEventListener(
+  "click",
+  function () {
+
+    historyPanel.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+
+/* ================================
+   REFRESH
+================================ */
+
+refreshHistory.addEventListener(
+  "click",
+  loadHistory
+);
+
+
+/* ================================
+   SEARCH
+================================ */
+
+historySearch.addEventListener(
+  "input",
+  renderHistory
+);
+
+
+/* ================================
+   LOAD HISTORY
+================================ */
+
+async function loadHistory() {
+
+  historyStatus.textContent =
+    "Memuatkan conversation...";
+
+  historyList.innerHTML = "";
+
+  try {
+
+    const params =
+      new URLSearchParams();
+
+    const search =
+      historySearch.value.trim();
+
+    if (search) {
+      params.set(
+        "search",
+        search
+      );
+    }
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/history?" +
+        params.toString()
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "History gagal dimuatkan."
+      );
+
+    }
+
+    allHistory =
+      data.conversations ||
+      [];
+
+    historyStatus.textContent =
+      `${allHistory.length} conversation`;
+
+    renderHistory();
+
+  } catch (error) {
+
+    console.error(error);
+
+    historyStatus.textContent =
+      "Gagal memuatkan history.";
+
+    historyList.innerHTML =
+      `
+      <div class="empty-history">
+        ❌ ${escapeHTML(error.message)}
+      </div>
+      `;
+
+  }
+
+}
+
+
+/* ================================
+   RENDER HISTORY
+================================ */
+
+function renderHistory() {
+
+  const search =
+    historySearch.value
+      .trim()
+      .toLowerCase();
+
+  const filtered =
+    allHistory.filter(
+      function (conversation) {
+
+        if (!search) {
+          return true;
+        }
+
+        return (
+
+          String(
+            conversation.title ||
+            ""
+          )
+          .toLowerCase()
+          .includes(search)
+
+          ||
+
+          String(
+            conversation.user_message ||
+            ""
+          )
+          .toLowerCase()
+          .includes(search)
+
+          ||
+
+          String(
+            conversation.naira_response ||
+            ""
+          )
+          .toLowerCase()
+          .includes(search)
+
+          ||
+
+          String(
+            conversation.category ||
+            ""
+          )
+          .toLowerCase()
+          .includes(search)
+
+        );
+
+      }
+    );
+
+  historyList.innerHTML = "";
+
+  if (!filtered.length) {
+
+    historyList.innerHTML =
+      `
+      <div class="empty-history">
+        🕘 Tiada conversation dijumpai.
+      </div>
+      `;
+
+    return;
+
+  }
+
+
+  /* ================================
+     GROUP BY DATE
+  ================================= */
+
+  const groups = {};
+
+  filtered.forEach(
+    function (conversation) {
+
+      const date =
+        new Date(
+          conversation.created_at
+        );
+
+      const dateKey =
+        date.toLocaleDateString(
+          "ms-MY",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+          }
+        );
+
+      if (!groups[dateKey]) {
+        groups[dateKey] = [];
+      }
+
+      groups[dateKey].push(
+        conversation
+      );
+
+    }
+  );
+
+
+  /* ================================
+     RENDER GROUPS
+  ================================= */
+
+  Object.keys(groups)
+    .forEach(
+      function (dateKey) {
+
+        const conversations =
+          groups[dateKey];
+
+        const day =
+          document.createElement(
+            "div"
+          );
+
+        day.className =
+          "history-day";
+
+
+        const title =
+          document.createElement(
+            "div"
+          );
+
+        title.className =
+          "history-day-title";
+
+        title.innerHTML =
+          `
+          <span>📅 ${escapeHTML(
+            dateKey
+          )}</span>
+
+          <span class="history-day-count">
+            ${conversations.length}
+          </span>
+          `;
+
+        day.appendChild(title);
+
+
+        /* ================================
+           CARDS
+        ================================= */
+
+        conversations.forEach(
+          function (conversation) {
+
+            const card =
+              document.createElement(
+                "div"
+              );
+
+            card.className =
+              "history-card";
+
+
+            const title =
+              document.createElement(
+                "div"
+              );
+
+            title.className =
+              "history-title";
+
+            title.textContent =
+              conversation.title ||
+              "Conversation Naira";
+
+
+            const preview =
+              document.createElement(
+                "div"
+              );
+
+            preview.className =
+              "history-preview";
+
+            preview.textContent =
+              conversation.user_message ||
+              "Tiada mesej";
+
+
+            const date =
+              new Date(
+                conversation.created_at
+              );
+
+            const time =
+              date.toLocaleTimeString(
+                "ms-MY",
+                {
+                  hour: "2-digit",
+                  minute: "2-digit"
+                }
+              );
+
+
+            const meta =
+              document.createElement(
+                "div"
+              );
+
+            meta.className =
+              "history-meta";
+
+            meta.textContent =
+              `${time} • ${
+                conversation.category ||
+                "general"
+              }`;
+
+
+            /* ================================
+               ACTIONS
+            ================================= */
+
+            const actions =
+              document.createElement(
+                "div"
+              );
+
+            actions.className =
+              "history-actions";
+
+
+            const openButton =
+              document.createElement(
+                "button"
+              );
+
+            openButton.textContent =
+              "👁️ Buka";
+
+            openButton.addEventListener(
+              "click",
+              function () {
+
+                openConversation(
+                  conversation.conversation_id
+                );
+
+              }
+            );
+
+
+            const editButton =
+              document.createElement(
+                "button"
+              );
+
+            editButton.textContent =
+              "✏️ Edit";
+
+            editButton.addEventListener(
+              "click",
+              function () {
+
+                editConversation(
+                  conversation
+                );
+
+              }
+            );
+
+
+            const deleteButton =
+              document.createElement(
+                "button"
+              );
+
+            deleteButton.className =
+              "history-delete";
+
+            deleteButton.textContent =
+              "🗑️ Delete";
+
+            deleteButton.addEventListener(
+              "click",
+              function () {
+
+                deleteConversation(
+                  conversation.conversation_id
+                );
+
+              }
+            );
+
+
+            actions.appendChild(
+              openButton
+            );
+
+            actions.appendChild(
+              editButton
+            );
+
+            actions.appendChild(
+              deleteButton
+            );
+
+
+            card.appendChild(
+              title
+            );
+
+            card.appendChild(
+              preview
+            );
+
+            card.appendChild(
+              meta
+            );
+
+            card.appendChild(
+              actions
+            );
+
+            day.appendChild(
+              card
+            );
+
+          }
+        );
+
+
+        historyList.appendChild(
+          day
+        );
+
+      }
+    );
+
+}
+
+
+/* ================================
+   OPEN CONVERSATION
+================================ */
+
+async function openConversation(
+  conversationId
+) {
+
+  try {
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/history?conversationId=" +
+        encodeURIComponent(
+          conversationId
+        )
+      );
+
+    const data =
+      await response.json();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error ||
+        "Conversation gagal dibuka."
+      );
+
+    }
+
+    const messages =
+      data.conversations ||
+      [];
+
+    historyPanel.classList.remove(
+      "active"
+    );
+
+    chat.innerHTML = "";
+
+    messages.forEach(
+      function (message) {
+
+        if (
+          message.user_message
+        ) {
+
+          addMessage(
+            message.user_message,
+            "user-message"
+          );
+
+        }
+
+        if (
+          message.naira_response
+        ) {
+
+          addMessage(
+            message.naira_response,
+            "naira-message"
+          );
+
+        }
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "❌ " +
+      error.message
+    );
+
+  }
+
+}
+
+
+/* ================================
+   NEW CONVERSATION
+================================ */
+
+newConversation.addEventListener(
+  "click",
+  function () {
+
+    const confirmed =
+      confirm(
+        "Mulakan conversation baru dengan Naira?"
+      );
+
+    if (!confirmed) {
+      return;
+    }
+
+    chat.innerHTML =
+      `
+      <div class="message naira-message">
+        Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
+      </div>
+      `;
+
+    historyPanel.classList.remove(
+      "active"
+    );
+
+    input.focus();
+
+  }
+);
+
+
+/* ================================
+   EDIT TITLE
+================================ */
+
+async function editConversation(
+  conversation
+) {
+
+  const currentTitle =
+    conversation.title ||
+    "Conversation Naira";
+
+  const newTitle =
+    prompt(
+      "Masukkan tajuk baru:",
+      currentTitle
+    );
+
+  if (
+    newTitle === null ||
+    !newTitle.trim()
+  ) {
+
+    return;
+
+  }
+
+  /*
+    Edit title akan kita sambungkan
+    kepada endpoint update selepas
+    API update history siap.
+  */
+
+  alert(
+    "Tajuk baru disediakan: " +
+    newTitle.trim() +
+    "\n\nAPI edit history akan kita sambungkan pada step seterusnya."
+  );
+
+}
+
+
+/* ================================
+   DELETE CONVERSATION
+================================ */
+
+async function deleteConversation(
+  conversationId
+) {
+
+  const confirmed =
+    confirm(
+      "Tuan pasti mahu padam conversation ini?"
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  /*
+    Jangan delete database dahulu.
+    API delete history belum kita
+    sambungkan dalam step ini.
+  */
+
+  alert(
+    "API delete history akan kita sambungkan pada step seterusnya."
+  );
+
+}
+
+
+/* ============================================================
+   END CONVERSATION HISTORY
+============================================================ */
+
 </script>
 </body>
 </html>
