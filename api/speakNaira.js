@@ -1,14 +1,16 @@
 /* ============================================================
    NAIRA VOICE CENTER
    ElevenLabs Voice Engine
-   ============================================================ */
+   AUTO CHARACTER VOICE SYSTEM
+============================================================ */
+"use strict";
 /* ============================================================
    CONFIG
 ============================================================ */
 const ELEVENLABS_MODEL =
   "eleven_multilingual_v2";
-const DEFAULT_VOICE_ID =
-  localStorage.getItem("naira_eleven_voice_id") || "";
+const VOICE_STORAGE_PREFIX =
+  "naira_character_voice_";
 /* ============================================================
    VOICE SETTINGS
 ============================================================ */
@@ -18,7 +20,9 @@ const voiceSettings = {
       "naira_voice_name"
     ) || "",
   voiceId:
-    DEFAULT_VOICE_ID,
+    localStorage.getItem(
+      "naira_eleven_voice_id"
+    ) || "",
   character:
     localStorage.getItem(
       "naira_voice_character"
@@ -47,105 +51,56 @@ const voiceSettings = {
     ) || 1.00
 };
 /* ============================================================
-   ELEVENLABS VOICE LIBRARY
-   TUKAR ID DI SINI DENGAN VOICE ID SEBENAR
+   CHARACTER LIBRARY
 ============================================================ */
-const elevenVoiceCharacters = [
+const voiceCharacters = [
   {
     id: "Naira",
-    label: "🌸 Naira",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_naira"
-      ) || ""
+    label: "🌸 Naira"
   },
   {
     id: "female",
-    label: "👩 Female",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_female"
-      ) || ""
+    label: "👩 Female"
   },
   {
     id: "male",
-    label: "👨 Male",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_male"
-      ) || ""
+    label: "👨 Male"
   },
   {
     id: "child",
-    label: "🧒 Child",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_child"
-      ) || ""
+    label: "🧒 Child"
   },
   {
     id: "elderly",
-    label: "👵 Elderly",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_elderly"
-      ) || ""
+    label: "👵 Elderly"
   },
   {
     id: "robot",
-    label: "🤖 Robot",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_robot"
-      ) || ""
+    label: "🤖 Robot"
   },
   {
     id: "cartoon",
-    label: "🎭 Cartoon",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_cartoon"
-      ) || ""
+    label: "🎭 Cartoon"
   },
   {
     id: "villain",
-    label: "🦹 Villain",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_villain"
-      ) || ""
+    label: "🦹 Villain"
   },
   {
     id: "narrator",
-    label: "🎙️ Narrator",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_narrator"
-      ) || ""
+    label: "🎙️ Narrator"
   },
   {
     id: "cool",
-    label: "😎 Cool",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_cool"
-      ) || ""
+    label: "😎 Cool"
   },
   {
     id: "cute",
-    label: "🥰 Cute",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_cute"
-      ) || ""
+    label: "🥰 Cute"
   },
   {
     id: "horror",
-    label: "👻 Horror",
-    voiceId:
-      localStorage.getItem(
-        "naira_voice_id_horror"
-      ) || ""
+    label: "👻 Horror"
   }
 ];
 /* ============================================================
@@ -197,6 +152,29 @@ const voiceEmotions = [
     label: "🎵 Singing"
   }
 ];
+/* ============================================================
+   STATE
+============================================================ */
+window.elevenLabsVoices =
+  window.elevenLabsVoices || [];
+window.nairaAudio =
+  window.nairaAudio || null;
+window.nairaSpeaking =
+  window.nairaSpeaking || false;
+/*
+ * Character -> ElevenLabs voice ID
+ *
+ * Contoh:
+ *
+ * Naira   -> voice A
+ * Female  -> voice B
+ * Male    -> voice C
+ * Child   -> voice D
+ *
+ * Sistem akan isi automatik berdasarkan
+ * voices yang diterima daripada ElevenLabs.
+ */
+const characterVoiceMap = {};
 /* ============================================================
    DOM
 ============================================================ */
@@ -269,18 +247,189 @@ const voiceCenterStatus =
     "voiceCenterStatus"
   );
 /* ============================================================
-   STATE
+   STATUS
 ============================================================ */
-window.nairaAudio =
-  window.nairaAudio || null;
-window.nairaSpeaking =
-  window.nairaSpeaking || false;
+function setVoiceStatus(message) {
+  if (!voiceCenterStatus) {
+    return;
+  }
+  voiceCenterStatus.textContent =
+    message;
+}
 /* ============================================================
-   GET CHARACTER
+   GET SAVED CHARACTER VOICE
+============================================================ */
+function getSavedCharacterVoice(
+  characterId
+) {
+  return localStorage.getItem(
+    VOICE_STORAGE_PREFIX +
+    characterId
+  ) || "";
+}
+/* ============================================================
+   SAVE CHARACTER VOICE
+============================================================ */
+function saveCharacterVoice(
+  characterId,
+  voiceId
+) {
+  if (!characterId || !voiceId) {
+    return;
+  }
+  localStorage.setItem(
+    VOICE_STORAGE_PREFIX +
+    characterId,
+    voiceId
+  );
+}
+/* ============================================================
+   BUILD CHARACTER VOICE MAP
+============================================================ */
+function buildCharacterVoiceMap(
+  voices
+) {
+  if (
+    !Array.isArray(voices) ||
+    !voices.length
+  ) {
+    return;
+  }
+  /*
+   * First:
+   * gunakan voice yang pernah disimpan.
+   */
+  voiceCharacters.forEach(
+    function(character) {
+      const saved =
+        getSavedCharacterVoice(
+          character.id
+        );
+      if (saved) {
+        const exists =
+          voices.some(
+            function(voice) {
+              return (
+                voice.voice_id ===
+                saved
+              );
+            }
+          );
+        if (exists) {
+          characterVoiceMap[
+            character.id
+          ] = saved;
+        }
+      }
+    }
+  );
+  /*
+   * Second:
+   * voice yang belum digunakan
+   */
+  const usedVoiceIds =
+    Object.values(
+      characterVoiceMap
+    );
+  const availableVoices =
+    voices.filter(
+      function(voice) {
+        return (
+          voice &&
+          voice.voice_id &&
+          !usedVoiceIds.includes(
+            voice.voice_id
+          )
+        );
+      }
+    );
+  /*
+   * Assign voice berlainan
+   * kepada character.
+   */
+  let voiceIndex = 0;
+  voiceCharacters.forEach(
+    function(character) {
+      if (
+        characterVoiceMap[
+          character.id
+        ]
+      ) {
+        return;
+      }
+      if (
+        availableVoices[
+          voiceIndex
+        ]
+      ) {
+        const voice =
+          availableVoices[
+            voiceIndex
+          ];
+        characterVoiceMap[
+          character.id
+        ] =
+          voice.voice_id;
+        saveCharacterVoice(
+          character.id,
+          voice.voice_id
+        );
+        voiceIndex++;
+      }
+    }
+  );
+  /*
+   * Kalau voices kurang daripada
+   * jumlah character,
+   * ulang semula voice yang ada.
+   */
+  if (
+    voices.length &&
+    voiceCharacters.some(
+      function(character) {
+        return (
+          !characterVoiceMap[
+            character.id
+          ]
+        );
+      }
+    )
+  ) {
+    voiceCharacters.forEach(
+      function(character) {
+        if (
+          characterVoiceMap[
+            character.id
+          ]
+        ) {
+          return;
+        }
+        const fallback =
+          voices[
+            voiceIndex %
+            voices.length
+          ];
+        if (fallback) {
+          characterVoiceMap[
+            character.id
+          ] =
+            fallback.voice_id;
+          saveCharacterVoice(
+            character.id,
+            fallback.voice_id
+          );
+          voiceIndex++;
+        }
+      }
+    );
+  }
+}
+/* ============================================================
+   GET CURRENT CHARACTER
 ============================================================ */
 function getCurrentCharacter() {
   return (
-    elevenVoiceCharacters.find(
+    voiceCharacters.find(
       function(character) {
         return (
           character.id ===
@@ -288,181 +437,53 @@ function getCurrentCharacter() {
         );
       }
     ) ||
-    elevenVoiceCharacters[0]
+    voiceCharacters[0]
   );
 }
 /* ============================================================
-   GET VOICE ID
+   GET CURRENT VOICE ID
 ============================================================ */
 function getCurrentVoiceId() {
   const character =
     getCurrentCharacter();
+  /*
+   * Character voice dahulu.
+   */
   if (
     character &&
-    character.voiceId
+    characterVoiceMap[
+      character.id
+    ]
   ) {
-    return character.voiceId;
+    return (
+      characterVoiceMap[
+        character.id
+      ]
+    );
   }
+  /*
+   * Voice yang dipilih manual.
+   */
   if (
     voiceSettings.voiceId
   ) {
-    return voiceSettings.voiceId;
+    return (
+      voiceSettings.voiceId
+    );
+  }
+  /*
+   * Voice pertama sebagai fallback.
+   */
+  if (
+    window.elevenLabsVoices &&
+    window.elevenLabsVoices[0]
+  ) {
+    return (
+      window.elevenLabsVoices[0]
+        .voice_id
+    );
   }
   return "";
-}
-/* ============================================================
-   CHARACTER RENDER
-============================================================ */
-function renderCharacters() {
-  if (!characterList) {
-    return;
-  }
-  characterList.innerHTML = "";
-  const search =
-    voiceSearch
-      ? voiceSearch.value
-          .trim()
-          .toLowerCase()
-      : "";
-  elevenVoiceCharacters
-    .filter(
-      function(character) {
-        if (!search) {
-          return true;
-        }
-        return (
-          character.label
-            .toLowerCase()
-            .includes(search)
-          ||
-          character.id
-            .toLowerCase()
-            .includes(search)
-        );
-      }
-    )
-    .forEach(
-      function(character) {
-        const button =
-          document.createElement(
-            "button"
-          );
-        button.type =
-          "button";
-        button.className =
-          "voice-chip";
-        if (
-          voiceSettings.character ===
-          character.id
-        ) {
-          button.classList.add(
-            "active"
-          );
-        }
-        button.textContent =
-          character.label;
-        button.addEventListener(
-          "click",
-          function() {
-            voiceSettings.character =
-              character.id;
-            if (
-              character.voiceId
-            ) {
-              voiceSettings.voiceId =
-                character.voiceId;
-              localStorage.setItem(
-                "naira_eleven_voice_id",
-                character.voiceId
-              );
-            }
-            renderCharacters();
-            syncVoiceControls();
-            setVoiceStatus(
-              character.voiceId
-                ? "🎙️ " +
-                  character.label +
-                  " dipilih."
-                : "⚠️ Voice ID belum ditetapkan untuk " +
-                  character.label
-            );
-          }
-        );
-        characterList.appendChild(
-          button
-        );
-      }
-    );
-}
-/* ============================================================
-   EMOTION RENDER
-============================================================ */
-function renderEmotions() {
-  if (!emotionList) {
-    return;
-  }
-  emotionList.innerHTML = "";
-  const search =
-    voiceSearch
-      ? voiceSearch.value
-          .trim()
-          .toLowerCase()
-      : "";
-  voiceEmotions
-    .filter(
-      function(emotion) {
-        if (!search) {
-          return true;
-        }
-        return (
-          emotion.label
-            .toLowerCase()
-            .includes(search)
-          ||
-          emotion.id
-            .toLowerCase()
-            .includes(search)
-        );
-      }
-    )
-    .forEach(
-      function(emotion) {
-        const button =
-          document.createElement(
-            "button"
-          );
-        button.type =
-          "button";
-        button.className =
-          "voice-chip";
-        if (
-          voiceSettings.emotion ===
-          emotion.id
-        ) {
-          button.classList.add(
-            "active"
-          );
-        }
-        button.textContent =
-          emotion.label;
-        button.addEventListener(
-          "click",
-          function() {
-            voiceSettings.emotion =
-              emotion.id;
-            renderEmotions();
-            applyEmotionSettings();
-            setVoiceStatus(
-              "🎭 Emotion: " +
-              emotion.label
-            );
-          }
-        );
-        emotionList.appendChild(
-          button
-        );
-      }
-    );
 }
 /* ============================================================
    LOAD ELEVENLABS VOICES
@@ -498,7 +519,10 @@ async function loadElevenLabsVoices() {
     window.elevenLabsVoices =
       data.voices;
     console.log(
-      "🎙️ ElevenLabs voices loaded:",
+      "🎙️ ElevenLabs voices:",
+      data.voices
+    );
+    buildCharacterVoiceMap(
       data.voices
     );
     return data.voices;
@@ -513,7 +537,213 @@ async function loadElevenLabsVoices() {
   }
 }
 /* ============================================================
-   RENDER REAL ELEVENLABS VOICES
+   RENDER CHARACTERS
+============================================================ */
+function renderCharacters() {
+  if (!characterList) {
+    return;
+  }
+  characterList.innerHTML = "";
+  const search =
+    voiceSearch
+      ? voiceSearch.value
+          .trim()
+          .toLowerCase()
+      : "";
+  voiceCharacters
+    .filter(
+      function(character) {
+        if (!search) {
+          return true;
+        }
+        return (
+          character.label
+            .toLowerCase()
+            .includes(search) ||
+          character.id
+            .toLowerCase()
+            .includes(search)
+        );
+      }
+    )
+    .forEach(
+      function(character) {
+        const button =
+          document.createElement(
+            "button"
+          );
+        button.type =
+          "button";
+        button.className =
+          "voice-chip";
+        if (
+          voiceSettings.character ===
+          character.id
+        ) {
+          button.classList.add(
+            "active"
+          );
+        }
+        button.textContent =
+          character.label;
+        button.addEventListener(
+          "click",
+          function() {
+            voiceSettings.character =
+              character.id;
+            const voiceId =
+              characterVoiceMap[
+                character.id
+              ] || "";
+            if (voiceId) {
+              voiceSettings.voiceId =
+                voiceId;
+              localStorage.setItem(
+                "naira_eleven_voice_id",
+                voiceId
+              );
+              const voice =
+                (
+                  window
+                    .elevenLabsVoices ||
+                  []
+                ).find(
+                  function(item) {
+                    return (
+                      item.voice_id ===
+                      voiceId
+                    );
+                  }
+                );
+              if (voice) {
+                voiceSettings.voiceName =
+                  voice.name;
+              }
+            }
+            localStorage.setItem(
+              "naira_voice_character",
+              character.id
+            );
+            renderCharacters();
+            renderVoiceSelect();
+            syncVoiceControls();
+            setVoiceStatus(
+              voiceId
+                ? "🎙️ " +
+                  character.label +
+                  " → " +
+                  (
+                    getVoiceName(
+                      voiceId
+                    )
+                  )
+                : "⚠️ Voice belum tersedia."
+            );
+          }
+        );
+        characterList.appendChild(
+          button
+        );
+      }
+    );
+}
+/* ============================================================
+   GET VOICE NAME
+============================================================ */
+function getVoiceName(
+  voiceId
+) {
+  const voice =
+    (
+      window.elevenLabsVoices ||
+      []
+    ).find(
+      function(item) {
+        return (
+          item.voice_id ===
+          voiceId
+        );
+      }
+    );
+  return voice
+    ? voice.name
+    : voiceId;
+}
+/* ============================================================
+   RENDER EMOTIONS
+============================================================ */
+function renderEmotions() {
+  if (!emotionList) {
+    return;
+  }
+  emotionList.innerHTML = "";
+  const search =
+    voiceSearch
+      ? voiceSearch.value
+          .trim()
+          .toLowerCase()
+      : "";
+  voiceEmotions
+    .filter(
+      function(emotion) {
+        if (!search) {
+          return true;
+        }
+        return (
+          emotion.label
+            .toLowerCase()
+            .includes(search) ||
+          emotion.id
+            .toLowerCase()
+            .includes(search)
+        );
+      }
+    )
+    .forEach(
+      function(emotion) {
+        const button =
+          document.createElement(
+            "button"
+          );
+        button.type =
+          "button";
+        button.className =
+          "voice-chip";
+        if (
+          voiceSettings.emotion ===
+          emotion.id
+        ) {
+          button.classList.add(
+            "active"
+          );
+        }
+        button.textContent =
+          emotion.label;
+        button.addEventListener(
+          "click",
+          function() {
+            voiceSettings.emotion =
+              emotion.id;
+            localStorage.setItem(
+              "naira_voice_emotion",
+              emotion.id
+            );
+            renderEmotions();
+            applyEmotionSettings();
+            setVoiceStatus(
+              "🎭 Emotion: " +
+              emotion.label
+            );
+          }
+        );
+        emotionList.appendChild(
+          button
+        );
+      }
+    );
+}
+/* ============================================================
+   RENDER VOICE SELECT
 ============================================================ */
 function renderVoiceSelect() {
   if (!voiceSelect) {
@@ -540,10 +770,11 @@ function renderVoiceSelect() {
     .sort(
       function(a, b) {
         return (
-          (a.name || "")
-            .localeCompare(
-              b.name || ""
-            )
+          (
+            a.name || ""
+          ).localeCompare(
+            b.name || ""
+          )
         );
       }
     )
@@ -559,7 +790,7 @@ function renderVoiceSelect() {
           voice.name;
         if (
           voice.voice_id ===
-          voiceSettings.voiceId
+          getCurrentVoiceId()
         ) {
           option.selected =
             true;
@@ -569,15 +800,9 @@ function renderVoiceSelect() {
         );
       }
     );
-  if (
-    voiceSettings.voiceId
-  ) {
-    voiceSelect.value =
-      voiceSettings.voiceId;
-  }
 }
 /* ============================================================
-   SELECT ELEVENLABS VOICE
+   SELECT MANUAL VOICE
 ============================================================ */
 if (voiceSelect) {
   voiceSelect.addEventListener(
@@ -594,32 +819,26 @@ if (voiceSelect) {
         "naira_eleven_voice_id",
         voiceId
       );
-      /*
-       * Jika voice dipilih secara manual,
-       * ia menjadi voice aktif.
-       */
-      const foundVoice =
+      const voice =
         (
           window.elevenLabsVoices ||
           []
         ).find(
-          function(voice) {
+          function(item) {
             return (
-              voice.voice_id ===
+              item.voice_id ===
               voiceId
             );
           }
         );
-      if (foundVoice) {
+      if (voice) {
         voiceSettings.voiceName =
-          foundVoice.name;
+          voice.name;
       }
       setVoiceStatus(
-        "🎙️ Voice dipilih: " +
-        (
-          foundVoice
-            ? foundVoice.name
-            : voiceId
+        "🎙️ Voice manual: " +
+        getVoiceName(
+          voiceId
         )
       );
     }
@@ -629,12 +848,6 @@ if (voiceSelect) {
    CHARACTER SETTINGS
 ============================================================ */
 function applyCharacterSettings() {
-  /*
-   * ElevenLabs sudah mengawal suara sebenar.
-   *
-   * Rate dan pitch di sini hanya digunakan
-   * sebagai modifier playback.
-   */
   switch (
     voiceSettings.character
   ) {
@@ -803,18 +1016,6 @@ function syncVoiceControls() {
   }
 }
 /* ============================================================
-   STATUS
-============================================================ */
-function setVoiceStatus(
-  message
-) {
-  if (!voiceCenterStatus) {
-    return;
-  }
-  voiceCenterStatus.textContent =
-    message;
-}
-/* ============================================================
    OPEN VOICE CENTER
 ============================================================ */
 if (voiceCenterButton) {
@@ -839,15 +1040,18 @@ if (voiceCenterButton) {
         "⏳ Loading ElevenLabs voices..."
       );
       await loadElevenLabsVoices();
+      renderCharacters();
       renderVoiceSelect();
       setVoiceStatus(
-        "✅ ElevenLabs Voice Center ready."
+        window.elevenLabsVoices.length
+          ? "✅ ElevenLabs Voice Center ready."
+          : "❌ ElevenLabs voices gagal dimuat."
       );
     }
   );
 }
 /* ============================================================
-   CLOSE VOICE CENTER
+   CLOSE
 ============================================================ */
 if (closeVoiceCenter) {
   closeVoiceCenter.addEventListener(
@@ -968,18 +1172,6 @@ if (saveVoiceSettings) {
         "naira_eleven_voice_id",
         voiceSettings.voiceId
       );
-      const character =
-        getCurrentCharacter();
-      if (
-        character &&
-        character.voiceId
-      ) {
-        localStorage.setItem(
-          "naira_voice_id_" +
-          character.id.toLowerCase(),
-          character.voiceId
-        );
-      }
       setVoiceStatus(
         "✅ Voice settings disimpan."
       );
@@ -1020,7 +1212,7 @@ if (previewVoice) {
   );
 }
 /* ============================================================
-   STOP NAIRA
+   STOP NAIRA SPEECH
 ============================================================ */
 function stopNairaSpeech() {
   if (window.nairaAudio) {
@@ -1062,24 +1254,43 @@ async function speakNaira(
    */
   stopNairaSpeech();
   /*
-   * Tentukan voice.
+   * Pastikan voices sudah loaded.
+   */
+  if (
+    !window.elevenLabsVoices ||
+    !window.elevenLabsVoices.length
+  ) {
+    await loadElevenLabsVoices();
+  }
+  /*
+   * Tentukan voice aktif.
    */
   const activeVoiceId =
     voiceId ||
     getCurrentVoiceId();
-  /*
-   * Kalau tiada Voice ID,
-   * jangan cuba panggil ElevenLabs.
-   */
   if (!activeVoiceId) {
     console.error(
-      "NAIRA: ElevenLabs Voice ID belum ditetapkan."
+      "NAIRA: Tiada ElevenLabs Voice ID."
     );
     setVoiceStatus(
-      "⚠️ Voice ID ElevenLabs belum ditetapkan."
+      "⚠️ Tiada ElevenLabs Voice ID tersedia."
     );
     return;
   }
+  /*
+   * Cari nama voice.
+   */
+  const activeVoiceName =
+    getVoiceName(
+      activeVoiceId
+    );
+  console.log(
+    "🎙️ NAIRA SPEAK:",
+    voiceSettings.character,
+    activeVoiceName,
+    activeVoiceId,
+    voiceSettings.emotion
+  );
   try {
     window.nairaSpeaking =
       true;
@@ -1093,7 +1304,7 @@ async function speakNaira(
       updateVoiceUI();
     }
     /*
-     * Hantar text ke Vercel.
+     * Request Vercel backend.
      */
     const response =
       await fetch(
@@ -1124,7 +1335,7 @@ async function speakNaira(
         }
       );
     /*
-     * Check API error.
+     * API error.
      */
     if (!response.ok) {
       const errorText =
@@ -1138,7 +1349,7 @@ async function speakNaira(
       );
     }
     /*
-     * Ambil audio.
+     * Audio blob.
      */
     const audioBlob =
       await response.blob();
@@ -1151,14 +1362,14 @@ async function speakNaira(
       );
     }
     /*
-     * Create object URL.
+     * Object URL.
      */
     const audioUrl =
       URL.createObjectURL(
         audioBlob
       );
     /*
-     * Create audio.
+     * Audio player.
      */
     const audio =
       new Audio(
@@ -1180,7 +1391,10 @@ async function speakNaira(
         )
       );
     /*
-     * Playback speed.
+     * Playback rate.
+     *
+     * Ini bukan menukar suara.
+     * Ia hanya mengubah kelajuan.
      */
     audio.playbackRate =
       Math.max(
@@ -1193,7 +1407,7 @@ async function speakNaira(
         )
       );
     /*
-     * PLAY.
+     * PLAY
      */
     audio.onplay =
       function() {
@@ -1210,7 +1424,7 @@ async function speakNaira(
         }
       };
     /*
-     * END.
+     * END
      */
     audio.onended =
       function() {
@@ -1232,7 +1446,7 @@ async function speakNaira(
         }
       };
     /*
-     * ERROR.
+     * ERROR
      */
     audio.onerror =
       function(error) {
@@ -1250,6 +1464,9 @@ async function speakNaira(
         URL.revokeObjectURL(
           audioUrl
         );
+        setVoiceStatus(
+          "❌ Audio gagal dimainkan."
+        );
         if (
           typeof updateVoiceUI ===
           "function"
@@ -1258,7 +1475,7 @@ async function speakNaira(
         }
       };
     /*
-     * PLAY AUDIO.
+     * PLAY AUDIO
      */
     await audio.play();
   } catch (error) {
@@ -1292,10 +1509,21 @@ async function initializeVoiceCenter() {
   renderEmotions();
   syncVoiceControls();
   /*
-   * Load ElevenLabs voices secara senyap.
+   * Load voices secara senyap.
    */
-  await loadElevenLabsVoices();
-  renderVoiceSelect();
+  const voices =
+    await loadElevenLabsVoices();
+  if (voices.length) {
+    renderCharacters();
+    renderVoiceSelect();
+    console.log(
+      "✅ Naira Voice Center initialized."
+    );
+  } else {
+    console.warn(
+      "⚠️ ElevenLabs voices belum tersedia."
+    );
+  }
 }
 /* ============================================================
    GLOBAL ACCESS
@@ -1307,7 +1535,7 @@ window.stopNairaSpeech =
 window.voiceSettings =
   voiceSettings;
 window.voiceCharacters =
-  elevenVoiceCharacters;
+  voiceCharacters;
 window.voiceEmotions =
   voiceEmotions;
 window.loadElevenLabsVoices =
