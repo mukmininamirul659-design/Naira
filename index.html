@@ -1051,6 +1051,30 @@ function addMessage(
     block: "end"
   });
 }
+// ============================================================
+// TEXT TO SPEECH
+// ============================================================
+
+let nairaSpeech = null;
+
+function speakNaira(text) {
+  if (!("speechSynthesis" in window)) {
+    console.warn("Text-to-Speech tidak disokong.");
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  nairaSpeech = new SpeechSynthesisUtterance(text);
+
+  nairaSpeech.lang = "ms-MY";
+  nairaSpeech.rate = 0.95;
+  nairaSpeech.pitch = 1;
+  nairaSpeech.volume = 1;
+
+  window.speechSynthesis.speak(nairaSpeech);
+}
+
 /* ============================================================
    SEND MESSAGE
 ============================================================ */
