@@ -1,157 +1,143 @@
 // ============================================================
-// NAIRA PHASE 5 — VOICE SCRIPT
+// NAIRA PHASE 5 — VOICE
 // ============================================================
 
-const Voice = {
+(function () {
 
-  recognition: null,
-  speaking: false,
-  listening: false,
+  "use strict";
 
   // ==========================================================
-  // INIT
+  // DOM
   // ==========================================================
 
-  init() {
+  const micButton =
+    document.getElementById("micButton");
 
-    console.log(
-      "🎙️ NAIRA VOICE: Initializing..."
-    );
+  const input =
+    document.getElementById("messageInput");
 
-    this.setupSpeechRecognition();
+  // ==========================================================
+  // STATE
+  // ==========================================================
 
-    console.log(
-      "🎙️ NAIRA VOICE: Ready."
-    );
-  },
+  let recognition = null;
+  let listening = false;
 
   // ==========================================================
   // SPEECH RECOGNITION
   // ==========================================================
 
-  setupSpeechRecognition() {
+  function setupRecognition() {
 
-    const SpeechRecognition =
+    const Recognition =
       window.SpeechRecognition ||
       window.webkitSpeechRecognition;
 
-    if (!SpeechRecognition) {
+    if (!Recognition) {
 
       console.warn(
-        "🎙️ Speech Recognition tidak disokong browser."
+        "🎙️ Naira Voice: Speech Recognition tidak disokong."
       );
 
       return;
     }
 
-    this.recognition =
-      new SpeechRecognition();
+    recognition =
+      new Recognition();
 
-    this.recognition.lang =
+    recognition.lang =
       "ms-MY";
 
-    this.recognition.continuous =
+    recognition.interimResults =
       false;
 
-    this.recognition.interimResults =
+    recognition.continuous =
       false;
 
-    // --------------------------------------------------------
-    // START
-    // --------------------------------------------------------
+    recognition.onstart =
+      function () {
 
-    this.recognition.onstart =
-      () => {
+        listening = true;
 
-        this.listening =
-          true;
+        if (micButton) {
+          micButton.textContent =
+            "🔴";
+        }
 
         console.log(
-          "🎙️ NAIRA: Listening..."
-        );
-
-        this.updateVoiceUI(
-          "listening"
+          "🎙️ Naira sedang mendengar..."
         );
       };
 
-    // --------------------------------------------------------
-    // RESULT
-    // --------------------------------------------------------
-
-    this.recognition.onresult =
-      (event) => {
-
-        const result =
-          event.results[
-            event.results.length - 1
-          ];
-
-        if (!result) return;
+    recognition.onresult =
+      function (event) {
 
         const transcript =
-          result[0]?.transcript
+          event.results?.[0]?.[0]?.transcript
             ?.trim();
 
-        if (!transcript) return;
+        if (!transcript) {
+          return;
+        }
 
         console.log(
-          "🎙️ USER:",
+          "🎙️ Tuan:",
           transcript
         );
 
-        this.sendToNaira(
-          transcript
-        );
+        if (input) {
+
+          input.value =
+            transcript;
+
+          input.focus();
+        }
+
+        // ----------------------------------------------------
+        // Hantar terus kepada sistem chat sedia ada
+        // ----------------------------------------------------
+
+        if (
+          typeof window.sendMessage ===
+          "function"
+        ) {
+
+          window.sendMessage();
+
+        }
+
       };
 
-    // --------------------------------------------------------
-    // END
-    // --------------------------------------------------------
-
-    this.recognition.onend =
-      () => {
-
-        this.listening =
-          false;
-
-        console.log(
-          "🎙️ NAIRA: Listening stopped."
-        );
-
-        this.updateVoiceUI(
-          "idle"
-        );
-      };
-
-    // --------------------------------------------------------
-    // ERROR
-    // --------------------------------------------------------
-
-    this.recognition.onerror =
-      (event) => {
-
-        this.listening =
-          false;
+    recognition.onerror =
+      function (event) {
 
         console.error(
-          "🎙️ VOICE ERROR:",
+          "🎙️ Naira Voice Error:",
           event.error
         );
 
-        this.updateVoiceUI(
-          "error"
-        );
+        listening = false;
+
+        resetMicButton();
       };
-  },
+
+    recognition.onend =
+      function () {
+
+        listening = false;
+
+        resetMicButton();
+
+      };
+  }
 
   // ==========================================================
   // START LISTENING
   // ==========================================================
 
-  startListening() {
+  function startListening() {
 
-    if (!this.recognition) {
+    if (!recognition) {
 
       console.warn(
         "🎙️ Speech Recognition belum tersedia."
@@ -160,102 +146,94 @@ const Voice = {
       return;
     }
 
-    if (this.listening) {
+    if (listening) {
       return;
     }
 
     try {
 
-      this.recognition.start();
+      recognition.start();
 
     } catch (error) {
 
       console.error(
-        "🎙️ START VOICE ERROR:",
+        "🎙️ Gagal memulakan microphone:",
         error
       );
 
     }
-  },
+  }
 
   // ==========================================================
   // STOP LISTENING
   // ==========================================================
 
-  stopListening() {
+  function stopListening() {
 
-    if (
-      !this.recognition ||
-      !this.listening
-    ) {
+    if (!recognition) {
       return;
     }
 
     try {
 
-      this.recognition.stop();
+      recognition.stop();
 
     } catch (error) {
 
       console.error(
-        "🎙️ STOP VOICE ERROR:",
+        "🎙️ Gagal menghentikan microphone:",
         error
       );
 
     }
-  },
+  }
 
   // ==========================================================
-  // SEND USER VOICE TO NAIRA
+  // BUTTON
   // ==========================================================
 
-  async sendToNaira(
-    text
-  ) {
+  function resetMicButton() {
 
-    console.log(
-      "🤖 Sending voice message to Naira..."
-    );
-
-    const input =
-      document.getElementById(
-        "messageInput"
-      );
-
-    if (input) {
-
-      input.value =
-        text;
-    }
-
-    // --------------------------------------------------------
-    // Gunakan fungsi chat sedia ada
-    // --------------------------------------------------------
-
-    if (
-      typeof window.sendMessage ===
-      "function"
-    ) {
-
-      await window.sendMessage(
-        text
-      );
-
+    if (!micButton) {
       return;
     }
 
-    console.warn(
-      "⚠️ window.sendMessage tidak dijumpai."
+    micButton.textContent =
+      "🎙️";
+  }
+
+  if (micButton) {
+
+    micButton.addEventListener(
+      "click",
+      function () {
+
+        if (listening) {
+
+          stopListening();
+
+        } else {
+
+          startListening();
+
+        }
+
+      }
     );
-  },
+
+  } else {
+
+    console.warn(
+      "🎙️ Naira Voice: #micButton tidak dijumpai."
+    );
+
+  }
 
   // ==========================================================
   // TEXT TO SPEECH
   // ==========================================================
 
-  speak(
-    text
-  ) {
+  function speak(text) {
 
     if (
       !text ||
@@ -264,7 +242,7 @@ const Voice = {
       return;
     }
 
-    this.stopSpeaking();
+    window.speechSynthesis.cancel();
 
     const utterance =
       new SpeechSynthesisUtterance(
@@ -284,42 +262,29 @@ const Voice = {
       1;
 
     utterance.onstart =
-      () => {
+      function () {
 
-        this.speaking =
-          true;
-
-        this.updateVoiceUI(
-          "speaking"
+        console.log(
+          "🔊 Naira sedang bercakap..."
         );
 
       };
 
     utterance.onend =
-      () => {
+      function () {
 
-        this.speaking =
-          false;
-
-        this.updateVoiceUI(
-          "idle"
+        console.log(
+          "🔊 Naira selesai bercakap."
         );
 
       };
 
     utterance.onerror =
-      (error) => {
-
-        this.speaking =
-          false;
+      function (error) {
 
         console.error(
           "🔊 TTS ERROR:",
           error
-        );
-
-        this.updateVoiceUI(
-          "error"
         );
 
       };
@@ -327,160 +292,33 @@ const Voice = {
     window.speechSynthesis.speak(
       utterance
     );
-  },
-
-  // ==========================================================
-  // STOP SPEAKING
-  // ==========================================================
-
-  stopSpeaking() {
-
-    if (
-      !window.speechSynthesis
-    ) {
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    this.speaking =
-      false;
-  },
-
-  // ==========================================================
-  // VOICE UI
-  // ==========================================================
-
-  updateVoiceUI(
-    state
-  ) {
-
-    const button =
-      document.getElementById(
-        "voiceButton"
-      );
-
-    if (!button) {
-      return;
-    }
-
-    button.classList.remove(
-      "voice-listening",
-      "voice-speaking",
-      "voice-error"
-    );
-
-    if (
-      state ===
-      "listening"
-    ) {
-
-      button.classList.add(
-        "voice-listening"
-      );
-
-      button.textContent =
-        "🔴";
-
-      return;
-    }
-
-    if (
-      state ===
-      "speaking"
-    ) {
-
-      button.classList.add(
-        "voice-speaking"
-      );
-
-      button.textContent =
-        "🔊";
-
-      return;
-    }
-
-    if (
-      state ===
-      "error"
-    ) {
-
-      button.classList.add(
-        "voice-error"
-      );
-
-      button.textContent =
-        "⚠️";
-
-      return;
-    }
-
-    button.textContent =
-      "🎙️";
   }
-};
 
-// ============================================================
-// VOICE BUTTON
-// ============================================================
+  // ==========================================================
+  // GLOBAL
+  // ==========================================================
 
-const voiceButton =
-  document.getElementById(
-    "voiceButton"
+  window.NairaVoice = {
+
+    start:
+      startListening,
+
+    stop:
+      stopListening,
+
+    speak:
+      speak
+
+  };
+
+  // ==========================================================
+  // INIT
+  // ==========================================================
+
+  setupRecognition();
+
+  console.log(
+    "🎙️ NAIRA PHASE 5 VOICE LOADED"
   );
 
-if (voiceButton) {
-
-  voiceButton.addEventListener(
-    "click",
-    function () {
-
-      if (
-        Voice.listening
-      ) {
-
-        Voice.stopListening();
-
-        return;
-      }
-
-      Voice.startListening();
-
-    }
-  );
-}
-
-// ============================================================
-// AUTO INIT
-// ============================================================
-
-if (
-  document.readyState ===
-  "loading"
-) {
-
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-
-      Voice.init();
-
-    }
-  );
-
-} else {
-
-  Voice.init();
-
-}
-
-// ============================================================
-// GLOBAL
-// ============================================================
-
-window.NairaVoice =
-  Voice;
-
-console.log(
-  "🎙️ NAIRA PHASE 5 VOICE LOADED"
-);
+})();
