@@ -6,6 +6,158 @@
 <meta name="theme-color" content="#10131c">
 <title>Naira — Personal Assistant</title>
 <style>
+/* =========================================================
+   VOICE CENTER
+========================================================= */
+
+.voice-center-box {
+  max-height: calc(100dvh - 36px);
+  overflow-y: auto;
+}
+
+.voice-center-search {
+  margin-bottom: 15px;
+}
+
+.voice-section {
+  margin-bottom: 20px;
+}
+
+.voice-section-title {
+  font-size: 14px;
+  font-weight: 650;
+  color: #d8dbe5;
+  margin-bottom: 10px;
+}
+
+.voice-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.voice-chip {
+  border: 1px solid rgba(255,255,255,.09);
+  background: rgba(255,255,255,.06);
+  color: #dfe2ea;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 12px;
+  transition: .2s ease;
+}
+
+.voice-chip:hover {
+  background: rgba(139,92,246,.18);
+}
+
+.voice-chip.active {
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #4f46e5
+    );
+  border-color: rgba(255,255,255,.15);
+  box-shadow:
+    0 5px 18px rgba(99,72,220,.25);
+}
+
+.voice-select {
+  width: 100%;
+  padding: 13px;
+  border-radius: 13px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: #1b1e2b;
+  color: white;
+  outline: none;
+  font-size: 13px;
+}
+
+.voice-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.voice-control {
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.voice-control-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 9px;
+  font-size: 12px;
+  color: #b8bdc9;
+}
+
+.voice-control-header span:last-child {
+  color: #a78bfa;
+  font-weight: 650;
+}
+
+.voice-control input {
+  width: 100%;
+  accent-color: #8b5cf6;
+}
+
+.voice-preview {
+  background: rgba(255,255,255,.045);
+  border-radius: 15px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+#voicePreviewText {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 12px;
+  background: rgba(0,0,0,.18);
+  color: white;
+  padding: 12px;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  margin-bottom: 9px;
+}
+
+.voice-preview-button,
+.voice-save-button {
+  width: 100%;
+  padding: 13px;
+  border-radius: 13px;
+  font-size: 13px;
+}
+
+.voice-preview-button {
+  background: rgba(139,92,246,.18);
+  border: 1px solid rgba(139,92,246,.2);
+}
+
+.voice-save-button {
+  background:
+    linear-gradient(
+      135deg,
+      #8b5cf6,
+      #4f46e5
+    );
+  margin-top: 3px;
+}
+
+.voice-center-status {
+  text-align: center;
+  min-height: 18px;
+  color: #858b9c;
+  font-size: 11px;
+  margin-top: 10px;
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:#07080d}
 body{
@@ -307,6 +459,9 @@ header{
   </div>
   <div class="header-buttons">
     <button class="header-button" id="historyButton" type="button">💬</button>
+    <button class="header-button" id="voiceCenterButton" type="button" title="Voice Center"
+>🎙️
+</button>
     <button class="header-button" id="memoryButton" type="button">🧠</button>
     <button class="header-button" id="voiceCenterButton" type="button">🎙️</button>
   </div>
@@ -2911,5 +3066,169 @@ console.log(
   "===================================="
 );
 </script>
+<!-- =========================================================
+     VOICE CENTER
+========================================================= -->
+
+<div
+  class="overlay"
+  id="voiceCenterPanel"
+>
+  <div class="panel-box voice-center-box">
+
+    <div class="panel-header">
+      <div>
+        <h2>🎙️ Voice Center</h2>
+        <p>
+          Pilih suara, character dan emotion Naira
+        </p>
+      </div>
+
+      <button
+        class="close-button"
+        id="closeVoiceCenter"
+        type="button"
+      >
+        ✕
+      </button>
+    </div>
+
+    <div class="voice-center-search">
+      <input
+        class="search-box"
+        id="voiceSearch"
+        type="search"
+        placeholder="🔍 Cari voice / character..."
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="voice-section">
+
+      <div class="voice-section-title">
+        🎭 Character
+      </div>
+
+      <div
+        class="voice-chips"
+        id="characterList"
+      ></div>
+
+    </div>
+
+    <div class="voice-section">
+
+      <div class="voice-section-title">
+        ❤️ Emotion
+      </div>
+
+      <div
+        class="voice-chips"
+        id="emotionList"
+      ></div>
+
+    </div>
+
+    <div class="voice-section">
+
+      <div class="voice-section-title">
+        🔊 Available Voices
+      </div>
+
+      <select
+        class="voice-select"
+        id="voiceSelect"
+      >
+        <option value="">
+          Loading voices...
+        </option>
+      </select>
+
+    </div>
+
+    <div class="voice-controls">
+
+      <div class="voice-control">
+        <div class="voice-control-header">
+          <span>⚡ Speed</span>
+          <span id="rateValue">0.90</span>
+        </div>
+
+        <input
+          id="rateControl"
+          type="range"
+          min="0.50"
+          max="2"
+          step="0.05"
+          value="0.90"
+        >
+      </div>
+
+      <div class="voice-control">
+        <div class="voice-control-header">
+          <span>🎵 Pitch</span>
+          <span id="pitchValue">1.08</span>
+        </div>
+
+        <input
+          id="pitchControl"
+          type="range"
+          min="0"
+          max="2"
+          step="0.05"
+          value="1.08"
+        >
+      </div>
+
+      <div class="voice-control">
+        <div class="voice-control-header">
+          <span>🔊 Volume</span>
+          <span id="volumeValue">1.00</span>
+        </div>
+
+        <input
+          id="volumeControl"
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+        >
+      </div>
+
+    </div>
+
+    <div class="voice-preview">
+
+      <textarea
+        id="voicePreviewText"
+        placeholder="Tulis ayat untuk test suara..."
+      >Hai Tuan, saya Naira. Ini suara pilihan Tuan.</textarea>
+
+      <button
+        class="voice-preview-button"
+        id="previewVoice"
+        type="button"
+      >
+        ▶️ Test Voice
+      </button>
+
+    </div>
+
+    <button
+      class="voice-save-button"
+      id="saveVoiceSettings"
+      type="button"
+    >
+      ⭐ Simpan Voice Ini
+    </button>
+
+    <div
+      class="voice-center-status"
+      id="voiceCenterStatus"
+    ></div>
+
+  </div>
+</div>
 </body>
 </html>
