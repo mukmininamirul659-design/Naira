@@ -306,7 +306,106 @@ function renderVoiceSelect() {
   }
 
 }
-
+/* ============================================================
+   LOAD ELEVENLABS VOICES
+============================================================ */
+async function loadElevenLabsVoices() {
+  try {
+    const response =
+      await fetch("/api/voices");
+    if (!response.ok) {
+      throw new Error(
+        "Gagal mendapatkan ElevenLabs voices."
+      );
+    }
+    const data =
+      await response.json();
+    if (
+      !data.voices ||
+      !Array.isArray(data.voices)
+    ) {
+      throw new Error(
+        "Data voices tidak sah."
+      );
+    }
+    console.log(
+      "🎙️ ElevenLabs Voices:",
+      data.voices
+    );
+    /*
+      Simpan voice ElevenLabs
+      supaya boleh digunakan oleh Naira.
+    */
+    window.elevenLabsVoices =
+      data.voices;
+    return data.voices;
+  } catch (error) {
+    console.error(
+      "ELEVENLABS VOICES ERROR:",
+      error
+    );
+    return [];
+  }
+}
+/* ============================================================
+   GET SELECTED ELEVENLABS VOICE
+============================================================ */
+function getSelectedElevenLabsVoice() {
+  const savedVoiceId =
+    localStorage.getItem(
+      "naira_eleven_voice_id"
+    );
+  if (
+    !savedVoiceId ||
+    !window.elevenLabsVoices
+  ) {
+    return null;
+  }
+  return (
+    window.elevenLabsVoices.find(
+      function(voice) {
+        return (
+          voice.voice_id ===
+          savedVoiceId
+        );
+      }
+    ) || null
+  );
+}
+/* ============================================================
+   SAVE ELEVENLABS VOICE
+============================================================ */
+function saveElevenLabsVoice(
+  voiceId
+) {
+  if (!voiceId) {
+    return;
+  }
+  localStorage.setItem(
+    "naira_eleven_voice_id",
+    voiceId
+  );
+  console.log(
+    "🎙️ Naira voice saved:",
+    voiceId
+  );
+}
+/* ============================================================
+   INITIALIZE ELEVENLABS VOICES
+============================================================ */
+async function initializeElevenLabsVoices() {
+  const voices =
+    await loadElevenLabsVoices();
+  if (!voices.length) {
+    console.warn(
+      "⚠️ Tiada ElevenLabs voices ditemui."
+    );
+    return;
+  }
+  console.log(
+    `✅ ${voices.length} ElevenLabs voices loaded.`
+  );
+}
 
 /* ============================================================
    CHARACTER SETTINGS
