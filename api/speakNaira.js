@@ -3,41 +3,12 @@
 ============================================================ */
 
 const voiceSettings = {
-  voiceName:
-    localStorage.getItem(
-      "naira_voice_name"
-    ) || "",
-
-  character:
-    localStorage.getItem(
-      "naira_voice_character"
-    ) || "Naira",
-
-  emotion:
-    localStorage.getItem(
-      "naira_voice_emotion"
-    ) || "calm",
-
-  rate:
-    Number(
-      localStorage.getItem(
-        "naira_voice_rate"
-      )
-    ) || 0.90,
-
-  pitch:
-    Number(
-      localStorage.getItem(
-        "naira_voice_pitch"
-      )
-    ) || 1.08,
-
-  volume:
-    Number(
-      localStorage.getItem(
-        "naira_voice_volume"
-      )
-    ) || 1
+  voiceName: localStorage.getItem("naira_voice_name") || "",
+  character: localStorage.getItem("naira_voice_character") || "Naira",
+  emotion: localStorage.getItem("naira_voice_emotion") || "calm",
+  rate: Number(localStorage.getItem("naira_voice_rate")) || 0.90,
+  pitch: Number(localStorage.getItem("naira_voice_pitch")) || 1.08,
+  volume: Number(localStorage.getItem("naira_voice_volume")) || 1
 };
 
 
@@ -46,54 +17,18 @@ const voiceSettings = {
 ============================================================ */
 
 const voiceCharacters = [
-  {
-    id: "Naira",
-    label: "🌸 Naira"
-  },
-  {
-    id: "female",
-    label: "👩 Female"
-  },
-  {
-    id: "male",
-    label: "👨 Male"
-  },
-  {
-    id: "child",
-    label: "🧒 Child"
-  },
-  {
-    id: "elderly",
-    label: "👵 Elderly"
-  },
-  {
-    id: "robot",
-    label: "🤖 Robot"
-  },
-  {
-    id: "cartoon",
-    label: "🎭 Cartoon"
-  },
-  {
-    id: "villain",
-    label: "🦹 Villain"
-  },
-  {
-    id: "narrator",
-    label: "🎙️ Narrator"
-  },
-  {
-    id: "cool",
-    label: "😎 Cool"
-  },
-  {
-    id: "cute",
-    label: "🥰 Cute"
-  },
-  {
-    id: "horror",
-    label: "👻 Horror"
-  }
+  { id: "Naira", label: "🌸 Naira" },
+  { id: "female", label: "👩 Female" },
+  { id: "male", label: "👨 Male" },
+  { id: "child", label: "🧒 Child" },
+  { id: "elderly", label: "👵 Elderly" },
+  { id: "robot", label: "🤖 Robot" },
+  { id: "cartoon", label: "🎭 Cartoon" },
+  { id: "villain", label: "🦹 Villain" },
+  { id: "narrator", label: "🎙️ Narrator" },
+  { id: "cool", label: "😎 Cool" },
+  { id: "cute", label: "🥰 Cute" },
+  { id: "horror", label: "👻 Horror" }
 ];
 
 
@@ -102,50 +37,17 @@ const voiceCharacters = [
 ============================================================ */
 
 const voiceEmotions = [
-  {
-    id: "happy",
-    label: "😊 Happy"
-  },
-  {
-    id: "calm",
-    label: "😌 Calm"
-  },
-  {
-    id: "sad",
-    label: "😢 Sad"
-  },
-  {
-    id: "angry",
-    label: "😡 Angry"
-  },
-  {
-    id: "scared",
-    label: "😱 Scared"
-  },
-  {
-    id: "excited",
-    label: "🤩 Excited"
-  },
-  {
-    id: "sarcastic",
-    label: "😏 Sarcastic"
-  },
-  {
-    id: "affectionate",
-    label: "❤️ Affectionate"
-  },
-  {
-    id: "sleepy",
-    label: "😴 Sleepy"
-  },
-  {
-    id: "dramatic",
-    label: "🎭 Dramatic"
-  },
-  {
-    id: "singing",
-    label: "🎵 Singing"
-  }
+  { id: "happy", label: "😊 Happy" },
+  { id: "calm", label: "😌 Calm" },
+  { id: "sad", label: "😢 Sad" },
+  { id: "angry", label: "😡 Angry" },
+  { id: "scared", label: "😱 Scared" },
+  { id: "excited", label: "🤩 Excited" },
+  { id: "sarcastic", label: "😏 Sarcastic" },
+  { id: "affectionate", label: "❤️ Affectionate" },
+  { id: "sleepy", label: "😴 Sleepy" },
+  { id: "dramatic", label: "🎭 Dramatic" },
+  { id: "singing", label: "🎵 Singing" }
 ];
 
 
@@ -154,89 +56,55 @@ const voiceEmotions = [
 ============================================================ */
 
 const voiceCenterButton =
-  document.getElementById(
-    "voiceCenterButton"
-  );
+  document.getElementById("voiceCenterButton");
 
 const voiceCenterPanel =
-  document.getElementById(
-    "voiceCenterPanel"
-  );
+  document.getElementById("voiceCenterPanel");
 
 const closeVoiceCenter =
-  document.getElementById(
-    "closeVoiceCenter"
-  );
+  document.getElementById("closeVoiceCenter");
 
 const voiceSearch =
-  document.getElementById(
-    "voiceSearch"
-  );
+  document.getElementById("voiceSearch");
 
 const characterList =
-  document.getElementById(
-    "characterList"
-  );
+  document.getElementById("characterList");
 
 const emotionList =
-  document.getElementById(
-    "emotionList"
-  );
+  document.getElementById("emotionList");
 
 const voiceSelect =
-  document.getElementById(
-    "voiceSelect"
-  );
+  document.getElementById("voiceSelect");
 
 const rateControl =
-  document.getElementById(
-    "rateControl"
-  );
+  document.getElementById("rateControl");
 
 const pitchControl =
-  document.getElementById(
-    "pitchControl"
-  );
+  document.getElementById("pitchControl");
 
 const volumeControl =
-  document.getElementById(
-    "volumeControl"
-  );
+  document.getElementById("volumeControl");
 
 const rateValue =
-  document.getElementById(
-    "rateValue"
-  );
+  document.getElementById("rateValue");
 
 const pitchValue =
-  document.getElementById(
-    "pitchValue"
-  );
+  document.getElementById("pitchValue");
 
 const volumeValue =
-  document.getElementById(
-    "volumeValue"
-  );
+  document.getElementById("volumeValue");
 
 const voicePreviewText =
-  document.getElementById(
-    "voicePreviewText"
-  );
+  document.getElementById("voicePreviewText");
 
 const previewVoice =
-  document.getElementById(
-    "previewVoice"
-  );
+  document.getElementById("previewVoice");
 
 const saveVoiceSettings =
-  document.getElementById(
-    "saveVoiceSettings"
-  );
+  document.getElementById("saveVoiceSettings");
 
 const voiceCenterStatus =
-  document.getElementById(
-    "voiceCenterStatus"
-  );
+  document.getElementById("voiceCenterStatus");
 
 
 /* ============================================================
@@ -245,53 +113,41 @@ const voiceCenterStatus =
 
 function renderCharacters() {
 
+  if (!characterList) return;
+
   characterList.innerHTML = "";
 
   const search =
-    voiceSearch.value
-      .trim()
-      .toLowerCase();
+    voiceSearch
+      ? voiceSearch.value.trim().toLowerCase()
+      : "";
 
   voiceCharacters
     .filter(function(character) {
 
-      if (!search) {
-        return true;
-      }
+      if (!search) return true;
 
       return (
-        character.label
-          .toLowerCase()
-          .includes(search) ||
-        character.id
-          .toLowerCase()
-          .includes(search)
+        character.label.toLowerCase().includes(search) ||
+        character.id.toLowerCase().includes(search)
       );
 
     })
     .forEach(function(character) {
 
       const button =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
       button.type = "button";
-
-      button.className =
-        "voice-chip";
+      button.className = "voice-chip";
 
       if (
-        voiceSettings.character ===
-        character.id
+        voiceSettings.character === character.id
       ) {
-        button.classList.add(
-          "active"
-        );
+        button.classList.add("active");
       }
 
-      button.textContent =
-        character.label;
+      button.textContent = character.label;
 
       button.addEventListener(
         "click",
@@ -307,9 +163,7 @@ function renderCharacters() {
         }
       );
 
-      characterList.appendChild(
-        button
-      );
+      characterList.appendChild(button);
 
     });
 }
@@ -321,53 +175,41 @@ function renderCharacters() {
 
 function renderEmotions() {
 
+  if (!emotionList) return;
+
   emotionList.innerHTML = "";
 
   const search =
-    voiceSearch.value
-      .trim()
-      .toLowerCase();
+    voiceSearch
+      ? voiceSearch.value.trim().toLowerCase()
+      : "";
 
   voiceEmotions
     .filter(function(emotion) {
 
-      if (!search) {
-        return true;
-      }
+      if (!search) return true;
 
       return (
-        emotion.label
-          .toLowerCase()
-          .includes(search) ||
-        emotion.id
-          .toLowerCase()
-          .includes(search)
+        emotion.label.toLowerCase().includes(search) ||
+        emotion.id.toLowerCase().includes(search)
       );
 
     })
     .forEach(function(emotion) {
 
       const button =
-        document.createElement(
-          "button"
-        );
+        document.createElement("button");
 
       button.type = "button";
-
-      button.className =
-        "voice-chip";
+      button.className = "voice-chip";
 
       if (
-        voiceSettings.emotion ===
-        emotion.id
+        voiceSettings.emotion === emotion.id
       ) {
-        button.classList.add(
-          "active"
-        );
+        button.classList.add("active");
       }
 
-      button.textContent =
-        emotion.label;
+      button.textContent = emotion.label;
 
       button.addEventListener(
         "click",
@@ -383,9 +225,7 @@ function renderEmotions() {
         }
       );
 
-      emotionList.appendChild(
-        button
-      );
+      emotionList.appendChild(button);
 
     });
 }
@@ -397,23 +237,22 @@ function renderEmotions() {
 
 function renderVoiceSelect() {
 
+  if (!voiceSelect) return;
+
   voiceSelect.innerHTML = "";
 
-  if (!voices.length) {
+  if (
+    typeof voices === "undefined" ||
+    !voices.length
+  ) {
 
     const option =
-      document.createElement(
-        "option"
-      );
+      document.createElement("option");
 
     option.value = "";
+    option.textContent = "Tiada voice tersedia";
 
-    option.textContent =
-      "Tiada voice tersedia";
-
-    voiceSelect.appendChild(
-      option
-    );
+    voiceSelect.appendChild(option);
 
     return;
   }
@@ -423,59 +262,44 @@ function renderVoiceSelect() {
     .sort(function(a, b) {
 
       return (
-        (a.lang || "")
-          .localeCompare(
-            b.lang || ""
-          ) ||
-        (a.name || "")
-          .localeCompare(
-            b.name || ""
-          )
+        (a.lang || "").localeCompare(b.lang || "") ||
+        (a.name || "").localeCompare(b.name || "")
       );
 
     })
     .forEach(function(voice) {
 
       const option =
-        document.createElement(
-          "option"
-        );
+        document.createElement("option");
 
-      option.value =
-        voice.name;
+      option.value = voice.name;
 
       option.textContent =
         `${voice.name} — ${voice.lang}`;
 
       if (
-        voice.name ===
-        voiceSettings.voiceName
+        voice.name === voiceSettings.voiceName
       ) {
-        option.selected =
-          true;
+        option.selected = true;
       }
 
-      voiceSelect.appendChild(
-        option
-      );
+      voiceSelect.appendChild(option);
 
     });
 
   if (
     !voiceSettings.voiceName &&
-    voices.length
+    voices.length &&
+    typeof findBestVoice === "function"
   ) {
 
-    const best =
-      findBestVoice();
+    const best = findBestVoice();
 
     if (best) {
 
-      voiceSettings.voiceName =
-        best.name;
+      voiceSettings.voiceName = best.name;
 
-      voiceSelect.value =
-        best.name;
+      voiceSelect.value = best.name;
 
     }
 
@@ -490,133 +314,70 @@ function renderVoiceSelect() {
 
 function applyCharacterSettings() {
 
-  switch (
-    voiceSettings.character
-  ) {
+  switch (voiceSettings.character) {
 
     case "child":
-
-      voiceSettings.pitch =
-        1.45;
-
-      voiceSettings.rate =
-        1.05;
-
+      voiceSettings.pitch = 1.45;
+      voiceSettings.rate = 1.05;
       break;
 
     case "elderly":
-
-      voiceSettings.pitch =
-        0.75;
-
-      voiceSettings.rate =
-        0.82;
-
+      voiceSettings.pitch = 0.75;
+      voiceSettings.rate = 0.82;
       break;
 
     case "robot":
-
-      voiceSettings.pitch =
-        0.65;
-
-      voiceSettings.rate =
-        0.92;
-
+      voiceSettings.pitch = 0.65;
+      voiceSettings.rate = 0.92;
       break;
 
     case "villain":
-
-      voiceSettings.pitch =
-        0.55;
-
-      voiceSettings.rate =
-        0.82;
-
+      voiceSettings.pitch = 0.55;
+      voiceSettings.rate = 0.82;
       break;
 
     case "narrator":
-
-      voiceSettings.pitch =
-        0.90;
-
-      voiceSettings.rate =
-        0.82;
-
+      voiceSettings.pitch = 0.90;
+      voiceSettings.rate = 0.82;
       break;
 
     case "cool":
-
-      voiceSettings.pitch =
-        0.82;
-
-      voiceSettings.rate =
-        0.88;
-
+      voiceSettings.pitch = 0.82;
+      voiceSettings.rate = 0.88;
       break;
 
     case "cute":
-
-      voiceSettings.pitch =
-        1.35;
-
-      voiceSettings.rate =
-        0.98;
-
+      voiceSettings.pitch = 1.35;
+      voiceSettings.rate = 0.98;
       break;
 
     case "horror":
-
-      voiceSettings.pitch =
-        0.45;
-
-      voiceSettings.rate =
-        0.68;
-
+      voiceSettings.pitch = 0.45;
+      voiceSettings.rate = 0.68;
       break;
 
     case "male":
-
-      voiceSettings.pitch =
-        0.78;
-
-      voiceSettings.rate =
-        0.90;
-
+      voiceSettings.pitch = 0.78;
+      voiceSettings.rate = 0.90;
       break;
 
     case "female":
-
-      voiceSettings.pitch =
-        1.12;
-
-      voiceSettings.rate =
-        0.92;
-
+      voiceSettings.pitch = 1.12;
+      voiceSettings.rate = 0.92;
       break;
 
     case "cartoon":
-
-      voiceSettings.pitch =
-        1.30;
-
-      voiceSettings.rate =
-        1.08;
-
+      voiceSettings.pitch = 1.30;
+      voiceSettings.rate = 1.08;
       break;
 
     default:
-
-      voiceSettings.pitch =
-        1.08;
-
-      voiceSettings.rate =
-        0.90;
-
+      voiceSettings.pitch = 1.08;
+      voiceSettings.rate = 0.90;
       break;
   }
 
   syncVoiceControls();
-
 }
 
 
@@ -626,140 +387,69 @@ function applyCharacterSettings() {
 
 function applyEmotionSettings() {
 
-  switch (
-    voiceSettings.emotion
-  ) {
+  switch (voiceSettings.emotion) {
 
     case "happy":
-
-      voiceSettings.rate =
-        1.04;
-
+      voiceSettings.rate = 1.04;
       voiceSettings.pitch =
-        Math.min(
-          2,
-          voiceSettings.pitch +
-          0.12
-        );
-
+        Math.min(2, voiceSettings.pitch + 0.12);
       break;
 
     case "sad":
-
-      voiceSettings.rate =
-        0.72;
-
+      voiceSettings.rate = 0.72;
       voiceSettings.pitch =
-        Math.max(
-          0.3,
-          voiceSettings.pitch -
-          0.15
-        );
-
+        Math.max(0.3, voiceSettings.pitch - 0.15);
       break;
 
     case "angry":
-
-      voiceSettings.rate =
-        1.12;
-
+      voiceSettings.rate = 1.12;
       voiceSettings.pitch =
-        Math.max(
-          0.4,
-          voiceSettings.pitch -
-          0.05
-        );
-
+        Math.max(0.4, voiceSettings.pitch - 0.05);
       break;
 
     case "scared":
-
-      voiceSettings.rate =
-        1.22;
-
+      voiceSettings.rate = 1.22;
       voiceSettings.pitch =
-        Math.min(
-          2,
-          voiceSettings.pitch +
-          0.20
-        );
-
+        Math.min(2, voiceSettings.pitch + 0.20);
       break;
 
     case "excited":
-
-      voiceSettings.rate =
-        1.18;
-
+      voiceSettings.rate = 1.18;
       voiceSettings.pitch =
-        Math.min(
-          2,
-          voiceSettings.pitch +
-          0.16
-        );
-
+        Math.min(2, voiceSettings.pitch + 0.16);
       break;
 
     case "sarcastic":
-
-      voiceSettings.rate =
-        0.86;
-
-      voiceSettings.pitch =
-        1.16;
-
+      voiceSettings.rate = 0.86;
+      voiceSettings.pitch = 1.16;
       break;
 
     case "affectionate":
-
-      voiceSettings.rate =
-        0.82;
-
-      voiceSettings.pitch =
-        1.14;
-
+      voiceSettings.rate = 0.82;
+      voiceSettings.pitch = 1.14;
       break;
 
     case "sleepy":
-
-      voiceSettings.rate =
-        0.62;
-
-      voiceSettings.pitch =
-        0.82;
-
+      voiceSettings.rate = 0.62;
+      voiceSettings.pitch = 0.82;
       break;
 
     case "dramatic":
-
-      voiceSettings.rate =
-        0.76;
-
-      voiceSettings.pitch =
-        1.05;
-
+      voiceSettings.rate = 0.76;
+      voiceSettings.pitch = 1.05;
       break;
 
     case "singing":
-
-      voiceSettings.rate =
-        0.72;
-
-      voiceSettings.pitch =
-        1.20;
-
+      voiceSettings.rate = 0.72;
+      voiceSettings.pitch = 1.20;
       break;
 
     default:
-
-      voiceSettings.rate =
-        0.90;
-
+      voiceSettings.rate = 0.90;
       break;
   }
 
   syncVoiceControls();
-
 }
 
 
@@ -769,30 +459,26 @@ function applyEmotionSettings() {
 
 function syncVoiceControls() {
 
-  rateControl.value =
-    voiceSettings.rate;
+  if (rateControl)
+    rateControl.value = voiceSettings.rate;
 
-  pitchControl.value =
-    voiceSettings.pitch;
+  if (pitchControl)
+    pitchControl.value = voiceSettings.pitch;
 
-  volumeControl.value =
-    voiceSettings.volume;
+  if (volumeControl)
+    volumeControl.value = voiceSettings.volume;
 
-  rateValue.textContent =
-    Number(
-      voiceSettings.rate
-    ).toFixed(2);
+  if (rateValue)
+    rateValue.textContent =
+      Number(voiceSettings.rate).toFixed(2);
 
-  pitchValue.textContent =
-    Number(
-      voiceSettings.pitch
-    ).toFixed(2);
+  if (pitchValue)
+    pitchValue.textContent =
+      Number(voiceSettings.pitch).toFixed(2);
 
-  volumeValue.textContent =
-    Number(
-      voiceSettings.volume
-    ).toFixed(2);
-
+  if (volumeValue)
+    volumeValue.textContent =
+      Number(voiceSettings.volume).toFixed(2);
 }
 
 
@@ -800,253 +486,290 @@ function syncVoiceControls() {
    OPEN VOICE CENTER
 ============================================================ */
 
-voiceCenterButton.addEventListener(
-  "click",
-  function() {
+if (voiceCenterButton) {
 
-    unlockSpeech();
+  voiceCenterButton.addEventListener(
+    "click",
+    function() {
 
-    voiceCenterPanel.classList.add(
-      "active"
-    );
+      if (typeof unlockSpeech === "function") {
+        unlockSpeech();
+      }
 
-    renderCharacters();
-    renderEmotions();
-    renderVoiceSelect();
-    syncVoiceControls();
+      if (voiceCenterPanel) {
+        voiceCenterPanel.classList.add("active");
+      }
 
-  }
-);
+      renderCharacters();
+      renderEmotions();
+
+      if (typeof loadVoices === "function") {
+        loadVoices();
+      }
+
+      renderVoiceSelect();
+      syncVoiceControls();
+
+    }
+  );
+
+}
 
 
 /* ============================================================
    CLOSE VOICE CENTER
 ============================================================ */
 
-closeVoiceCenter.addEventListener(
-  "click",
-  function() {
+if (closeVoiceCenter) {
 
-    voiceCenterPanel.classList.remove(
-      "active"
-    );
+  closeVoiceCenter.addEventListener(
+    "click",
+    function() {
 
-  }
-);
+      if (voiceCenterPanel) {
+        voiceCenterPanel.classList.remove("active");
+      }
+
+    }
+  );
+
+}
 
 
 /* ============================================================
    SEARCH
 ============================================================ */
 
-voiceSearch.addEventListener(
-  "input",
-  function() {
+if (voiceSearch) {
 
-    renderCharacters();
-    renderEmotions();
+  voiceSearch.addEventListener(
+    "input",
+    function() {
 
-  }
-);
+      renderCharacters();
+      renderEmotions();
+
+    }
+  );
+
+}
 
 
 /* ============================================================
    VOICE SELECT
 ============================================================ */
 
-voiceSelect.addEventListener(
-  "change",
-  function() {
+if (voiceSelect) {
 
-    voiceSettings.voiceName =
-      voiceSelect.value;
+  voiceSelect.addEventListener(
+    "change",
+    function() {
 
-  }
-);
+      voiceSettings.voiceName =
+        voiceSelect.value;
+
+    }
+  );
+
+}
 
 
 /* ============================================================
    RANGE CONTROLS
 ============================================================ */
 
-rateControl.addEventListener(
-  "input",
-  function() {
+if (rateControl) {
 
-    voiceSettings.rate =
-      Number(
-        rateControl.value
-      );
+  rateControl.addEventListener(
+    "input",
+    function() {
 
-    rateValue.textContent =
-      Number(
-        voiceSettings.rate
-      ).toFixed(2);
+      voiceSettings.rate =
+        Number(rateControl.value);
 
-  }
-);
+      if (rateValue) {
+        rateValue.textContent =
+          Number(voiceSettings.rate).toFixed(2);
+      }
 
-pitchControl.addEventListener(
-  "input",
-  function() {
+    }
+  );
 
-    voiceSettings.pitch =
-      Number(
-        pitchControl.value
-      );
+}
 
-    pitchValue.textContent =
-      Number(
-        voiceSettings.pitch
-      ).toFixed(2);
+if (pitchControl) {
 
-  }
-);
+  pitchControl.addEventListener(
+    "input",
+    function() {
 
-volumeControl.addEventListener(
-  "input",
-  function() {
+      voiceSettings.pitch =
+        Number(pitchControl.value);
 
-    voiceSettings.volume =
-      Number(
-        volumeControl.value
-      );
+      if (pitchValue) {
+        pitchValue.textContent =
+          Number(voiceSettings.pitch).toFixed(2);
+      }
 
-    volumeValue.textContent =
-      Number(
-        voiceSettings.volume
-      ).toFixed(2);
+    }
+  );
 
-  }
-);
+}
+
+if (volumeControl) {
+
+  volumeControl.addEventListener(
+    "input",
+    function() {
+
+      voiceSettings.volume =
+        Number(volumeControl.value);
+
+      if (volumeValue) {
+        volumeValue.textContent =
+          Number(voiceSettings.volume).toFixed(2);
+      }
+
+    }
+  );
+
+}
 
 
 /* ============================================================
    PREVIEW
 ============================================================ */
 
-previewVoice.addEventListener(
-  "click",
-  function() {
+if (previewVoice) {
 
-    const text =
-      voicePreviewText.value.trim();
+  previewVoice.addEventListener(
+    "click",
+    function() {
 
-    if (!text) {
-      return;
+      const text =
+        voicePreviewText
+          ? voicePreviewText.value.trim()
+          : "";
+
+      if (!text) return;
+
+      if (typeof unlockSpeech === "function") {
+        unlockSpeech();
+      }
+
+      speakNaira(text);
+
     }
+  );
 
-    unlockSpeech();
-
-    speakNaira(text);
-
-  }
-);
+}
 
 
 /* ============================================================
    SAVE SETTINGS
 ============================================================ */
 
-saveVoiceSettings.addEventListener(
-  "click",
-  function() {
+if (saveVoiceSettings) {
 
-    localStorage.setItem(
-      "naira_voice_name",
-      voiceSettings.voiceName
-    );
+  saveVoiceSettings.addEventListener(
+    "click",
+    function() {
 
-    localStorage.setItem(
-      "naira_voice_character",
-      voiceSettings.character
-    );
+      localStorage.setItem(
+        "naira_voice_name",
+        voiceSettings.voiceName
+      );
 
-    localStorage.setItem(
-      "naira_voice_emotion",
-      voiceSettings.emotion
-    );
+      localStorage.setItem(
+        "naira_voice_character",
+        voiceSettings.character
+      );
 
-    localStorage.setItem(
-      "naira_voice_rate",
-      voiceSettings.rate
-    );
+      localStorage.setItem(
+        "naira_voice_emotion",
+        voiceSettings.emotion
+      );
 
-    localStorage.setItem(
-      "naira_voice_pitch",
-      voiceSettings.pitch
-    );
+      localStorage.setItem(
+        "naira_voice_rate",
+        voiceSettings.rate
+      );
 
-    localStorage.setItem(
-      "naira_voice_volume",
-      voiceSettings.volume
-    );
+      localStorage.setItem(
+        "naira_voice_pitch",
+        voiceSettings.pitch
+      );
 
-    voiceCenterStatus.textContent =
-      "✅ Voice settings disimpan.";
+      localStorage.setItem(
+        "naira_voice_volume",
+        voiceSettings.volume
+      );
 
-    setTimeout(
-      function() {
+      if (voiceCenterStatus) {
 
         voiceCenterStatus.textContent =
-          "";
+          "✅ Voice settings disimpan.";
 
-      },
-      2500
-    );
+        setTimeout(
+          function() {
 
-  }
-);
+            voiceCenterStatus.textContent = "";
+
+          },
+          2500
+        );
+
+      }
+
+    }
+  );
+
+}
 
 
 /* ============================================================
-   NEW SPEAK ENGINE
+   SPEAK NAIRA ENGINE
 ============================================================ */
 
 function speakNaira(text) {
 
-  if (!text) {
-    return;
-  }
+  if (!text) return;
 
-  if (
-    !("speechSynthesis" in window)
-  ) {
+  if (!("speechSynthesis" in window)) {
 
-    setVoiceStatus(
-      "❌ Browser tidak menyokong voice."
-    );
+    if (typeof setVoiceStatus === "function") {
+      setVoiceStatus(
+        "❌ Browser tidak menyokong voice."
+      );
+    }
 
     return;
   }
 
-  loadVoices();
+  if (typeof loadVoices === "function") {
+    loadVoices();
+  }
 
   try {
-
     window.speechSynthesis.cancel();
-
   } catch (error) {}
 
   const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
+    new SpeechSynthesisUtterance(text);
 
-  nairaSpeech =
-    utterance;
+  /*
+     Simpan reference global kalau variable
+     tersebut memang wujud dalam script utama.
+  */
 
-  utterance.lang =
-    "ms-MY";
+  try {
+    nairaSpeech = utterance;
+  } catch (error) {}
 
-  utterance.rate =
-    voiceSettings.rate;
-
-  utterance.pitch =
-    voiceSettings.pitch;
-
-  utterance.volume =
-    voiceSettings.volume;
+  utterance.lang = "ms-MY";
+  utterance.rate = voiceSettings.rate;
+  utterance.pitch = voiceSettings.pitch;
+  utterance.volume = voiceSettings.volume;
 
 
   /* ========================================================
@@ -1056,7 +779,8 @@ function speakNaira(text) {
   let selectedVoice = null;
 
   if (
-    voiceSettings.voiceName
+    voiceSettings.voiceName &&
+    typeof voices !== "undefined"
   ) {
 
     selectedVoice =
@@ -1073,7 +797,10 @@ function speakNaira(text) {
 
   }
 
-  if (!selectedVoice) {
+  if (
+    !selectedVoice &&
+    typeof findBestVoice === "function"
+  ) {
 
     selectedVoice =
       findBestVoice();
@@ -1122,12 +849,20 @@ function speakNaira(text) {
   }
 
 
+  /* ========================================================
+     EVENTS
+  ======================================================== */
+
   utterance.onstart =
     function() {
 
-      speaking = true;
+      try {
+        speaking = true;
+      } catch (error) {}
 
-      updateVoiceUI();
+      if (typeof updateVoiceUI === "function") {
+        updateVoiceUI();
+      }
 
     };
 
@@ -1135,11 +870,17 @@ function speakNaira(text) {
   utterance.onend =
     function() {
 
-      speaking = false;
+      try {
+        speaking = false;
+      } catch (error) {}
 
-      nairaSpeech = null;
+      try {
+        nairaSpeech = null;
+      } catch (error) {}
 
-      updateVoiceUI();
+      if (typeof updateVoiceUI === "function") {
+        updateVoiceUI();
+      }
 
     };
 
@@ -1147,11 +888,17 @@ function speakNaira(text) {
   utterance.onerror =
     function(event) {
 
-      speaking = false;
+      try {
+        speaking = false;
+      } catch (error) {}
 
-      nairaSpeech = null;
+      try {
+        nairaSpeech = null;
+      } catch (error) {}
 
-      updateVoiceUI();
+      if (typeof updateVoiceUI === "function") {
+        updateVoiceUI();
+      }
 
       console.error(
         "TTS ERROR:",
@@ -1160,6 +907,10 @@ function speakNaira(text) {
 
     };
 
+
+  /* ========================================================
+     SPEAK
+  ======================================================== */
 
   try {
 
@@ -1174,10 +925,24 @@ function speakNaira(text) {
       error
     );
 
-    speaking = false;
+    try {
+      speaking = false;
+    } catch (e) {}
 
-    updateVoiceUI();
+    if (typeof updateVoiceUI === "function") {
+      updateVoiceUI();
+    }
 
   }
 
 }
+
+
+/* ============================================================
+   GLOBAL ACCESS
+============================================================ */
+
+window.speakNaira = speakNaira;
+window.voiceSettings = voiceSettings;
+window.voiceCharacters = voiceCharacters;
+window.voiceEmotions = voiceEmotions;
