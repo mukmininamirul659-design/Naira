@@ -744,6 +744,192 @@ export default async function handler(req, res) {
     // ============================================================
     // DETECT FORGET REQUEST
     // ============================================================
+// ============================================================
+// CONVERSATION SEARCH
+// ============================================================
+
+const isConversationSearchRequest =
+  /(cari|search|find|tunjukkan|tunjuk|lihat|lihatkan)\s+(conversation|conversation saya|perbualan|perbualan saya|chat|chat saya)/i
+    .test(cleanMessage) ||
+  /(conversation|perbualan|chat)\s+(pasal|tentang|mengenai)/i
+    .test(cleanMessage);
+
+if (isConversationSearchRequest) {
+  // ----------------------------------------------------------
+  // EXTRACT SEARCH KEYWORD
+  // ----------------------------------------------------------
+
+  const searchTerm =
+    cleanMessage
+      .replace(
+        /^(naira[\s,]*)?/i,
+        ""
+      )
+      .replace(
+        /\b(cari|search|find|tunjukkan|tunjuk|lihat|lihatkan)\b/gi,
+        ""
+      )
+      .replace(
+        /\b(conversation|perbualan|chat)\b/gi,
+        ""
+      )
+      .replace(
+        /\b(saya|aku|tuan|pasal|tentang|mengenai)\b/gi,
+        ""
+      )
+      .trim()
+      .replace(
+        /[.!?]+$/,
+        ""
+      );
+
+  // ----------------------------------------------------------
+  // EMPTY SEARCH
+  // ----------------------------------------------------------
+
+  if (!searchTerm) {
+    const recentConversations =
+      await sql`
+        SELECT
+          conversation_id,
+          title,
+          user_message,
+          naira_response,
+          created_at
+        FROM naira_conversations
+        ORDER BY created_at DESC
+        LIMIT 10
+      `;
+
+    if (
+      recentConversations.length === 0
+    ) {
+      return res.status(200).json({
+        reply:
+          "Naira belum jumpa sebarang conversation terdahulu, Tuan. 💬",
+        conversationSearch: true,
+        conversationCount: 0,
+        conversations: [],
+        conversationId:
+          activeConversationId
+      });
+    }
+
+    let reply =
+      "💬 Conversation terbaru Tuan:\n\n";
+
+    recentConversations.forEach(
+      (item, index) => {
+        reply +=
+          `${index + 1}. ${item.title}\n` +
+          `   ${item.user_message.slice(0, 120)}\n` +
+          `   📅 ${new Date(item.created_at).toLocaleString("ms-MY")}\n\n`;
+      }
+    );
+
+    return res.status(200).json({
+      reply,
+      conversationSearch: true,
+      conversationCount:
+        recentConversations.length,
+      conversations:
+        recentConversations,
+      conversationId:
+        activeConversationId
+    });
+  }
+
+  // ----------------------------------------------------------
+  // SEARCH CONVERSATION CONTENT
+  // ----------------------------------------------------------
+
+  const searchPattern =
+    `%${searchTerm}%`;
+
+  const conversationResults =
+    await sql`
+      SELECT
+        conversation_id,
+        title,
+        user_message,
+        naira_response,
+        category,
+        subcategory,
+        created_at
+      FROM naira_conversations
+      WHERE
+        user_message ILIKE ${searchPattern}
+        OR naira_response ILIKE ${searchPattern}
+        OR title ILIKE ${searchPattern}
+        OR category ILIKE ${searchPattern}
+        OR subcategory ILIKE ${searchPattern}
+      ORDER BY
+        created_at DESC
+      LIMIT 20
+    `;
+
+  // ----------------------------------------------------------
+  // NO RESULT
+  // ----------------------------------------------------------
+
+  if (
+    conversationResults.length === 0
+  ) {
+    return res.status(200).json({
+      reply:
+        `Naira tak jumpa conversation terdahulu yang berkaitan dengan "${searchTerm}", Tuan. 🔎💬`,
+      conversationSearch: true,
+      conversationCount: 0,
+      conversations: [],
+      conversationId:
+        activeConversationId
+    });
+  }
+
+  // ----------------------------------------------------------
+  // FORMAT RESULTS
+  // ----------------------------------------------------------
+
+  let reply =
+    `🔎 Naira jumpa ${conversationResults.length} conversation berkaitan "${searchTerm}":\n\n`;
+
+  conversationResults.forEach(
+    (item, index) => {
+      const userMessage =
+        item.user_message.length > 160
+          ? item.user_message.slice(0, 160) + "..."
+          : item.user_message;
+
+      const nairaResponse =
+        item.naira_response.length > 220
+          ? item.naira_response.slice(0, 220) + "..."
+          : item.naira_response;
+
+      reply +=
+        `### ${index + 1}. ${item.title}\n` +
+        `🗣️ Tuan: ${userMessage}\n` +
+        `🤖 Naira: ${nairaResponse}\n` +
+        `📂 ${item.category}/${item.subcategory}\n` +
+        `📅 ${new Date(item.created_at).toLocaleString("ms-MY")}\n\n`;
+    }
+  );
+
+  return res.status(200).json({
+    reply,
+
+    conversationSearch:
+      true,
+
+    conversationCount:
+      conversationResults.length,
+
+    conversations:
+      conversationResults,
+
+    conversationId:
+      activeConversationId
+  });
+}
 
     const isForgetRequest =
       /\b(lupakan|lupa|padam|hapus|delete|forget)\b/i
