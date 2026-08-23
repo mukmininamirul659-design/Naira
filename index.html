@@ -934,13 +934,20 @@ function startListening() {
   }
   try {
     recognition.start();
-  } catch (error) {
-    console.error(
-      "Microphone error:",
-      error
-    );
-  }
-}
+
+setTimeout(() => {
+  const testVoice = new SpeechSynthesisUtterance(
+    "Hai Tuan, ini suara Naira."
+  );
+
+  testVoice.lang = "ms-MY";
+  testVoice.rate = 0.88;
+  testVoice.pitch = 1.12;
+  testVoice.volume = 1;
+
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(testVoice);
+}, 300);
 /* ============================================================
    STOP LISTENING
 ============================================================ */
