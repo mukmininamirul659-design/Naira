@@ -1187,3 +1187,5 @@ window.speakNaira = speakNaira;
 window.voiceSettings = voiceSettings;
 window.voiceCharacters = voiceCharacters;
 window.voiceEmotions = voiceEmotions;
+
+initializeElevenLabsVoices();
