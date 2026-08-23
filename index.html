@@ -1,4524 +1,2863 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#10131c">
-  <title>Naira — Personal Assistant</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      min-height: 100vh;
-      font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      background:
-        radial-gradient(
-          circle at top,
-          #26304d 0%,
-          #10131c 45%,
-          #07080d 100%
-        );
-      color: white;
-      display: flex;
-      justify-content: center;
-    }
-
-    button {
-      border: none;
-      cursor: pointer;
-      color: white;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    button:disabled {
-      opacity: .55;
-      cursor: not-allowed;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 600px;
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      padding:
-        calc(18px + env(safe-area-inset-top))
-        18px
-        calc(14px + env(safe-area-inset-bottom));
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 4px 20px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .avatar {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        linear-gradient(135deg, #8b5cf6, #4f46e5);
-      box-shadow:
-        0 0 25px rgba(124, 92, 246, .45);
-      font-size: 22px;
-    }
-
-    .brand h1 {
-      font-size: 21px;
-      font-weight: 650;
-    }
-
-    .status {
-      font-size: 12px;
-      color: #9ca3af;
-      margin-top: 3px;
-    }
-
-    .online {
-      color: #65e6a8;
-    }
-
-    .header-buttons {
-      display: flex;
-      gap: 7px;
-    }
-
-    .header-button {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.08);
-      font-size: 17px;
-    }
-
-    .header-button.voice-center {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(139,92,246,.35),
-          rgba(79,70,229,.25)
-        );
-      border-color: rgba(139,92,246,.35);
-    }
-
-    .welcome {
-      text-align: center;
-      margin-top: 35px;
-      margin-bottom: 25px;
-    }
-
-    .welcome-orb {
-      width: 110px;
-      height: 110px;
-      margin: 0 auto 25px;
-      border-radius: 50%;
-      background:
-        radial-gradient(
-          circle at 35% 30%,
-          #d8c7ff,
-          #8b5cf6 38%,
-          #4338ca 70%,
-          #17122e
-        );
-      box-shadow:
-        0 0 35px rgba(139, 92, 246, .45),
-        0 0 80px rgba(79, 70, 229, .18);
-      animation: breathe 3s ease-in-out infinite;
-    }
-
-    @keyframes breathe {
-      0%, 100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.06);
-      }
-    }
-
-    .welcome h2 {
-      font-size: 28px;
-      margin-bottom: 9px;
-    }
-
-    .welcome p {
-      color: #a7adbd;
-      font-size: 15px;
-    }
-
-    .chat {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      padding-bottom: 20px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .message {
-      max-width: 82%;
-      padding: 13px 16px;
-      border-radius: 18px;
-      font-size: 14px;
-      line-height: 1.5;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .naira-message {
-      align-self: flex-start;
-      background: rgba(255,255,255,.08);
-      border: 1px solid rgba(255,255,255,.06);
-      color: #e8eaf0;
-      border-bottom-left-radius: 5px;
-    }
-
-    .user-message {
-      align-self: flex-end;
-      background:
-        linear-gradient(135deg, #6d4df5, #4f46e5);
-      border-bottom-right-radius: 5px;
-    }
-
-    .input-area {
-      display: flex;
-      gap: 9px;
-      align-items: center;
-      padding: 10px;
-      background: rgba(20, 22, 32, .82);
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 22px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow:
-        0 12px 35px rgba(0,0,0,.3);
-    }
-
-    #messageInput {
-      flex: 1;
-      border: none;
-      outline: none;
-      background: transparent;
-      color: white;
-      font-size: 15px;
-      padding: 10px;
-      min-width: 0;
-    }
-
-    #messageInput::placeholder {
-      color: #777d8d;
-    }
-
-    .mic,
-    .send {
-      width: 43px;
-      height: 43px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .mic {
-      background: rgba(255,255,255,.08);
-      transition: .2s ease;
-    }
-
-    .mic.listening {
-      background: rgba(239,68,68,.22);
-      box-shadow:
-        0 0 0 5px rgba(239,68,68,.08),
-        0 0 25px rgba(239,68,68,.3);
-      animation: micPulse 1.3s infinite;
-    }
-
-    .mic.speaking {
-      background: rgba(139,92,246,.25);
-      box-shadow:
-        0 0 0 5px rgba(139,92,246,.08),
-        0 0 25px rgba(139,92,246,.35);
-    }
-
-    @keyframes micPulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.06);
-      }
-    }
-
-    .send {
-      background:
-        linear-gradient(135deg, #8b5cf6, #4f46e5);
-      box-shadow:
-        0 5px 18px rgba(99, 72, 220, .35);
-    }
-
-    .footer {
-      text-align: center;
-      color: #5f6472;
-      font-size: 10px;
-      margin-top: 12px;
-    }
-
-    .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      min-width: 58px;
-      min-height: 42px;
-      padding: 13px 16px;
-    }
-
-    .typing-indicator span {
-      width: 7px;
-      height: 7px;
-      background: #9ca3af;
-      border-radius: 50%;
-      display: block;
-      animation:
-        typingBounce 1.4s infinite ease-in-out;
-    }
-
-    .typing-indicator span:nth-child(1) {
-      animation-delay: 0s;
-    }
-
-    .typing-indicator span:nth-child(2) {
-      animation-delay: .2s;
-    }
-
-    .typing-indicator span:nth-child(3) {
-      animation-delay: .4s;
-    }
-
-    @keyframes typingBounce {
-      0%, 60%, 100% {
-        transform: translateY(0);
-        opacity: .4;
-      }
-
-      30% {
-        transform: translateY(-5px);
-        opacity: 1;
-      }
-    }
-
-    .overlay,
-    .history-panel,
-    .memory-form-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(5, 6, 10, .88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 18px;
-      overflow-y: auto;
-    }
-
-    .overlay.active,
-    .history-panel.active,
-    .memory-form-overlay.active {
-      display: block;
-    }
-
-    .panel-box,
-    .history-box {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      background:
-        linear-gradient(
-          145deg,
-          rgba(31, 34, 50, .99),
-          rgba(13, 15, 24, .99)
-        );
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.5);
-    }
-
-    .panel-header,
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .panel-header h2,
-    .history-header h2 {
-      font-size: 22px;
-    }
-
-    .panel-header p,
-    .history-header p {
-      color: #858b9c;
-      font-size: 11px;
-      margin-top: 4px;
-    }
-
-    .close-button,
-    .close-history {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.08);
-      font-size: 18px;
-    }
-
-    .history-panel {
-      z-index: 1500;
-    }
-
-    .history-tools,
-    .memory-tools {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .history-search,
-    .search-box {
-      flex: 1;
-      padding: 13px 14px;
-      border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
-      outline: none;
-      background: rgba(255,255,255,.06);
-      color: white;
-      font-size: 14px;
-    }
-
-    .history-search::placeholder,
-    .search-box::placeholder {
-      color: #777d8d;
-    }
-
-    .history-refresh,
-    .tool-button {
-      width: 47px;
-      border-radius: 13px;
-      background: rgba(255,255,255,.08);
-      font-size: 17px;
-    }
-
-    .new-conversation,
-    .memory-add {
-      width: 100%;
-      padding: 14px;
-      border-radius: 15px;
-      background:
-        linear-gradient(135deg, #8b5cf6, #4f46e5);
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-
-    .history-status,
-    .memory-status {
-      text-align: center;
-      color: #7f8799;
-      font-size: 12px;
-      margin-bottom: 14px;
-    }
-
-    .history-day {
-      margin-bottom: 22px;
-    }
-
-    .history-day-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #cfd2dc;
-      font-size: 14px;
-      margin-bottom: 9px;
-    }
-
-    .history-day-count,
-    .category-count {
-      color: #777d8d;
-      font-size: 11px;
-    }
-
-    .history-card,
-    .memory-card {
-      position: relative;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 14px;
-      margin-bottom: 8px;
-    }
-
-    .history-title {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 7px;
-    }
-
-    .history-preview {
-      color: #a7adbd;
-      font-size: 12px;
-      line-height: 1.45;
-      margin-bottom: 9px;
-    }
-
-    .history-meta,
-    .memory-meta {
-      color: #777d8d;
-      font-size: 10px;
-    }
-
-    .history-actions,
-    .memory-actions {
-      display: flex;
-      gap: 7px;
-      margin-top: 11px;
-    }
-
-    .history-actions button,
-    .memory-actions button {
-      flex: 1;
-      padding: 9px;
-      border-radius: 9px;
-      background: rgba(255,255,255,.08);
-      font-size: 11px;
-    }
-
-    .history-actions .history-delete,
-    .memory-actions .delete {
-      background: rgba(239,68,68,.18);
-      color: #ff9b9b;
-    }
-
-    .empty-history,
-    .empty-state {
-      text-align: center;
-      color: #777d8d;
-      font-size: 13px;
-      padding: 35px 15px;
-    }
-
-    .category-filter {
-      width: 100%;
-      padding: 12px 13px;
-      border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.08);
-      outline: none;
-      background: #1b1e2b;
-      color: white;
-      font-size: 13px;
-      margin-bottom: 12px;
-    }
-
-    .memory-category {
-      margin-bottom: 22px;
-    }
-
-    .category-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 15px;
-      margin-bottom: 9px;
-      color: #cfd2dc;
-    }
-
-    .memory-text {
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 9px;
-    }
-
-    .memory-meta {
-      font-size: 11px;
-      margin-bottom: 11px;
-      color: #858b9c;
-    }
-
-    .memory-form-overlay {
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .memory-form-overlay.active {
-      display: flex;
-    }
-
-    .memory-form {
-      width: 100%;
-      max-width: 520px;
-      background: #171a26;
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow:
-        0 25px 70px rgba(0,0,0,.55);
-    }
-
-    .memory-form h3 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-
-    .memory-form-subtitle {
-      color: #858b9c;
-      font-size: 12px;
-      margin-bottom: 18px;
-    }
-
-    .form-group {
-      margin-bottom: 13px;
-    }
-
-    .form-group label {
-      display: block;
-      color: #aeb3c1;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,.09);
-      border-radius: 12px;
-      background: rgba(255,255,255,.06);
-      color: white;
-      outline: none;
-      padding: 12px;
-      font-family: inherit;
-      font-size: 14px;
-    }
-
-    .form-group textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-
-    .form-group select {
-      background: #1b1e2b;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 9px;
-      margin-top: 18px;
-    }
-
-    .form-actions button {
-      flex: 1;
-      padding: 13px;
-      border-radius: 12px;
-      font-size: 13px;
-    }
-
-    .cancel-button {
-      background: rgba(255,255,255,.08);
-    }
-
-    .save-button {
-      background:
-        linear-gradient(135deg, #8b5cf6, #4f46e5);
-    }
-
-    /* =========================================================
-       VOICE STATUS
-    ========================================================= */
-
-    .voice-status {
-      text-align: center;
-      min-height: 16px;
-      color: #858b9c;
-      font-size: 11px;
-      margin-top: 7px;
-    }
-
-    /* =========================================================
-       VOICE CENTER
-    ========================================================= */
-
-    #voiceCenterPanel {
-      z-index: 1800;
-    }
-
-    .voice-center-box {
-      max-height: calc(100dvh - 36px);
-      overflow-y: auto;
-    }
-
-    .voice-search-row {
-      margin-bottom: 12px;
-    }
-
-    .voice-category-scroll {
-      display: flex;
-      gap: 7px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 10px;
-      scrollbar-width: none;
-    }
-
-    .voice-category-scroll::-webkit-scrollbar {
-      display: none;
-    }
-
-    .voice-filter,
-    .voice-mode,
-    .emotion {
-      flex-shrink: 0;
-      border-radius: 999px;
-      padding: 9px 12px;
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(255,255,255,.07);
-      color: #cfd2dc;
-      font-size: 11px;
-    }
-
-    .voice-filter.active,
-    .voice-mode.active,
-    .emotion.active {
-      background:
-        linear-gradient(135deg, #8b5cf6, #4f46e5);
-      color: white;
-    }
-
-    .voice-emotion-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 7px;
-      margin: 8px 0 14px;
-    }
-
-    .emotion {
-      border-radius: 12px;
-      padding: 10px 5px;
-    }
-
-    .voice-mode-row {
-      display: flex;
-      gap: 7px;
-      margin-bottom: 15px;
-    }
-
-    .voice-mode {
-      flex: 1;
-      text-align: center;
-    }
-
-    .voice-controls {
-      background: rgba(255,255,255,.045);
-      border: 1px solid rgba(255,255,255,.06);
-      border-radius: 16px;
-      padding: 13px;
-      margin-bottom: 14px;
-    }
-
-    .voice-control {
-      margin-bottom: 13px;
-    }
-
-    .voice-control:last-child {
-      margin-bottom: 0;
-    }
-
-    .voice-control label {
-      display: flex;
-      justify-content: space-between;
-      color: #aeb3c1;
-      font-size: 11px;
-      margin-bottom: 7px;
-    }
-
-    .voice-control label span {
-      color: #c4b5fd;
-    }
-
-    .voice-control input[type="range"] {
-      width: 100%;
-      accent-color: #8b5cf6;
-    }
-
-    .voice-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .voice-card {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 12px;
-      border-radius: 15px;
-      background: rgba(255,255,255,.055);
-      border: 1px solid rgba(255,255,255,.07);
-      transition: .18s ease;
-    }
-
-    .voice-card.selected {
-      border-color: rgba(139,92,246,.7);
-      background: rgba(139,92,246,.13);
-    }
-
-    .voice-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background:
-        linear-gradient(135deg,#8b5cf6,#4f46e5);
-      flex-shrink: 0;
-      font-size: 19px;
-    }
-
-    .voice-info {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .voice-name {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 3px;
-    }
-
-    .voice-description {
-      color: #858b9c;
-      font-size: 10px;
-      line-height: 1.4;
-    }
-
-    .voice-tags {
-      display: flex;
-      gap: 4px;
-      margin-top: 5px;
-      flex-wrap: wrap;
-    }
-
-    .voice-tag {
-      font-size: 9px;
-      padding: 3px 6px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.07);
-      color: #aeb3c1;
-    }
-
-    .voice-card-actions {
-      display: flex;
-      gap: 5px;
-    }
-
-    .voice-card-actions button {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.08);
-      font-size: 14px;
-    }
-
-    .voice-selected-card {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px;
-      border-radius: 16px;
-      background:
-        linear-gradient(
-          135deg,
-          rgba(139,92,246,.16),
-          rgba(79,70,229,.10)
-        );
-      border: 1px solid rgba(139,92,246,.25);
-    }
-
-    .selected-label {
-      color: #858b9c;
-      font-size: 9px;
-      letter-spacing: .08em;
-      margin-bottom: 4px;
-    }
-
-    .selected-voice {
-      font-size: 14px;
-      font-weight: 650;
-    }
-
-    .selected-description {
-      color: #858b9c;
-      font-size: 10px;
-      margin-top: 3px;
-    }
-
-    .voice-preview-button {
-      width: 43px;
-      height: 43px;
-      border-radius: 50%;
-      background:
-        linear-gradient(135deg,#8b5cf6,#4f46e5);
-      flex-shrink: 0;
-    }
-
-    .voice-engine-info {
-      margin-top: 12px;
-      padding: 11px 12px;
-      border-radius: 13px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid rgba(255,255,255,.05);
-      color: #777d8d;
-      font-size: 10px;
-      line-height: 1.5;
-    }
-
-    .voice-engine-info strong {
-      color: #aeb3c1;
-    }
-
-    @media (max-height: 700px) {
-      .welcome {
-        margin-top: 15px;
-        margin-bottom: 15px;
-      }
-
-      .welcome-orb {
-        width: 85px;
-        height: 85px;
-      }
-
-      .welcome h2 {
-        font-size: 24px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .voice-emotion-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .header-buttons {
-        gap: 4px;
-      }
-
-      .header-button {
-        width: 38px;
-        height: 38px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<meta name="theme-color" content="#10131c">
+<title>Naira — Personal Assistant</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top,#26304d 0%,#10131c 45%,#07080d 100%);
+  color:white;
+  display:flex;
+  justify-content:center;
+}
+button{
+  border:none;
+  cursor:pointer;
+  color:white;
+  -webkit-tap-highlight-color:transparent;
+}
+button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+input,select,textarea{
+  font-family:inherit;
+}
+.app{
+  width:100%;
+  max-width:600px;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    18px
+    calc(14px + env(safe-area-inset-bottom));
+}
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 4px 20px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.avatar{
+  width:46px;
+  height:46px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+  box-shadow:0 0 25px rgba(124,92,246,.45);
+  font-size:22px;
+}
+.brand h1{
+  font-size:21px;
+  font-weight:650;
+}
+.status{
+  font-size:12px;
+  color:#9ca3af;
+  margin-top:3px;
+}
+.online{
+  color:#65e6a8;
+}
+.header-buttons{
+  display:flex;
+  gap:8px;
+}
+.header-button{
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.08);
+  font-size:19px;
+}
+.welcome{
+  text-align:center;
+  margin-top:35px;
+  margin-bottom:25px;
+}
+.welcome-orb{
+  width:110px;
+  height:110px;
+  margin:0 auto 25px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 35% 30%,
+      #d8c7ff,
+      #8b5cf6 38%,
+      #4338ca 70%,
+      #17122e);
+  box-shadow:
+    0 0 35px rgba(139,92,246,.45),
+    0 0 80px rgba(79,70,229,.18);
+  animation:breathe 3s ease-in-out infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+}
+.welcome h2{
+  font-size:28px;
+  margin-bottom:9px;
+}
+.welcome p{
+  color:#a7adbd;
+  font-size:15px;
+}
+.chat{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding-bottom:20px;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.message{
+  max-width:82%;
+  padding:13px 16px;
+  border-radius:18px;
+  font-size:14px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+.naira-message{
+  align-self:flex-start;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.06);
+  color:#e8eaf0;
+  border-bottom-left-radius:5px;
+}
+.user-message{
+  align-self:flex-end;
+  background:linear-gradient(135deg,#6d4df5,#4f46e5);
+  border-bottom-right-radius:5px;
+}
+.input-area{
+  display:flex;
+  gap:9px;
+  align-items:center;
+  padding:10px;
+  background:rgba(20,22,32,.82);
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  box-shadow:0 12px 35px rgba(0,0,0,.3);
+}
+#messageInput{
+  flex:1;
+  border:none;
+  outline:none;
+  background:transparent;
+  color:white;
+  font-size:15px;
+  padding:10px;
+  min-width:0;
+}
+#messageInput::placeholder{
+  color:#777d8d;
+}
+.mic,.send{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.mic{
+  background:rgba(255,255,255,.08);
+  transition:.2s ease;
+}
+.mic.listening{
+  background:rgba(239,68,68,.22);
+  box-shadow:
+    0 0 0 5px rgba(239,68,68,.08),
+    0 0 25px rgba(239,68,68,.3);
+  animation:micPulse 1.3s infinite;
+}
+.mic.speaking{
+  background:rgba(139,92,246,.25);
+  box-shadow:
+    0 0 0 5px rgba(139,92,246,.08),
+    0 0 25px rgba(139,92,246,.35);
+}
+@keyframes micPulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.06)}
+}
+.send{
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+  box-shadow:0 5px 18px rgba(99,72,220,.35);
+}
+.footer{
+  text-align:center;
+  color:#5f6472;
+  font-size:10px;
+  margin-top:12px;
+}
+.voice-status{
+  text-align:center;
+  min-height:16px;
+  color:#858b9c;
+  font-size:11px;
+  margin-top:7px;
+}
+.typing-indicator{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-width:58px;
+  min-height:42px;
+  padding:13px 16px;
+}
+.typing-indicator span{
+  width:7px;
+  height:7px;
+  background:#9ca3af;
+  border-radius:50%;
+  display:block;
+  animation:typingBounce 1.4s infinite ease-in-out;
+}
+.typing-indicator span:nth-child(1){animation-delay:0s}
+.typing-indicator span:nth-child(2){animation-delay:.2s}
+.typing-indicator span:nth-child(3){animation-delay:.4s}
+@keyframes typingBounce{
+  0%,60%,100%{
+    transform:translateY(0);
+    opacity:.4;
+  }
+  30%{
+    transform:translateY(-5px);
+    opacity:1;
+  }
+}
+/* =========================================================
+   OVERLAYS
+========================================================= */
+.overlay,
+.history-panel,
+.memory-form-overlay,
+.voice-center-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  background:rgba(5,6,10,.90);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:18px;
+  overflow-y:auto;
+}
+.overlay.active,
+.history-panel.active,
+.memory-form-overlay.active,
+.voice-center-overlay.active{
+  display:block;
+}
+.panel-box,
+.history-box,
+.voice-center-box{
+  width:100%;
+  max-width:600px;
+  margin:0 auto;
+  background:
+    linear-gradient(145deg,
+      rgba(31,34,50,.99),
+      rgba(13,15,24,.99));
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:24px;
+  padding:18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.panel-header,
+.history-header,
+.voice-center-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+}
+.panel-header h2,
+.history-header h2,
+.voice-center-header h2{
+  font-size:22px;
+}
+.panel-header p,
+.history-header p,
+.voice-center-header p{
+  color:#858b9c;
+  font-size:11px;
+  margin-top:4px;
+}
+.close-button,
+.close-history,
+.close-voice{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+  font-size:18px;
+}
+.history-panel{z-index:1500}
+.memory-form-overlay{z-index:2000}
+.voice-center-overlay{z-index:1800}
+/* =========================================================
+   VOICE CENTER
+========================================================= */
+.voice-center-box{
+  padding-bottom:25px;
+}
+.voice-current{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(139,92,246,.22),
+      rgba(79,70,229,.10)
+    );
+  border:1px solid rgba(139,92,246,.25);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:15px;
+}
+.voice-current-top{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+.voice-avatar{
+  width:54px;
+  height:54px;
+  border-radius:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:27px;
+  background:rgba(255,255,255,.08);
+}
+.voice-current-name{
+  font-size:16px;
+  font-weight:650;
+}
+.voice-current-desc{
+  color:#969caf;
+  font-size:11px;
+  margin-top:4px;
+}
+.voice-test-row{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+}
+.voice-test-row button{
+  flex:1;
+  padding:11px;
+  border-radius:11px;
+  background:rgba(255,255,255,.08);
+  font-size:12px;
+}
+.voice-test-row .primary{
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+}
+.voice-search{
+  width:100%;
+  padding:13px 14px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  background:rgba(255,255,255,.06);
+  color:white;
+  font-size:14px;
+  margin-bottom:10px;
+}
+.voice-search::placeholder{
+  color:#777d8d;
+}
+.voice-filters{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:14px;
+}
+.voice-filters select{
+  width:100%;
+  padding:11px 10px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  background:#1b1e2b;
+  color:white;
+  font-size:12px;
+}
+.voice-section-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#cfd2dc;
+  font-size:14px;
+  margin:17px 0 9px;
+}
+.voice-count{
+  color:#777d8d;
+  font-size:10px;
+}
+.voice-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.voice-card{
+  position:relative;
+  padding:13px;
+  min-height:120px;
+  border-radius:16px;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.07);
+  transition:.2s ease;
+}
+.voice-card:hover{
+  background:rgba(139,92,246,.12);
+  border-color:rgba(139,92,246,.28);
+}
+.voice-card.selected{
+  border-color:#8b5cf6;
+  background:rgba(139,92,246,.14);
+  box-shadow:0 0 18px rgba(139,92,246,.13);
+}
+.voice-card-icon{
+  font-size:24px;
+  margin-bottom:7px;
+}
+.voice-card-name{
+  font-size:13px;
+  font-weight:600;
+  line-height:1.25;
+}
+.voice-card-type{
+  color:#858b9c;
+  font-size:10px;
+  margin-top:4px;
+}
+.voice-card-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:8px;
+}
+.voice-tag{
+  padding:3px 6px;
+  border-radius:6px;
+  background:rgba(255,255,255,.07);
+  color:#aeb3c1;
+  font-size:8px;
+}
+.voice-card-actions{
+  display:flex;
+  gap:5px;
+  margin-top:10px;
+}
+.voice-card-actions button{
+  flex:1;
+  padding:7px;
+  border-radius:8px;
+  background:rgba(255,255,255,.08);
+  font-size:10px;
+}
+.voice-card-actions .use{
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+}
+.voice-settings{
+  margin-top:17px;
+  padding:15px;
+  border-radius:16px;
+  background:rgba(255,255,255,.045);
+  border:1px solid rgba(255,255,255,.06);
+}
+.voice-setting{
+  margin-bottom:14px;
+}
+.voice-setting:last-child{
+  margin-bottom:0;
+}
+.voice-setting-head{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:7px;
+}
+.voice-setting-label{
+  color:#bfc4d1;
+  font-size:12px;
+}
+.voice-setting-value{
+  color:#8b5cf6;
+  font-size:11px;
+}
+.voice-setting input[type="range"]{
+  width:100%;
+  accent-color:#8b5cf6;
+}
+.voice-toggle-row{
+  display:flex;
+  gap:7px;
+}
+.voice-toggle{
+  flex:1;
+  padding:9px;
+  border-radius:9px;
+  background:rgba(255,255,255,.07);
+  font-size:10px;
+}
+.voice-toggle.active{
+  background:rgba(139,92,246,.28);
+  border:1px solid rgba(139,92,246,.4);
+}
+.voice-empty{
+  grid-column:1/-1;
+  text-align:center;
+  color:#777d8d;
+  padding:25px 10px;
+  font-size:12px;
+}
+/* =========================================================
+   HISTORY
+========================================================= */
+.history-tools,
+.memory-tools{
+  display:flex;
+  gap:8px;
+  margin-bottom:10px;
+}
+.history-search,
+.search-box{
+  flex:1;
+  padding:13px 14px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  background:rgba(255,255,255,.06);
+  color:white;
+  font-size:14px;
+}
+.history-search::placeholder,
+.search-box::placeholder{
+  color:#777d8d;
+}
+.history-refresh,
+.tool-button{
+  width:47px;
+  border-radius:13px;
+  background:rgba(255,255,255,.08);
+  font-size:17px;
+}
+.new-conversation,
+.memory-add{
+  width:100%;
+  padding:14px;
+  border-radius:15px;
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+  font-size:14px;
+  margin-bottom:14px;
+}
+.history-status,
+.memory-status{
+  text-align:center;
+  color:#7f8799;
+  font-size:12px;
+  margin-bottom:14px;
+}
+.history-day{
+  margin-bottom:22px;
+}
+.history-day-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  color:#cfd2dc;
+  font-size:14px;
+  margin-bottom:9px;
+}
+.history-day-count,
+.category-count{
+  color:#777d8d;
+  font-size:11px;
+}
+.history-card,
+.memory-card{
+  position:relative;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:8px;
+}
+.history-title{
+  font-size:14px;
+  font-weight:600;
+  line-height:1.4;
+  margin-bottom:7px;
+}
+.history-preview{
+  color:#a7adbd;
+  font-size:12px;
+  line-height:1.45;
+  margin-bottom:9px;
+}
+.history-meta,
+.memory-meta{
+  color:#777d8d;
+  font-size:10px;
+}
+.history-actions,
+.memory-actions{
+  display:flex;
+  gap:7px;
+  margin-top:11px;
+}
+.history-actions button,
+.memory-actions button{
+  flex:1;
+  padding:9px;
+  border-radius:9px;
+  background:rgba(255,255,255,.08);
+  font-size:11px;
+}
+.history-actions .history-delete,
+.memory-actions .delete{
+  background:rgba(239,68,68,.18);
+  color:#ff9b9b;
+}
+.empty-history,
+.empty-state{
+  text-align:center;
+  color:#777d8d;
+  font-size:13px;
+  padding:35px 15px;
+}
+/* =========================================================
+   MEMORY
+========================================================= */
+.category-filter{
+  width:100%;
+  padding:12px 13px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.08);
+  outline:none;
+  background:#1b1e2b;
+  color:white;
+  font-size:13px;
+  margin-bottom:12px;
+}
+.memory-category{
+  margin-bottom:22px;
+}
+.category-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:15px;
+  margin-bottom:9px;
+  color:#cfd2dc;
+}
+.memory-text{
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:9px;
+}
+.memory-meta{
+  font-size:11px;
+  margin-bottom:11px;
+  color:#858b9c;
+}
+.memory-form-overlay.active{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.memory-form{
+  width:100%;
+  max-width:520px;
+  background:#171a26;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 25px 70px rgba(0,0,0,.55);
+}
+.memory-form h3{
+  font-size:20px;
+  margin-bottom:5px;
+}
+.memory-form-subtitle{
+  color:#858b9c;
+  font-size:12px;
+  margin-bottom:18px;
+}
+.form-group{
+  margin-bottom:13px;
+}
+.form-group label{
+  display:block;
+  color:#aeb3c1;
+  font-size:12px;
+  margin-bottom:6px;
+}
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  color:white;
+  outline:none;
+  padding:12px;
+  font-size:14px;
+}
+.form-group textarea{
+  min-height:90px;
+  resize:vertical;
+}
+.form-group select{
+  background:#1b1e2b;
+}
+.form-actions{
+  display:flex;
+  gap:9px;
+  margin-top:18px;
+}
+.form-actions button{
+  flex:1;
+  padding:13px;
+  border-radius:12px;
+  font-size:13px;
+}
+.cancel-button{
+  background:rgba(255,255,255,.08);
+}
+.save-button{
+  background:linear-gradient(135deg,#8b5cf6,#4f46e5);
+}
+@media(max-width:420px){
+  .voice-grid{
+    grid-template-columns:1fr;
+  }
+}
+@media(max-height:700px){
+  .welcome{
+    margin-top:15px;
+    margin-bottom:15px;
+  }
+  .welcome-orb{
+    width:85px;
+    height:85px;
+  }
+  .welcome h2{
+    font-size:24px;
+  }
+}
+</style>
 </head>
-
 <body>
-
 <main class="app">
-
-  <!-- =======================================================
-       HEADER
-  ======================================================== -->
-
-  <header>
-
-    <div class="brand">
-
-      <div class="avatar">
-        N
+<header>
+  <div class="brand">
+    <div class="avatar">N</div>
+    <div>
+      <h1>Naira</h1>
+      <div class="status">
+        <span class="online">●</span>
+        Personal Assistant
       </div>
-
-      <div>
-        <h1>Naira</h1>
-
-        <div class="status">
-          <span class="online">●</span>
-          Personal Assistant
-        </div>
-      </div>
-
     </div>
-
-    <div class="header-buttons">
-
-      <button
-        class="header-button"
-        id="historyButton"
-        type="button"
-        title="Conversation History"
-      >
-        💬
-      </button>
-
-      <button
-        class="header-button"
-        id="memoryButton"
-        type="button"
-        title="Memory Center"
-      >
-        🧠
-      </button>
-
-      <button
-        class="header-button voice-center"
-        id="voiceCenterButton"
-        type="button"
-        title="Voice Center"
-      >
-        🎙️
-      </button>
-
-    </div>
-
-  </header>
-
-
-  <!-- =======================================================
-       WELCOME
-  ======================================================== -->
-
-  <section class="welcome">
-
-    <div class="welcome-orb"></div>
-
-    <h2>
-      Hai, Cik Amirul 👋
-    </h2>
-
-    <p>
-      Naira ada dengan Tuan.
-    </p>
-
-  </section>
-
-
-  <!-- =======================================================
-       CHAT
-  ======================================================== -->
-
-  <section
-    class="chat"
-    id="chat"
-  >
-
-    <div class="message naira-message">
-      Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
-    </div>
-
-  </section>
-
-
-  <!-- =======================================================
-       INPUT
-  ======================================================== -->
-
-  <div class="input-area">
-
+  </div>
+  <div class="header-buttons">
     <button
-      class="mic"
-      id="micButton"
+      class="header-button"
+      id="voiceCenterButton"
       type="button"
-      aria-label="Voice"
-      title="Tekan untuk bercakap"
-    >
+      title="Voice Center">
       🎙️
     </button>
-
-    <input
-      id="messageInput"
-      type="text"
-      placeholder="Cakap dengan Naira..."
-      autocomplete="off"
-    >
-
     <button
-      class="send"
-      id="sendButton"
-      type="button"
-    >
-      ➤
+      class="header-button"
+      id="historyButton"
+      type="button">
+      💬
     </button>
-
+    <button
+      class="header-button"
+      id="memoryButton"
+      type="button">
+      🧠
+    </button>
   </div>
-
-  <div
-    class="voice-status"
-    id="voiceStatus"
-  ></div>
-
-  <div class="footer">
-    Naira • Personal Assistant
+</header>
+<section class="welcome">
+  <div class="welcome-orb"></div>
+  <h2>
+    Hai, Cik Amirul 👋
+  </h2>
+  <p>
+    Naira ada dengan Tuan.
+  </p>
+</section>
+<section
+  class="chat"
+  id="chat">
+  <div class="message naira-message">
+    Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
   </div>
-
+</section>
+<div class="input-area">
+  <button
+    class="mic"
+    id="micButton"
+    type="button"
+    aria-label="Voice"
+    title="Tekan untuk bercakap">
+    🎙️
+  </button>
+  <input
+    id="messageInput"
+    type="text"
+    placeholder="Cakap dengan Naira..."
+    autocomplete="off">
+  <button
+    class="send"
+    id="sendButton"
+    type="button">
+    ➤
+  </button>
+</div>
+<div
+  class="voice-status"
+  id="voiceStatus">
+</div>
+<div class="footer">
+  Naira • Personal Assistant
+</div>
 </main>
-
-
-<!-- =========================================================
-     HISTORY
-========================================================= -->
-
-<div
-  class="history-panel"
-  id="historyPanel"
->
-
-  <div class="history-box">
-
-    <div class="history-header">
-
-      <div>
-
-        <h2>
-          🕘 Conversation History
-        </h2>
-
-        <p>
-          Semua perbualan Tuan dengan Naira
-        </p>
-
-      </div>
-
-      <button
-        class="close-history"
-        id="closeHistory"
-        type="button"
-      >
-        ✕
-      </button>
-
-    </div>
-
-
-    <div class="history-tools">
-
-      <input
-        class="history-search"
-        id="historySearch"
-        type="search"
-        placeholder="🔍 Cari conversation..."
-        autocomplete="off"
-      >
-
-      <button
-        class="history-refresh"
-        id="refreshHistory"
-        type="button"
-      >
-        🔄
-      </button>
-
-    </div>
-
-
-    <button
-      class="new-conversation"
-      id="newConversation"
-      type="button"
-    >
-      ＋ New Conversation
-    </button>
-
-
-    <div
-      class="history-status"
-      id="historyStatus"
-    >
-      Memuatkan history...
-    </div>
-
-
-    <div id="historyList"></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     MEMORY
-========================================================= -->
-
-<div
-  class="overlay"
-  id="memoryPanel"
->
-
-  <div class="panel-box">
-
-    <div class="panel-header">
-
-      <div>
-
-        <h2>
-          🧠 Memory Center
-        </h2>
-
-        <p>
-          Ingatan yang Naira simpan tentang Tuan
-        </p>
-
-      </div>
-
-      <button
-        class="close-button"
-        id="closeMemory"
-        type="button"
-      >
-        ✕
-      </button>
-
-    </div>
-
-
-    <div class="memory-tools">
-
-      <input
-        class="search-box"
-        id="memorySearch"
-        type="search"
-        placeholder="🔍 Cari memory..."
-        autocomplete="off"
-      >
-
-      <button
-        class="tool-button"
-        id="refreshMemory"
-        type="button"
-      >
-        🔄
-      </button>
-
-    </div>
-
-
-    <select
-      class="category-filter"
-      id="categoryFilter"
-    >
-
-      <option value="all">
-        📂 Semua kategori
-      </option>
-
-      <option value="profile">
-        👤 Profile
-      </option>
-
-      <option value="fashion">
-        👕 Fashion
-      </option>
-
-      <option value="food">
-        🍔 Food
-      </option>
-
-      <option value="game">
-        🎮 Game
-      </option>
-
-      <option value="hobby">
-        🎨 Hobby
-      </option>
-
-      <option value="work">
-        💼 Work
-      </option>
-
-      <option value="project">
-        🚀 Project
-      </option>
-
-      <option value="preference">
-        ❤️ Preference
-      </option>
-
-      <option value="family">
-        👨‍👩‍👧 Family
-      </option>
-
-      <option value="general">
-        📁 General
-      </option>
-
-    </select>
-
-
-    <div
-      class="memory-status"
-      id="memoryStatus"
-    >
-      Memuatkan memory...
-    </div>
-
-
-    <button
-      class="memory-add"
-      id="addMemoryButton"
-      type="button"
-    >
-      ＋ Tambah Memory
-    </button>
-
-
-    <div id="memoryList"></div>
-
-  </div>
-
-</div>
-
-
-<!-- =========================================================
-     MEMORY FORM
-========================================================= -->
-
-<div
-  class="memory-form-overlay"
-  id="memoryFormOverlay"
->
-
-  <div class="memory-form">
-
-    <h3 id="memoryFormTitle">
-      ➕ Tambah Memory
-    </h3>
-
-    <div class="memory-form-subtitle">
-      Tuan boleh kawal sendiri apa yang Naira simpan.
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="memoryText">
-        Memory
-      </label>
-
-      <textarea
-        id="memoryText"
-        placeholder="Contoh: Tuan suka warna biru."
-      ></textarea>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="memoryCategory">
-        Kategori
-      </label>
-
-      <select id="memoryCategory">
-
-        <option value="profile">
-          👤 Profile
-        </option>
-
-        <option value="fashion">
-          👕 Fashion
-        </option>
-
-        <option value="food">
-          🍔 Food
-        </option>
-
-        <option value="game">
-          🎮 Game
-        </option>
-
-        <option value="hobby">
-          🎨 Hobby
-        </option>
-
-        <option value="work">
-          💼 Work
-        </option>
-
-        <option value="project">
-          🚀 Project
-        </option>
-
-        <option value="preference">
-          ❤️ Preference
-        </option>
-
-        <option value="family">
-          👨‍👩‍👧 Family
-        </option>
-
-        <option value="general">
-          📁 General
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="memorySubcategory">
-        Subkategori
-      </label>
-
-      <input
-        id="memorySubcategory"
-        type="text"
-        placeholder="Contoh: color"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="memoryImportance">
-        Importance
-      </label>
-
-      <select id="memoryImportance">
-
-        <option value="1">
-          ⭐ Biasa
-        </option>
-
-        <option value="2" selected>
-          ⭐⭐ Penting
-        </option>
-
-        <option value="3">
-          ⭐⭐⭐ Sangat penting
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-actions">
-
-      <button
-        class="cancel-button"
-        id="cancelMemory"
-        type="button"
-      >
-        Batal
-      </button>
-
-      <button
-        class="save-button"
-        id="saveMemory"
-        type="button"
-      >
-        💾 Simpan
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
 <!-- =========================================================
      VOICE CENTER
 ========================================================= -->
-
 <div
-  class="overlay"
-  id="voiceCenterPanel"
->
-
-  <div class="panel-box voice-center-box">
-
-    <div class="panel-header">
-
+  class="voice-center-overlay"
+  id="voiceCenterOverlay">
+  <div class="voice-center-box">
+    <div class="voice-center-header">
       <div>
-
-        <h2>
-          🎙️ Voice Center
-        </h2>
-
+        <h2>🎙️ Voice Center</h2>
         <p>
-          Pilih suara, emotion dan style Naira
+          Pilih suara, karakter, emosi dan gaya percakapan Naira
         </p>
-
       </div>
-
       <button
-        class="close-button"
+        class="close-voice"
         id="closeVoiceCenter"
-        type="button"
-      >
+        type="button">
         ✕
       </button>
-
     </div>
-
-
-    <!-- SEARCH -->
-
-    <div class="voice-search-row">
-
-      <input
-        class="search-box"
-        id="voiceSearch"
-        type="search"
-        placeholder="🔍 Cari voice..."
-        autocomplete="off"
-      >
-
+    <div class="voice-current">
+      <div class="voice-current-top">
+        <div
+          class="voice-avatar"
+          id="currentVoiceIcon">
+          👩🏻
+        </div>
+        <div>
+          <div
+            class="voice-current-name"
+            id="currentVoiceName">
+            Naira Natural
+          </div>
+          <div
+            class="voice-current-desc"
+            id="currentVoiceDescription">
+            Suara wanita natural • Malay
+          </div>
+        </div>
+      </div>
+      <div class="voice-test-row">
+        <button
+          id="testVoiceButton"
+          type="button">
+          ▶️ Test Voice
+        </button>
+        <button
+          class="primary"
+          id="applyVoiceButton"
+          type="button">
+          ✓ Gunakan
+        </button>
+      </div>
     </div>
-
-
-    <!-- CATEGORY -->
-
+    <input
+      class="voice-search"
+      id="voiceSearch"
+      type="search"
+      placeholder="🔍 Cari voice... contoh: woman, Mr Bean, animal, narrator..."
+      autocomplete="off">
+    <div class="voice-filters">
+      <select id="voiceCategoryFilter">
+        <option value="all">
+          🌍 Semua kategori
+        </option>
+        <option value="assistant">
+          🤖 Assistant
+        </option>
+        <option value="character">
+          🎭 Character
+        </option>
+        <option value="celebrity">
+          ⭐ Celebrity / Licensed
+        </option>
+        <option value="animal">
+          🐱 Animal
+        </option>
+        <option value="narrator">
+          🎙️ Narrator
+        </option>
+        <option value="singing">
+          🎵 Singing
+        </option>
+      </select>
+      <select id="voiceEmotionFilter">
+        <option value="all">
+          ❤️ Semua emotion
+        </option>
+        <option value="positive">
+          😊 Positive
+        </option>
+        <option value="negative">
+          😔 Negative
+        </option>
+        <option value="neutral">
+          😐 Neutral
+        </option>
+        <option value="dramatic">
+          🎭 Dramatic
+        </option>
+        <option value="funny">
+          😂 Funny
+        </option>
+      </select>
+    </div>
+    <div class="voice-section-title">
+      <span>🎤 Voice Library</span>
+      <span
+        class="voice-count"
+        id="voiceCount">
+        0 voices
+      </span>
+    </div>
     <div
-      class="voice-category-scroll"
-      id="voiceCategories"
-    >
-
-      <button
-        class="voice-filter active"
-        data-category="all"
-      >
-        🌐 Semua
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="female"
-      >
-        👩 Female
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="male"
-      >
-        👨 Male
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="cartoon"
-      >
-        🎭 Cartoon
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="animal"
-      >
-        🐱 Animal
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="robot"
-      >
-        🤖 AI / Robot
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="dramatic"
-      >
-        🎬 Dramatic
-      </button>
-
-      <button
-        class="voice-filter"
-        data-category="singing"
-      >
-        🎵 Singing
-      </button>
-
+      class="voice-grid"
+      id="voiceGrid">
     </div>
-
-
-    <!-- EMOTIONS -->
-
-    <div class="voice-emotion-grid">
-
-      <button
-        class="emotion active"
-        data-emotion="neutral"
-      >
-        😐 Neutral
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="happy"
-      >
-        😄 Happy
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="sad"
-      >
-        😢 Sad
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="angry"
-      >
-        😡 Angry
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="excited"
-      >
-        🤩 Excited
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="calm"
-      >
-        😌 Calm
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="romantic"
-      >
-        ❤️ Romantic
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="scared"
-      >
-        😱 Scared
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="funny"
-      >
-        😂 Funny
-      </button>
-
-      <button
-        class="emotion"
-        data-emotion="evil"
-      >
-        👿 Evil
-      </button>
-
-    </div>
-
-
-    <!-- MODE -->
-
-    <div class="voice-mode-row">
-
-      <button
-        class="voice-mode active"
-        data-mode="speech"
-      >
-        🗣️ Speech
-      </button>
-
-      <button
-        class="voice-mode"
-        data-mode="expressive"
-      >
-        🎭 Expressive
-      </button>
-
-      <button
-        class="voice-mode"
-        data-mode="singing"
-      >
-        🎵 Singing
-      </button>
-
-    </div>
-
-
-    <!-- CONTROLS -->
-
-    <div class="voice-controls">
-
-      <div class="voice-control">
-
-        <label>
-          <span>Speed</span>
-          <span id="voiceRateValue">0.90</span>
-        </label>
-
+    <div class="voice-settings">
+      <div class="voice-section-title">
+        <span>🎛️ Voice Controls</span>
+      </div>
+      <div class="voice-setting">
+        <div class="voice-setting-head">
+          <span class="voice-setting-label">
+            Speed
+          </span>
+          <span
+            class="voice-setting-value"
+            id="rateValue">
+            0.90
+          </span>
+        </div>
         <input
           id="voiceRate"
           type="range"
-          min="0.5"
-          max="1.5"
+          min="0.50"
+          max="1.50"
           step="0.05"
-          value="0.90"
-        >
-
+          value="0.90">
       </div>
-
-
-      <div class="voice-control">
-
-        <label>
-          <span>Pitch</span>
-          <span id="voicePitchValue">1.08</span>
-        </label>
-
+      <div class="voice-setting">
+        <div class="voice-setting-head">
+          <span class="voice-setting-label">
+            Pitch
+          </span>
+          <span
+            class="voice-setting-value"
+            id="pitchValue">
+            1.08
+          </span>
+        </div>
         <input
           id="voicePitch"
           type="range"
-          min="0.5"
-          max="2"
+          min="0.50"
+          max="1.80"
           step="0.05"
-          value="1.08"
-        >
-
+          value="1.08">
       </div>
-
-
-      <div class="voice-control">
-
-        <label>
-          <span>Volume</span>
-          <span id="voiceVolumeValue">1.00</span>
-        </label>
-
+      <div class="voice-setting">
+        <div class="voice-setting-head">
+          <span class="voice-setting-label">
+            Volume
+          </span>
+          <span
+            class="voice-setting-value"
+            id="volumeValue">
+            100%
+          </span>
+        </div>
         <input
           id="voiceVolume"
           type="range"
           min="0"
           max="1"
           step="0.05"
-          value="1"
-        >
-
+          value="1">
       </div>
-
-    </div>
-
-
-    <!-- VOICE LIST -->
-
-    <div
-      class="voice-list"
-      id="voiceList"
-    ></div>
-
-
-    <!-- SELECTED -->
-
-    <div class="voice-selected-card">
-
-      <div>
-
-        <div class="selected-label">
-          VOICE DIPILIH
+      <div class="voice-setting">
+        <div class="voice-setting-head">
+          <span class="voice-setting-label">
+            Speaking Style
+          </span>
         </div>
-
-        <div
-          class="selected-voice"
-          id="selectedVoiceName"
-        >
-          Auto / Naira
+        <div class="voice-toggle-row">
+          <button
+            class="voice-toggle active"
+            data-style="normal"
+            type="button">
+            🗣️ Normal
+          </button>
+          <button
+            class="voice-toggle"
+            data-style="dramatic"
+            type="button">
+            🎭 Dramatic
+          </button>
+          <button
+            class="voice-toggle"
+            data-style="singing"
+            type="button">
+            🎵 Singing
+          </button>
         </div>
-
-        <div
-          class="selected-description"
-          id="selectedVoiceDescription"
-        >
-          Suara terbaik yang tersedia pada device.
-        </div>
-
       </div>
-
-      <button
-        class="voice-preview-button"
-        id="previewSelectedVoice"
-        type="button"
-      >
-        ▶️
-      </button>
-
     </div>
-
-
-    <div class="voice-engine-info">
-      <strong>ℹ️ Voice Engine:</strong>
-      Voice Center ini menggunakan suara yang tersedia pada
-      browser/device untuk mode asas. Profile, emotion dan style
-      mengawal cara suara dimainkan. Mode singing pada browser
-      ialah musical-style speech; untuk singing AI sebenar,
-      kita boleh sambungkan engine TTS/singing backend kemudian.
-    </div>
-
   </div>
-
 </div>
-
-
+<!-- =========================================================
+     HISTORY
+========================================================= -->
+<div
+  class="history-panel"
+  id="historyPanel">
+  <div class="history-box">
+    <div class="history-header">
+      <div>
+        <h2>
+          🕘 Conversation History
+        </h2>
+        <p>
+          Semua perbualan Tuan dengan Naira
+        </p>
+      </div>
+      <button
+        class="close-history"
+        id="closeHistory"
+        type="button">
+        ✕
+      </button>
+    </div>
+    <div class="history-tools">
+      <input
+        class="history-search"
+        id="historySearch"
+        type="search"
+        placeholder="🔍 Cari conversation..."
+        autocomplete="off">
+      <button
+        class="history-refresh"
+        id="refreshHistory"
+        type="button">
+        🔄
+      </button>
+    </div>
+    <button
+      class="new-conversation"
+      id="newConversation"
+      type="button">
+      ＋ New Conversation
+    </button>
+    <div
+      class="history-status"
+      id="historyStatus">
+      Memuatkan history...
+    </div>
+    <div id="historyList"></div>
+  </div>
+</div>
+<!-- =========================================================
+     MEMORY
+========================================================= -->
+<div
+  class="overlay"
+  id="memoryPanel">
+  <div class="panel-box">
+    <div class="panel-header">
+      <div>
+        <h2>
+          🧠 Memory Center
+        </h2>
+        <p>
+          Ingatan yang Naira simpan tentang Tuan
+        </p>
+      </div>
+      <button
+        class="close-button"
+        id="closeMemory"
+        type="button">
+        ✕
+      </button>
+    </div>
+    <div class="memory-tools">
+      <input
+        class="search-box"
+        id="memorySearch"
+        type="search"
+        placeholder="🔍 Cari memory..."
+        autocomplete="off">
+      <button
+        class="tool-button"
+        id="refreshMemory"
+        type="button">
+        🔄
+      </button>
+    </div>
+    <select
+      class="category-filter"
+      id="categoryFilter">
+      <option value="all">
+        📂 Semua kategori
+      </option>
+      <option value="profile">
+        👤 Profile
+      </option>
+      <option value="fashion">
+        👕 Fashion
+      </option>
+      <option value="food">
+        🍔 Food
+      </option>
+      <option value="game">
+        🎮 Game
+      </option>
+      <option value="hobby">
+        🎨 Hobby
+      </option>
+      <option value="work">
+        💼 Work
+      </option>
+      <option value="project">
+        🚀 Project
+      </option>
+      <option value="preference">
+        ❤️ Preference
+      </option>
+      <option value="family">
+        👨‍👩‍👧 Family
+      </option>
+      <option value="general">
+        📁 General
+      </option>
+    </select>
+    <div
+      class="memory-status"
+      id="memoryStatus">
+      Memuatkan memory...
+    </div>
+    <button
+      class="memory-add"
+      id="addMemoryButton"
+      type="button">
+      ＋ Tambah Memory
+    </button>
+    <div id="memoryList"></div>
+  </div>
+</div>
+<!-- =========================================================
+     MEMORY FORM
+========================================================= -->
+<div
+  class="memory-form-overlay"
+  id="memoryFormOverlay">
+  <div class="memory-form">
+    <h3 id="memoryFormTitle">
+      ➕ Tambah Memory
+    </h3>
+    <div class="memory-form-subtitle">
+      Tuan boleh kawal sendiri apa yang Naira simpan.
+    </div>
+    <div class="form-group">
+      <label for="memoryText">
+        Memory
+      </label>
+      <textarea
+        id="memoryText"
+        placeholder="Contoh: Tuan suka warna biru.">
+      </textarea>
+    </div>
+    <div class="form-group">
+      <label for="memoryCategory">
+        Kategori
+      </label>
+      <select id="memoryCategory">
+        <option value="profile">👤 Profile</option>
+        <option value="fashion">👕 Fashion</option>
+        <option value="food">🍔 Food</option>
+        <option value="game">🎮 Game</option>
+        <option value="hobby">🎨 Hobby</option>
+        <option value="work">💼 Work</option>
+        <option value="project">🚀 Project</option>
+        <option value="preference">❤️ Preference</option>
+        <option value="family">👨‍👩‍👧 Family</option>
+        <option value="general">📁 General</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="memorySubcategory">
+        Subkategori
+      </label>
+      <input
+        id="memorySubcategory"
+        type="text"
+        placeholder="Contoh: color">
+    </div>
+    <div class="form-group">
+      <label for="memoryImportance">
+        Importance
+      </label>
+      <select id="memoryImportance">
+        <option value="1">
+          ⭐ Biasa
+        </option>
+        <option
+          value="2"
+          selected>
+          ⭐⭐ Penting
+        </option>
+        <option value="3">
+          ⭐⭐⭐ Sangat penting
+        </option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button
+        class="cancel-button"
+        id="cancelMemory"
+        type="button">
+        Batal
+      </button>
+      <button
+        class="save-button"
+        id="saveMemory"
+        type="button">
+        💾 Simpan
+      </button>
+    </div>
+  </div>
+</div>
 <script>
-
-/* ============================================================
+/* =========================================================
    CONFIG
-============================================================ */
-
+========================================================= */
 const API_BASE =
   "https://naira-tawny.vercel.app";
-
-
-/* ============================================================
+/* =========================================================
    CONVERSATION ID
-============================================================ */
-
+========================================================= */
 let currentConversationId =
   localStorage.getItem(
     "naira_conversation_id"
   );
-
-
-function createConversationId() {
-
+function createConversationId(){
   return (
     "conv_" +
     Date.now() +
     "_" +
     Math.random()
       .toString(36)
-      .substring(2, 10)
+      .substring(2,10)
   );
-
 }
-
-
-function ensureConversationId() {
-
-  if (!currentConversationId) {
-
+function ensureConversationId(){
+  if(!currentConversationId){
     currentConversationId =
       createConversationId();
-
     localStorage.setItem(
       "naira_conversation_id",
       currentConversationId
     );
-
   }
-
 }
-
-
 ensureConversationId();
-
-
-/* ============================================================
+/* =========================================================
    HELPERS
-============================================================ */
-
-function escapeHTML(value) {
-
+========================================================= */
+function escapeHTML(value){
   return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
-
-
-/* ============================================================
+/* =========================================================
    DOM
-============================================================ */
-
+========================================================= */
 const input =
-  document.getElementById(
-    "messageInput"
-  );
-
+  document.getElementById("messageInput");
 const sendButton =
-  document.getElementById(
-    "sendButton"
-  );
-
+  document.getElementById("sendButton");
 const chat =
-  document.getElementById(
-    "chat"
-  );
-
+  document.getElementById("chat");
 const micButton =
-  document.getElementById(
-    "micButton"
-  );
-
+  document.getElementById("micButton");
 const voiceStatus =
-  document.getElementById(
-    "voiceStatus"
-  );
-
-
-/* ============================================================
+  document.getElementById("voiceStatus");
+/* =========================================================
    MESSAGE
-============================================================ */
-
-function addMessage(
-  text,
-  type
-) {
-
+========================================================= */
+function addMessage(text,type){
   const message =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
   message.className =
     "message " + type;
-
   message.textContent =
     text;
-
-  chat.appendChild(
-    message
-  );
-
+  chat.appendChild(message);
   message.scrollIntoView({
-    behavior: "smooth",
-    block: "end"
+    behavior:"smooth",
+    block:"end"
   });
-
 }
-
-
-/* ============================================================
+/* =========================================================
    NAIRA VOICE ENGINE
-============================================================ */
-
+========================================================= */
 let recognition = null;
 let listening = false;
 let speaking = false;
 let nairaSpeech = null;
 let voices = [];
 let voiceUnlocked = false;
-
-
-/* ============================================================
-   VOICE CENTER STATE
-============================================================ */
-
-let selectedVoiceProfile = null;
-
-let selectedVoiceCategory =
-  "all";
-
-let selectedEmotion =
-  "neutral";
-
-let selectedVoiceMode =
-  "speech";
-
-
-/* ============================================================
+/* =========================================================
+   VOICE PROFILE SYSTEM
+========================================================= */
+const VOICE_LIBRARY = [
+  {
+    id:"naira-natural",
+    name:"Naira Natural",
+    icon:"👩🏻",
+    category:"assistant",
+    emotion:"positive",
+    language:"Malay",
+    type:"Natural Assistant",
+    description:"Suara wanita natural untuk penggunaan harian.",
+    provider:"browser",
+    rate:.90,
+    pitch:1.08
+  },
+  {
+    id:"naira-soft",
+    name:"Naira Soft",
+    icon:"🌸",
+    category:"assistant",
+    emotion:"positive",
+    language:"Malay",
+    type:"Soft Assistant",
+    description:"Lembut, manja dan tenang.",
+    provider:"browser",
+    rate:.82,
+    pitch:1.15
+  },
+  {
+    id:"naira-serious",
+    name:"Naira Serious",
+    icon:"🖤",
+    category:"assistant",
+    emotion:"neutral",
+    language:"Malay",
+    type:"Professional Assistant",
+    description:"Nada serius dan yakin.",
+    provider:"browser",
+    rate:.88,
+    pitch:.95
+  },
+  {
+    id:"naira-happy",
+    name:"Naira Happy",
+    icon:"😊",
+    category:"assistant",
+    emotion:"positive",
+    language:"Malay",
+    type:"Happy Assistant",
+    description:"Ceria, energetic dan mesra.",
+    provider:"browser",
+    rate:1.02,
+    pitch:1.18
+  },
+  {
+    id:"naira-sad",
+    name:"Naira Sad",
+    icon:"🥺",
+    category:"assistant",
+    emotion:"negative",
+    language:"Malay",
+    type:"Emotional Assistant",
+    description:"Nada sedih dan perlahan.",
+    provider:"browser",
+    rate:.72,
+    pitch:.90
+  },
+  {
+    id:"naira-angry",
+    name:"Naira Angry",
+    icon:"😤",
+    category:"assistant",
+    emotion:"negative",
+    language:"Malay",
+    type:"Angry Assistant",
+    description:"Nada tegas dan marah.",
+    provider:"browser",
+    rate:1.03,
+    pitch:.92
+  },
+  {
+    id:"naira-dramatic",
+    name:"Naira Dramatic",
+    icon:"🎭",
+    category:"character",
+    emotion:"dramatic",
+    language:"Malay",
+    type:"Drama Character",
+    description:"Sesuai untuk dialog dramatik.",
+    provider:"browser",
+    rate:.78,
+    pitch:1.05
+  },
+  {
+    id:"cartoon-boy",
+    name:"Cartoon Boy",
+    icon:"👦",
+    category:"character",
+    emotion:"funny",
+    language:"Malay",
+    type:"Cartoon",
+    description:"Gaya kartun ceria.",
+    provider:"browser",
+    rate:1.15,
+    pitch:1.45
+  },
+  {
+    id:"cartoon-girl",
+    name:"Cartoon Girl",
+    icon:"👧",
+    category:"character",
+    emotion:"funny",
+    language:"Malay",
+    type:"Cartoon",
+    description:"Gaya kartun comel.",
+    provider:"browser",
+    rate:1.10,
+    pitch:1.55
+  },
+  {
+    id:"old-man",
+    name:"Old Man",
+    icon:"👴",
+    category:"character",
+    emotion:"neutral",
+    language:"Malay",
+    type:"Character",
+    description:"Gaya suara lelaki tua.",
+    provider:"browser",
+    rate:.72,
+    pitch:.70
+  },
+  {
+    id:"robot",
+    name:"Robot",
+    icon:"🤖",
+    category:"character",
+    emotion:"neutral",
+    language:"Malay",
+    type:"Synthetic",
+    description:"Gaya suara robot.",
+    provider:"browser",
+    rate:.85,
+    pitch:.65
+  },
+  {
+    id:"mr-bean-style",
+    name:"Comedy British Character",
+    icon:"🎩",
+    category:"character",
+    emotion:"funny",
+    language:"English",
+    type:"Comedy Character",
+    description:"Gaya komedi fizikal British. Bukan clone suara Mr Bean.",
+    provider:"browser",
+    rate:.78,
+    pitch:1.0
+  },
+  {
+    id:"narrator-calm",
+    name:"Calm Narrator",
+    icon:"🎙️",
+    category:"narrator",
+    emotion:"neutral",
+    language:"English",
+    type:"Narrator",
+    description:"Sesuai untuk storytelling.",
+    provider:"browser",
+    rate:.78,
+    pitch:.90
+  },
+  {
+    id:"narrator-documentary",
+    name:"Documentary",
+    icon:"📺",
+    category:"narrator",
+    emotion:"dramatic",
+    language:"English",
+    type:"Narrator",
+    description:"Gaya dokumentari.",
+    provider:"browser",
+    rate:.82,
+    pitch:.82
+  },
+  {
+    id:"cat",
+    name:"Cat",
+    icon:"🐱",
+    category:"animal",
+    emotion:"funny",
+    language:"Style",
+    type:"Animal Style",
+    description:"Gaya suara kartun kucing.",
+    provider:"browser",
+    rate:1.25,
+    pitch:1.65
+  },
+  {
+    id:"dog",
+    name:"Dog",
+    icon:"🐶",
+    category:"animal",
+    emotion:"funny",
+    language:"Style",
+    type:"Animal Style",
+    description:"Gaya karakter anjing kartun.",
+    provider:"browser",
+    rate:1.20,
+    pitch:1.45
+  },
+  {
+    id:"mouse",
+    name:"Mouse",
+    icon:"🐭",
+    category:"animal",
+    emotion:"funny",
+    language:"Style",
+    type:"Animal Style",
+    description:"Suara karakter tikus kartun.",
+    provider:"browser",
+    rate:1.30,
+    pitch:1.75
+  },
+  {
+    id:"lion",
+    name:"Lion",
+    icon:"🦁",
+    category:"animal",
+    emotion:"dramatic",
+    language:"Style",
+    type:"Animal Style",
+    description:"Gaya suara haiwan besar.",
+    provider:"browser",
+    rate:.68,
+    pitch:.55
+  },
+  {
+    id:"singing-female",
+    name:"Singing Voice",
+    icon:"🎵",
+    category:"singing",
+    emotion:"positive",
+    language:"Malay",
+    type:"Singing Style",
+    description:"Gaya bercakap berirama seperti menyanyi.",
+    provider:"browser",
+    rate:.85,
+    pitch:1.30
+  },
+  {
+    id:"singing-dramatic",
+    name:"Musical Drama",
+    icon:"🎼",
+    category:"singing",
+    emotion:"dramatic",
+    language:"Malay",
+    type:"Singing Style",
+    description:"Gaya musical theatre.",
+    provider:"browser",
+    rate:.72,
+    pitch:1.18
+  },
+  {
+    id:"licensed-celebrity-slot",
+    name:"Licensed Celebrity Voice",
+    icon:"⭐",
+    category:"celebrity",
+    emotion:"neutral",
+    language:"Provider",
+    type:"Licensed Provider",
+    description:"Slot untuk voice artis/selebriti yang tersedia secara berlesen.",
+    provider:"external",
+    rate:.90,
+    pitch:1.0
+  },
+  {
+    id:"licensed-character-slot",
+    name:"Licensed Character",
+    icon:"🎬",
+    category:"celebrity",
+    emotion:"funny",
+    language:"Provider",
+    type:"Licensed Character",
+    description:"Slot untuk karakter rasmi daripada provider berlesen.",
+    provider:"external",
+    rate:.90,
+    pitch:1.0
+  }
+];
+let selectedVoiceId =
+  localStorage.getItem(
+    "naira_voice_id"
+  ) || "naira-natural";
+let voiceSettings = {
+  rate:Number(
+    localStorage.getItem(
+      "naira_voice_rate"
+    ) || .90
+  ),
+  pitch:Number(
+    localStorage.getItem(
+      "naira_voice_pitch"
+    ) || 1.08
+  ),
+  volume:Number(
+    localStorage.getItem(
+      "naira_voice_volume"
+    ) || 1
+  ),
+  style:
+    localStorage.getItem(
+      "naira_voice_style"
+    ) || "normal"
+};
+function getSelectedVoice(){
+  return (
+    VOICE_LIBRARY.find(
+      v => v.id === selectedVoiceId
+    ) ||
+    VOICE_LIBRARY[0]
+  );
+}
+/* =========================================================
    VOICE STATUS
-============================================================ */
-
-function setVoiceStatus(text) {
-
-  if (voiceStatus) {
-
+========================================================= */
+function setVoiceStatus(text){
+  if(voiceStatus){
     voiceStatus.textContent =
       text || "";
-
   }
-
 }
-
-
-/* ============================================================
-   LOAD VOICES
-============================================================ */
-
-function loadVoices() {
-
-  if (
-    !("speechSynthesis" in window)
-  ) {
+/* =========================================================
+   LOAD SYSTEM VOICES
+========================================================= */
+function loadVoices(){
+  if(!("speechSynthesis" in window)){
     return;
   }
-
   voices =
-    window.speechSynthesis
-      .getVoices();
-
+    window.speechSynthesis.getVoices();
   console.log(
-    "🔊 Voices:",
-    voices.map(function(v) {
-
-      return (
-        v.name +
-        " | " +
-        v.lang
-      );
-
-    })
+    "🔊 Browser voices:",
+    voices.map(
+      v => v.name + " | " + v.lang
+    )
   );
-
 }
-
-
-if (
-  "speechSynthesis" in window
-) {
-
+if("speechSynthesis" in window){
   loadVoices();
-
-  window.speechSynthesis
-    .onvoiceschanged =
-    function() {
-
-      loadVoices();
-
-      if (
-        typeof renderVoiceLibrary ===
-        "function"
-      ) {
-        renderVoiceLibrary();
-      }
-
-    };
-
+  window.speechSynthesis.onvoiceschanged =
+    loadVoices;
 }
-
-
-/* ============================================================
-   UNLOCK SPEECH SYNTHESIS
-============================================================ */
-
-function unlockSpeech() {
-
-  if (
-    !("speechSynthesis" in window)
-  ) {
+/* =========================================================
+   UNLOCK SPEECH
+========================================================= */
+function unlockSpeech(){
+  if(!("speechSynthesis" in window)){
     return false;
   }
-
-  try {
-
+  try{
     window.speechSynthesis.cancel();
-
     const unlock =
       new SpeechSynthesisUtterance("");
-
     unlock.volume = 0;
     unlock.rate = 10;
     unlock.pitch = 1;
-
     window.speechSynthesis.speak(
       unlock
     );
-
     voiceUnlocked = true;
-
-    console.log(
-      "🔓 Speech synthesis unlocked."
-    );
-
     return true;
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "VOICE UNLOCK ERROR:",
       error
     );
-
     return false;
-
   }
-
 }
-
-
-/* ============================================================
-   FIND BEST VOICE
-============================================================ */
-
-function findBestVoice() {
-
-  if (!voices.length) {
-
+/* =========================================================
+   FIND BEST SYSTEM VOICE
+========================================================= */
+function findBestVoice(){
+  if(!voices.length){
     loadVoices();
-
   }
-
-  if (!voices.length) {
-
+  if(!voices.length){
     return null;
-
   }
-
-
-  const malay =
+  const selected =
+    getSelectedVoice();
+  const lang =
+    selected.language === "Malay"
+      ? "ms"
+      : "en";
+  const candidates =
     voices.filter(
-      function(v) {
-
-        return (
-          v.lang &&
-          v.lang
-            .toLowerCase()
-            .startsWith("ms")
-        );
-
-      }
+      v =>
+        v.lang &&
+        v.lang
+          .toLowerCase()
+          .startsWith(lang)
     );
-
-
-  const femaleWords = [
-
-    "female",
-    "woman",
-    "girl",
-    "samantha",
-    "ava",
-    "siri",
-    "karen",
-    "moira",
-    "tessa",
-    "fiona",
-    "amelie",
-    "allison",
-    "victoria"
-
-  ];
-
-
-  function femaleScore(
-    voice
-  ) {
-
-    const name =
-      (
-        voice.name ||
-        ""
-      ).toLowerCase();
-
-    let score = 0;
-
-    femaleWords.forEach(
-      function(word) {
-
-        if (
-          name.includes(word)
-        ) {
-
-          score += 10;
-
-        }
-
-      }
-    );
-
-    return score;
-
+  if(candidates.length){
+    return candidates[0];
   }
-
-
-  if (malay.length) {
-
-    const sortedMalay =
-      malay.slice().sort(
-        function(a, b) {
-
-          return (
-            femaleScore(b) -
-            femaleScore(a)
-          );
-
-        }
-      );
-
-    return sortedMalay[0];
-
-  }
-
-
-  const indonesian =
-    voices.filter(
-      function(v) {
-
-        return (
-          v.lang &&
-          v.lang
-            .toLowerCase()
-            .startsWith("id")
-        );
-
-      }
-    );
-
-
-  if (indonesian.length) {
-
-    const sortedIndo =
-      indonesian.slice().sort(
-        function(a, b) {
-
-          return (
-            femaleScore(b) -
-            femaleScore(a)
-          );
-
-        }
-      );
-
-    return sortedIndo[0];
-
-  }
-
-
-  const english =
-    voices.filter(
-      function(v) {
-
-        return (
-          v.lang &&
-          v.lang
-            .toLowerCase()
-            .startsWith("en")
-        );
-
-      }
-    );
-
-
-  if (english.length) {
-
-    const sortedEnglish =
-      english.slice().sort(
-        function(a, b) {
-
-          return (
-            femaleScore(b) -
-            femaleScore(a)
-          );
-
-        }
-      );
-
-    return sortedEnglish[0];
-
-  }
-
-
   return voices[0];
-
 }
-
-
-/* ============================================================
+/* =========================================================
    VOICE UI
-============================================================ */
-
-function updateVoiceUI() {
-
-  if (!micButton) {
+========================================================= */
+function updateVoiceUI(){
+  if(!micButton){
     return;
   }
-
   micButton.classList.remove(
     "listening",
     "speaking"
   );
-
-
-  if (listening) {
-
+  if(listening){
     micButton.classList.add(
       "listening"
     );
-
     micButton.textContent =
       "🔴";
-
     micButton.title =
       "Sedang mendengar";
-
     setVoiceStatus(
       "🎙️ Naira sedang mendengar..."
     );
-
     return;
-
   }
-
-
-  if (speaking) {
-
+  if(speaking){
     micButton.classList.add(
       "speaking"
     );
-
     micButton.textContent =
       "🔊";
-
     micButton.title =
       "Tekan untuk hentikan suara Naira";
-
     setVoiceStatus(
       "🔊 Naira sedang bercakap..."
     );
-
     return;
-
   }
-
-
   micButton.textContent =
     "🎙️";
-
   micButton.title =
     "Tekan untuk bercakap";
-
   setVoiceStatus("");
-
 }
-
-
-/* ============================================================
+/* =========================================================
    STOP SPEAKING
-============================================================ */
-
-function stopSpeaking() {
-
-  if (
-    "speechSynthesis" in window
-  ) {
-
-    try {
-
+========================================================= */
+function stopSpeaking(){
+  if("speechSynthesis" in window){
+    try{
       window.speechSynthesis.cancel();
-
-    } catch (error) {
-
+    }catch(error){
       console.error(error);
-
     }
-
   }
-
   nairaSpeech = null;
-
   speaking = false;
-
   updateVoiceUI();
-
 }
-
-
-/* ============================================================
-   BASIC SPEAK
-============================================================ */
-
-function basicSpeakNaira(
-  text
-) {
-
-  if (!text) {
-    return;
-  }
-
-  if (
-    !("speechSynthesis" in window)
-  ) {
-
-    console.error(
-      "❌ speechSynthesis tidak tersedia."
-    );
-
-    setVoiceStatus(
-      "❌ Voice tidak disokong oleh browser."
-    );
-
-    return;
-
-  }
-
-
-  loadVoices();
-
-
-  try {
-
-    window.speechSynthesis.cancel();
-
-  } catch (error) {}
-
-
-  const utterance =
-    new SpeechSynthesisUtterance(
-      text
-    );
-
-  nairaSpeech =
-    utterance;
-
-
-  utterance.lang =
-    "ms-MY";
-
-  utterance.rate =
-    0.90;
-
-  utterance.pitch =
-    1.08;
-
-  utterance.volume =
-    1;
-
-
+/* =========================================================
+   BUILD SPEECH TEXT
+========================================================= */
+function buildSpeechText(text){
   const voice =
-    findBestVoice();
-
-
-  if (voice) {
-
-    utterance.voice =
-      voice;
-
-    console.log(
-      "👩 Naira voice:",
-      voice.name,
-      voice.lang
-    );
-
+    getSelectedVoice();
+  if(voice.id === "cat"){
+    return "Miau... " + text + " miau.";
+  }
+  if(voice.id === "dog"){
+    return "Woof! " + text + " woof!";
+  }
+  if(voice.id === "mouse"){
+    return text;
+  }
+  if(voice.id === "lion"){
+    return text;
+  }
+  if(
+    voiceSettings.style === "singing" ||
+    voice.category === "singing"
+  ){
+    /*
+      Browser TTS tidak menghasilkan
+      nyanyian sebenar.
+      Kita gunakan prosody-like
+      punctuation untuk menghasilkan
+      gaya bercakap berirama.
+    */
+    return text
+      .replace(/[.!?]/g,"... ♪ ")
+      .replace(/,/g,", ♪ ");
+  }
+  return text;
+}
+/* =========================================================
+   SPEAK NAIRA
+========================================================= */
+function speakNaira(text){
+  if(!text){
+    return;
+  }
+  if(!("speechSynthesis" in window)){
     setVoiceStatus(
-      "🔊 Voice: " +
-      voice.name
+      "❌ Voice tidak disokong browser."
     );
-
-  }
-
-
-  utterance.onstart =
-    function() {
-
-      speaking = true;
-
-      updateVoiceUI();
-
-    };
-
-
-  utterance.onend =
-    function() {
-
-      speaking = false;
-
-      nairaSpeech = null;
-
-      updateVoiceUI();
-
-    };
-
-
-  utterance.onerror =
-    function(event) {
-
-      speaking = false;
-
-      nairaSpeech = null;
-
-      updateVoiceUI();
-
-      console.error(
-        "❌ TTS ERROR:",
-        event.error,
-        event
-      );
-
-      setVoiceStatus(
-        "❌ Browser gagal memainkan suara."
-      );
-
-    };
-
-
-  try {
-
-    window.speechSynthesis.speak(
-      utterance
-    );
-
-  } catch (error) {
-
-    console.error(
-      "❌ SPEAK ERROR:",
-      error
-    );
-
-    speaking = false;
-
-    updateVoiceUI();
-
-  }
-
-}
-
-
-/* ============================================================
-   VOICE PROFILES
-============================================================ */
-
-const NAIRA_VOICE_LIBRARY = [
-
-  {
-    id: "naira-female",
-    name: "Naira Soft",
-    icon: "👩🏻",
-    category: "female",
-    description:
-      "Lembut, natural dan sesuai untuk assistant.",
-    tags: [
-      "Natural",
-      "Soft",
-      "Assistant"
-    ]
-  },
-
-  {
-    id: "naira-warm",
-    name: "Naira Warm",
-    icon: "💜",
-    category: "female",
-    description:
-      "Suara wanita yang warm dan mesra.",
-    tags: [
-      "Warm",
-      "Friendly"
-    ]
-  },
-
-  {
-    id: "naira-confident",
-    name: "Naira Confident",
-    icon: "👩‍💼",
-    category: "female",
-    description:
-      "Lebih yakin dan profesional.",
-    tags: [
-      "Professional",
-      "Strong"
-    ]
-  },
-
-  {
-    id: "male-deep",
-    name: "Deep Male",
-    icon: "👨🏻",
-    category: "male",
-    description:
-      "Suara lelaki rendah dan matang.",
-    tags: [
-      "Deep",
-      "Mature"
-    ]
-  },
-
-  {
-    id: "male-calm",
-    name: "Calm Male",
-    icon: "🧔🏻",
-    category: "male",
-    description:
-      "Tenang dan perlahan.",
-    tags: [
-      "Calm",
-      "Relaxed"
-    ]
-  },
-
-  {
-    id: "cartoon-cute",
-    name: "Cute Cartoon",
-    icon: "🐰",
-    category: "cartoon",
-    description:
-      "Gaya kartun comel dan playful.",
-    tags: [
-      "Cute",
-      "Cartoon"
-    ]
-  },
-
-  {
-    id: "cartoon-comedy",
-    name: "Comedy Character",
-    icon: "😂",
-    category: "cartoon",
-    description:
-      "Gaya komedi deadpan dan quirky.",
-    tags: [
-      "Comedy",
-      "Funny"
-    ]
-  },
-
-  {
-    id: "cartoon-hero",
-    name: "Cartoon Hero",
-    icon: "🦸",
-    category: "cartoon",
-    description:
-      "Energetic seperti watak animasi hero.",
-    tags: [
-      "Hero",
-      "Energy"
-    ]
-  },
-
-  {
-    id: "animal-cat",
-    name: "Cat Character",
-    icon: "🐱",
-    category: "animal",
-    description:
-      "Gaya karakter kucing playful.",
-    tags: [
-      "Animal",
-      "Cute"
-    ]
-  },
-
-  {
-    id: "animal-dog",
-    name: "Dog Character",
-    icon: "🐶",
-    category: "animal",
-    description:
-      "Gaya karakter anjing ceria.",
-    tags: [
-      "Animal",
-      "Happy"
-    ]
-  },
-
-  {
-    id: "animal-bird",
-    name: "Bird Character",
-    icon: "🐦",
-    category: "animal",
-    description:
-      "Gaya karakter burung ringan.",
-    tags: [
-      "Animal",
-      "Light"
-    ]
-  },
-
-  {
-    id: "robot",
-    name: "AI Robot",
-    icon: "🤖",
-    category: "robot",
-    description:
-      "Suara futuristik dan synthetic.",
-    tags: [
-      "AI",
-      "Robot"
-    ]
-  },
-
-  {
-    id: "robot-assistant",
-    name: "Future Assistant",
-    icon: "🧠",
-    category: "robot",
-    description:
-      "Gaya AI assistant moden.",
-    tags: [
-      "Future",
-      "AI"
-    ]
-  },
-
-  {
-    id: "dramatic",
-    name: "Movie Narrator",
-    icon: "🎬",
-    category: "dramatic",
-    description:
-      "Gaya narrator sinematik.",
-    tags: [
-      "Cinema",
-      "Dramatic"
-    ]
-  },
-
-  {
-    id: "dramatic-villain",
-    name: "Dark Character",
-    icon: "👿",
-    category: "dramatic",
-    description:
-      "Suara gelap dan theatrical.",
-    tags: [
-      "Dark",
-      "Villain"
-    ]
-  },
-
-  {
-    id: "singing",
-    name: "Singing Voice",
-    icon: "🎵",
-    category: "singing",
-    description:
-      "Mode bercakap dengan intonasi musical.",
-    tags: [
-      "Music",
-      "Singing"
-    ]
-  }
-
-];
-
-
-/* ============================================================
-   VOICE CENTER DOM
-============================================================ */
-
-const voiceCenterButton =
-  document.getElementById(
-    "voiceCenterButton"
-  );
-
-const voiceCenterPanel =
-  document.getElementById(
-    "voiceCenterPanel"
-  );
-
-const closeVoiceCenter =
-  document.getElementById(
-    "closeVoiceCenter"
-  );
-
-const voiceSearch =
-  document.getElementById(
-    "voiceSearch"
-  );
-
-const voiceList =
-  document.getElementById(
-    "voiceList"
-  );
-
-const selectedVoiceName =
-  document.getElementById(
-    "selectedVoiceName"
-  );
-
-const selectedVoiceDescription =
-  document.getElementById(
-    "selectedVoiceDescription"
-  );
-
-const previewSelectedVoice =
-  document.getElementById(
-    "previewSelectedVoice"
-  );
-
-const voiceRate =
-  document.getElementById(
-    "voiceRate"
-  );
-
-const voicePitch =
-  document.getElementById(
-    "voicePitch"
-  );
-
-const voiceVolume =
-  document.getElementById(
-    "voiceVolume"
-  );
-
-const voiceRateValue =
-  document.getElementById(
-    "voiceRateValue"
-  );
-
-const voicePitchValue =
-  document.getElementById(
-    "voicePitchValue"
-  );
-
-const voiceVolumeValue =
-  document.getElementById(
-    "voiceVolumeValue"
-  );
-
-
-/* ============================================================
-   VOICE CENTER OPEN
-============================================================ */
-
-voiceCenterButton.addEventListener(
-  "click",
-  function() {
-
-    unlockSpeech();
-
-    voiceCenterPanel.classList.add(
-      "active"
-    );
-
-    loadVoices();
-
-    renderVoiceLibrary();
-
-  }
-);
-
-
-/* ============================================================
-   VOICE CENTER CLOSE
-============================================================ */
-
-closeVoiceCenter.addEventListener(
-  "click",
-  function() {
-
-    voiceCenterPanel.classList.remove(
-      "active"
-    );
-
-  }
-);
-
-
-/* ============================================================
-   VOICE SEARCH
-============================================================ */
-
-voiceSearch.addEventListener(
-  "input",
-  renderVoiceLibrary
-);
-
-
-/* ============================================================
-   CATEGORY
-============================================================ */
-
-document
-  .querySelectorAll(
-    ".voice-filter"
-  )
-  .forEach(
-    function(button) {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".voice-filter"
-            )
-            .forEach(
-              function(item) {
-
-                item.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-          button.classList.add(
-            "active"
-          );
-
-          selectedVoiceCategory =
-            button.dataset.category;
-
-          renderVoiceLibrary();
-
-        }
-      );
-
-    }
-  );
-
-
-/* ============================================================
-   EMOTION
-============================================================ */
-
-document
-  .querySelectorAll(
-    ".emotion"
-  )
-  .forEach(
-    function(button) {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".emotion"
-            )
-            .forEach(
-              function(item) {
-
-                item.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-          button.classList.add(
-            "active"
-          );
-
-          selectedEmotion =
-            button.dataset.emotion;
-
-        }
-      );
-
-    }
-  );
-
-
-/* ============================================================
-   MODE
-============================================================ */
-
-document
-  .querySelectorAll(
-    ".voice-mode"
-  )
-  .forEach(
-    function(button) {
-
-      button.addEventListener(
-        "click",
-        function() {
-
-          document
-            .querySelectorAll(
-              ".voice-mode"
-            )
-            .forEach(
-              function(item) {
-
-                item.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-          button.classList.add(
-            "active"
-          );
-
-          selectedVoiceMode =
-            button.dataset.mode;
-
-        }
-      );
-
-    }
-  );
-
-
-/* ============================================================
-   SLIDERS
-============================================================ */
-
-voiceRate.addEventListener(
-  "input",
-  function() {
-
-    voiceRateValue.textContent =
-      Number(
-        voiceRate.value
-      ).toFixed(2);
-
-  }
-);
-
-
-voicePitch.addEventListener(
-  "input",
-  function() {
-
-    voicePitchValue.textContent =
-      Number(
-        voicePitch.value
-      ).toFixed(2);
-
-  }
-);
-
-
-voiceVolume.addEventListener(
-  "input",
-  function() {
-
-    voiceVolumeValue.textContent =
-      Number(
-        voiceVolume.value
-      ).toFixed(2);
-
-  }
-);
-
-
-/* ============================================================
-   SELECT VOICE PROFILE
-============================================================ */
-
-function selectVoiceProfile(
-  profile
-) {
-
-  selectedVoiceProfile =
-    profile;
-
-  selectedVoiceName.textContent =
-    profile.name;
-
-  selectedVoiceDescription.textContent =
-    profile.description;
-
-  renderVoiceLibrary();
-
-  console.log(
-    "🎙️ Selected voice profile:",
-    profile
-  );
-
-}
-
-
-/* ============================================================
-   RENDER VOICE LIBRARY
-============================================================ */
-
-function renderVoiceLibrary() {
-
-  if (!voiceList) {
     return;
   }
-
-  const search =
-    voiceSearch.value
-      .trim()
-      .toLowerCase();
-
-
-  const filtered =
-    NAIRA_VOICE_LIBRARY.filter(
-      function(voice) {
-
-        const matchesCategory =
-          selectedVoiceCategory ===
-            "all" ||
-          voice.category ===
-            selectedVoiceCategory;
-
-
-        const searchable =
-          [
-            voice.name,
-            voice.description,
-            voice.category,
-            ...(voice.tags || [])
-          ]
-            .join(" ")
-            .toLowerCase();
-
-
-        const matchesSearch =
-          !search ||
-          searchable.includes(
-            search
-          );
-
-
-        return (
-          matchesCategory &&
-          matchesSearch
-        );
-
-      }
-    );
-
-
-  voiceList.innerHTML =
-    "";
-
-
-  if (!filtered.length) {
-
-    voiceList.innerHTML =
-      `
-      <div class="empty-state">
-        🔍 Voice tidak dijumpai.
-      </div>
-      `;
-
-    return;
-
-  }
-
-
-  filtered.forEach(
-    function(voice) {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-
-      card.className =
-        "voice-card" +
-        (
-          selectedVoiceProfile &&
-          selectedVoiceProfile.id ===
-          voice.id
-            ? " selected"
-            : ""
-        );
-
-
-      const avatar =
-        document.createElement(
-          "div"
-        );
-
-      avatar.className =
-        "voice-avatar";
-
-      avatar.textContent =
-        voice.icon;
-
-
-      const info =
-        document.createElement(
-          "div"
-        );
-
-      info.className =
-        "voice-info";
-
-
-      const name =
-        document.createElement(
-          "div"
-        );
-
-      name.className =
-        "voice-name";
-
-      name.textContent =
-        voice.name;
-
-
-      const description =
-        document.createElement(
-          "div"
-        );
-
-      description.className =
-        "voice-description";
-
-      description.textContent =
-        voice.description;
-
-
-      const tags =
-        document.createElement(
-          "div"
-        );
-
-      tags.className =
-        "voice-tags";
-
-
-      (voice.tags || [])
-        .forEach(
-          function(tag) {
-
-            const tagElement =
-              document.createElement(
-                "span"
-              );
-
-            tagElement.className =
-              "voice-tag";
-
-            tagElement.textContent =
-              tag;
-
-            tags.appendChild(
-              tagElement
-            );
-
-          }
-        );
-
-
-      info.appendChild(
-        name
-      );
-
-      info.appendChild(
-        description
-      );
-
-      info.appendChild(
-        tags
-      );
-
-
-      const actions =
-        document.createElement(
-          "div"
-        );
-
-      actions.className =
-        "voice-card-actions";
-
-
-      const preview =
-        document.createElement(
-          "button"
-        );
-
-      preview.type =
-        "button";
-
-      preview.textContent =
-        "▶️";
-
-      preview.title =
-        "Preview voice";
-
-
-      preview.addEventListener(
-        "click",
-        function(event) {
-
-          event.stopPropagation();
-
-          previewVoiceProfile(
-            voice
-          );
-
-        }
-      );
-
-
-      const select =
-        document.createElement(
-          "button"
-        );
-
-      select.type =
-        "button";
-
-      select.textContent =
-        "✓";
-
-      select.title =
-        "Pilih voice";
-
-
-      select.addEventListener(
-        "click",
-        function(event) {
-
-          event.stopPropagation();
-
-          selectVoiceProfile(
-            voice
-          );
-
-        }
-      );
-
-
-      actions.appendChild(
-        preview
-      );
-
-      actions.appendChild(
-        select
-      );
-
-
-      card.appendChild(
-        avatar
-      );
-
-      card.appendChild(
-        info
-      );
-
-      card.appendChild(
-        actions
-      );
-
-
-      card.addEventListener(
-        "click",
-        function() {
-
-          selectVoiceProfile(
-            voice
-          );
-
-        }
-      );
-
-
-      voiceList.appendChild(
-        card
-      );
-
-    }
-  );
-
-}
-
-
-/* ============================================================
-   PREVIEW VOICE
-============================================================ */
-
-function previewVoiceProfile(
-  profile
-) {
-
-  unlockSpeech();
-
-  const previewText =
-    "Hai Tuan. Saya Naira. Ini adalah preview suara yang Tuan pilih.";
-
-  speakWithVoiceProfile(
-    previewText,
-    profile
-  );
-
-}
-
-
-/* ============================================================
-   VOICE ENGINE WITH PROFILE
-============================================================ */
-
-function speakWithVoiceProfile(
-  text,
-  profile
-) {
-
-  if (!text) {
-    return;
-  }
-
-
-  if (
-    !("speechSynthesis" in window)
-  ) {
-
-    setVoiceStatus(
-      "❌ Voice tidak disokong."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    window.speechSynthesis.cancel();
-
-  } catch (error) {}
-
-
   loadVoices();
-
-
+  try{
+    window.speechSynthesis.cancel();
+  }catch(error){}
+  const voiceProfile =
+    getSelectedVoice();
+  const speechText =
+    buildSpeechText(text);
   const utterance =
     new SpeechSynthesisUtterance(
-      text
+      speechText
     );
-
-
-  utterance.lang =
-    "ms-MY";
-
-
-  let rate =
-    Number(
-      voiceRate.value
-    );
-
-
-  let pitch =
-    Number(
-      voicePitch.value
-    );
-
-
-  const volume =
-    Number(
-      voiceVolume.value
-    );
-
-
-  /* ========================================================
-     PROFILE MODIFIERS
-  ======================================================== */
-
-  if (profile) {
-
-    switch (
-      profile.id
-    ) {
-
-      case "naira-female":
-
-        pitch += .04;
-
-        break;
-
-
-      case "naira-warm":
-
-        pitch += .08;
-        rate -= .03;
-
-        break;
-
-
-      case "naira-confident":
-
-        pitch -= .02;
-        rate += .03;
-
-        break;
-
-
-      case "male-deep":
-
-        pitch -= .35;
-        rate -= .03;
-
-        break;
-
-
-      case "male-calm":
-
-        pitch -= .18;
-        rate -= .12;
-
-        break;
-
-
-      case "cartoon-cute":
-
-        pitch += .38;
-        rate += .08;
-
-        break;
-
-
-      case "cartoon-comedy":
-
-        pitch += .25;
-        rate += .04;
-
-        break;
-
-
-      case "cartoon-hero":
-
-        pitch += .02;
-        rate += .12;
-
-        break;
-
-
-      case "animal-cat":
-
-        pitch += .35;
-        rate += .04;
-
-        break;
-
-
-      case "animal-dog":
-
-        pitch += .28;
-        rate += .12;
-
-        break;
-
-
-      case "animal-bird":
-
-        pitch += .42;
-        rate += .15;
-
-        break;
-
-
-      case "robot":
-
-        pitch -= .05;
-        rate -= .08;
-
-        break;
-
-
-      case "robot-assistant":
-
-        pitch += .02;
-        rate -= .02;
-
-        break;
-
-
-      case "dramatic":
-
-        pitch -= .05;
-        rate -= .12;
-
-        break;
-
-
-      case "dramatic-villain":
-
-        pitch -= .30;
-        rate -= .10;
-
-        break;
-
-
-      case "singing":
-
-        pitch += .22;
-        rate *= .82;
-
-        break;
-
-    }
-
-  }
-
-
-  /* ========================================================
-     EMOTION MODIFIERS
-  ======================================================== */
-
-  switch (
-    selectedEmotion
-  ) {
-
-    case "happy":
-
-      rate += .08;
-      pitch += .12;
-
-      break;
-
-
-    case "sad":
-
-      rate -= .15;
-      pitch -= .12;
-
-      break;
-
-
-    case "angry":
-
-      rate += .12;
-      pitch -= .08;
-
-      break;
-
-
-    case "excited":
-
-      rate += .18;
-      pitch += .20;
-
-      break;
-
-
-    case "calm":
-
-      rate -= .15;
-      pitch -= .03;
-
-      break;
-
-
-    case "romantic":
-
-      rate -= .08;
-      pitch += .08;
-
-      break;
-
-
-    case "scared":
-
-      rate += .15;
-      pitch += .25;
-
-      break;
-
-
-    case "funny":
-
-      pitch += .20;
-
-      break;
-
-
-    case "evil":
-
-      rate -= .08;
-      pitch -= .25;
-
-      break;
-
-  }
-
-
-  /* ========================================================
-     MODE
-  ======================================================== */
-
-  if (
-    selectedVoiceMode ===
-    "expressive"
-  ) {
-
-    pitch += .08;
-
-  }
-
-
-  if (
-    selectedVoiceMode ===
-    "singing"
-  ) {
-
-    rate *= .82;
-
-    pitch += .18;
-
-  }
-
-
-  utterance.rate =
-    Math.max(
-      .3,
-      Math.min(
-        2,
-        rate
-      )
-    );
-
-
-  utterance.pitch =
-    Math.max(
-      .1,
-      Math.min(
-        2,
-        pitch
-      )
-    );
-
-
-  utterance.volume =
-    Math.max(
-      0,
-      Math.min(
-        1,
-        volume
-      )
-    );
-
-
-  /* ========================================================
-     REAL BROWSER VOICE
-  ======================================================== */
-
-  const browserVoice =
-    findBestVoice();
-
-
-  if (browserVoice) {
-
-    utterance.voice =
-      browserVoice;
-
-    setVoiceStatus(
-      "🔊 " +
-      (
-        profile
-          ? profile.name
-          : browserVoice.name
-      ) +
-      " • " +
-      selectedEmotion
-    );
-
-  }
-
-
-  utterance.onstart =
-    function() {
-
-      speaking = true;
-
-      updateVoiceUI();
-
-    };
-
-
-  utterance.onend =
-    function() {
-
-      speaking = false;
-
-      nairaSpeech =
-        null;
-
-      updateVoiceUI();
-
-    };
-
-
-  utterance.onerror =
-    function(event) {
-
-      speaking = false;
-
-      nairaSpeech =
-        null;
-
-      updateVoiceUI();
-
-      console.error(
-        "❌ Voice profile error:",
-        event
-      );
-
-      setVoiceStatus(
-        "❌ Gagal memainkan voice."
-      );
-
-    };
-
-
   nairaSpeech =
     utterance;
-
-
-  try {
-
+  utterance.lang =
+    voiceProfile.language === "Malay"
+      ? "ms-MY"
+      : "en-US";
+  utterance.rate =
+    voiceProfile.rate ||
+    voiceSettings.rate;
+  utterance.pitch =
+    voiceProfile.pitch ||
+    voiceSettings.pitch;
+  utterance.volume =
+    voiceSettings.volume;
+  const systemVoice =
+    findBestVoice();
+  if(systemVoice){
+    utterance.voice =
+      systemVoice;
+  }
+  /*
+   * Extra character styling.
+   */
+  if(
+    voiceProfile.category ===
+    "animal"
+  ){
+    utterance.rate =
+      Math.min(
+        1.5,
+        voiceSettings.rate *
+        1.25
+      );
+  }
+  if(
+    voiceProfile.id ===
+    "old-man"
+  ){
+    utterance.pitch =
+      .65;
+  }
+  if(
+    voiceProfile.id ===
+    "robot"
+  ){
+    utterance.pitch =
+      .60;
+  }
+  if(
+    voiceProfile.id ===
+    "cartoon-girl"
+  ){
+    utterance.pitch =
+      1.55;
+  }
+  if(
+    voiceProfile.id ===
+    "cartoon-boy"
+  ){
+    utterance.pitch =
+      1.40;
+  }
+  if(
+    voiceSettings.style ===
+    "dramatic"
+  ){
+    utterance.rate =
+      Math.max(
+        .55,
+        utterance.rate * .82
+      );
+  }
+  utterance.onstart =
+    function(){
+      speaking = true;
+      updateVoiceUI();
+      setVoiceStatus(
+        "🔊 " +
+        voiceProfile.name
+      );
+    };
+  utterance.onend =
+    function(){
+      speaking = false;
+      nairaSpeech = null;
+      updateVoiceUI();
+    };
+  utterance.onerror =
+    function(event){
+      speaking = false;
+      nairaSpeech = null;
+      updateVoiceUI();
+      console.error(
+        "TTS ERROR:",
+        event.error
+      );
+      setVoiceStatus(
+        "❌ Voice gagal dimainkan."
+      );
+    };
+  try{
     window.speechSynthesis.speak(
       utterance
     );
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
-      "VOICE SPEAK ERROR:",
+      "SPEAK ERROR:",
       error
     );
-
     speaking = false;
-
     updateVoiceUI();
-
   }
-
 }
-
-
-/* ============================================================
-   PUBLIC SPEAK FUNCTION
-============================================================ */
-
-function speakNaira(
-  text
-) {
-
-  if (
-    selectedVoiceProfile
-  ) {
-
-    speakWithVoiceProfile(
-      text,
-      selectedVoiceProfile
-    );
-
-    return;
-
-  }
-
-
-  basicSpeakNaira(
-    text
-  );
-
-}
-
-
-/* ============================================================
-   SELECTED VOICE PREVIEW
-============================================================ */
-
-previewSelectedVoice.addEventListener(
-  "click",
-  function() {
-
-    unlockSpeech();
-
-    if (
-      selectedVoiceProfile
-    ) {
-
-      previewVoiceProfile(
-        selectedVoiceProfile
-      );
-
-      return;
-
-    }
-
-
-    speakNaira(
-      "Hai Tuan. Ini adalah suara Naira."
-    );
-
-  }
-);
-
-
-/* ============================================================
+/* =========================================================
    SPEECH RECOGNITION
-============================================================ */
-
-function setupRecognition() {
-
+========================================================= */
+function setupRecognition(){
   const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
-
-
-  if (!Recognition) {
-
+  if(!Recognition){
     console.warn(
-      "🎙️ Speech Recognition tidak disokong."
+      "Speech Recognition tidak disokong."
     );
-
     return;
-
   }
-
-
   recognition =
     new Recognition();
-
-
   recognition.lang =
     "ms-MY";
-
-
   recognition.interimResults =
     false;
-
-
   recognition.continuous =
     false;
-
-
   recognition.maxAlternatives =
     1;
-
-
   recognition.onstart =
-    function() {
-
+    function(){
       listening = true;
-
       updateVoiceUI();
-
-      console.log(
-        "🎙️ Listening..."
-      );
-
     };
-
-
   recognition.onresult =
-    function(event) {
-
+    function(event){
       const transcript =
         event.results?.[0]?.[0]
           ?.transcript
           ?.trim();
-
-
-      if (!transcript) {
+      if(!transcript){
         return;
       }
-
-
-      console.log(
-        "🎙️ Tuan:",
-        transcript
-      );
-
-
       input.value =
         transcript;
-
-
       sendMessage();
-
     };
-
-
   recognition.onerror =
-    function(event) {
-
+    function(event){
       console.error(
-        "🎙️ Recognition error:",
+        "Recognition error:",
         event.error
       );
-
       listening = false;
-
       updateVoiceUI();
-
     };
-
-
   recognition.onend =
-    function() {
-
+    function(){
       listening = false;
-
       updateVoiceUI();
-
-      console.log(
-        "🎙️ Recognition ended."
-      );
-
     };
-
 }
-
-
-/* ============================================================
-   START LISTENING
-============================================================ */
-
-function startListening() {
-
+/* =========================================================
+   LISTENING
+========================================================= */
+function startListening(){
   unlockSpeech();
-
-
-  if (!recognition) {
-
+  if(!recognition){
     addMessage(
       "🎙️ Voice recognition tidak disokong oleh browser ini.",
       "naira-message"
     );
-
     return;
-
   }
-
-
-  if (speaking) {
-
+  if(speaking){
     stopSpeaking();
-
   }
-
-
-  if (listening) {
-
+  if(listening){
     return;
-
   }
-
-
-  try {
-
+  try{
     recognition.start();
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
-      "🎙️ Recognition start error:",
+      "Recognition start:",
       error
     );
-
   }
-
 }
-
-
-/* ============================================================
-   STOP LISTENING
-============================================================ */
-
-function stopListening() {
-
-  if (!recognition) {
+function stopListening(){
+  if(!recognition){
     return;
   }
-
-
-  try {
-
+  try{
     recognition.stop();
-
-  } catch (error) {
-
-    console.error(
-      "🎙️ Recognition stop error:",
-      error
-    );
-
+  }catch(error){
+    console.error(error);
   }
-
 }
-
-
-/* ============================================================
-   MIC BUTTON
-============================================================ */
-
+/* =========================================================
+   MIC
+========================================================= */
 micButton.addEventListener(
   "click",
-  function() {
-
+  function(){
     unlockSpeech();
-
-
-    if (speaking) {
-
+    if(speaking){
       stopSpeaking();
-
       return;
-
     }
-
-
-    if (listening) {
-
+    if(listening){
       stopListening();
-
       return;
-
     }
-
-
     startListening();
-
   }
 );
-
-
-/* ============================================================
+/* =========================================================
    GLOBAL VOICE API
-============================================================ */
-
+========================================================= */
 window.NairaVoice = {
-
-  start:
-    startListening,
-
-  stop:
-    stopListening,
-
-  speak:
-    speakNaira,
-
-  stopSpeaking:
-    stopSpeaking,
-
-  unlock:
-    unlockSpeech,
-
-  getSelectedVoice:
-    function() {
-
-      return selectedVoiceProfile;
-
-    },
-
-  getEmotion:
-    function() {
-
-      return selectedEmotion;
-
-    },
-
-  getMode:
-    function() {
-
-      return selectedVoiceMode;
-
-    },
-
-  isListening:
-    function() {
-
-      return listening;
-
-    },
-
-  isSpeaking:
-    function() {
-
-      return speaking;
-
+  start:startListening,
+  stop:stopListening,
+  speak:speakNaira,
+  stopSpeaking:stopSpeaking,
+  unlock:unlockSpeech,
+  select:function(id){
+    if(
+      VOICE_LIBRARY.some(
+        v => v.id === id
+      )
+    ){
+      selectedVoiceId =
+        id;
+      localStorage.setItem(
+        "naira_voice_id",
+        id
+      );
+      updateCurrentVoice();
+      renderVoiceLibrary();
     }
-
+  },
+  getCurrent:function(){
+    return getSelectedVoice();
+  },
+  isListening:function(){
+    return listening;
+  },
+  isSpeaking:function(){
+    return speaking;
+  }
 };
-
-
-/* ============================================================
+/* =========================================================
    SEND MESSAGE
-============================================================ */
-
-async function sendMessage() {
-
+========================================================= */
+async function sendMessage(){
   const text =
     input.value.trim();
-
-
-  if (!text) {
-
+  if(!text){
     return;
-
   }
-
-
   ensureConversationId();
-
-
-  if (speaking) {
-
+  if(speaking){
     stopSpeaking();
-
   }
-
-
   addMessage(
     text,
     "user-message"
   );
-
-
   input.value = "";
-
-
   sendButton.disabled =
     true;
-
-
   const loading =
-    document.createElement(
-      "div"
-    );
-
-
+    document.createElement("div");
   loading.className =
     "message naira-message typing-indicator";
-
-
-  loading.innerHTML =
-    `
+  loading.innerHTML = `
     <span></span>
     <span></span>
     <span></span>
-    `;
-
-
+  `;
   chat.appendChild(
     loading
   );
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
         "/api/chat",
         {
-          method: "POST",
-
-          headers: {
+          method:"POST",
+          headers:{
             "Content-Type":
               "application/json"
           },
-
           body:
             JSON.stringify({
-
-              message:
-                text,
-
+              message:text,
               conversationId:
                 currentConversationId
-
             })
-
         }
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {
-
         error:
           raw ||
           "Server response tidak sah."
-
       };
-
     }
-
-
     loading.remove();
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       addMessage(
         data.error ||
         `Server error (${response.status})`,
         "naira-message"
       );
-
       return;
-
     }
-
-
     const nairaReply =
       data.reply ||
       data.message ||
       "Maaf Tuan, Naira tak menerima jawapan.";
-
-
     addMessage(
       nairaReply,
       "naira-message"
     );
-
-
     setTimeout(
-      function() {
-
+      function(){
         speakNaira(
           nairaReply
         );
-
       },
       80
     );
-
-
     loadHistory(true);
-
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "CHAT ERROR:",
       error
     );
-
-
     loading.remove();
-
-
     addMessage(
       "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
       error.message,
       "naira-message"
     );
-
-
-  } finally {
-
+  }finally{
     sendButton.disabled =
       false;
-
     input.focus();
-
   }
-
 }
-
-
 window.sendMessage =
   sendMessage;
-
-
 sendButton.addEventListener(
   "click",
-  function() {
-
+  function(){
     unlockSpeech();
-
     sendMessage();
-
   }
 );
-
-
 input.addEventListener(
   "keydown",
-  function(event) {
-
-    if (
-      event.key === "Enter"
-    ) {
-
+  function(event){
+    if(event.key === "Enter"){
       event.preventDefault();
-
       unlockSpeech();
-
       sendMessage();
-
     }
-
   }
 );
-
-
-/* ============================================================
-   HISTORY DOM
-============================================================ */
-
+/* =========================================================
+   VOICE CENTER DOM
+========================================================= */
+const voiceCenterButton =
+  document.getElementById(
+    "voiceCenterButton"
+  );
+const voiceCenterOverlay =
+  document.getElementById(
+    "voiceCenterOverlay"
+  );
+const closeVoiceCenter =
+  document.getElementById(
+    "closeVoiceCenter"
+  );
+const voiceSearch =
+  document.getElementById(
+    "voiceSearch"
+  );
+const voiceCategoryFilter =
+  document.getElementById(
+    "voiceCategoryFilter"
+  );
+const voiceEmotionFilter =
+  document.getElementById(
+    "voiceEmotionFilter"
+  );
+const voiceGrid =
+  document.getElementById(
+    "voiceGrid"
+  );
+const voiceCount =
+  document.getElementById(
+    "voiceCount"
+  );
+const currentVoiceIcon =
+  document.getElementById(
+    "currentVoiceIcon"
+  );
+const currentVoiceName =
+  document.getElementById(
+    "currentVoiceName"
+  );
+const currentVoiceDescription =
+  document.getElementById(
+    "currentVoiceDescription"
+  );
+const testVoiceButton =
+  document.getElementById(
+    "testVoiceButton"
+  );
+const applyVoiceButton =
+  document.getElementById(
+    "applyVoiceButton"
+  );
+const voiceRate =
+  document.getElementById(
+    "voiceRate"
+  );
+const voicePitch =
+  document.getElementById(
+    "voicePitch"
+  );
+const voiceVolume =
+  document.getElementById(
+    "voiceVolume"
+  );
+const rateValue =
+  document.getElementById(
+    "rateValue"
+  );
+const pitchValue =
+  document.getElementById(
+    "pitchValue"
+  );
+const volumeValue =
+  document.getElementById(
+    "volumeValue"
+  );
+/* =========================================================
+   VOICE CENTER OPEN
+========================================================= */
+voiceCenterButton.addEventListener(
+  "click",
+  function(){
+    voiceCenterOverlay.classList.add(
+      "active"
+    );
+    unlockSpeech();
+    updateCurrentVoice();
+    renderVoiceLibrary();
+  }
+);
+closeVoiceCenter.addEventListener(
+  "click",
+  function(){
+    voiceCenterOverlay.classList.remove(
+      "active"
+    );
+  }
+);
+voiceCenterOverlay.addEventListener(
+  "click",
+  function(event){
+    if(
+      event.target ===
+      voiceCenterOverlay
+    ){
+      voiceCenterOverlay.classList.remove(
+        "active"
+      );
+    }
+  }
+);
+/* =========================================================
+   CURRENT VOICE
+========================================================= */
+function updateCurrentVoice(){
+  const voice =
+    getSelectedVoice();
+  currentVoiceIcon.textContent =
+    voice.icon;
+  currentVoiceName.textContent =
+    voice.name;
+  currentVoiceDescription.textContent =
+    voice.description;
+}
+/* =========================================================
+   RENDER VOICES
+========================================================= */
+function renderVoiceLibrary(){
+  const search =
+    voiceSearch.value
+      .trim()
+      .toLowerCase();
+  const category =
+    voiceCategoryFilter.value;
+  const emotion =
+    voiceEmotionFilter.value;
+  const filtered =
+    VOICE_LIBRARY.filter(
+      voice => {
+        const haystack =
+          [
+            voice.name,
+            voice.category,
+            voice.emotion,
+            voice.language,
+            voice.type,
+            voice.description
+          ]
+          .join(" ")
+          .toLowerCase();
+        const matchesSearch =
+          !search ||
+          haystack.includes(
+            search
+          );
+        const matchesCategory =
+          category === "all" ||
+          voice.category ===
+            category;
+        const matchesEmotion =
+          emotion === "all" ||
+          voice.emotion ===
+            emotion;
+        return (
+          matchesSearch &&
+          matchesCategory &&
+          matchesEmotion
+        );
+      }
+    );
+  voiceCount.textContent =
+    filtered.length +
+    " voices";
+  voiceGrid.innerHTML =
+    "";
+  if(!filtered.length){
+    voiceGrid.innerHTML = `
+      <div class="voice-empty">
+        🔍 Tiada voice dijumpai.
+      </div>
+    `;
+    return;
+  }
+  filtered.forEach(
+    voice => {
+      const card =
+        document.createElement(
+          "div"
+        );
+      card.className =
+        "voice-card" +
+        (
+          voice.id ===
+          selectedVoiceId
+            ? " selected"
+            : ""
+        );
+      card.innerHTML = `
+        <div class="voice-card-icon">
+          ${voice.icon}
+        </div>
+        <div class="voice-card-name">
+          ${escapeHTML(voice.name)}
+        </div>
+        <div class="voice-card-type">
+          ${escapeHTML(voice.type)}
+        </div>
+        <div class="voice-card-tags">
+          <span class="voice-tag">
+            ${escapeHTML(voice.emotion)}
+          </span>
+          <span class="voice-tag">
+            ${escapeHTML(voice.language)}
+          </span>
+        </div>
+        <div class="voice-card-actions">
+          <button
+            type="button"
+            class="preview">
+            ▶️
+          </button>
+          <button
+            type="button"
+            class="use">
+            Pilih
+          </button>
+        </div>
+      `;
+      const preview =
+        card.querySelector(
+          ".preview"
+        );
+      const use =
+        card.querySelector(
+          ".use"
+        );
+      preview.addEventListener(
+        "click",
+        function(event){
+          event.stopPropagation();
+          selectedVoiceId =
+            voice.id;
+          updateCurrentVoice();
+          speakNaira(
+            getVoiceDemoText(
+              voice
+            )
+          );
+          renderVoiceLibrary();
+        }
+      );
+      use.addEventListener(
+        "click",
+        function(event){
+          event.stopPropagation();
+          selectedVoiceId =
+            voice.id;
+          localStorage.setItem(
+            "naira_voice_id",
+            selectedVoiceId
+          );
+          updateCurrentVoice();
+          renderVoiceLibrary();
+          setVoiceStatus(
+            "✓ Voice dipilih: " +
+            voice.name
+          );
+        }
+      );
+      card.addEventListener(
+        "click",
+        function(){
+          selectedVoiceId =
+            voice.id;
+          updateCurrentVoice();
+          renderVoiceLibrary();
+        }
+      );
+      voiceGrid.appendChild(
+        card
+      );
+    }
+  );
+}
+/* =========================================================
+   DEMO TEXT
+========================================================= */
+function getVoiceDemoText(voice){
+  if(
+    voice.category ===
+    "animal"
+  ){
+    return (
+      "Hai Tuan! " +
+      "Ini contoh suara " +
+      voice.name
+    );
+  }
+  if(
+    voice.category ===
+    "singing"
+  ){
+    return (
+      "Hai Tuan, ini contoh gaya suara Naira... ♪ " +
+      "selamat datang... ♪"
+    );
+  }
+  if(
+    voice.emotion ===
+    "negative"
+  ){
+    return (
+      "Tuan... Naira nak cakap sesuatu. " +
+      "Jangan risau, kita selesaikan sama-sama."
+    );
+  }
+  if(
+    voice.emotion ===
+    "dramatic"
+  ){
+    return (
+      "Tuan... masa sudah tiba. " +
+      "Kita mesti teruskan sekarang."
+    );
+  }
+  if(
+    voice.emotion ===
+    "funny"
+  ){
+    return (
+      "Tuan! Hahaha... " +
+      "Naira rasa benda ni memang kelakar."
+    );
+  }
+  return (
+    "Hai Tuan ❤️ " +
+    "Ini contoh suara " +
+    voice.name +
+    ". Naira ada dengan Tuan."
+  );
+}
+/* =========================================================
+   VOICE TEST
+========================================================= */
+testVoiceButton.addEventListener(
+  "click",
+  function(){
+    unlockSpeech();
+    speakNaira(
+      getVoiceDemoText(
+        getSelectedVoice()
+      )
+    );
+  }
+);
+applyVoiceButton.addEventListener(
+  "click",
+  function(){
+    localStorage.setItem(
+      "naira_voice_id",
+      selectedVoiceId
+    );
+    localStorage.setItem(
+      "naira_voice_rate",
+      voiceSettings.rate
+    );
+    localStorage.setItem(
+      "naira_voice_pitch",
+      voiceSettings.pitch
+    );
+    localStorage.setItem(
+      "naira_voice_volume",
+      voiceSettings.volume
+    );
+    localStorage.setItem(
+      "naira_voice_style",
+      voiceSettings.style
+    );
+    setVoiceStatus(
+      "✓ Voice Naira dikemaskini."
+    );
+  }
+);
+/* =========================================================
+   VOICE SEARCH FILTER
+========================================================= */
+voiceSearch.addEventListener(
+  "input",
+  renderVoiceLibrary
+);
+voiceCategoryFilter.addEventListener(
+  "change",
+  renderVoiceLibrary
+);
+voiceEmotionFilter.addEventListener(
+  "change",
+  renderVoiceLibrary
+);
+/* =========================================================
+   VOICE CONTROLS
+========================================================= */
+voiceRate.value =
+  voiceSettings.rate;
+voicePitch.value =
+  voiceSettings.pitch;
+voiceVolume.value =
+  voiceSettings.volume;
+function updateVoiceSettingsUI(){
+  rateValue.textContent =
+    Number(
+      voiceSettings.rate
+    ).toFixed(2);
+  pitchValue.textContent =
+    Number(
+      voiceSettings.pitch
+    ).toFixed(2);
+  volumeValue.textContent =
+    Math.round(
+      voiceSettings.volume *
+      100
+    ) + "%";
+}
+voiceRate.addEventListener(
+  "input",
+  function(){
+    voiceSettings.rate =
+      Number(
+        voiceRate.value
+      );
+    updateVoiceSettingsUI();
+  }
+);
+voicePitch.addEventListener(
+  "input",
+  function(){
+    voiceSettings.pitch =
+      Number(
+        voicePitch.value
+      );
+    updateVoiceSettingsUI();
+  }
+);
+voiceVolume.addEventListener(
+  "input",
+  function(){
+    voiceSettings.volume =
+      Number(
+        voiceVolume.value
+      );
+    updateVoiceSettingsUI();
+  }
+);
+document
+  .querySelectorAll(
+    ".voice-toggle"
+  )
+  .forEach(
+    button => {
+      button.addEventListener(
+        "click",
+        function(){
+          document
+            .querySelectorAll(
+              ".voice-toggle"
+            )
+            .forEach(
+              b =>
+                b.classList.remove(
+                  "active"
+                )
+            );
+          button.classList.add(
+            "active"
+          );
+          voiceSettings.style =
+            button.dataset.style;
+          localStorage.setItem(
+            "naira_voice_style",
+            voiceSettings.style
+          );
+        }
+      );
+    }
+  );
+updateVoiceSettingsUI();
+/* =========================================================
+   HISTORY
+========================================================= */
 const historyButton =
   document.getElementById(
     "historyButton"
   );
-
 const historyPanel =
   document.getElementById(
     "historyPanel"
   );
-
 const closeHistory =
   document.getElementById(
     "closeHistory"
   );
-
 const historyList =
   document.getElementById(
     "historyList"
   );
-
 const historyStatus =
   document.getElementById(
     "historyStatus"
   );
-
 const historySearch =
   document.getElementById(
     "historySearch"
   );
-
 const refreshHistory =
   document.getElementById(
     "refreshHistory"
   );
-
 const newConversation =
   document.getElementById(
     "newConversation"
   );
-
-
 let allHistory = [];
-
-
-/* ============================================================
-   HISTORY OPEN
-============================================================ */
-
 historyButton.addEventListener(
   "click",
-  function() {
-
+  function(){
     historyPanel.classList.add(
       "active"
     );
-
     loadHistory();
-
   }
 );
-
-
-/* ============================================================
-   HISTORY CLOSE
-============================================================ */
-
 closeHistory.addEventListener(
   "click",
-  function() {
-
+  function(){
     historyPanel.classList.remove(
       "active"
     );
-
   }
 );
-
-
-/* ============================================================
-   HISTORY REFRESH
-============================================================ */
-
 refreshHistory.addEventListener(
   "click",
-  function() {
-
+  function(){
     loadHistory();
-
   }
 );
-
-
 historySearch.addEventListener(
   "input",
   renderHistory
 );
-
-
-/* ============================================================
+/* =========================================================
    LOAD HISTORY
-============================================================ */
-
+========================================================= */
 async function loadHistory(
-  silent = false
-) {
-
-  if (!silent) {
-
+  silent=false
+){
+  if(!silent){
     historyStatus.textContent =
       "Memuatkan conversation...";
-
     historyList.innerHTML =
       "";
-
   }
-
-
-  try {
-
+  try{
     const search =
       historySearch.value.trim();
-
-
     const params =
       new URLSearchParams();
-
-
-    if (search) {
-
+    if(search){
       params.set(
         "search",
         search
       );
-
     }
-
-
     const url =
       API_BASE +
       "/api/history" +
@@ -4528,106 +2867,62 @@ async function loadHistory(
             params.toString()
           : ""
       );
-
-
     const response =
       await fetch(url);
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         `History error (${response.status})`
       );
-
     }
-
-
     allHistory =
       data.conversations ||
       [];
-
-
     historyStatus.textContent =
       `${allHistory.length} conversation`;
-
-
     renderHistory();
-
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "HISTORY ERROR:",
       error
     );
-
-
     historyStatus.textContent =
       "Gagal memuatkan history.";
-
-
-    if (!silent) {
-
+    if(!silent){
       historyList.innerHTML =
         `
         <div class="empty-history">
           ❌ ${escapeHTML(error.message)}
         </div>
         `;
-
     }
-
   }
-
 }
-
-
-/* ============================================================
+/* =========================================================
    RENDER HISTORY
-============================================================ */
-
-function renderHistory() {
-
+========================================================= */
+function renderHistory(){
   const search =
     historySearch.value
       .trim()
       .toLowerCase();
-
-
   const filtered =
     allHistory.filter(
-      function(conversation) {
-
-        if (!search) {
-
+      conversation => {
+        if(!search){
           return true;
-
         }
-
-
         const text =
           [
             conversation.title,
@@ -4638,367 +2933,229 @@ function renderHistory() {
           ]
           .join(" ")
           .toLowerCase();
-
-
         return text.includes(
           search
         );
-
       }
     );
-
-
   historyList.innerHTML =
     "";
-
-
-  if (!filtered.length) {
-
+  if(!filtered.length){
     historyList.innerHTML =
       `
       <div class="empty-history">
         🕘 Tiada conversation dijumpai.
       </div>
       `;
-
     return;
-
   }
-
-
   const groups = {};
-
-
   filtered.forEach(
-    function(conversation) {
-
+    conversation => {
       const date =
         new Date(
           conversation.created_at
         );
-
-
       const dateKey =
         date.toLocaleDateString(
           "ms-MY",
           {
-            weekday:
-              "long",
-            year:
-              "numeric",
-            month:
-              "long",
-            day:
-              "numeric"
+            weekday:"long",
+            year:"numeric",
+            month:"long",
+            day:"numeric"
           }
         );
-
-
-      if (!groups[dateKey]) {
-
+      if(!groups[dateKey]){
         groups[dateKey] = [];
-
       }
-
-
       groups[dateKey].push(
         conversation
       );
-
     }
   );
-
-
   Object.keys(groups)
     .forEach(
-      function(dateKey) {
-
+      dateKey => {
         const conversations =
           groups[dateKey];
-
-
         const day =
           document.createElement(
             "div"
           );
-
-
         day.className =
           "history-day";
-
-
         const dayTitle =
           document.createElement(
             "div"
           );
-
-
         dayTitle.className =
           "history-day-title";
-
-
         dayTitle.innerHTML =
           `
           <span>
             📅 ${escapeHTML(dateKey)}
           </span>
-
           <span class="history-day-count">
             ${conversations.length}
           </span>
           `;
-
-
         day.appendChild(
           dayTitle
         );
-
-
         conversations.forEach(
-          function(conversation) {
-
+          conversation => {
             const card =
               document.createElement(
                 "div"
               );
-
-
             card.className =
               "history-card";
-
-
             const title =
               document.createElement(
                 "div"
               );
-
-
             title.className =
               "history-title";
-
-
             title.textContent =
               conversation.title ||
               "Conversation Naira";
-
-
             const preview =
               document.createElement(
                 "div"
               );
-
-
             preview.className =
               "history-preview";
-
-
             preview.textContent =
               conversation.user_message ||
               "Tiada mesej";
-
-
             const date =
               new Date(
                 conversation.created_at
               );
-
-
             const time =
               date.toLocaleTimeString(
                 "ms-MY",
                 {
-                  hour:
-                    "2-digit",
-                  minute:
-                    "2-digit"
+                  hour:"2-digit",
+                  minute:"2-digit"
                 }
               );
-
-
             const meta =
               document.createElement(
                 "div"
               );
-
-
             meta.className =
               "history-meta";
-
-
             meta.textContent =
               `${time} • ${
                 conversation.category ||
                 "general"
               }`;
-
-
             const actions =
               document.createElement(
                 "div"
               );
-
-
             actions.className =
               "history-actions";
-
-
             const openButton =
               document.createElement(
                 "button"
               );
-
-
             openButton.type =
               "button";
-
-
             openButton.textContent =
               "👁️ Buka";
-
-
             openButton.addEventListener(
               "click",
-              function(event) {
-
+              event => {
                 event.stopPropagation();
-
                 openConversation(
                   conversation.conversation_id
                 );
-
               }
             );
-
-
             const editButton =
               document.createElement(
                 "button"
               );
-
-
             editButton.type =
               "button";
-
-
             editButton.textContent =
               "✏️ Edit";
-
-
             editButton.addEventListener(
               "click",
-              function(event) {
-
+              event => {
                 event.stopPropagation();
-
                 editConversation(
                   conversation
                 );
-
               }
             );
-
-
             const deleteButton =
               document.createElement(
                 "button"
               );
-
-
             deleteButton.type =
               "button";
-
-
             deleteButton.className =
               "history-delete";
-
-
             deleteButton.textContent =
               "🗑️ Delete";
-
-
             deleteButton.addEventListener(
               "click",
-              function(event) {
-
+              event => {
                 event.stopPropagation();
-
                 deleteConversation(
                   conversation.conversation_id
                 );
-
               }
             );
-
-
             actions.appendChild(
               openButton
             );
-
             actions.appendChild(
               editButton
             );
-
             actions.appendChild(
               deleteButton
             );
-
-
             card.appendChild(
               title
             );
-
             card.appendChild(
               preview
             );
-
             card.appendChild(
               meta
             );
-
             card.appendChild(
               actions
             );
-
-
             day.appendChild(
               card
             );
-
           }
         );
-
-
         historyList.appendChild(
           day
         );
-
       }
     );
-
 }
-
-
-/* ============================================================
+/* =========================================================
    OPEN CONVERSATION
-============================================================ */
-
+========================================================= */
 async function openConversation(
   conversationId
-) {
-
-  if (!conversationId) {
-
+){
+  if(!conversationId){
     alert(
       "❌ Conversation ID tidak dijumpai."
     );
-
     return;
-
   }
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
@@ -5007,713 +3164,436 @@ async function openConversation(
           conversationId
         )
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         "Conversation gagal dibuka."
       );
-
     }
-
-
     const messages =
       data.conversations ||
       [];
-
-
     currentConversationId =
       conversationId;
-
-
     localStorage.setItem(
       "naira_conversation_id",
       currentConversationId
     );
-
-
     historyPanel.classList.remove(
       "active"
     );
-
-
     chat.innerHTML =
       "";
-
-
     messages.forEach(
-      function(message) {
-
-        if (
-          message.user_message
-        ) {
-
+      message => {
+        if(message.user_message){
           addMessage(
             message.user_message,
             "user-message"
           );
-
         }
-
-
-        if (
-          message.naira_response
-        ) {
-
+        if(message.naira_response){
           addMessage(
             message.naira_response,
             "naira-message"
           );
-
         }
-
       }
     );
-
-
-    if (!messages.length) {
-
+    if(!messages.length){
       addMessage(
         "Conversation ini kosong.",
         "naira-message"
       );
-
     }
-
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "OPEN HISTORY ERROR:",
       error
     );
-
-
     alert(
       "❌ " +
       error.message
     );
-
   }
-
 }
-
-
-/* ============================================================
+/* =========================================================
    NEW CONVERSATION
-============================================================ */
-
+========================================================= */
 newConversation.addEventListener(
   "click",
-  function() {
-
+  function(){
     const confirmed =
       confirm(
         "Mulakan conversation baru dengan Naira?"
       );
-
-
-    if (!confirmed) {
-
+    if(!confirmed){
       return;
-
     }
-
-
     stopSpeaking();
-
-
     currentConversationId =
       createConversationId();
-
-
     localStorage.setItem(
       "naira_conversation_id",
       currentConversationId
     );
-
-
     chat.innerHTML =
       `
       <div class="message naira-message">
         Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
       </div>
       `;
-
-
     historyPanel.classList.remove(
       "active"
     );
-
-
     input.value =
       "";
-
-
     input.focus();
-
   }
 );
-
-
-/* ============================================================
+/* =========================================================
    EDIT HISTORY
-============================================================ */
-
+========================================================= */
 async function editConversation(
   conversation
-) {
-
+){
   const currentTitle =
     conversation.title ||
     "Conversation Naira";
-
-
   const newTitle =
     prompt(
       "✏️ Masukkan tajuk baru:",
       currentTitle
     );
-
-
-  if (
-    newTitle === null
-  ) {
-
+  if(newTitle === null){
     return;
-
   }
-
-
   const cleanTitle =
     newTitle.trim();
-
-
-  if (!cleanTitle) {
-
+  if(!cleanTitle){
     alert(
       "⚠️ Tajuk tidak boleh kosong."
     );
-
     return;
-
   }
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
         "/api/history",
         {
-          method:
-            "PATCH",
-
-          headers: {
+          method:"PATCH",
+          headers:{
             "Content-Type":
               "application/json"
           },
-
           body:
             JSON.stringify({
-
               conversationId:
                 conversation.conversation_id,
-
               title:
                 cleanTitle
-
             })
-
         }
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         `Gagal edit history (${response.status})`
       );
-
     }
-
-
     await loadHistory();
-
-
-  } catch (error) {
-
-    console.error(
-      "EDIT HISTORY ERROR:",
-      error
-    );
-
-
+  }catch(error){
     alert(
       "❌ Gagal edit conversation.\n\n" +
       error.message
     );
-
   }
-
 }
-
-
-/* ============================================================
+/* =========================================================
    DELETE HISTORY
-============================================================ */
-
+========================================================= */
 async function deleteConversation(
   conversationId
-) {
-
-  if (!conversationId) {
-
+){
+  if(!conversationId){
     alert(
       "❌ Conversation ID tidak dijumpai."
     );
-
     return;
-
   }
-
-
   const confirmed =
     confirm(
       "🗑️ Tuan pasti mahu padam conversation ini?\n\n" +
       "Semua mesej dalam conversation ini akan dipadam dari database."
     );
-
-
-  if (!confirmed) {
-
+  if(!confirmed){
     return;
-
   }
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
         "/api/history",
         {
-          method:
-            "DELETE",
-
-          headers: {
+          method:"DELETE",
+          headers:{
             "Content-Type":
               "application/json"
           },
-
           body:
             JSON.stringify({
-
               conversationId:
                 conversationId
-
             })
-
         }
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         `Gagal delete history (${response.status})`
       );
-
     }
-
-
-    if (
+    if(
       currentConversationId ===
       conversationId
-    ) {
-
+    ){
       currentConversationId =
         createConversationId();
-
-
       localStorage.setItem(
         "naira_conversation_id",
         currentConversationId
       );
-
-
       chat.innerHTML =
         `
         <div class="message naira-message">
           Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
         </div>
         `;
-
     }
-
-
     await loadHistory();
-
-
-  } catch (error) {
-
-    console.error(
-      "DELETE HISTORY ERROR:",
-      error
-    );
-
-
+  }catch(error){
     alert(
       "❌ Gagal padam conversation.\n\n" +
       error.message
     );
-
   }
-
 }
-
-
-/* ============================================================
-   MEMORY DOM
-============================================================ */
-
+/* =========================================================
+   MEMORY
+========================================================= */
 const memoryButton =
   document.getElementById(
     "memoryButton"
   );
-
 const memoryPanel =
   document.getElementById(
     "memoryPanel"
   );
-
 const closeMemory =
   document.getElementById(
     "closeMemory"
   );
-
 const memoryList =
   document.getElementById(
     "memoryList"
   );
-
 const memoryStatus =
   document.getElementById(
     "memoryStatus"
   );
-
 const memorySearch =
   document.getElementById(
     "memorySearch"
   );
-
 const categoryFilter =
   document.getElementById(
     "categoryFilter"
   );
-
 const refreshMemory =
   document.getElementById(
     "refreshMemory"
   );
-
 const addMemoryButton =
   document.getElementById(
     "addMemoryButton"
   );
-
 const memoryFormOverlay =
   document.getElementById(
     "memoryFormOverlay"
   );
-
 const memoryFormTitle =
   document.getElementById(
     "memoryFormTitle"
   );
-
 const memoryText =
   document.getElementById(
     "memoryText"
   );
-
 const memoryCategory =
   document.getElementById(
     "memoryCategory"
   );
-
 const memorySubcategory =
   document.getElementById(
     "memorySubcategory"
   );
-
 const memoryImportance =
   document.getElementById(
     "memoryImportance"
   );
-
 const saveMemoryButton =
   document.getElementById(
     "saveMemory"
   );
-
 const cancelMemory =
   document.getElementById(
     "cancelMemory"
   );
-
-
 let allMemories = [];
-
 let editingMemoryId =
   null;
-
-
-/* ============================================================
+/* =========================================================
    MEMORY OPEN / CLOSE
-============================================================ */
-
+========================================================= */
 memoryButton.addEventListener(
   "click",
-  function() {
-
+  function(){
     memoryPanel.classList.add(
       "active"
     );
-
     loadMemories();
-
   }
 );
-
-
 closeMemory.addEventListener(
   "click",
-  function() {
-
+  function(){
     memoryPanel.classList.remove(
       "active"
     );
-
   }
 );
-
-
 refreshMemory.addEventListener(
   "click",
   loadMemories
 );
-
-
 memorySearch.addEventListener(
   "input",
   renderFilteredMemories
 );
-
-
 categoryFilter.addEventListener(
   "change",
   renderFilteredMemories
 );
-
-
-/* ============================================================
+/* =========================================================
    LOAD MEMORIES
-============================================================ */
-
-async function loadMemories() {
-
+========================================================= */
+async function loadMemories(){
   memoryStatus.textContent =
     "Memuatkan memory...";
-
-
   memoryList.innerHTML =
     "";
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
         "/api/memory",
         {
-          method:
-            "POST",
-
-          headers: {
+          method:"POST",
+          headers:{
             "Content-Type":
               "application/json"
           },
-
           body:
             JSON.stringify({
-
-              action:
-                "list"
-
+              action:"list"
             })
-
         }
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         `Memory error (${response.status})`
       );
-
     }
-
-
     allMemories =
       data.memories ||
       [];
-
-
     memoryStatus.textContent =
       `${allMemories.length} memory disimpan`;
-
-
     renderFilteredMemories();
-
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "MEMORY ERROR:",
       error
     );
-
-
     memoryStatus.textContent =
       "Gagal memuatkan memory.";
-
-
     memoryList.innerHTML =
       `
       <div class="empty-state">
         ❌ ${escapeHTML(error.message)}
       </div>
       `;
-
   }
-
 }
-
-
-/* ============================================================
+/* =========================================================
    FILTER MEMORY
-============================================================ */
-
-function renderFilteredMemories() {
-
+========================================================= */
+function renderFilteredMemories(){
   const search =
     memorySearch.value
       .trim()
       .toLowerCase();
-
-
   const category =
     categoryFilter.value;
-
-
   const filtered =
     allMemories.filter(
-      function(memory) {
-
+      memory => {
         const text =
           [
             memory.memory,
@@ -5722,148 +3602,81 @@ function renderFilteredMemories() {
           ]
           .join(" ")
           .toLowerCase();
-
-
         const matchesSearch =
           !search ||
-          text.includes(
-            search
-          );
-
-
+          text.includes(search);
         const matchesCategory =
           category === "all" ||
           memory.category ===
-          category;
-
-
+            category;
         return (
           matchesSearch &&
           matchesCategory
         );
-
       }
     );
-
-
   renderMemories(
     filtered
   );
-
 }
-
-
-/* ============================================================
+/* =========================================================
    RENDER MEMORY
-============================================================ */
-
+========================================================= */
 function renderMemories(
   memories
-) {
-
+){
   memoryList.innerHTML =
     "";
-
-
-  if (!memories.length) {
-
+  if(!memories.length){
     memoryList.innerHTML =
       `
       <div class="empty-state">
         🧠 Tiada memory dijumpai.
       </div>
       `;
-
     return;
-
   }
-
-
   const groups = {};
-
-
   memories.forEach(
-    function(memory) {
-
+    memory => {
       const category =
         memory.category ||
         "general";
-
-
-      if (!groups[category]) {
-
+      if(!groups[category]){
         groups[category] = [];
-
       }
-
-
       groups[category].push(
         memory
       );
-
     }
   );
-
-
   const categoryInfo = {
-
-    profile:
-      "👤 Profile",
-
-    fashion:
-      "👕 Fashion",
-
-    food:
-      "🍔 Food",
-
-    game:
-      "🎮 Game",
-
-    hobby:
-      "🎨 Hobby",
-
-    work:
-      "💼 Work",
-
-    project:
-      "🚀 Project",
-
-    preference:
-      "❤️ Preference",
-
-    family:
-      "👨‍👩‍👧 Family",
-
-    general:
-      "📁 General"
-
+    profile:"👤 Profile",
+    fashion:"👕 Fashion",
+    food:"🍔 Food",
+    game:"🎮 Game",
+    hobby:"🎨 Hobby",
+    work:"💼 Work",
+    project:"🚀 Project",
+    preference:"❤️ Preference",
+    family:"👨‍👩‍👧 Family",
+    general:"📁 General"
   };
-
-
   Object.keys(groups)
     .forEach(
-      function(category) {
-
+      category => {
         const section =
           document.createElement(
             "div"
           );
-
-
         section.className =
           "memory-category";
-
-
         const title =
           document.createElement(
             "div"
           );
-
-
         title.className =
           "category-title";
-
-
         title.innerHTML =
           `
           <span>
@@ -5875,47 +3688,31 @@ function renderMemories(
               escapeHTML(category)
             }
           </span>
-
           <span class="category-count">
             ${groups[category].length}
           </span>
           `;
-
-
         section.appendChild(
           title
         );
-
-
         groups[category]
           .forEach(
-            function(memory) {
-
+            memory => {
               const card =
                 document.createElement(
                   "div"
                 );
-
-
               card.className =
                 "memory-card";
-
-
               const text =
                 document.createElement(
                   "div"
                 );
-
-
               text.className =
                 "memory-text";
-
-
               text.textContent =
                 memory.memory ||
                 "";
-
-
               const stars =
                 "⭐".repeat(
                   Math.max(
@@ -5928,18 +3725,12 @@ function renderMemories(
                     )
                   )
                 );
-
-
               const meta =
                 document.createElement(
                   "div"
                 );
-
-
               meta.className =
                 "memory-meta";
-
-
               meta.innerHTML =
                 `
                 ${stars}
@@ -5949,560 +3740,343 @@ function renderMemories(
                   "general"
                 )}
                 `;
-
-
               const actions =
                 document.createElement(
                   "div"
                 );
-
-
               actions.className =
                 "memory-actions";
-
-
               const edit =
                 document.createElement(
                   "button"
                 );
-
-
               edit.type =
                 "button";
-
-
               edit.textContent =
                 "✏️ Edit";
-
-
               edit.addEventListener(
                 "click",
-                function() {
-
+                function(){
                   openEditForm(
                     memory
                   );
-
                 }
               );
-
-
               const deleteButton =
                 document.createElement(
                   "button"
                 );
-
-
               deleteButton.type =
                 "button";
-
-
               deleteButton.className =
                 "delete";
-
-
               deleteButton.textContent =
                 "🗑️ Delete";
-
-
               deleteButton.addEventListener(
                 "click",
-                function() {
-
+                function(){
                   deleteMemory(
                     memory.id
                   );
-
                 }
               );
-
-
               actions.appendChild(
                 edit
               );
-
-
               actions.appendChild(
                 deleteButton
               );
-
-
               card.appendChild(
                 text
               );
-
-
               card.appendChild(
                 meta
               );
-
-
               card.appendChild(
                 actions
               );
-
-
               section.appendChild(
                 card
               );
-
             }
           );
-
-
         memoryList.appendChild(
           section
         );
-
       }
     );
-
 }
-
-
-/* ============================================================
+/* =========================================================
    ADD MEMORY
-============================================================ */
-
+========================================================= */
 addMemoryButton.addEventListener(
   "click",
-  function() {
-
+  function(){
     editingMemoryId =
       null;
-
-
     memoryFormTitle.textContent =
       "➕ Tambah Memory";
-
-
     memoryText.value =
       "";
-
-
     memoryCategory.value =
       "general";
-
-
     memorySubcategory.value =
       "general";
-
-
     memoryImportance.value =
       "2";
-
-
     memoryFormOverlay.classList.add(
       "active"
     );
-
-
     setTimeout(
-      function() {
-
+      function(){
         memoryText.focus();
-
       },
       100
     );
-
   }
 );
-
-
-/* ============================================================
+/* =========================================================
    EDIT MEMORY
-============================================================ */
-
+========================================================= */
 function openEditForm(
   memory
-) {
-
+){
   editingMemoryId =
     memory.id;
-
-
   memoryFormTitle.textContent =
     "✏️ Edit Memory";
-
-
   memoryText.value =
     memory.memory ||
     "";
-
-
   memoryCategory.value =
     memory.category ||
     "general";
-
-
   memorySubcategory.value =
     memory.subcategory ||
     "general";
-
-
   memoryImportance.value =
     String(
       memory.importance ||
       1
     );
-
-
   memoryFormOverlay.classList.add(
     "active"
   );
-
-
   setTimeout(
-    function() {
-
+    function(){
       memoryText.focus();
-
     },
     100
   );
-
 }
-
-
-/* ============================================================
+/* =========================================================
    CLOSE MEMORY FORM
-============================================================ */
-
+========================================================= */
 cancelMemory.addEventListener(
   "click",
   closeMemoryForm
 );
-
-
 memoryFormOverlay.addEventListener(
   "click",
-  function(event) {
-
-    if (
+  function(event){
+    if(
       event.target ===
       memoryFormOverlay
-    ) {
-
+    ){
       closeMemoryForm();
-
     }
-
   }
 );
-
-
-function closeMemoryForm() {
-
+function closeMemoryForm(){
   memoryFormOverlay.classList.remove(
     "active"
   );
-
-
   editingMemoryId =
     null;
-
 }
-
-
-/* ============================================================
+/* =========================================================
    SAVE MEMORY
-============================================================ */
-
+========================================================= */
 saveMemoryButton.addEventListener(
   "click",
-  async function() {
-
+  async function(){
     const text =
       memoryText.value.trim();
-
-
-    if (!text) {
-
+    if(!text){
       alert(
         "⚠️ Sila masukkan memory."
       );
-
       return;
-
     }
-
-
     saveMemoryButton.disabled =
       true;
-
-
     saveMemoryButton.textContent =
       "Menyimpan...";
-
-
-    try {
-
+    try{
       const action =
         editingMemoryId
           ? "update"
           : "save";
-
-
       const body = {
-
-        action:
-          action,
-
-        memory:
-          text,
-
+        action:action,
+        memory:text,
         category:
           memoryCategory.value,
-
         subcategory:
           memorySubcategory.value
             .trim() ||
           "general",
-
         importance:
           Number(
             memoryImportance.value
           )
-
       };
-
-
-      if (
-        editingMemoryId
-      ) {
-
+      if(editingMemoryId){
         body.id =
           editingMemoryId;
-
       }
-
-
       const response =
         await fetch(
           API_BASE +
           "/api/memory",
           {
-            method:
-              "POST",
-
-            headers: {
+            method:"POST",
+            headers:{
               "Content-Type":
                 "application/json"
             },
-
             body:
               JSON.stringify(
                 body
               )
-
           }
         );
-
-
       const raw =
         await response.text();
-
-
       let data = {};
-
-
-      try {
-
+      try{
         data =
           raw
             ? JSON.parse(raw)
             : {};
-
-      } catch {
-
+      }catch{
         data = {};
-
       }
-
-
-      if (!response.ok) {
-
+      if(!response.ok){
         throw new Error(
           data.error ||
           `Memory gagal disimpan (${response.status})`
         );
-
       }
-
-
       closeMemoryForm();
-
-
       await loadMemories();
-
-
-    } catch (error) {
-
+    }catch(error){
       console.error(
         "SAVE MEMORY ERROR:",
         error
       );
-
-
       alert(
         "❌ " +
         error.message
       );
-
-
-    } finally {
-
+    }finally{
       saveMemoryButton.disabled =
         false;
-
-
       saveMemoryButton.textContent =
         "💾 Simpan";
-
     }
-
   }
 );
-
-
-/* ============================================================
+/* =========================================================
    DELETE MEMORY
-============================================================ */
-
+========================================================= */
 async function deleteMemory(
   id
-) {
-
+){
   const confirmed =
     confirm(
       "Tuan pasti mahu padam memory ini?\n\n" +
       "Naira tidak akan menggunakan memory tersebut lagi."
     );
-
-
-  if (!confirmed) {
-
+  if(!confirmed){
     return;
-
   }
-
-
-  try {
-
+  try{
     const response =
       await fetch(
         API_BASE +
         "/api/memory",
         {
-          method:
-            "POST",
-
-          headers: {
+          method:"POST",
+          headers:{
             "Content-Type":
               "application/json"
           },
-
           body:
             JSON.stringify({
-
-              action:
-                "delete",
-
-              id:
-                id
-
+              action:"delete",
+              id:id
             })
-
         }
       );
-
-
     const raw =
       await response.text();
-
-
     let data = {};
-
-
-    try {
-
+    try{
       data =
         raw
           ? JSON.parse(raw)
           : {};
-
-    } catch {
-
+    }catch{
       data = {};
-
     }
-
-
-    if (!response.ok) {
-
+    if(!response.ok){
       throw new Error(
         data.error ||
         `Memory gagal dipadam (${response.status})`
       );
-
     }
-
-
     await loadMemories();
-
-
-  } catch (error) {
-
+  }catch(error){
     console.error(
       "DELETE MEMORY ERROR:",
       error
     );
-
-
     alert(
       "❌ " +
       error.message
     );
-
   }
-
 }
-
-
-/* ============================================================
+/* =========================================================
    INIT
-============================================================ */
-
+========================================================= */
 setupRecognition();
-
 updateVoiceUI();
-
 loadVoices();
-
-
+updateCurrentVoice();
+renderVoiceLibrary();
 console.log(
   "===================================="
 );
-
 console.log(
-  "🎙️ NAIRA VOICE ENGINE LOADED"
+  "🎙️ NAIRA VOICE CENTER LOADED"
 );
-
 console.log(
   "===================================="
 );
-
 console.log(
   "API:",
   API_BASE
 );
-
 console.log(
   "Conversation ID:",
   currentConversationId
 );
-
+console.log(
+  "Selected Voice:",
+  selectedVoiceId
+);
 console.log(
   "Speech Recognition:",
   !!(
@@ -6510,27 +4084,13 @@ console.log(
     window.webkitSpeechRecognition
   )
 );
-
 console.log(
   "Speech Synthesis:",
   "speechSynthesis" in window
 );
-
-console.log(
-  "Voice Profiles:",
-  NAIRA_VOICE_LIBRARY.length
-);
-
-console.log(
-  "User Agent:",
-  navigator.userAgent
-);
-
 console.log(
   "===================================="
 );
-
 </script>
-
 </body>
 </html>
