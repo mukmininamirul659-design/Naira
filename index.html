@@ -1162,6 +1162,20 @@ console.log(
   "Text To Speech:",
   "speechSynthesis" in window
 );
+setTimeout(() => {
+  const testVoice =
+    new SpeechSynthesisUtterance(
+      "Hai Tuan, ini suara Naira."
+    );
+
+  testVoice.lang = "ms-MY";
+  testVoice.rate = 0.88;
+  testVoice.pitch = 1.12;
+  testVoice.volume = 1;
+
+  window.speechSynthesis.speak(testVoice);
+}, 1500);
+
 </script>
 </body>
 </html>
