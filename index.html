@@ -1,9 +1,10 @@
+Naira — Personal Assistant | Full HTML
+
 <!DOCTYPE html>
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#10131c">
   <title>Naira — Personal Assistant</title>
   <style>
     * {
@@ -33,7 +34,6 @@
       border: none;
       cursor: pointer;
       color: white;
-      -webkit-tap-highlight-color: transparent;
     }
     button:disabled {
       opacity: .55;
@@ -45,19 +45,13 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      padding:
-        22px
-        18px
-        calc(18px + env(safe-area-inset-bottom));
+      padding: 22px 18px;
     }
     header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding:
-        8px
-        4px
-        20px;
+      padding: 8px 4px 20px;
     }
     .brand {
       display: flex;
@@ -115,10 +109,7 @@
     .welcome-orb {
       width: 110px;
       height: 110px;
-      margin:
-        0
-        auto
-        25px;
+      margin: 0 auto 25px;
       border-radius: 50%;
       background:
         radial-gradient(
@@ -156,14 +147,10 @@
       flex-direction: column;
       gap: 12px;
       padding-bottom: 20px;
-      overflow-y: auto;
-      scroll-behavior: smooth;
     }
     .message {
       max-width: 82%;
-      padding:
-        13px
-        16px;
+      padding: 13px 16px;
       border-radius: 18px;
       font-size: 14px;
       line-height: 1.5;
@@ -211,7 +198,6 @@
       color: white;
       font-size: 15px;
       padding: 10px;
-      min-width: 0;
     }
     #messageInput::placeholder {
       color: #777d8d;
@@ -230,7 +216,8 @@
     .mic {
       background:
         rgba(255,255,255,.08);
-      transition: .2s ease;
+      transition:
+        .2s ease;
     }
     .mic.listening {
       background:
@@ -278,9 +265,7 @@
       gap: 5px;
       min-width: 58px;
       min-height: 42px;
-      padding:
-        13px
-        16px;
+      padding: 13px 16px;
     }
     .typing-indicator span {
       width: 7px;
@@ -382,9 +367,7 @@
     }
     .history-search {
       flex: 1;
-      padding:
-        13px
-        14px;
+      padding: 13px 14px;
       border-radius: 13px;
       border:
         1px solid rgba(255,255,255,.08);
@@ -488,9 +471,7 @@
       text-align: center;
       color: #777d8d;
       font-size: 13px;
-      padding:
-        35px
-        15px;
+      padding: 35px 15px;
     }
     .memory-tools {
       display: flex;
@@ -499,9 +480,7 @@
     }
     .search-box {
       flex: 1;
-      padding:
-        13px
-        14px;
+      padding: 13px 14px;
       border-radius: 13px;
       border:
         1px solid rgba(255,255,255,.08);
@@ -523,9 +502,7 @@
     }
     .category-filter {
       width: 100%;
-      padding:
-        12px
-        13px;
+      padding: 12px 13px;
       border-radius: 13px;
       border:
         1px solid rgba(255,255,255,.08);
@@ -701,9 +678,13 @@
         N
       </div>
       <div>
-        <h1>Naira</h1>
+        <h1>
+          Naira
+        </h1>
         <div class="status">
-          <span class="online">●</span>
+          <span class="online">
+            ●
+          </span>
           Personal Assistant
         </div>
       </div>
@@ -1000,7 +981,10 @@
         <option value="1">
           ⭐ Biasa
         </option>
-        <option value="2" selected>
+        <option
+          value="2"
+          selected
+        >
           ⭐⭐ Penting
         </option>
         <option value="3">
@@ -1108,183 +1092,200 @@ function addMessage(
   chat.appendChild(
     message
   );
-  requestAnimationFrame(
-    function() {
-      message.scrollIntoView({
-        behavior: "smooth",
-        block: "end"
-      });
-    }
-  );
+  message.scrollIntoView({
+    behavior: "smooth",
+    block: "end"
+  });
 }
 /* ============================================================
    NAIRA VOICE ENGINE
-   FULL VOICE VERSION
 ============================================================ */
 let recognition = null;
 let listening = false;
 let speaking = false;
+let nairaSpeech = null;
 let voices = [];
-let speechUnlocked = false;
-let currentUtterance = null;
 /* ============================================================
-   CHECK TTS SUPPORT
+   VOICE SETTINGS
 ============================================================ */
-function hasSpeechSynthesis() {
-  return (
-    "speechSynthesis" in window &&
-    typeof SpeechSynthesisUtterance !==
-      "undefined"
-  );
-}
+const NAIRA_VOICE_SETTINGS = {
+  language:
+    "ms-MY",
+  rate:
+    0.90,
+  pitch:
+    1.08,
+  volume:
+    1.0
+};
 /* ============================================================
    LOAD VOICES
 ============================================================ */
 function loadVoices() {
-  if (!hasSpeechSynthesis()) {
-    console.warn(
-      "🔊 speechSynthesis tidak disokong."
-    );
+  if (
+    !("speechSynthesis" in window)
+  ) {
     return;
   }
   voices =
     window.speechSynthesis
       .getVoices();
   console.log(
-    "🔊 Naira voices:",
+    "🔊 Naira voices loaded:",
     voices.length
   );
+  voices.forEach(
+    function(voice) {
+      console.log(
+        "VOICE:",
+        voice.name,
+        "|",
+        voice.lang
+      );
+    }
+  );
 }
-if (hasSpeechSynthesis()) {
+if (
+  "speechSynthesis" in window
+) {
   loadVoices();
   window.speechSynthesis
-    .addEventListener(
-      "voiceschanged",
-      loadVoices
-    );
+    .onvoiceschanged =
+    function() {
+      loadVoices();
+    };
 }
 /* ============================================================
-   FIND MALAY VOICE
+   CHECK FEMALE VOICE NAME
 ============================================================ */
-function findMalayVoice() {
+function looksLikeFemaleVoice(
+  voice
+) {
+  if (!voice || !voice.name) {
+    return false;
+  }
+  const name =
+    voice.name
+      .toLowerCase();
+  const femaleKeywords = [
+    "female",
+    "woman",
+    "girl",
+    "siti",
+    "amira",
+    "aisyah",
+    "farah",
+    "nur",
+    "nora",
+    "sarah",
+    "zara",
+    "hana",
+    "alya",
+    "maya",
+    "mia"
+  ];
+  return femaleKeywords.some(
+    function(keyword) {
+      return name.includes(
+        keyword
+      );
+    }
+  );
+}
+/* ============================================================
+   FIND MALAY FEMALE VOICE
+============================================================ */
+function findMalayFemaleVoice() {
   if (!voices.length) {
     loadVoices();
   }
   /*
-   * Priority:
-   *
-   * 1. ms-MY
-   * 2. ms
-   * 3. id-ID
-   * 4. id
-   * 5. English fallback
+   * STEP 1
+   * Exact Malay Malaysia female-looking voice
    */
   let voice =
     voices.find(
       function(v) {
         return (
           v.lang &&
-          v.lang.toLowerCase() ===
-            "ms-my"
+          v.lang
+            .toLowerCase()
+            .startsWith("ms-my") &&
+          looksLikeFemaleVoice(v)
         );
       }
     );
   if (voice) {
-    return voice;
-  }
-  voice =
-    voices.find(
-      function(v) {
-        return (
-          v.lang &&
-          v.lang.toLowerCase()
-            .startsWith("ms")
-        );
-      }
+    console.log(
+      "👩🇲🇾 Female Malay voice:",
+      voice.name,
+      voice.lang
     );
-  if (voice) {
-    return voice;
-  }
-  voice =
-    voices.find(
-      function(v) {
-        return (
-          v.lang &&
-          v.lang.toLowerCase() ===
-            "id-id"
-        );
-      }
-    );
-  if (voice) {
-    return voice;
-  }
-  voice =
-    voices.find(
-      function(v) {
-        return (
-          v.lang &&
-          v.lang.toLowerCase()
-            .startsWith("id")
-        );
-      }
-    );
-  if (voice) {
     return voice;
   }
   /*
-   * Last fallback.
+   * STEP 2
+   * Any Malay Malaysia voice.
+   *
+   * IMPORTANT:
+   * Tidak menggunakan id-ID.
    */
   voice =
     voices.find(
       function(v) {
         return (
           v.lang &&
-          v.lang.toLowerCase()
-            .startsWith("en")
+          v.lang
+            .toLowerCase()
+            .startsWith("ms-my")
         );
       }
     );
-  return voice || null;
-}
-/* ============================================================
-   UNLOCK SPEECH
-   IMPORTANT FOR MOBILE BROWSERS
-============================================================ */
-function unlockSpeech() {
-  if (!hasSpeechSynthesis()) {
-    return;
-  }
-  try {
-    window.speechSynthesis.cancel();
-    /*
-     * Empty / very short utterance.
-     *
-     * This is triggered directly by the
-     * user's microphone button press.
-     */
-    const unlock =
-      new SpeechSynthesisUtterance(
-        " "
-      );
-    unlock.volume = 0;
-    unlock.rate = 10;
-    unlock.pitch = 1;
-    window.speechSynthesis.speak(
-      unlock
-    );
-    speechUnlocked = true;
+  if (voice) {
     console.log(
-      "🔓 Naira speech unlocked."
+      "🇲🇾 Malay Malaysia voice:",
+      voice.name,
+      voice.lang
     );
-  } catch (error) {
-    console.warn(
-      "🔓 Speech unlock gagal:",
-      error
-    );
+    return voice;
   }
+  /*
+   * STEP 3
+   * Any Malay voice.
+   *
+   * Masih bukan Indonesia.
+   */
+  voice =
+    voices.find(
+      function(v) {
+        return (
+          v.lang &&
+          v.lang
+            .toLowerCase()
+            .startsWith("ms")
+        );
+      }
+    );
+  if (voice) {
+    console.log(
+      "🇲🇾 Malay voice:",
+      voice.name,
+      voice.lang
+    );
+    return voice;
+  }
+  /*
+   * Tiada voice Melayu.
+   *
+   * Jangan fallback ke Indonesia.
+   */
+  console.warn(
+    "⚠️ Voice ms-MY tidak tersedia pada device/browser Tuan."
+  );
+  return null;
 }
 /* ============================================================
-   VOICE UI
+   VOICE UI STATE
 ============================================================ */
 function updateVoiceUI() {
   if (!micButton) {
@@ -1323,266 +1324,182 @@ function updateVoiceUI() {
    STOP SPEAKING
 ============================================================ */
 function stopSpeaking() {
-  if (hasSpeechSynthesis()) {
-    try {
-      window.speechSynthesis.cancel();
-    } catch (error) {
-      console.warn(
-        "TTS cancel error:",
-        error
-      );
-    }
+  if (
+    !("speechSynthesis" in window)
+  ) {
+    speaking = false;
+    updateVoiceUI();
+    return;
   }
-  currentUtterance =
-    null;
+  window.speechSynthesis.cancel();
+  nairaSpeech = null;
   speaking = false;
   updateVoiceUI();
+  console.log(
+    "🛑 Naira voice interrupted."
+  );
+}
+/* ============================================================
+   CLEAN TEXT FOR SPEECH
+============================================================ */
+function cleanTextForSpeech(
+  text
+) {
+  return String(text || "")
+    /*
+     * Remove markdown
+     */
+    .replace(
+      /[*_~`#]/g,
+      ""
+    )
+    /*
+     * Remove markdown links
+     */
+    .replace(
+      /\[([^\]]+)\]\([^)]+\)/g,
+      "$1"
+    )
+    /*
+     * Remove excessive whitespace
+     */
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
 }
 /* ============================================================
    SPEAK NAIRA
 ============================================================ */
-function speakNaira(text) {
+function speakNaira(
+  text
+) {
   if (!text) {
     return;
   }
-  if (!hasSpeechSynthesis()) {
+  if (
+    !("speechSynthesis" in window)
+  ) {
     console.warn(
-      "🔊 Browser tidak menyokong Text-to-Speech."
+      "🔊 Text-to-Speech tidak disokong."
     );
     return;
   }
-  /*
-   * Clean text sedikit supaya TTS
-   * tidak membaca simbol pelik.
-   */
+  stopSpeaking();
   const cleanText =
-    String(text)
-      .replace(
-        /https?:\/\/\S+/gi,
-        ""
-      )
-      .replace(
-        /\s+/g,
-        " "
-      )
-      .trim();
+    cleanTextForSpeech(
+      text
+    );
   if (!cleanText) {
     return;
   }
-  try {
+  const utterance =
+    new SpeechSynthesisUtterance(
+      cleanText
+    );
+  nairaSpeech =
+    utterance;
+  /*
+   * Bahasa Melayu Malaysia.
+   *
+   * TIDAK menggunakan id-ID.
+   */
+  utterance.lang =
+    NAIRA_VOICE_SETTINGS.language;
+  /*
+   * Suara lebih perlahan
+   * dan lembut.
+   */
+  utterance.rate =
+    NAIRA_VOICE_SETTINGS.rate;
+  /*
+   * Sedikit pitch tinggi
+   * untuk karakter suara feminin.
+   */
+  utterance.pitch =
+    NAIRA_VOICE_SETTINGS.pitch;
+  utterance.volume =
+    NAIRA_VOICE_SETTINGS.volume;
+  const malayFemaleVoice =
+    findMalayFemaleVoice();
+  if (malayFemaleVoice) {
+    utterance.voice =
+      malayFemaleVoice;
     /*
-     * Stop previous speech.
+     * Pastikan bahasa utterance
+     * mengikuti voice sebenar.
      */
-    window.speechSynthesis.cancel();
-    speaking = false;
+    utterance.lang =
+      malayFemaleVoice.lang;
+    console.log(
+      "💜 Naira voice:",
+      malayFemaleVoice.name,
+      malayFemaleVoice.lang
+    );
+  } else {
+    console.warn(
+      "⚠️ Tiada voice Melayu Malaysia tersedia."
+    );
     /*
-     * Pastikan browser ada masa
-     * untuk clear queue.
+     * Masih cuba bercakap dalam
+     * Bahasa Melayu Malaysia.
      */
-    setTimeout(
-      function() {
-        const utterance =
-          new SpeechSynthesisUtterance(
-            cleanText
-          );
-        currentUtterance =
-          utterance;
-        /*
-         * Malay.
-         */
-        utterance.lang =
-          "ms-MY";
-        /*
-         * Voice settings.
-         */
-        utterance.rate =
-          0.92;
-        utterance.pitch =
-          1.02;
-        utterance.volume =
-          1;
-        /*
-         * Cari voice.
-         */
-        const malayVoice =
-          findMalayVoice();
-        if (malayVoice) {
-          utterance.voice =
-            malayVoice;
-          console.log(
-            "🟣 Naira voice:",
-            malayVoice.name,
-            malayVoice.lang
-          );
-        } else {
-          console.warn(
-            "🟣 Voice Melayu tidak dijumpai. Menggunakan browser default."
-          );
-        }
-        /*
-         * START
-         */
-        utterance.onstart =
-          function() {
-            speaking = true;
-            updateVoiceUI();
-            console.log(
-              "🔊 Naira sedang bercakap..."
-            );
-          };
-        /*
-         * END
-         */
-        utterance.onend =
-          function() {
-            speaking = false;
-            currentUtterance =
-              null;
-            updateVoiceUI();
-            console.log(
-              "🔊 Naira selesai bercakap."
-            );
-          };
-        /*
-         * ERROR
-         */
-        utterance.onerror =
-          function(event) {
-            speaking = false;
-            currentUtterance =
-              null;
-            updateVoiceUI();
-            console.error(
-              "🔊 TTS ERROR:",
-              event.error
-            );
-            /*
-             * Retry sekali jika browser
-             * gagal pada first attempt.
-             */
-            if (
-              event.error ===
-                "interrupted" ||
-              event.error ===
-                "canceled"
-            ) {
-              return;
-            }
-            /*
-             * Cuba semula selepas 300ms.
-             */
-            setTimeout(
-              function() {
-                if (
-                  !speaking &&
-                  cleanText
-                ) {
-                  retrySpeak(
-                    cleanText
-                  );
-                }
-              },
-              300
-            );
-          };
-        /*
-         * Speak.
-         */
+    utterance.lang =
+      "ms-MY";
+  }
+  utterance.onstart =
+    function() {
+      speaking = true;
+      updateVoiceUI();
+      console.log(
+        "🔊 Naira sedang bercakap..."
+      );
+    };
+  utterance.onend =
+    function() {
+      speaking = false;
+      nairaSpeech =
+        null;
+      updateVoiceUI();
+      console.log(
+        "🔊 Naira selesai bercakap."
+      );
+    };
+  utterance.onerror =
+    function(event) {
+      speaking = false;
+      nairaSpeech =
+        null;
+      updateVoiceUI();
+      console.error(
+        "🔊 TTS ERROR:",
+        event.error
+      );
+    };
+  /*
+   * Chrome/Safari kadang-kadang
+   * lebih stabil kalau speak
+   * dipanggil selepas event loop.
+   */
+  setTimeout(
+    function() {
+      try {
         window.speechSynthesis
           .speak(
             utterance
           );
-        /*
-         * Sesetengah browser Android
-         * boleh pause queue secara pelik.
-         */
-        setTimeout(
-          function() {
-            if (
-              window.speechSynthesis
-                .paused
-            ) {
-              window.speechSynthesis
-                .resume();
-            }
-          },
-          100
-        );
-      },
-      120
-    );
-  } catch (error) {
-    console.error(
-      "🔊 SPEAK ERROR:",
-      error
-    );
-  }
-}
-/* ============================================================
-   RETRY SPEECH
-============================================================ */
-function retrySpeak(text) {
-  if (!hasSpeechSynthesis()) {
-    return;
-  }
-  try {
-    window.speechSynthesis.cancel();
-    const utterance =
-      new SpeechSynthesisUtterance(
-        text
-      );
-    currentUtterance =
-      utterance;
-    utterance.lang =
-      "ms-MY";
-    utterance.rate =
-      0.92;
-    utterance.pitch =
-      1.02;
-    utterance.volume =
-      1;
-    const voice =
-      findMalayVoice();
-    if (voice) {
-      utterance.voice =
-        voice;
-    }
-    utterance.onstart =
-      function() {
-        speaking = true;
-        updateVoiceUI();
-        console.log(
-          "🔊 Naira retry bercakap..."
-        );
-      };
-    utterance.onend =
-      function() {
-        speaking = false;
-        currentUtterance =
-          null;
-        updateVoiceUI();
-      };
-    utterance.onerror =
-      function(event) {
-        speaking = false;
-        currentUtterance =
-          null;
-        updateVoiceUI();
+      } catch (error) {
         console.error(
-          "🔊 Retry TTS ERROR:",
-          event.error
+          "🔊 SPEECH ERROR:",
+          error
         );
-      };
-    window.speechSynthesis
-      .speak(
-        utterance
-      );
-  } catch (error) {
-    console.error(
-      "🔊 Retry speech error:",
-      error
-    );
-  }
+        speaking = false;
+        updateVoiceUI();
+      }
+    },
+    80
+  );
 }
 /* ============================================================
    SPEECH RECOGNITION SETUP
@@ -1593,7 +1510,7 @@ function setupRecognition() {
     window.webkitSpeechRecognition;
   if (!Recognition) {
     console.warn(
-      "🎙️ Speech Recognition tidak disokong."
+      "🎙️ Naira Voice: Speech Recognition tidak disokong."
     );
     return;
   }
@@ -1607,9 +1524,9 @@ function setupRecognition() {
     false;
   recognition.maxAlternatives =
     1;
-  /*
-   * START
-   */
+  /* ----------------------------------------------------------
+     START
+  ---------------------------------------------------------- */
   recognition.onstart =
     function() {
       listening = true;
@@ -1618,9 +1535,9 @@ function setupRecognition() {
         "🎙️ Naira sedang mendengar..."
       );
     };
-  /*
-   * RESULT
-   */
+  /* ----------------------------------------------------------
+     RESULT
+  ---------------------------------------------------------- */
   recognition.onresult =
     function(event) {
       const transcript =
@@ -1637,43 +1554,33 @@ function setupRecognition() {
       if (input) {
         input.value =
           transcript;
+        input.focus();
       }
       /*
-       * Auto send.
+       * AUTO SEND
        */
       if (
         typeof window.sendMessage ===
         "function"
       ) {
-        window.sendMessage(
-          true
-        );
+        window.sendMessage();
       }
     };
-  /*
-   * ERROR
-   */
+  /* ----------------------------------------------------------
+     ERROR
+  ---------------------------------------------------------- */
   recognition.onerror =
     function(event) {
       console.error(
-        "🎙️ Speech Recognition Error:",
+        "🎙️ Naira Voice Error:",
         event.error
       );
       listening = false;
       updateVoiceUI();
-      if (
-        event.error ===
-          "not-allowed"
-      ) {
-        addMessage(
-          "🎙️ Tuan perlu benarkan akses microphone untuk bercakap dengan Naira.",
-          "naira-message"
-        );
-      }
     };
-  /*
-   * END
-   */
+  /* ----------------------------------------------------------
+     END
+  ---------------------------------------------------------- */
   recognition.onend =
     function() {
       listening = false;
@@ -1689,7 +1596,7 @@ function setupRecognition() {
 function startListening() {
   if (!recognition) {
     addMessage(
-      "🎙️ Browser ini tidak menyokong voice recognition.",
+      "🎙️ Voice recognition belum disokong oleh browser ini.",
       "naira-message"
     );
     return;
@@ -1698,15 +1605,8 @@ function startListening() {
     return;
   }
   /*
-   * IMPORTANT:
-   *
-   * Unlock TTS ketika user menekan
-   * microphone.
-   */
-  unlockSpeech();
-  /*
    * Kalau Naira sedang bercakap,
-   * hentikan.
+   * hentikan dahulu.
    */
   if (speaking) {
     stopSpeaking();
@@ -1715,7 +1615,7 @@ function startListening() {
     recognition.start();
   } catch (error) {
     console.error(
-      "🎙️ Gagal start microphone:",
+      "🎙️ Gagal memulakan microphone:",
       error
     );
   }
@@ -1730,8 +1630,8 @@ function stopListening() {
   try {
     recognition.stop();
   } catch (error) {
-    console.warn(
-      "🎙️ Stop microphone error:",
+    console.error(
+      "🎙️ Gagal menghentikan microphone:",
       error
     );
   }
@@ -1744,25 +1644,23 @@ if (micButton) {
     "click",
     function() {
       /*
-       * Kalau Naira bercakap:
-       * stop speech.
+       * 1. Naira bercakap
+       *    → hentikan
+       *
+       * 2. Sedang listening
+       *    → stop
+       *
+       * 3. Idle
+       *    → start
        */
       if (speaking) {
         stopSpeaking();
         return;
       }
-      /*
-       * Kalau sedang mendengar:
-       * stop microphone.
-       */
       if (listening) {
         stopListening();
         return;
       }
-      /*
-       * Kalau idle:
-       * mula dengar.
-       */
       startListening();
     }
   );
@@ -1779,8 +1677,6 @@ window.NairaVoice = {
     speakNaira,
   stopSpeaking:
     stopSpeaking,
-  unlock:
-    unlockSpeech,
   isListening:
     function() {
       return listening;
@@ -1793,9 +1689,7 @@ window.NairaVoice = {
 /* ============================================================
    SEND MESSAGE
 ============================================================ */
-async function sendMessage(
-  fromVoice = false
-) {
+async function sendMessage() {
   const text =
     input.value.trim();
   if (!text) {
@@ -1803,38 +1697,20 @@ async function sendMessage(
   }
   ensureConversationId();
   /*
-   * Kalau Naira sedang bercakap,
-   * stop dahulu.
+   * Kalau user hantar mesej ketika
+   * Naira sedang bercakap,
+   * hentikan voice dahulu.
    */
   if (speaking) {
     stopSpeaking();
   }
-  /*
-   * Kalau voice input,
-   * microphone selesai selepas result.
-   */
-  if (
-    fromVoice &&
-    listening
-  ) {
-    try {
-      recognition.stop();
-    } catch (error) {}
-  }
-  /*
-   * Show user message.
-   */
   addMessage(
     text,
     "user-message"
   );
-  input.value =
-    "";
+  input.value = "";
   sendButton.disabled =
     true;
-  /*
-   * Typing animation.
-   */
   const loading =
     document.createElement(
       "div"
@@ -1852,11 +1728,9 @@ async function sendMessage(
   try {
     const response =
       await fetch(
-        API_BASE +
-          "/api/chat",
+        API_BASE + "/api/chat",
         {
-          method:
-            "POST",
+          method: "POST",
           headers: {
             "Content-Type":
               "application/json"
@@ -1887,77 +1761,39 @@ async function sendMessage(
     }
     loading.remove();
     if (!response.ok) {
-      const errorMessage =
-        data.error ||
-        `Server error (${response.status})`;
       addMessage(
-        errorMessage,
+        data.error ||
+          `Server error (${response.status})`,
         "naira-message"
       );
-      /*
-       * Baca error juga jika voice mode.
-       */
-      if (fromVoice) {
-        speakNaira(
-          errorMessage
-        );
-      }
       return;
     }
     const nairaReply =
       data.reply ||
       data.message ||
       "Maaf Tuan, Naira tak menerima jawapan.";
-    /*
-     * Paparkan reply.
-     */
     addMessage(
       nairaReply,
       "naira-message"
     );
     /*
-     * ========================================================
-     * PENTING:
-     *
-     * Naira sekarang akan bercakap untuk:
-     *
-     * 1. Voice input
-     * 2. Text input
-     *
-     * Jadi Tuan taip pun Naira akan jawab dengan suara.
-     * ========================================================
+     * 🔊 VOICE RESPONSE
      */
     speakNaira(
       nairaReply
     );
-    /*
-     * Update history.
-     */
-    loadHistory(
-      true
-    );
+    loadHistory(true);
   } catch (error) {
     console.error(
       "CHAT ERROR:",
       error
     );
     loading.remove();
-    const errorText =
-      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
-      error.message;
     addMessage(
-      errorText,
+      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
+        error.message,
       "naira-message"
     );
-    /*
-     * Jika datang dari microphone,
-     * bacakan error.
-     */
-    if (fromVoice) {
-      speakNaira(
-        errorText
-      );
-    }
   } finally {
     sendButton.disabled =
       false;
@@ -1965,27 +1801,14 @@ async function sendMessage(
   }
 }
 /*
- * Expose globally.
+ * Expose kepada Speech Recognition
  */
 window.sendMessage =
   sendMessage;
-/* ============================================================
-   SEND BUTTON
-============================================================ */
 sendButton.addEventListener(
   "click",
-  function() {
-    /*
-     * Click send juga dianggap
-     * user interaction untuk unlock TTS.
-     */
-    unlockSpeech();
-    sendMessage(false);
-  }
+  sendMessage
 );
-/* ============================================================
-   ENTER
-============================================================ */
 input.addEventListener(
   "keydown",
   function(event) {
@@ -1994,13 +1817,12 @@ input.addEventListener(
       "Enter"
     ) {
       event.preventDefault();
-      unlockSpeech();
-      sendMessage(false);
+      sendMessage();
     }
   }
 );
 /* ============================================================
-   HISTORY DOM
+   HISTORY
 ============================================================ */
 const historyButton =
   document.getElementById(
@@ -2035,9 +1857,6 @@ const newConversation =
     "newConversation"
   );
 let allHistory = [];
-/* ============================================================
-   HISTORY OPEN
-============================================================ */
 historyButton.addEventListener(
   "click",
   function() {
@@ -2047,9 +1866,6 @@ historyButton.addEventListener(
     loadHistory();
   }
 );
-/* ============================================================
-   HISTORY CLOSE
-============================================================ */
 closeHistory.addEventListener(
   "click",
   function() {
@@ -2058,18 +1874,12 @@ closeHistory.addEventListener(
     );
   }
 );
-/* ============================================================
-   HISTORY REFRESH
-============================================================ */
 refreshHistory.addEventListener(
   "click",
   function() {
     loadHistory();
   }
 );
-/* ============================================================
-   HISTORY SEARCH
-============================================================ */
 historySearch.addEventListener(
   "input",
   renderHistory
@@ -2124,7 +1934,7 @@ async function loadHistory(
     if (!response.ok) {
       throw new Error(
         data.error ||
-        `History error (${response.status})`
+          `History error (${response.status})`
       );
     }
     allHistory =
@@ -2411,10 +2221,10 @@ async function openConversation(
     const response =
       await fetch(
         API_BASE +
-        "/api/history?conversationId=" +
-        encodeURIComponent(
-          conversationId
-        )
+          "/api/history?conversationId=" +
+          encodeURIComponent(
+            conversationId
+          )
       );
     const raw =
       await response.text();
@@ -2430,7 +2240,7 @@ async function openConversation(
     if (!response.ok) {
       throw new Error(
         data.error ||
-        "Conversation gagal dibuka."
+          "Conversation gagal dibuka."
       );
     }
     const messages =
@@ -2480,7 +2290,7 @@ async function openConversation(
     );
     alert(
       "❌ " +
-      error.message
+        error.message
     );
   }
 }
@@ -2545,9 +2355,7 @@ async function editConversation(
     );
     return;
   }
-  if (
-    !conversation.conversation_id
-  ) {
+  if (!conversation.conversation_id) {
     alert(
       "❌ Conversation ID tidak dijumpai."
     );
@@ -2557,7 +2365,7 @@ async function editConversation(
     const response =
       await fetch(
         API_BASE +
-        "/api/history",
+          "/api/history",
         {
           method:
             "PATCH",
@@ -2588,7 +2396,7 @@ async function editConversation(
     if (!response.ok) {
       throw new Error(
         data.error ||
-        `Gagal edit history (${response.status})`
+          `Gagal edit history (${response.status})`
       );
     }
     await loadHistory();
@@ -2599,7 +2407,7 @@ async function editConversation(
     );
     alert(
       "❌ Gagal edit conversation.\n\n" +
-      error.message
+        error.message
     );
   }
 }
@@ -2618,7 +2426,7 @@ async function deleteConversation(
   const confirmed =
     confirm(
       "🗑️ Tuan pasti mahu padam conversation ini?\n\n" +
-      "Semua mesej dalam conversation ini akan dipadam dari database."
+        "Semua mesej dalam conversation ini akan dipadam dari database."
     );
   if (!confirmed) {
     return;
@@ -2627,7 +2435,7 @@ async function deleteConversation(
     const response =
       await fetch(
         API_BASE +
-        "/api/history",
+          "/api/history",
         {
           method:
             "DELETE",
@@ -2656,7 +2464,7 @@ async function deleteConversation(
     if (!response.ok) {
       throw new Error(
         data.error ||
-        `Gagal delete history (${response.status})`
+          `Gagal delete history (${response.status})`
       );
     }
     if (
@@ -2684,12 +2492,12 @@ async function deleteConversation(
     );
     alert(
       "❌ Gagal padam conversation.\n\n" +
-      error.message
+        error.message
     );
   }
 }
 /* ============================================================
-   MEMORY DOM
+   MEMORY
 ============================================================ */
 const memoryButton =
   document.getElementById(
@@ -2763,7 +2571,7 @@ let allMemories = [];
 let editingMemoryId =
   null;
 /* ============================================================
-   MEMORY OPEN
+   MEMORY OPEN/CLOSE
 ============================================================ */
 memoryButton.addEventListener(
   "click",
@@ -2774,9 +2582,6 @@ memoryButton.addEventListener(
     loadMemories();
   }
 );
-/* ============================================================
-   MEMORY CLOSE
-============================================================ */
 closeMemory.addEventListener(
   "click",
   function() {
@@ -2785,23 +2590,14 @@ closeMemory.addEventListener(
     );
   }
 );
-/* ============================================================
-   MEMORY REFRESH
-============================================================ */
 refreshMemory.addEventListener(
   "click",
   loadMemories
 );
-/* ============================================================
-   MEMORY SEARCH
-============================================================ */
 memorySearch.addEventListener(
   "input",
   renderFilteredMemories
 );
-/* ============================================================
-   CATEGORY FILTER
-============================================================ */
 categoryFilter.addEventListener(
   "change",
   renderFilteredMemories
@@ -2818,7 +2614,7 @@ async function loadMemories() {
     const response =
       await fetch(
         API_BASE +
-        "/api/memory",
+          "/api/memory",
         {
           method:
             "POST",
@@ -2847,7 +2643,7 @@ async function loadMemories() {
     if (!response.ok) {
       throw new Error(
         data.error ||
-        `Memory error (${response.status})`
+          `Memory error (${response.status})`
       );
     }
     allMemories =
@@ -3044,7 +2840,7 @@ function renderMemories(
                 &nbsp; • &nbsp;
                 ${escapeHTML(
                   memory.subcategory ||
-                  "general"
+                    "general"
                 )}
                 `;
               const actions =
@@ -3143,7 +2939,7 @@ addMemoryButton.addEventListener(
   }
 );
 /* ============================================================
-   EDIT MEMORY
+   EDIT MEMORY FORM
 ============================================================ */
 function openEditForm(
   memory
@@ -3164,7 +2960,7 @@ function openEditForm(
   memoryImportance.value =
     String(
       memory.importance ||
-      1
+        1
     );
   memoryFormOverlay.classList.add(
     "active"
@@ -3247,7 +3043,7 @@ saveMemoryButton.addEventListener(
       const response =
         await fetch(
           API_BASE +
-          "/api/memory",
+            "/api/memory",
           {
             method:
               "POST",
@@ -3275,7 +3071,7 @@ saveMemoryButton.addEventListener(
       if (!response.ok) {
         throw new Error(
           data.error ||
-          `Memory gagal disimpan (${response.status})`
+            `Memory gagal disimpan (${response.status})`
         );
       }
       closeMemoryForm();
@@ -3287,7 +3083,7 @@ saveMemoryButton.addEventListener(
       );
       alert(
         "❌ " +
-        error.message
+          error.message
       );
     } finally {
       saveMemoryButton.disabled =
@@ -3305,8 +3101,7 @@ async function deleteMemory(
 ) {
   const confirmed =
     confirm(
-      "Tuan pasti mahu padam memory ini?\n\n" +
-      "Naira tidak akan menggunakan memory tersebut lagi."
+      "Tuan pasti mahu padam memory ini?\n\nNaira tidak akan menggunakan memory tersebut lagi."
     );
   if (!confirmed) {
     return;
@@ -3315,7 +3110,7 @@ async function deleteMemory(
     const response =
       await fetch(
         API_BASE +
-        "/api/memory",
+          "/api/memory",
         {
           method:
             "POST",
@@ -3346,7 +3141,7 @@ async function deleteMemory(
     if (!response.ok) {
       throw new Error(
         data.error ||
-        `Memory gagal dipadam (${response.status})`
+          `Memory gagal dipadam (${response.status})`
       );
     }
     await loadMemories();
@@ -3357,7 +3152,7 @@ async function deleteMemory(
     );
     alert(
       "❌ " +
-      error.message
+        error.message
     );
   }
 }
@@ -3367,13 +3162,10 @@ async function deleteMemory(
 setupRecognition();
 updateVoiceUI();
 console.log(
-  "================================="
+  "🎙️ NAIRA VOICE — MALAY FEMALE PRIORITY LOADED"
 );
 console.log(
-  "🎙️ NAIRA FULL VOICE VERSION"
-);
-console.log(
-  "================================="
+  "Naira Personal Assistant loaded successfully."
 );
 console.log(
   "API:",
@@ -3391,12 +3183,8 @@ console.log(
   )
 );
 console.log(
-  "Text-to-Speech:",
-  hasSpeechSynthesis()
-);
-console.log(
-  "Speech unlocked:",
-  speechUnlocked
+  "TTS:",
+  "speechSynthesis" in window
 );
 </script>
 </body>
