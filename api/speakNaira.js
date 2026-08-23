@@ -236,75 +236,113 @@ function renderEmotions() {
 ============================================================ */
 
 function renderVoiceSelect() {
-
-  if (!voiceSelect) return;
-
   voiceSelect.innerHTML = "";
-
-  if (
-    typeof voices === "undefined" ||
-    !voices.length
-  ) {
-
-    const option =
-      document.createElement("option");
-
-    option.value = "";
-    option.textContent = "Tiada voice tersedia";
-
-    voiceSelect.appendChild(option);
-
+  const elevenVoices =
+    window.elevenLabsVoices || [];
+  /*
+   * Kalau ElevenLabs voices sudah tersedia,
+   * gunakan senarai tersebut.
+   */
+  if (elevenVoices.length) {
+    const savedVoiceId =
+      localStorage.getItem(
+        "naira_eleven_voice_id"
+      );
+    elevenVoices
+      .slice()
+      .sort(function(a, b) {
+        return (a.name || "")
+          .localeCompare(
+            b.name || ""
+          );
+      })
+      .forEach(function(voice) {
+        const option =
+          document.createElement(
+            "option"
+          );
+        option.value =
+          voice.voice_id;
+        option.textContent =
+          voice.name;
+        if (
+          voice.voice_id ===
+          savedVoiceId
+        ) {
+          option.selected = true;
+        }
+        voiceSelect.appendChild(
+          option
+        );
+      });
+    /*
+     * Kalau belum ada voice tersimpan,
+     * pilih voice pertama.
+     */
+    if (
+      !savedVoiceId &&
+      elevenVoices[0]
+    ) {
+      voiceSelect.value =
+        elevenVoices[0].voice_id;
+      saveElevenLabsVoice(
+        elevenVoices[0].voice_id
+      );
+    }
     return;
   }
-
+  /*
+   * Fallback:
+   * gunakan device/browser voices
+   * jika ElevenLabs belum loaded.
+   */
+  if (!voices.length) {
+    const option =
+      document.createElement(
+        "option"
+      );
+    option.value = "";
+    option.textContent =
+      "Loading voice...";
+    voiceSelect.appendChild(
+      option
+    );
+    return;
+  }
   voices
     .slice()
     .sort(function(a, b) {
-
       return (
-        (a.lang || "").localeCompare(b.lang || "") ||
-        (a.name || "").localeCompare(b.name || "")
+        (a.lang || "")
+          .localeCompare(
+            b.lang || ""
+          ) ||
+        (a.name || "")
+          .localeCompare(
+            b.name || ""
+          )
       );
-
     })
     .forEach(function(voice) {
-
       const option =
-        document.createElement("option");
-
-      option.value = voice.name;
-
+        document.createElement(
+          "option"
+        );
+      option.value =
+        voice.name;
       option.textContent =
         `${voice.name} — ${voice.lang}`;
-
       if (
-        voice.name === voiceSettings.voiceName
+        voice.name ===
+        voiceSettings.voiceName
       ) {
-        option.selected = true;
+        option.selected =
+          true;
       }
-
-      voiceSelect.appendChild(option);
-
+      voiceSelect.appendChild(
+        option
+      );
     });
-
-  if (
-    !voiceSettings.voiceName &&
-    voices.length &&
-    typeof findBestVoice === "function"
-  ) {
-
-    const best = findBestVoice();
-
-    if (best) {
-
-      voiceSettings.voiceName = best.name;
-
-      voiceSelect.value = best.name;
-
-    }
-
-  }
-
 }
 /* ============================================================
    LOAD ELEVENLABS VOICES
@@ -661,16 +699,39 @@ if (voiceSearch) {
 if (voiceSelect) {
 
   voiceSelect.addEventListener(
-    "change",
-    function() {
-
+  "change",
+  function() {
+    const selectedId =
+      voiceSelect.value;
+    /*
+     * Kalau ElevenLabs voice,
+     * simpan voice_id.
+     */
+    if (
+      window.elevenLabsVoices &&
+      window.elevenLabsVoices.some(
+        function(voice) {
+          return (
+            voice.voice_id ===
+            selectedId
+          );
+        }
+      )
+    ) {
+      saveElevenLabsVoice(
+        selectedId
+      );
       voiceSettings.voiceName =
-        voiceSelect.value;
-
+        "";
+      return;
     }
-  );
-
-}
+    /*
+     * Fallback browser voice.
+     */
+    voiceSettings.voiceName =
+      selectedId;
+  }
+);
 
 
 /* ============================================================
