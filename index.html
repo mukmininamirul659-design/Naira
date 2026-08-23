@@ -921,25 +921,28 @@ function setupRecognition() {
 function startListening() {
   if (!recognition) {
     addMessage(
-      "🎙️ Browser ini tidak menyokong voice recognition.",
+      "🎙️ Voice recognition belum disokong oleh browser ini.",
       "naira-message"
     );
     return;
   }
+
   if (listening) {
     return;
   }
+
   if (speaking) {
     stopSpeaking();
   }
+
   try {
-    try {
-  recognition.start();
-} catch (error) {
-  console.error(
-    "🎙️ Gagal memulakan microphone:",
-    error
-  );
+    recognition.start();
+  } catch (error) {
+    console.error(
+      "🎙️ Gagal memulakan microphone:",
+      error
+    );
+  }
 }
 /* ============================================================
    STOP LISTENING
