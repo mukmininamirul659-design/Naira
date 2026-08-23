@@ -1,5 +1,3 @@
-Naira — Personal Assistant | Full HTML
-
 <!DOCTYPE html>
 <html lang="ms">
 <head>
@@ -95,10 +93,8 @@ Naira — Personal Assistant | Full HTML
       width: 44px;
       height: 44px;
       border-radius: 50%;
-      background:
-        rgba(255,255,255,.08);
-      border:
-        1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.08);
       font-size: 19px;
     }
     .welcome {
@@ -159,10 +155,8 @@ Naira — Personal Assistant | Full HTML
     }
     .naira-message {
       align-self: flex-start;
-      background:
-        rgba(255,255,255,.08);
-      border:
-        1px solid rgba(255,255,255,.06);
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.06);
       color: #e8eaf0;
       border-bottom-left-radius: 5px;
     }
@@ -214,14 +208,11 @@ Naira — Personal Assistant | Full HTML
       flex-shrink: 0;
     }
     .mic {
-      background:
-        rgba(255,255,255,.08);
-      transition:
-        .2s ease;
+      background: rgba(255,255,255,.08);
+      transition: .2s ease;
     }
     .mic.listening {
-      background:
-        rgba(239,68,68,.22);
+      background: rgba(239,68,68,.22);
       box-shadow:
         0 0 0 5px rgba(239,68,68,.08),
         0 0 25px rgba(239,68,68,.3);
@@ -229,8 +220,7 @@ Naira — Personal Assistant | Full HTML
         micPulse 1.3s infinite;
     }
     .mic.speaking {
-      background:
-        rgba(139,92,246,.25);
+      background: rgba(139,92,246,.25);
       box-shadow:
         0 0 0 5px rgba(139,92,246,.08),
         0 0 25px rgba(139,92,246,.35);
@@ -295,369 +285,6 @@ Naira — Personal Assistant | Full HTML
         opacity: 1;
       }
     }
-    .overlay,
-    .history-panel,
-    .memory-form-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background:
-        rgba(5, 6, 10, .88);
-      backdrop-filter: blur(16px);
-      padding: 18px;
-      overflow-y: auto;
-    }
-    .overlay.active,
-    .history-panel.active,
-    .memory-form-overlay.active {
-      display: block;
-    }
-    .panel-box,
-    .history-box {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      background:
-        linear-gradient(
-          145deg,
-          rgba(31, 34, 50, .99),
-          rgba(13, 15, 24, .99)
-        );
-      border:
-        1px solid rgba(255,255,255,.09);
-      border-radius: 24px;
-      padding: 18px;
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.5);
-    }
-    .panel-header,
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .panel-header h2,
-    .history-header h2 {
-      font-size: 22px;
-    }
-    .panel-header p,
-    .history-header p {
-      color: #858b9c;
-      font-size: 11px;
-      margin-top: 4px;
-    }
-    .close-button,
-    .close-history {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background:
-        rgba(255,255,255,.08);
-      font-size: 18px;
-    }
-    .history-panel {
-      z-index: 1500;
-    }
-    .history-tools {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .history-search {
-      flex: 1;
-      padding: 13px 14px;
-      border-radius: 13px;
-      border:
-        1px solid rgba(255,255,255,.08);
-      outline: none;
-      background:
-        rgba(255,255,255,.06);
-      color: white;
-      font-size: 14px;
-    }
-    .history-search::placeholder {
-      color: #777d8d;
-    }
-    .history-refresh {
-      width: 47px;
-      border-radius: 13px;
-      background:
-        rgba(255,255,255,.08);
-      font-size: 17px;
-    }
-    .new-conversation {
-      width: 100%;
-      padding: 14px;
-      border-radius: 15px;
-      background:
-        linear-gradient(
-          135deg,
-          #8b5cf6,
-          #4f46e5
-        );
-      font-size: 14px;
-      margin-bottom: 14px;
-    }
-    .history-status,
-    .memory-status {
-      text-align: center;
-      color: #7f8799;
-      font-size: 12px;
-      margin-bottom: 14px;
-    }
-    .history-day {
-      margin-bottom: 22px;
-    }
-    .history-day-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      color: #cfd2dc;
-      font-size: 14px;
-      margin-bottom: 9px;
-    }
-    .history-day-count {
-      color: #777d8d;
-      font-size: 11px;
-    }
-    .history-card {
-      position: relative;
-      background:
-        rgba(255,255,255,.06);
-      border:
-        1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 14px;
-      margin-bottom: 8px;
-    }
-    .history-title {
-      font-size: 14px;
-      font-weight: 600;
-      line-height: 1.4;
-      margin-bottom: 7px;
-    }
-    .history-preview {
-      color: #a7adbd;
-      font-size: 12px;
-      line-height: 1.45;
-      margin-bottom: 9px;
-    }
-    .history-meta {
-      color: #777d8d;
-      font-size: 10px;
-    }
-    .history-actions {
-      display: flex;
-      gap: 7px;
-      margin-top: 11px;
-    }
-    .history-actions button {
-      flex: 1;
-      padding: 9px;
-      border-radius: 9px;
-      background:
-        rgba(255,255,255,.08);
-      font-size: 11px;
-    }
-    .history-actions .history-delete {
-      background:
-        rgba(239,68,68,.18);
-      color: #ff9b9b;
-    }
-    .empty-history,
-    .empty-state {
-      text-align: center;
-      color: #777d8d;
-      font-size: 13px;
-      padding: 35px 15px;
-    }
-    .memory-tools {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-    .search-box {
-      flex: 1;
-      padding: 13px 14px;
-      border-radius: 13px;
-      border:
-        1px solid rgba(255,255,255,.08);
-      outline: none;
-      background:
-        rgba(255,255,255,.06);
-      color: white;
-      font-size: 14px;
-    }
-    .search-box::placeholder {
-      color: #777d8d;
-    }
-    .tool-button {
-      width: 47px;
-      border-radius: 13px;
-      background:
-        rgba(255,255,255,.08);
-      font-size: 17px;
-    }
-    .category-filter {
-      width: 100%;
-      padding: 12px 13px;
-      border-radius: 13px;
-      border:
-        1px solid rgba(255,255,255,.08);
-      outline: none;
-      background: #1b1e2b;
-      color: white;
-      font-size: 13px;
-      margin-bottom: 12px;
-    }
-    .memory-add {
-      width: 100%;
-      padding: 14px;
-      border-radius: 15px;
-      background:
-        linear-gradient(
-          135deg,
-          #8b5cf6,
-          #4f46e5
-        );
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-    .memory-category {
-      margin-bottom: 22px;
-    }
-    .category-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 15px;
-      margin-bottom: 9px;
-      color: #cfd2dc;
-    }
-    .category-count {
-      color: #777d8d;
-      font-size: 11px;
-    }
-    .memory-card {
-      background:
-        rgba(255,255,255,.06);
-      border:
-        1px solid rgba(255,255,255,.07);
-      border-radius: 15px;
-      padding: 14px;
-      margin-bottom: 8px;
-    }
-    .memory-text {
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 9px;
-    }
-    .memory-meta {
-      font-size: 11px;
-      color: #858b9c;
-      margin-bottom: 11px;
-    }
-    .memory-actions {
-      display: flex;
-      gap: 8px;
-    }
-    .memory-actions button {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      background:
-        rgba(255,255,255,.08);
-    }
-    .memory-actions .delete {
-      background:
-        rgba(239,68,68,.18);
-      color: #ff9b9b;
-    }
-    .memory-form-overlay {
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-    .memory-form-overlay.active {
-      display: flex;
-    }
-    .memory-form {
-      width: 100%;
-      max-width: 520px;
-      background: #171a26;
-      border:
-        1px solid rgba(255,255,255,.09);
-      border-radius: 22px;
-      padding: 20px;
-      box-shadow:
-        0 25px 70px rgba(0,0,0,.55);
-    }
-    .memory-form h3 {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-    .memory-form-subtitle {
-      color: #858b9c;
-      font-size: 12px;
-      margin-bottom: 18px;
-    }
-    .form-group {
-      margin-bottom: 13px;
-    }
-    .form-group label {
-      display: block;
-      color: #aeb3c1;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      border:
-        1px solid rgba(255,255,255,.09);
-      border-radius: 12px;
-      background:
-        rgba(255,255,255,.06);
-      color: white;
-      outline: none;
-      padding: 12px;
-      font-family: inherit;
-      font-size: 14px;
-    }
-    .form-group textarea {
-      min-height: 90px;
-      resize: vertical;
-    }
-    .form-group select {
-      background: #1b1e2b;
-    }
-    .form-actions {
-      display: flex;
-      gap: 9px;
-      margin-top: 18px;
-    }
-    .form-actions button {
-      flex: 1;
-      padding: 13px;
-      border-radius: 12px;
-      font-size: 13px;
-    }
-    .cancel-button {
-      background:
-        rgba(255,255,255,.08);
-    }
-    .save-button {
-      background:
-        linear-gradient(
-          135deg,
-          #8b5cf6,
-          #4f46e5
-        );
-    }
     @media (max-height: 700px) {
       .welcome {
         margin-top: 20px;
@@ -678,13 +305,9 @@ Naira — Personal Assistant | Full HTML
         N
       </div>
       <div>
-        <h1>
-          Naira
-        </h1>
+        <h1>Naira</h1>
         <div class="status">
-          <span class="online">
-            ●
-          </span>
+          <span class="online">●</span>
           Personal Assistant
         </div>
       </div>
@@ -751,265 +374,6 @@ Naira — Personal Assistant | Full HTML
     Naira • Personal Assistant
   </div>
 </main>
-<!-- =========================================================
-     HISTORY
-========================================================= -->
-<div
-  class="history-panel"
-  id="historyPanel"
->
-  <div class="history-box">
-    <div class="history-header">
-      <div>
-        <h2>
-          🕘 Conversation History
-        </h2>
-        <p>
-          Semua perbualan Tuan dengan Naira
-        </p>
-      </div>
-      <button
-        class="close-history"
-        id="closeHistory"
-        type="button"
-      >
-        ✕
-      </button>
-    </div>
-    <div class="history-tools">
-      <input
-        class="history-search"
-        id="historySearch"
-        type="search"
-        placeholder="🔍 Cari conversation..."
-        autocomplete="off"
-      >
-      <button
-        class="history-refresh"
-        id="refreshHistory"
-        type="button"
-      >
-        🔄
-      </button>
-    </div>
-    <button
-      class="new-conversation"
-      id="newConversation"
-      type="button"
-    >
-      ＋ New Conversation
-    </button>
-    <div
-      class="history-status"
-      id="historyStatus"
-    >
-      Memuatkan history...
-    </div>
-    <div id="historyList"></div>
-  </div>
-</div>
-<!-- =========================================================
-     MEMORY
-========================================================= -->
-<div
-  class="overlay"
-  id="memoryPanel"
->
-  <div class="panel-box">
-    <div class="panel-header">
-      <div>
-        <h2>
-          🧠 Memory Center
-        </h2>
-        <p>
-          Ingatan yang Naira simpan tentang Tuan
-        </p>
-      </div>
-      <button
-        class="close-button"
-        id="closeMemory"
-        type="button"
-      >
-        ✕
-      </button>
-    </div>
-    <div class="memory-tools">
-      <input
-        class="search-box"
-        id="memorySearch"
-        type="search"
-        placeholder="🔍 Cari memory..."
-        autocomplete="off"
-      >
-      <button
-        class="tool-button"
-        id="refreshMemory"
-        type="button"
-      >
-        🔄
-      </button>
-    </div>
-    <select
-      class="category-filter"
-      id="categoryFilter"
-    >
-      <option value="all">
-        📂 Semua kategori
-      </option>
-      <option value="profile">
-        👤 Profile
-      </option>
-      <option value="fashion">
-        👕 Fashion
-      </option>
-      <option value="food">
-        🍔 Food
-      </option>
-      <option value="game">
-        🎮 Game
-      </option>
-      <option value="hobby">
-        🎨 Hobby
-      </option>
-      <option value="work">
-        💼 Work
-      </option>
-      <option value="project">
-        🚀 Project
-      </option>
-      <option value="preference">
-        ❤️ Preference
-      </option>
-      <option value="family">
-        👨‍👩‍👧 Family
-      </option>
-      <option value="general">
-        📁 General
-      </option>
-    </select>
-    <div
-      class="memory-status"
-      id="memoryStatus"
-    >
-      Memuatkan memory...
-    </div>
-    <button
-      class="memory-add"
-      id="addMemoryButton"
-      type="button"
-    >
-      ＋ Tambah Memory
-    </button>
-    <div id="memoryList"></div>
-  </div>
-</div>
-<!-- =========================================================
-     MEMORY FORM
-========================================================= -->
-<div
-  class="memory-form-overlay"
-  id="memoryFormOverlay"
->
-  <div class="memory-form">
-    <h3 id="memoryFormTitle">
-      ➕ Tambah Memory
-    </h3>
-    <div class="memory-form-subtitle">
-      Tuan boleh kawal sendiri apa yang Naira simpan.
-    </div>
-    <div class="form-group">
-      <label for="memoryText">
-        Memory
-      </label>
-      <textarea
-        id="memoryText"
-        placeholder="Contoh: Tuan suka warna biru."
-      ></textarea>
-    </div>
-    <div class="form-group">
-      <label for="memoryCategory">
-        Kategori
-      </label>
-      <select id="memoryCategory">
-        <option value="profile">
-          👤 Profile
-        </option>
-        <option value="fashion">
-          👕 Fashion
-        </option>
-        <option value="food">
-          🍔 Food
-        </option>
-        <option value="game">
-          🎮 Game
-        </option>
-        <option value="hobby">
-          🎨 Hobby
-        </option>
-        <option value="work">
-          💼 Work
-        </option>
-        <option value="project">
-          🚀 Project
-        </option>
-        <option value="preference">
-          ❤️ Preference
-        </option>
-        <option value="family">
-          👨‍👩‍👧 Family
-        </option>
-        <option value="general">
-          📁 General
-        </option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="memorySubcategory">
-        Subkategori
-      </label>
-      <input
-        id="memorySubcategory"
-        type="text"
-        placeholder="Contoh: color"
-      >
-    </div>
-    <div class="form-group">
-      <label for="memoryImportance">
-        Importance
-      </label>
-      <select id="memoryImportance">
-        <option value="1">
-          ⭐ Biasa
-        </option>
-        <option
-          value="2"
-          selected
-        >
-          ⭐⭐ Penting
-        </option>
-        <option value="3">
-          ⭐⭐⭐ Sangat penting
-        </option>
-      </select>
-    </div>
-    <div class="form-actions">
-      <button
-        class="cancel-button"
-        id="cancelMemory"
-        type="button"
-      >
-        Batal
-      </button>
-      <button
-        class="save-button"
-        id="saveMemory"
-        type="button"
-      >
-        💾 Simpan
-      </button>
-    </div>
-  </div>
-</div>
 <script>
 /* ============================================================
    CONFIG
@@ -1017,7 +381,7 @@ Naira — Personal Assistant | Full HTML
 const API_BASE =
   "https://naira-tawny.vercel.app";
 /* ============================================================
-   CONVERSATION ID
+   CONVERSATION
 ============================================================ */
 let currentConversationId =
   localStorage.getItem(
@@ -1045,18 +409,7 @@ function ensureConversationId() {
 }
 ensureConversationId();
 /* ============================================================
-   HELPERS
-============================================================ */
-function escapeHTML(value) {
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-/* ============================================================
-   CHAT DOM
+   DOM
 ============================================================ */
 const input =
   document.getElementById(
@@ -1099,6 +452,7 @@ function addMessage(
 }
 /* ============================================================
    NAIRA VOICE ENGINE
+   FEMALE MALAY / SOFT ANIME STYLE
 ============================================================ */
 let recognition = null;
 let listening = false;
@@ -1106,15 +460,22 @@ let speaking = false;
 let nairaSpeech = null;
 let voices = [];
 /* ============================================================
-   VOICE SETTINGS
+   VOICE PREFERENCES
 ============================================================ */
 const NAIRA_VOICE_SETTINGS = {
   language:
     "ms-MY",
+  fallbackLanguages: [
+    "ms",
+    "id-ID",
+    "id",
+    "en-MY",
+    "en-US"
+  ],
   rate:
-    0.90,
+    0.88,
   pitch:
-    1.08,
+    1.12,
   volume:
     1.0
 };
@@ -1131,18 +492,8 @@ function loadVoices() {
     window.speechSynthesis
       .getVoices();
   console.log(
-    "🔊 Naira voices loaded:",
-    voices.length
-  );
-  voices.forEach(
-    function(voice) {
-      console.log(
-        "VOICE:",
-        voice.name,
-        "|",
-        voice.lang
-      );
-    }
+    "🔊 Available voices:",
+    voices
   );
 }
 if (
@@ -1158,31 +509,32 @@ if (
 /* ============================================================
    CHECK FEMALE VOICE NAME
 ============================================================ */
-function looksLikeFemaleVoice(
+function looksFemaleVoice(
   voice
 ) {
-  if (!voice || !voice.name) {
-    return false;
-  }
   const name =
-    voice.name
+    (
+      voice.name ||
+      ""
+    )
       .toLowerCase();
   const femaleKeywords = [
     "female",
     "woman",
     "girl",
-    "siti",
-    "amira",
-    "aisyah",
-    "farah",
-    "nur",
-    "nora",
-    "sarah",
-    "zara",
-    "hana",
-    "alya",
-    "maya",
-    "mia"
+    "zira",
+    "samantha",
+    "victoria",
+    "karen",
+    "moira",
+    "ava",
+    "susan",
+    "aria",
+    "jenny",
+    "sara",
+    "siri",
+    "google bahasa melayu",
+    "malay female"
   ];
   return femaleKeywords.some(
     function(keyword) {
@@ -1193,99 +545,109 @@ function looksLikeFemaleVoice(
   );
 }
 /* ============================================================
-   FIND MALAY FEMALE VOICE
+   FIND BEST NAIRA VOICE
 ============================================================ */
-function findMalayFemaleVoice() {
+function findNairaVoice() {
   if (!voices.length) {
     loadVoices();
   }
-  /*
-   * STEP 1
-   * Exact Malay Malaysia female-looking voice
-   */
-  let voice =
-    voices.find(
-      function(v) {
-        return (
-          v.lang &&
-          v.lang
-            .toLowerCase()
-            .startsWith("ms-my") &&
-          looksLikeFemaleVoice(v)
-        );
-      }
-    );
-  if (voice) {
-    console.log(
-      "👩🇲🇾 Female Malay voice:",
-      voice.name,
-      voice.lang
-    );
-    return voice;
+  if (!voices.length) {
+    return null;
   }
   /*
-   * STEP 2
-   * Any Malay Malaysia voice.
-   *
-   * IMPORTANT:
-   * Tidak menggunakan id-ID.
+   * 1.
+   * Cuba cari Bahasa Melayu Malaysia
    */
-  voice =
-    voices.find(
-      function(v) {
+  let candidates =
+    voices.filter(
+      function(voice) {
         return (
-          v.lang &&
-          v.lang
-            .toLowerCase()
-            .startsWith("ms-my")
-        );
-      }
-    );
-  if (voice) {
-    console.log(
-      "🇲🇾 Malay Malaysia voice:",
-      voice.name,
-      voice.lang
-    );
-    return voice;
-  }
-  /*
-   * STEP 3
-   * Any Malay voice.
-   *
-   * Masih bukan Indonesia.
-   */
-  voice =
-    voices.find(
-      function(v) {
-        return (
-          v.lang &&
-          v.lang
+          voice.lang &&
+          voice.lang
             .toLowerCase()
             .startsWith("ms")
         );
       }
     );
-  if (voice) {
-    console.log(
-      "🇲🇾 Malay voice:",
-      voice.name,
-      voice.lang
+  /*
+   * 2.
+   * Kalau ada voice Melayu,
+   * utamakan voice perempuan.
+   */
+  let femaleMalay =
+    candidates.find(
+      function(voice) {
+        return looksFemaleVoice(
+          voice
+        );
+      }
     );
-    return voice;
+  if (femaleMalay) {
+    return femaleMalay;
   }
   /*
-   * Tiada voice Melayu.
-   *
-   * Jangan fallback ke Indonesia.
+   * 3.
+   * Cari voice Melayu biasa.
    */
-  console.warn(
-    "⚠️ Voice ms-MY tidak tersedia pada device/browser Tuan."
-  );
-  return null;
+  if (candidates.length) {
+    return candidates[0];
+  }
+  /*
+   * 4.
+   * Fallback Indonesia.
+   */
+  for (
+    const language of
+    NAIRA_VOICE_SETTINGS.fallbackLanguages
+  ) {
+    candidates =
+      voices.filter(
+        function(voice) {
+          return (
+            voice.lang &&
+            voice.lang
+              .toLowerCase()
+              .startsWith(
+                language
+              )
+          );
+        }
+      );
+    if (candidates.length) {
+      femaleMalay =
+        candidates.find(
+          function(voice) {
+            return looksFemaleVoice(
+              voice
+            );
+          }
+        );
+      if (femaleMalay) {
+        return femaleMalay;
+      }
+      return candidates[0];
+    }
+  }
+  /*
+   * 5.
+   * Last fallback:
+   * cari voice yang nampak perempuan.
+   */
+  const femaleVoice =
+    voices.find(
+      function(voice) {
+        return looksFemaleVoice(
+          voice
+        );
+      }
+    );
+  if (femaleVoice) {
+    return femaleVoice;
+  }
+  return voices[0];
 }
 /* ============================================================
-   VOICE UI STATE
+   VOICE UI
 ============================================================ */
 function updateVoiceUI() {
   if (!micButton) {
@@ -1302,7 +664,7 @@ function updateVoiceUI() {
     micButton.textContent =
       "🔴";
     micButton.title =
-      "Sedang mendengar — tekan untuk berhenti";
+      "Naira sedang mendengar — tekan untuk berhenti";
     return;
   }
   if (speaking) {
@@ -1325,19 +687,15 @@ function updateVoiceUI() {
 ============================================================ */
 function stopSpeaking() {
   if (
-    !("speechSynthesis" in window)
+    "speechSynthesis" in window
   ) {
-    speaking = false;
-    updateVoiceUI();
-    return;
+    window.speechSynthesis.cancel();
   }
-  window.speechSynthesis.cancel();
-  nairaSpeech = null;
-  speaking = false;
+  nairaSpeech =
+    null;
+  speaking =
+    false;
   updateVoiceUI();
-  console.log(
-    "🛑 Naira voice interrupted."
-  );
 }
 /* ============================================================
    CLEAN TEXT FOR SPEECH
@@ -1345,23 +703,32 @@ function stopSpeaking() {
 function cleanTextForSpeech(
   text
 ) {
-  return String(text || "")
+  return String(
+    text || ""
+  )
     /*
-     * Remove markdown
+     * buang markdown
      */
     .replace(
-      /[*_~`#]/g,
+      /[*_`#]/g,
       ""
     )
     /*
-     * Remove markdown links
+     * buang URL
      */
     .replace(
-      /\[([^\]]+)\]\([^)]+\)/g,
-      "$1"
+      /https?:\/\/\S+/gi,
+      ""
     )
     /*
-     * Remove excessive whitespace
+     * kurangkan emoji
+     */
+    .replace(
+      /[\u{1F300}-\u{1FAFF}]/gu,
+      ""
+    )
+    /*
+     * kemaskan spacing
      */
     .replace(
       /\s+/g,
@@ -1375,18 +742,6 @@ function cleanTextForSpeech(
 function speakNaira(
   text
 ) {
-  if (!text) {
-    return;
-  }
-  if (
-    !("speechSynthesis" in window)
-  ) {
-    console.warn(
-      "🔊 Text-to-Speech tidak disokong."
-    );
-    return;
-  }
-  stopSpeaking();
   const cleanText =
     cleanTextForSpeech(
       text
@@ -1394,6 +749,15 @@ function speakNaira(
   if (!cleanText) {
     return;
   }
+  if (
+    !("speechSynthesis" in window)
+  ) {
+    console.warn(
+      "🔊 Browser tidak menyokong Text-to-Speech."
+    );
+    return;
+  }
+  stopSpeaking();
   const utterance =
     new SpeechSynthesisUtterance(
       cleanText
@@ -1401,56 +765,42 @@ function speakNaira(
   nairaSpeech =
     utterance;
   /*
-   * Bahasa Melayu Malaysia.
-   *
-   * TIDAK menggunakan id-ID.
+   * Bahasa Melayu
    */
   utterance.lang =
     NAIRA_VOICE_SETTINGS.language;
   /*
-   * Suara lebih perlahan
-   * dan lembut.
+   * Suara perlahan,
+   * lembut dan feminin-ish.
    */
   utterance.rate =
     NAIRA_VOICE_SETTINGS.rate;
-  /*
-   * Sedikit pitch tinggi
-   * untuk karakter suara feminin.
-   */
   utterance.pitch =
     NAIRA_VOICE_SETTINGS.pitch;
   utterance.volume =
     NAIRA_VOICE_SETTINGS.volume;
-  const malayFemaleVoice =
-    findMalayFemaleVoice();
-  if (malayFemaleVoice) {
+  /*
+   * Cari voice terbaik.
+   */
+  const nairaVoice =
+    findNairaVoice();
+  if (nairaVoice) {
     utterance.voice =
-      malayFemaleVoice;
-    /*
-     * Pastikan bahasa utterance
-     * mengikuti voice sebenar.
-     */
-    utterance.lang =
-      malayFemaleVoice.lang;
+      nairaVoice;
     console.log(
-      "💜 Naira voice:",
-      malayFemaleVoice.name,
-      malayFemaleVoice.lang
+      "🌸 Naira voice:",
+      nairaVoice.name,
+      nairaVoice.lang
     );
   } else {
     console.warn(
-      "⚠️ Tiada voice Melayu Malaysia tersedia."
+      "🌸 Tiada voice khusus dijumpai."
     );
-    /*
-     * Masih cuba bercakap dalam
-     * Bahasa Melayu Malaysia.
-     */
-    utterance.lang =
-      "ms-MY";
   }
   utterance.onstart =
     function() {
-      speaking = true;
+      speaking =
+        true;
       updateVoiceUI();
       console.log(
         "🔊 Naira sedang bercakap..."
@@ -1458,7 +808,8 @@ function speakNaira(
     };
   utterance.onend =
     function() {
-      speaking = false;
+      speaking =
+        false;
       nairaSpeech =
         null;
       updateVoiceUI();
@@ -1468,7 +819,8 @@ function speakNaira(
     };
   utterance.onerror =
     function(event) {
-      speaking = false;
+      speaking =
+        false;
       nairaSpeech =
         null;
       updateVoiceUI();
@@ -1478,31 +830,22 @@ function speakNaira(
       );
     };
   /*
-   * Chrome/Safari kadang-kadang
-   * lebih stabil kalau speak
-   * dipanggil selepas event loop.
+   * Sesetengah mobile browser
+   * lebih stabil jika speech dimasukkan
+   * selepas sedikit delay.
    */
   setTimeout(
     function() {
-      try {
-        window.speechSynthesis
-          .speak(
-            utterance
-          );
-      } catch (error) {
-        console.error(
-          "🔊 SPEECH ERROR:",
-          error
+      window.speechSynthesis
+        .speak(
+          utterance
         );
-        speaking = false;
-        updateVoiceUI();
-      }
     },
     80
   );
 }
 /* ============================================================
-   SPEECH RECOGNITION SETUP
+   SPEECH RECOGNITION
 ============================================================ */
 function setupRecognition() {
   const Recognition =
@@ -1510,7 +853,7 @@ function setupRecognition() {
     window.webkitSpeechRecognition;
   if (!Recognition) {
     console.warn(
-      "🎙️ Naira Voice: Speech Recognition tidak disokong."
+      "🎙️ Speech Recognition tidak disokong browser."
     );
     return;
   }
@@ -1524,20 +867,12 @@ function setupRecognition() {
     false;
   recognition.maxAlternatives =
     1;
-  /* ----------------------------------------------------------
-     START
-  ---------------------------------------------------------- */
   recognition.onstart =
     function() {
-      listening = true;
+      listening =
+        true;
       updateVoiceUI();
-      console.log(
-        "🎙️ Naira sedang mendengar..."
-      );
     };
-  /* ----------------------------------------------------------
-     RESULT
-  ---------------------------------------------------------- */
   recognition.onresult =
     function(event) {
       const transcript =
@@ -1551,11 +886,8 @@ function setupRecognition() {
         "🎙️ Tuan:",
         transcript
       );
-      if (input) {
-        input.value =
-          transcript;
-        input.focus();
-      }
+      input.value =
+        transcript;
       /*
        * AUTO SEND
        */
@@ -1566,28 +898,21 @@ function setupRecognition() {
         window.sendMessage();
       }
     };
-  /* ----------------------------------------------------------
-     ERROR
-  ---------------------------------------------------------- */
   recognition.onerror =
     function(event) {
       console.error(
-        "🎙️ Naira Voice Error:",
+        "🎙️ Recognition error:",
         event.error
       );
-      listening = false;
+      listening =
+        false;
       updateVoiceUI();
     };
-  /* ----------------------------------------------------------
-     END
-  ---------------------------------------------------------- */
   recognition.onend =
     function() {
-      listening = false;
+      listening =
+        false;
       updateVoiceUI();
-      console.log(
-        "🎙️ Naira berhenti mendengar."
-      );
     };
 }
 /* ============================================================
@@ -1596,7 +921,7 @@ function setupRecognition() {
 function startListening() {
   if (!recognition) {
     addMessage(
-      "🎙️ Voice recognition belum disokong oleh browser ini.",
+      "🎙️ Browser ini tidak menyokong voice recognition.",
       "naira-message"
     );
     return;
@@ -1604,10 +929,6 @@ function startListening() {
   if (listening) {
     return;
   }
-  /*
-   * Kalau Naira sedang bercakap,
-   * hentikan dahulu.
-   */
   if (speaking) {
     stopSpeaking();
   }
@@ -1615,7 +936,7 @@ function startListening() {
     recognition.start();
   } catch (error) {
     console.error(
-      "🎙️ Gagal memulakan microphone:",
+      "Microphone error:",
       error
     );
   }
@@ -1631,7 +952,7 @@ function stopListening() {
     recognition.stop();
   } catch (error) {
     console.error(
-      "🎙️ Gagal menghentikan microphone:",
+      "Stop microphone error:",
       error
     );
   }
@@ -1639,32 +960,20 @@ function stopListening() {
 /* ============================================================
    MIC BUTTON
 ============================================================ */
-if (micButton) {
-  micButton.addEventListener(
-    "click",
-    function() {
-      /*
-       * 1. Naira bercakap
-       *    → hentikan
-       *
-       * 2. Sedang listening
-       *    → stop
-       *
-       * 3. Idle
-       *    → start
-       */
-      if (speaking) {
-        stopSpeaking();
-        return;
-      }
-      if (listening) {
-        stopListening();
-        return;
-      }
-      startListening();
+micButton.addEventListener(
+  "click",
+  function() {
+    if (speaking) {
+      stopSpeaking();
+      return;
     }
-  );
-}
+    if (listening) {
+      stopListening();
+      return;
+    }
+    startListening();
+  }
+);
 /* ============================================================
    GLOBAL VOICE API
 ============================================================ */
@@ -1684,6 +993,10 @@ window.NairaVoice = {
   isSpeaking:
     function() {
       return speaking;
+    },
+  listVoices:
+    function() {
+      return voices;
     }
 };
 /* ============================================================
@@ -1696,11 +1009,6 @@ async function sendMessage() {
     return;
   }
   ensureConversationId();
-  /*
-   * Kalau user hantar mesej ketika
-   * Naira sedang bercakap,
-   * hentikan voice dahulu.
-   */
   if (speaking) {
     stopSpeaking();
   }
@@ -1708,7 +1016,8 @@ async function sendMessage() {
     text,
     "user-message"
   );
-  input.value = "";
+  input.value =
+    "";
   sendButton.disabled =
     true;
   const loading =
@@ -1728,9 +1037,11 @@ async function sendMessage() {
   try {
     const response =
       await fetch(
-        API_BASE + "/api/chat",
+        API_BASE +
+          "/api/chat",
         {
-          method: "POST",
+          method:
+            "POST",
           headers: {
             "Content-Type":
               "application/json"
@@ -1772,37 +1083,44 @@ async function sendMessage() {
       data.reply ||
       data.message ||
       "Maaf Tuan, Naira tak menerima jawapan.";
+    /*
+     * Papar text
+     */
     addMessage(
       nairaReply,
       "naira-message"
     );
     /*
-     * 🔊 VOICE RESPONSE
+     * TERUS CAKAP
      */
     speakNaira(
       nairaReply
     );
-    loadHistory(true);
   } catch (error) {
     console.error(
       "CHAT ERROR:",
       error
     );
     loading.remove();
+    const errorText =
+      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.";
     addMessage(
-      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
-        error.message,
+      errorText,
       "naira-message"
     );
+    /*
+     * Jangan cuba bercakap
+     * mesej error teknikal panjang.
+     */
   } finally {
     sendButton.disabled =
       false;
     input.focus();
   }
 }
-/*
- * Expose kepada Speech Recognition
- */
+/* ============================================================
+   GLOBAL SEND
+============================================================ */
 window.sendMessage =
   sendMessage;
 sendButton.addEventListener(
@@ -1822,1358 +1140,16 @@ input.addEventListener(
   }
 );
 /* ============================================================
-   HISTORY
-============================================================ */
-const historyButton =
-  document.getElementById(
-    "historyButton"
-  );
-const historyPanel =
-  document.getElementById(
-    "historyPanel"
-  );
-const closeHistory =
-  document.getElementById(
-    "closeHistory"
-  );
-const historyList =
-  document.getElementById(
-    "historyList"
-  );
-const historyStatus =
-  document.getElementById(
-    "historyStatus"
-  );
-const historySearch =
-  document.getElementById(
-    "historySearch"
-  );
-const refreshHistory =
-  document.getElementById(
-    "refreshHistory"
-  );
-const newConversation =
-  document.getElementById(
-    "newConversation"
-  );
-let allHistory = [];
-historyButton.addEventListener(
-  "click",
-  function() {
-    historyPanel.classList.add(
-      "active"
-    );
-    loadHistory();
-  }
-);
-closeHistory.addEventListener(
-  "click",
-  function() {
-    historyPanel.classList.remove(
-      "active"
-    );
-  }
-);
-refreshHistory.addEventListener(
-  "click",
-  function() {
-    loadHistory();
-  }
-);
-historySearch.addEventListener(
-  "input",
-  renderHistory
-);
-/* ============================================================
-   LOAD HISTORY
-============================================================ */
-async function loadHistory(
-  silent = false
-) {
-  if (!silent) {
-    historyStatus.textContent =
-      "Memuatkan conversation...";
-    historyList.innerHTML =
-      "";
-  }
-  try {
-    const search =
-      historySearch.value.trim();
-    const params =
-      new URLSearchParams();
-    if (search) {
-      params.set(
-        "search",
-        search
-      );
-    }
-    const url =
-      API_BASE +
-      "/api/history" +
-      (
-        params.toString()
-          ? "?" +
-            params.toString()
-          : ""
-      );
-    const response =
-      await fetch(
-        url
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          `History error (${response.status})`
-      );
-    }
-    allHistory =
-      data.conversations ||
-      [];
-    historyStatus.textContent =
-      `${allHistory.length} conversation`;
-    renderHistory();
-  } catch (error) {
-    console.error(
-      "HISTORY ERROR:",
-      error
-    );
-    historyStatus.textContent =
-      "Gagal memuatkan history.";
-    if (!silent) {
-      historyList.innerHTML =
-        `
-        <div class="empty-history">
-          ❌ ${escapeHTML(
-            error.message
-          )}
-        </div>
-        `;
-    }
-  }
-}
-/* ============================================================
-   RENDER HISTORY
-============================================================ */
-function renderHistory() {
-  const search =
-    historySearch.value
-      .trim()
-      .toLowerCase();
-  const filtered =
-    allHistory.filter(
-      function(conversation) {
-        if (!search) {
-          return true;
-        }
-        const text =
-          [
-            conversation.title,
-            conversation.user_message,
-            conversation.naira_response,
-            conversation.category,
-            conversation.subcategory
-          ]
-          .join(" ")
-          .toLowerCase();
-        return text.includes(
-          search
-        );
-      }
-    );
-  historyList.innerHTML =
-    "";
-  if (!filtered.length) {
-    historyList.innerHTML =
-      `
-      <div class="empty-history">
-        🕘 Tiada conversation dijumpai.
-      </div>
-      `;
-    return;
-  }
-  const groups = {};
-  filtered.forEach(
-    function(conversation) {
-      const date =
-        new Date(
-          conversation.created_at
-        );
-      const dateKey =
-        date.toLocaleDateString(
-          "ms-MY",
-          {
-            weekday:
-              "long",
-            year:
-              "numeric",
-            month:
-              "long",
-            day:
-              "numeric"
-          }
-        );
-      if (!groups[dateKey]) {
-        groups[dateKey] =
-          [];
-      }
-      groups[dateKey].push(
-        conversation
-      );
-    }
-  );
-  Object.keys(groups)
-    .forEach(
-      function(dateKey) {
-        const conversations =
-          groups[dateKey];
-        const day =
-          document.createElement(
-            "div"
-          );
-        day.className =
-          "history-day";
-        const dayTitle =
-          document.createElement(
-            "div"
-          );
-        dayTitle.className =
-          "history-day-title";
-        dayTitle.innerHTML =
-          `
-          <span>
-            📅 ${escapeHTML(
-              dateKey
-            )}
-          </span>
-          <span class="history-day-count">
-            ${conversations.length}
-          </span>
-          `;
-        day.appendChild(
-          dayTitle
-        );
-        conversations.forEach(
-          function(conversation) {
-            const card =
-              document.createElement(
-                "div"
-              );
-            card.className =
-              "history-card";
-            const title =
-              document.createElement(
-                "div"
-              );
-            title.className =
-              "history-title";
-            title.textContent =
-              conversation.title ||
-              "Conversation Naira";
-            const preview =
-              document.createElement(
-                "div"
-              );
-            preview.className =
-              "history-preview";
-            preview.textContent =
-              conversation.user_message ||
-              "Tiada mesej";
-            const date =
-              new Date(
-                conversation.created_at
-              );
-            const time =
-              date.toLocaleTimeString(
-                "ms-MY",
-                {
-                  hour:
-                    "2-digit",
-                  minute:
-                    "2-digit"
-                }
-              );
-            const meta =
-              document.createElement(
-                "div"
-              );
-            meta.className =
-              "history-meta";
-            meta.textContent =
-              `${time} • ${
-                conversation.category ||
-                "general"
-              }`;
-            const actions =
-              document.createElement(
-                "div"
-              );
-            actions.className =
-              "history-actions";
-            const openButton =
-              document.createElement(
-                "button"
-              );
-            openButton.type =
-              "button";
-            openButton.textContent =
-              "👁️ Buka";
-            openButton.addEventListener(
-              "click",
-              function(event) {
-                event.stopPropagation();
-                openConversation(
-                  conversation.conversation_id
-                );
-              }
-            );
-            const editButton =
-              document.createElement(
-                "button"
-              );
-            editButton.type =
-              "button";
-            editButton.textContent =
-              "✏️ Edit";
-            editButton.addEventListener(
-              "click",
-              function(event) {
-                event.stopPropagation();
-                editConversation(
-                  conversation
-                );
-              }
-            );
-            const deleteButton =
-              document.createElement(
-                "button"
-              );
-            deleteButton.type =
-              "button";
-            deleteButton.className =
-              "history-delete";
-            deleteButton.textContent =
-              "🗑️ Delete";
-            deleteButton.addEventListener(
-              "click",
-              function(event) {
-                event.stopPropagation();
-                deleteConversation(
-                  conversation.conversation_id
-                );
-              }
-            );
-            actions.appendChild(
-              openButton
-            );
-            actions.appendChild(
-              editButton
-            );
-            actions.appendChild(
-              deleteButton
-            );
-            card.appendChild(
-              title
-            );
-            card.appendChild(
-              preview
-            );
-            card.appendChild(
-              meta
-            );
-            card.appendChild(
-              actions
-            );
-            day.appendChild(
-              card
-            );
-          }
-        );
-        historyList.appendChild(
-          day
-        );
-      }
-    );
-}
-/* ============================================================
-   OPEN CONVERSATION
-============================================================ */
-async function openConversation(
-  conversationId
-) {
-  if (!conversationId) {
-    alert(
-      "❌ Conversation ID tidak dijumpai."
-    );
-    return;
-  }
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-          "/api/history?conversationId=" +
-          encodeURIComponent(
-            conversationId
-          )
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          "Conversation gagal dibuka."
-      );
-    }
-    const messages =
-      data.conversations ||
-      [];
-    currentConversationId =
-      conversationId;
-    localStorage.setItem(
-      "naira_conversation_id",
-      currentConversationId
-    );
-    historyPanel.classList.remove(
-      "active"
-    );
-    chat.innerHTML =
-      "";
-    messages.forEach(
-      function(message) {
-        if (
-          message.user_message
-        ) {
-          addMessage(
-            message.user_message,
-            "user-message"
-          );
-        }
-        if (
-          message.naira_response
-        ) {
-          addMessage(
-            message.naira_response,
-            "naira-message"
-          );
-        }
-      }
-    );
-    if (!messages.length) {
-      addMessage(
-        "Conversation ini kosong.",
-        "naira-message"
-      );
-    }
-  } catch (error) {
-    console.error(
-      "OPEN HISTORY ERROR:",
-      error
-    );
-    alert(
-      "❌ " +
-        error.message
-    );
-  }
-}
-/* ============================================================
-   NEW CONVERSATION
-============================================================ */
-newConversation.addEventListener(
-  "click",
-  function() {
-    const confirmed =
-      confirm(
-        "Mulakan conversation baru dengan Naira?"
-      );
-    if (!confirmed) {
-      return;
-    }
-    stopSpeaking();
-    currentConversationId =
-      createConversationId();
-    localStorage.setItem(
-      "naira_conversation_id",
-      currentConversationId
-    );
-    chat.innerHTML =
-      `
-      <div class="message naira-message">
-        Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
-      </div>
-      `;
-    historyPanel.classList.remove(
-      "active"
-    );
-    input.value =
-      "";
-    input.focus();
-  }
-);
-/* ============================================================
-   EDIT HISTORY
-============================================================ */
-async function editConversation(
-  conversation
-) {
-  const currentTitle =
-    conversation.title ||
-    "Conversation Naira";
-  const newTitle =
-    prompt(
-      "✏️ Masukkan tajuk baru:",
-      currentTitle
-    );
-  if (
-    newTitle === null
-  ) {
-    return;
-  }
-  const cleanTitle =
-    newTitle.trim();
-  if (!cleanTitle) {
-    alert(
-      "⚠️ Tajuk tidak boleh kosong."
-    );
-    return;
-  }
-  if (!conversation.conversation_id) {
-    alert(
-      "❌ Conversation ID tidak dijumpai."
-    );
-    return;
-  }
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-          "/api/history",
-        {
-          method:
-            "PATCH",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              conversationId:
-                conversation.conversation_id,
-              title:
-                cleanTitle
-            })
-        }
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          `Gagal edit history (${response.status})`
-      );
-    }
-    await loadHistory();
-  } catch (error) {
-    console.error(
-      "EDIT HISTORY ERROR:",
-      error
-    );
-    alert(
-      "❌ Gagal edit conversation.\n\n" +
-        error.message
-    );
-  }
-}
-/* ============================================================
-   DELETE HISTORY
-============================================================ */
-async function deleteConversation(
-  conversationId
-) {
-  if (!conversationId) {
-    alert(
-      "❌ Conversation ID tidak dijumpai."
-    );
-    return;
-  }
-  const confirmed =
-    confirm(
-      "🗑️ Tuan pasti mahu padam conversation ini?\n\n" +
-        "Semua mesej dalam conversation ini akan dipadam dari database."
-    );
-  if (!confirmed) {
-    return;
-  }
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-          "/api/history",
-        {
-          method:
-            "DELETE",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              conversationId:
-                conversationId
-            })
-        }
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          `Gagal delete history (${response.status})`
-      );
-    }
-    if (
-      currentConversationId ===
-      conversationId
-    ) {
-      currentConversationId =
-        createConversationId();
-      localStorage.setItem(
-        "naira_conversation_id",
-        currentConversationId
-      );
-      chat.innerHTML =
-        `
-        <div class="message naira-message">
-          Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
-        </div>
-        `;
-    }
-    await loadHistory();
-  } catch (error) {
-    console.error(
-      "DELETE HISTORY ERROR:",
-      error
-    );
-    alert(
-      "❌ Gagal padam conversation.\n\n" +
-        error.message
-    );
-  }
-}
-/* ============================================================
-   MEMORY
-============================================================ */
-const memoryButton =
-  document.getElementById(
-    "memoryButton"
-  );
-const memoryPanel =
-  document.getElementById(
-    "memoryPanel"
-  );
-const closeMemory =
-  document.getElementById(
-    "closeMemory"
-  );
-const memoryList =
-  document.getElementById(
-    "memoryList"
-  );
-const memoryStatus =
-  document.getElementById(
-    "memoryStatus"
-  );
-const memorySearch =
-  document.getElementById(
-    "memorySearch"
-  );
-const categoryFilter =
-  document.getElementById(
-    "categoryFilter"
-  );
-const refreshMemory =
-  document.getElementById(
-    "refreshMemory"
-  );
-const addMemoryButton =
-  document.getElementById(
-    "addMemoryButton"
-  );
-const memoryFormOverlay =
-  document.getElementById(
-    "memoryFormOverlay"
-  );
-const memoryFormTitle =
-  document.getElementById(
-    "memoryFormTitle"
-  );
-const memoryText =
-  document.getElementById(
-    "memoryText"
-  );
-const memoryCategory =
-  document.getElementById(
-    "memoryCategory"
-  );
-const memorySubcategory =
-  document.getElementById(
-    "memorySubcategory"
-  );
-const memoryImportance =
-  document.getElementById(
-    "memoryImportance"
-  );
-const saveMemoryButton =
-  document.getElementById(
-    "saveMemory"
-  );
-const cancelMemory =
-  document.getElementById(
-    "cancelMemory"
-  );
-let allMemories = [];
-let editingMemoryId =
-  null;
-/* ============================================================
-   MEMORY OPEN/CLOSE
-============================================================ */
-memoryButton.addEventListener(
-  "click",
-  function() {
-    memoryPanel.classList.add(
-      "active"
-    );
-    loadMemories();
-  }
-);
-closeMemory.addEventListener(
-  "click",
-  function() {
-    memoryPanel.classList.remove(
-      "active"
-    );
-  }
-);
-refreshMemory.addEventListener(
-  "click",
-  loadMemories
-);
-memorySearch.addEventListener(
-  "input",
-  renderFilteredMemories
-);
-categoryFilter.addEventListener(
-  "change",
-  renderFilteredMemories
-);
-/* ============================================================
-   LOAD MEMORIES
-============================================================ */
-async function loadMemories() {
-  memoryStatus.textContent =
-    "Memuatkan memory...";
-  memoryList.innerHTML =
-    "";
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-          "/api/memory",
-        {
-          method:
-            "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              action:
-                "list"
-            })
-        }
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          `Memory error (${response.status})`
-      );
-    }
-    allMemories =
-      data.memories ||
-      [];
-    memoryStatus.textContent =
-      `${allMemories.length} memory disimpan`;
-    renderFilteredMemories();
-  } catch (error) {
-    console.error(
-      "MEMORY ERROR:",
-      error
-    );
-    memoryStatus.textContent =
-      "Gagal memuatkan memory.";
-    memoryList.innerHTML =
-      `
-      <div class="empty-state">
-        ❌ ${escapeHTML(
-          error.message
-        )}
-      </div>
-      `;
-  }
-}
-/* ============================================================
-   FILTER MEMORY
-============================================================ */
-function renderFilteredMemories() {
-  const search =
-    memorySearch.value
-      .trim()
-      .toLowerCase();
-  const category =
-    categoryFilter.value;
-  const filtered =
-    allMemories.filter(
-      function(memory) {
-        const text =
-          [
-            memory.memory,
-            memory.category,
-            memory.subcategory
-          ]
-          .join(" ")
-          .toLowerCase();
-        const matchesSearch =
-          !search ||
-          text.includes(
-            search
-          );
-        const matchesCategory =
-          category === "all" ||
-          memory.category ===
-            category;
-        return (
-          matchesSearch &&
-          matchesCategory
-        );
-      }
-    );
-  renderMemories(
-    filtered
-  );
-}
-/* ============================================================
-   RENDER MEMORY
-============================================================ */
-function renderMemories(
-  memories
-) {
-  memoryList.innerHTML =
-    "";
-  if (!memories.length) {
-    memoryList.innerHTML =
-      `
-      <div class="empty-state">
-        🧠 Tiada memory dijumpai.
-      </div>
-      `;
-    return;
-  }
-  const groups = {};
-  memories.forEach(
-    function(memory) {
-      const category =
-        memory.category ||
-        "general";
-      if (!groups[category]) {
-        groups[category] =
-          [];
-      }
-      groups[category].push(
-        memory
-      );
-    }
-  );
-  const categoryInfo = {
-    profile:
-      "👤 Profile",
-    fashion:
-      "👕 Fashion",
-    food:
-      "🍔 Food",
-    game:
-      "🎮 Game",
-    hobby:
-      "🎨 Hobby",
-    work:
-      "💼 Work",
-    project:
-      "🚀 Project",
-    preference:
-      "❤️ Preference",
-    family:
-      "👨‍👩‍👧 Family",
-    general:
-      "📁 General"
-  };
-  Object.keys(groups)
-    .forEach(
-      function(category) {
-        const section =
-          document.createElement(
-            "div"
-          );
-        section.className =
-          "memory-category";
-        const title =
-          document.createElement(
-            "div"
-          );
-        title.className =
-          "category-title";
-        title.innerHTML =
-          `
-          <span>
-            ${
-              categoryInfo[
-                category
-              ] ||
-              "📁 " +
-              escapeHTML(
-                category
-              )
-            }
-          </span>
-          <span class="category-count">
-            ${groups[category].length}
-          </span>
-          `;
-        section.appendChild(
-          title
-        );
-        groups[category]
-          .forEach(
-            function(memory) {
-              const card =
-                document.createElement(
-                  "div"
-                );
-              card.className =
-                "memory-card";
-              const text =
-                document.createElement(
-                  "div"
-                );
-              text.className =
-                "memory-text";
-              text.textContent =
-                memory.memory ||
-                "";
-              const stars =
-                "⭐".repeat(
-                  Math.max(
-                    1,
-                    Math.min(
-                      3,
-                      Number(
-                        memory.importance
-                      ) || 1
-                    )
-                  )
-                );
-              const meta =
-                document.createElement(
-                  "div"
-                );
-              meta.className =
-                "memory-meta";
-              meta.innerHTML =
-                `
-                ${stars}
-                &nbsp; • &nbsp;
-                ${escapeHTML(
-                  memory.subcategory ||
-                    "general"
-                )}
-                `;
-              const actions =
-                document.createElement(
-                  "div"
-                );
-              actions.className =
-                "memory-actions";
-              const edit =
-                document.createElement(
-                  "button"
-                );
-              edit.type =
-                "button";
-              edit.textContent =
-                "✏️ Edit";
-              edit.addEventListener(
-                "click",
-                function() {
-                  openEditForm(
-                    memory
-                  );
-                }
-              );
-              const deleteButton =
-                document.createElement(
-                  "button"
-                );
-              deleteButton.type =
-                "button";
-              deleteButton.className =
-                "delete";
-              deleteButton.textContent =
-                "🗑️ Delete";
-              deleteButton.addEventListener(
-                "click",
-                function() {
-                  deleteMemory(
-                    memory.id
-                  );
-                }
-              );
-              actions.appendChild(
-                edit
-              );
-              actions.appendChild(
-                deleteButton
-              );
-              card.appendChild(
-                text
-              );
-              card.appendChild(
-                meta
-              );
-              card.appendChild(
-                actions
-              );
-              section.appendChild(
-                card
-              );
-            }
-          );
-        memoryList.appendChild(
-          section
-        );
-      }
-    );
-}
-/* ============================================================
-   ADD MEMORY
-============================================================ */
-addMemoryButton.addEventListener(
-  "click",
-  function() {
-    editingMemoryId =
-      null;
-    memoryFormTitle.textContent =
-      "➕ Tambah Memory";
-    memoryText.value =
-      "";
-    memoryCategory.value =
-      "general";
-    memorySubcategory.value =
-      "general";
-    memoryImportance.value =
-      "2";
-    memoryFormOverlay.classList.add(
-      "active"
-    );
-    setTimeout(
-      function() {
-        memoryText.focus();
-      },
-      100
-    );
-  }
-);
-/* ============================================================
-   EDIT MEMORY FORM
-============================================================ */
-function openEditForm(
-  memory
-) {
-  editingMemoryId =
-    memory.id;
-  memoryFormTitle.textContent =
-    "✏️ Edit Memory";
-  memoryText.value =
-    memory.memory ||
-    "";
-  memoryCategory.value =
-    memory.category ||
-    "general";
-  memorySubcategory.value =
-    memory.subcategory ||
-    "general";
-  memoryImportance.value =
-    String(
-      memory.importance ||
-        1
-    );
-  memoryFormOverlay.classList.add(
-    "active"
-  );
-  setTimeout(
-    function() {
-      memoryText.focus();
-    },
-    100
-  );
-}
-/* ============================================================
-   CLOSE MEMORY FORM
-============================================================ */
-cancelMemory.addEventListener(
-  "click",
-  closeMemoryForm
-);
-memoryFormOverlay.addEventListener(
-  "click",
-  function(event) {
-    if (
-      event.target ===
-      memoryFormOverlay
-    ) {
-      closeMemoryForm();
-    }
-  }
-);
-function closeMemoryForm() {
-  memoryFormOverlay.classList.remove(
-    "active"
-  );
-  editingMemoryId =
-    null;
-}
-/* ============================================================
-   SAVE MEMORY
-============================================================ */
-saveMemoryButton.addEventListener(
-  "click",
-  async function() {
-    const text =
-      memoryText.value.trim();
-    if (!text) {
-      alert(
-        "⚠️ Sila masukkan memory."
-      );
-      return;
-    }
-    saveMemoryButton.disabled =
-      true;
-    saveMemoryButton.textContent =
-      "Menyimpan...";
-    try {
-      const action =
-        editingMemoryId
-          ? "update"
-          : "save";
-      const body = {
-        action:
-          action,
-        memory:
-          text,
-        category:
-          memoryCategory.value,
-        subcategory:
-          memorySubcategory.value
-            .trim() ||
-          "general",
-        importance:
-          Number(
-            memoryImportance.value
-          )
-      };
-      if (editingMemoryId) {
-        body.id =
-          editingMemoryId;
-      }
-      const response =
-        await fetch(
-          API_BASE +
-            "/api/memory",
-          {
-            method:
-              "POST",
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-            body:
-              JSON.stringify(
-                body
-              )
-          }
-        );
-      const raw =
-        await response.text();
-      let data = {};
-      try {
-        data =
-          raw
-            ? JSON.parse(raw)
-            : {};
-      } catch {
-        data = {};
-      }
-      if (!response.ok) {
-        throw new Error(
-          data.error ||
-            `Memory gagal disimpan (${response.status})`
-        );
-      }
-      closeMemoryForm();
-      await loadMemories();
-    } catch (error) {
-      console.error(
-        "SAVE MEMORY ERROR:",
-        error
-      );
-      alert(
-        "❌ " +
-          error.message
-      );
-    } finally {
-      saveMemoryButton.disabled =
-        false;
-      saveMemoryButton.textContent =
-        "💾 Simpan";
-    }
-  }
-);
-/* ============================================================
-   DELETE MEMORY
-============================================================ */
-async function deleteMemory(
-  id
-) {
-  const confirmed =
-    confirm(
-      "Tuan pasti mahu padam memory ini?\n\nNaira tidak akan menggunakan memory tersebut lagi."
-    );
-  if (!confirmed) {
-    return;
-  }
-  try {
-    const response =
-      await fetch(
-        API_BASE +
-          "/api/memory",
-        {
-          method:
-            "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              action:
-                "delete",
-              id:
-                id
-            })
-        }
-      );
-    const raw =
-      await response.text();
-    let data = {};
-    try {
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-    } catch {
-      data = {};
-    }
-    if (!response.ok) {
-      throw new Error(
-        data.error ||
-          `Memory gagal dipadam (${response.status})`
-      );
-    }
-    await loadMemories();
-  } catch (error) {
-    console.error(
-      "DELETE MEMORY ERROR:",
-      error
-    );
-    alert(
-      "❌ " +
-        error.message
-    );
-  }
-}
-/* ============================================================
-   INIT
+   INITIAL VOICE
 ============================================================ */
 setupRecognition();
 updateVoiceUI();
 console.log(
-  "🎙️ NAIRA VOICE — MALAY FEMALE PRIORITY LOADED"
-);
-console.log(
-  "Naira Personal Assistant loaded successfully."
+  "🌸 NAIRA FEMALE MALAY VOICE LOADED"
 );
 console.log(
   "API:",
   API_BASE
-);
-console.log(
-  "Conversation ID:",
-  currentConversationId
 );
 console.log(
   "Speech Recognition:",
@@ -3183,7 +1159,7 @@ console.log(
   )
 );
 console.log(
-  "TTS:",
+  "Text To Speech:",
   "speechSynthesis" in window
 );
 </script>
