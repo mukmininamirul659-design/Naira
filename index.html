@@ -1148,12 +1148,18 @@ async function sendMessage() {
       );
       return;
     }
-    addMessage(
-      data.reply ||
-      data.message ||
-      "Maaf Tuan, Naira tak menerima jawapan.",
-      "naira-message"
-    );
+    const nairaReply =
+  data.reply ||
+  data.message ||
+  "Maaf Tuan, Naira tak menerima jawapan.";
+
+addMessage(
+  nairaReply,
+  "naira-message"
+);
+
+speakNaira(nairaReply);
+
     loadHistory(true);
   } catch (error) {
     console.error(
