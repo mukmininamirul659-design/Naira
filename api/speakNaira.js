@@ -731,45 +731,187 @@ if (saveVoiceSettings) {
    SPEAK NAIRA ENGINE
 ============================================================ */
 
-function speakNaira(text) {
+async function speakNaira(text, voiceId = null) {
 
-  if (!text) return;
-
-  if (!("speechSynthesis" in window)) {
-
-    if (typeof setVoiceStatus === "function") {
-      setVoiceStatus(
-        "❌ Browser tidak menyokong voice."
-      );
-    }
-
+  if (!text || !text.trim()) {
     return;
   }
 
-  if (typeof loadVoices === "function") {
-    loadVoices();
+  try {
+
+    // Hentikan audio sebelumnya
+    if (window.nairaAudio) {
+      window.nairaAudio.pause();
+      window.nairaAudio.currentTime = 0;
+      window.nairaAudio = null;
+    }
+
+    // UI speaking
+    speaking = true;
+
+    if (typeof updateVoiceUI === "function") {
+      updateVoiceUI();
+    }
+
+    // Hantar text ke Vercel backend
+    const response = await fetch("/api/speak", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+
+        text: text.trim(),
+
+        // Kalau voiceId diberikan,
+        // ElevenLabs akan guna voice tersebut
+        voiceId: voiceId || null,
+
+        modelId: "eleven_multilingual_v2"
+
+      })
+
+    });
+
+
+    // Check error
+    if (!response.ok) {
+
+      const errorText =
+        await response.text();
+
+      console.error(
+        "NAIRA ELEVENLABS ERROR:",
+        errorText
+      );
+
+      throw new Error(
+        "ElevenLabs request gagal."
+      );
+    }
+
+
+    // Ambil audio
+    const audioBlob =
+      await response.blob();
+
+
+    // Buat URL audio
+    const audioUrl =
+      URL.createObjectURL(
+        audioBlob
+      );
+
+
+    // Create audio player
+    const audio =
+      new Audio(audioUrl);
+
+    window.nairaAudio =
+      audio;
+
+
+    // Volume
+    audio.volume =
+      voiceSettings?.volume ?? 1;
+
+
+    // Audio mula
+    audio.onplay =
+      function() {
+
+        speaking = true;
+
+        if (
+          typeof updateVoiceUI ===
+          "function"
+        ) {
+          updateVoiceUI();
+        }
+
+      };
+
+
+    // Audio tamat
+    audio.onended =
+      function() {
+
+        speaking = false;
+
+        window.nairaAudio =
+          null;
+
+        URL.revokeObjectURL(
+          audioUrl
+        );
+
+        if (
+          typeof updateVoiceUI ===
+          "function"
+        ) {
+          updateVoiceUI();
+        }
+
+      };
+
+
+    // Audio error
+    audio.onerror =
+      function(error) {
+
+        console.error(
+          "NAIRA AUDIO ERROR:",
+          error
+        );
+
+        speaking = false;
+
+        window.nairaAudio =
+          null;
+
+        URL.revokeObjectURL(
+          audioUrl
+        );
+
+        if (
+          typeof updateVoiceUI ===
+          "function"
+        ) {
+          updateVoiceUI();
+        }
+
+      };
+
+
+    // Play
+    await audio.play();
+
+
+  } catch (error) {
+
+    console.error(
+      "NAIRA SPEAK ERROR:",
+      error
+    );
+
+    speaking = false;
+
+    window.nairaAudio =
+      null;
+
+    if (
+      typeof updateVoiceUI ===
+      "function"
+    ) {
+      updateVoiceUI();
+    }
+
   }
 
-  try {
-    window.speechSynthesis.cancel();
-  } catch (error) {}
-
-  const utterance =
-    new SpeechSynthesisUtterance(text);
-
-  /*
-     Simpan reference global kalau variable
-     tersebut memang wujud dalam script utama.
-  */
-
-  try {
-    nairaSpeech = utterance;
-  } catch (error) {}
-
-  utterance.lang = "ms-MY";
-  utterance.rate = voiceSettings.rate;
-  utterance.pitch = voiceSettings.pitch;
-  utterance.volume = voiceSettings.volume;
+}
 
 
   /* ========================================================
