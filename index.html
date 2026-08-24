@@ -1788,7 +1788,7 @@ function addMessage(
 
 
   /* =========================================================
-     NAIRA MESSAGE ACTIONS
+     ACTION BAR UNTUK REPLY NAIRA SAHAJA
   ========================================================= */
 
   if (
@@ -1805,52 +1805,152 @@ function addMessage(
 
 
     actions.innerHTML = `
+
+      <!-- COPY -->
+
       <button
         type="button"
         class="message-action-btn copy-btn"
         title="Copy"
+        aria-label="Copy"
       >
-        📋
+        <svg viewBox="0 0 24 24">
+          <rect
+            x="8"
+            y="8"
+            width="11"
+            height="11"
+            rx="2"
+          ></rect>
+
+          <path
+            d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+          ></path>
+        </svg>
       </button>
+
+
+      <!-- SPEAKER -->
 
       <button
         type="button"
         class="message-action-btn speaker-btn"
         title="Read aloud"
+        aria-label="Read aloud"
       >
-        🔊
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M11 5 6 9H3v6h3l5 4z"
+          ></path>
+
+          <path
+            d="M15 9a4 4 0 0 1 0 6"
+          ></path>
+
+          <path
+            d="M17.5 6.5a8 8 0 0 1 0 11"
+          ></path>
+        </svg>
       </button>
+
+
+      <!-- LIKE -->
 
       <button
         type="button"
         class="message-action-btn like-btn"
         title="Like"
+        aria-label="Like"
       >
-        👍
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M7 10v10H4V10z"
+          ></path>
+
+          <path
+            d="M7 18h9.5a2 2 0 0 0 2-1.6l1-5A2 2 0 0 0 17.5 9H14l.5-3a2 2 0 0 0-3.5-1.5L7 10"
+          ></path>
+        </svg>
       </button>
+
+
+      <!-- DISLIKE -->
 
       <button
         type="button"
         class="message-action-btn dislike-btn"
         title="Dislike"
+        aria-label="Dislike"
       >
-        👎
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M7 14V4H4v10z"
+          ></path>
+
+          <path
+            d="M7 6h9.5a2 2 0 0 1 2 1.6l1 5A2 2 0 0 1 17.5 15H14l.5 3a2 2 0 0 1-3.5 1.5L7 14"
+          ></path>
+        </svg>
       </button>
+
+
+      <!-- SHARE -->
 
       <button
         type="button"
         class="message-action-btn share-btn"
         title="Share"
+        aria-label="Share"
       >
-        ↗️
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M12 16V4"
+          ></path>
+
+          <path
+            d="m8 8 4-4 4 4"
+          ></path>
+
+          <path
+            d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"
+          ></path>
+        </svg>
       </button>
+
+
+      <!-- MORE -->
 
       <button
         type="button"
         class="message-action-btn more-btn"
         title="More"
+        aria-label="More"
       >
-        •••
+        <svg viewBox="0 0 24 24">
+          <circle
+            cx="5"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
+
+          <circle
+            cx="12"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
+
+          <circle
+            cx="19"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
+        </svg>
       </button>
     `;
 
@@ -1876,18 +1976,20 @@ function addMessage(
           );
 
 
-          copyButton.textContent =
-            "✓";
+          copyButton.classList.add(
+            "active"
+          );
 
 
           setTimeout(
             function() {
 
-              copyButton.textContent =
-                "📋";
+              copyButton.classList.remove(
+                "active"
+              );
 
             },
-            1000
+            900
           );
 
         } catch (error) {
@@ -2023,29 +2125,17 @@ function addMessage(
           ) {
 
             await navigator.share({
-              title: "Naira",
-              text: text
+              title:
+                "Naira",
+
+              text:
+                text
             });
 
           } else {
 
             await navigator.clipboard.writeText(
               text
-            );
-
-
-            shareButton.textContent =
-              "✓";
-
-
-            setTimeout(
-              function() {
-
-                shareButton.textContent =
-                  "↗️";
-
-              },
-              1000
             );
 
           }
@@ -2071,7 +2161,7 @@ function addMessage(
 
 
     /* =======================================================
-       MORE MENU
+       MORE
     ======================================================= */
 
     const moreButton =
@@ -2095,21 +2185,21 @@ function addMessage(
         type="button"
         class="message-more-item more-copy"
       >
-        📋 Copy
+        Copy
       </button>
 
       <button
         type="button"
         class="message-more-item more-speak"
       >
-        🔊 Read aloud
+        Read aloud
       </button>
 
       <button
         type="button"
         class="message-more-item more-share"
       >
-        ↗️ Share
+        Share
       </button>
     `;
 
@@ -2134,7 +2224,9 @@ function addMessage(
     );
 
 
-    /* MORE → COPY */
+    /* =======================================================
+       MORE COPY
+    ======================================================= */
 
     const moreCopy =
       moreMenu.querySelector(
@@ -2146,31 +2238,22 @@ function addMessage(
       "click",
       async function() {
 
-        try {
-
-          await navigator.clipboard.writeText(
-            text
-          );
+        await navigator.clipboard.writeText(
+          text
+        );
 
 
-          moreMenu.classList.remove(
-            "active"
-          );
-
-        } catch (error) {
-
-          console.error(
-            "MORE COPY ERROR:",
-            error
-          );
-
-        }
+        moreMenu.classList.remove(
+          "active"
+        );
 
       }
     );
 
 
-    /* MORE → READ ALOUD */
+    /* =======================================================
+       MORE SPEAKER
+    ======================================================= */
 
     const moreSpeak =
       moreMenu.querySelector(
@@ -2202,7 +2285,9 @@ function addMessage(
     );
 
 
-    /* MORE → SHARE */
+    /* =======================================================
+       MORE SHARE
+    ======================================================= */
 
     const moreShare =
       moreMenu.querySelector(
@@ -2226,8 +2311,11 @@ function addMessage(
           ) {
 
             await navigator.share({
-              title: "Naira",
-              text: text
+              title:
+                "Naira",
+
+              text:
+                text
             });
 
           } else {
@@ -2246,7 +2334,7 @@ function addMessage(
           ) {
 
             console.error(
-              "MORE SHARE ERROR:",
+              "SHARE ERROR:",
               error
             );
 
@@ -2271,8 +2359,11 @@ function addMessage(
 
 
   wrapper.scrollIntoView({
-    behavior: "smooth",
-    block: "end"
+    behavior:
+      "smooth",
+
+    block:
+      "end"
   });
 
 }
