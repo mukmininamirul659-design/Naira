@@ -1301,34 +1301,24 @@ async function speakNaira(
     /*
      * Request Vercel backend.
      */
-    const response =
-      await fetch(
-        "/api/speak",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-          body:
-            JSON.stringify({
-              text:
-                text.trim(),
-              voiceId:
-                activeVoiceId,
-              modelId:
-                ELEVENLABS_MODEL,
-              character:
-                voiceSettings.character,
-              emotion:
-                voiceSettings.emotion,
-              rate:
-                voiceSettings.rate,
-              pitch:
-                voiceSettings.pitch
-            })
-        }
-      );
+    const response = await fetch(
+  "https://naira-tawny.vercel.app/api/speak",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      text: text.trim(),
+      voiceId: activeVoiceId,
+      modelId: "eleven_multilingual_v2",
+      character: voiceSettings.character,
+      emotion: voiceSettings.emotion,
+      rate: voiceSettings.rate,
+      pitch: voiceSettings.pitch
+    })
+  }
+);
     /*
      * API error.
      */
