@@ -215,18 +215,91 @@ header{
   border-bottom-left-radius:5px;
 }
 
+/* ============================================================
+   NAIRA MESSAGE ACTION BAR
+============================================================ */
+
 .message-actions{
   position:relative;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:10px;
+  padding-top:8px;
+  border-top:1px solid rgba(255,255,255,.055);
 }
+
+.message-action-btn{
+  width:28px;
+  height:28px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  padding:0;
+  margin:0;
+
+  border:0;
+  border-radius:7px;
+
+  background:transparent !important;
+  color:#8e95a5;
+
+  cursor:pointer;
+  opacity:.82;
+
+  -webkit-appearance:none;
+  appearance:none;
+
+  transition:
+    background .15s ease,
+    color .15s ease,
+    opacity .15s ease,
+    transform .12s ease;
+}
+
+.message-action-btn svg{
+  width:17px;
+  height:17px;
+
+  display:block;
+
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.message-action-btn:hover{
+  background:rgba(255,255,255,.065) !important;
+  color:#e8eaf0;
+  opacity:1;
+}
+
+.message-action-btn:active{
+  transform:scale(.90);
+}
+
+.message-action-btn.active{
+  color:#a78bfa;
+  opacity:1;
+}
+
+
+/* ============================================================
+   MORE MENU
+============================================================ */
 
 .message-more-menu{
   display:none;
   position:absolute;
 
-  left:105px;
-  bottom:30px;
+  right:0;
+  bottom:34px;
 
-  min-width:155px;
+  width:165px;
   padding:6px;
 
   background:#1b1e29;
@@ -234,9 +307,9 @@ header{
   border-radius:12px;
 
   box-shadow:
-    0 12px 35px rgba(0,0,0,.45);
+    0 14px 40px rgba(0,0,0,.48);
 
-  z-index:50;
+  z-index:100;
 }
 
 .message-more-menu.active{
@@ -245,17 +318,19 @@ header{
 
 .message-more-item{
   width:100%;
+
   display:flex;
   align-items:center;
   gap:9px;
 
   padding:9px 10px;
 
-  background:transparent;
   border:0;
   border-radius:8px;
 
-  color:#e5e7eb;
+  background:transparent;
+
+  color:#d9dce5;
   font-size:12px;
   text-align:left;
 }
