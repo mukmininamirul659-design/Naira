@@ -14,7 +14,7 @@
 const ELEVENLABS_MODEL =
   "eleven_multilingual_v2";
 
-const API_BASE =
+const VOICE_API_BASE =
   "https://naira-tawny.vercel.app";
 
 const VOICE_STORAGE_PREFIX =
@@ -743,8 +743,8 @@ async function loadElevenLabsVoices() {
 
     const response =
       await fetch(
-        API_BASE +
-        "/api/voice",
+        VOICE_API_BASE +
+"/api/voice"
         {
           method:
             "GET",
@@ -2074,8 +2074,8 @@ async function speakNaira(
 
     const response =
       await fetch(
-        API_BASE +
-        "/api/speak",
+        VOICE_API_BASE +
+"/api/speak"
         {
 
           method:
