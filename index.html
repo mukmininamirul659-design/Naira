@@ -1800,6 +1800,32 @@ copyButton.addEventListener(
 
   }
 
+const speakerButton =
+  actions.querySelector(
+    ".speaker-btn"
+  );
+
+speakerButton.addEventListener(
+  "click",
+  function() {
+
+    if (
+      typeof window.speakNaira ===
+      "function"
+    ) {
+
+      window.speakNaira(text);
+
+    } else {
+
+      console.error(
+        "speakNaira belum tersedia."
+      );
+
+    }
+
+  }
+);
 
   chat.appendChild(
     wrapper
