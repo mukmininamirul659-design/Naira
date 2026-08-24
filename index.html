@@ -1847,6 +1847,57 @@ dislikeButton.addEventListener(
   }
 );
 
+const shareButton =
+  actions.querySelector(
+    ".share-btn"
+  );
+
+shareButton.addEventListener(
+  "click",
+  async function() {
+
+    try {
+
+      if (navigator.share) {
+
+        await navigator.share({
+          title: "Naira",
+          text: text
+        });
+
+      } else {
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        shareButton.textContent = "✓";
+
+        setTimeout(
+          function() {
+            shareButton.textContent = "↗️";
+          },
+          1200
+        );
+
+      }
+
+    } catch (error) {
+
+      if (
+        error.name !== "AbortError"
+      ) {
+        console.error(
+          "SHARE ERROR:",
+          error
+        );
+      }
+
+    }
+
+  }
+);
+
     wrapper.appendChild(
       actions
     );
