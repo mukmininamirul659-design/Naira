@@ -2212,27 +2212,21 @@ async function sendMessage() {
         nairaReply
       );
 
+    } else {
+
+      console.error(
+        "speakNaira.js belum loaded."
+      );
+
+      setVoiceStatus(
+        "❌ ElevenLabs Voice Engine belum loaded."
+      );
+
     }
 
   },
   100
 );
-
-        } else {
-
-          console.error(
-            "speakNaira.js belum loaded."
-          );
-
-          setVoiceStatus(
-            "❌ ElevenLabs Voice Engine belum loaded."
-          );
-
-        }
-
-      },
-      100
-    );
 
 
     /*
