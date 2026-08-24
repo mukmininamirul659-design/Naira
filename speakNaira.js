@@ -490,49 +490,44 @@ function getCurrentVoiceId() {
 ============================================================ */
 async function loadElevenLabsVoices() {
   try {
-    const response =
-      await fetch(
-  "https://naira-tawny.vercel.app/api/voice",,
-        {
-          method: "GET",
-          cache: "no-store"
-        }
-      );
+    const response = await fetch(
+      "https://naira-tawny.vercel.app/api/voice",
+      {
+        method: "GET",
+        cache: "no-store"
+      }
+    );
+
     if (!response.ok) {
       throw new Error(
-        "API voices gagal: " +
-        response.status
+        "API voices gagal: " + response.status
       );
     }
-    const data =
-      await response.json();
-    if (
-      !data.voices ||
-      !Array.isArray(
-        data.voices
-      )
-    ) {
+
+    const data = await response.json();
+
+    if (!data.voices || !Array.isArray(data.voices)) {
       throw new Error(
         "Response voices tidak sah."
       );
     }
-    window.elevenLabsVoices =
-      data.voices;
+
+    window.elevenLabsVoices = data.voices;
+
     console.log(
-      "🎙️ ElevenLabs voices:",
+      "🎙️ ElevenLabs voices loaded:",
       data.voices
     );
-    buildCharacterVoiceMap(
-      data.voices
-    );
+
     return data.voices;
+
   } catch (error) {
     console.error(
       "ELEVENLABS VOICES ERROR:",
       error
     );
-    window.elevenLabsVoices =
-      [];
+
+    window.elevenLabsVoices = [];
     return [];
   }
 }
