@@ -24,19 +24,14 @@
   --border:rgba(255,255,255,.09);
 }
 
-html,
-body{
+html,body{
   min-height:100%;
   background:var(--bg);
 }
 
 body{
   min-height:100vh;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   background:
     radial-gradient(
       circle at top,
@@ -61,9 +56,7 @@ button:disabled{
   cursor:not-allowed;
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
   font-family:inherit;
 }
 
@@ -100,14 +93,8 @@ header{
   display:flex;
   align-items:center;
   justify-content:center;
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
-  box-shadow:
-    0 0 25px rgba(124,92,246,.45);
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  box-shadow:0 0 25px rgba(124,92,246,.45);
   font-size:22px;
 }
 
@@ -162,19 +149,6 @@ header{
   box-shadow:
     0 0 35px rgba(139,92,246,.45),
     0 0 80px rgba(79,70,229,.18);
-  animation:
-    breathe 3s ease-in-out infinite;
-}
-
-@keyframes breathe{
-  0%,
-  100%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.06);
-  }
 }
 
 .welcome h2{
@@ -215,56 +189,45 @@ header{
   border-bottom-left-radius:5px;
 }
 
+.user-message{
+  align-self:flex-end;
+  background:linear-gradient(135deg,#6d4df5,#4f46e5);
+  border-bottom-right-radius:5px;
+}
+
 /* ============================================================
-   NAIRA MESSAGE ACTION BAR
+   CHATGPT STYLE MESSAGE ACTIONS
 ============================================================ */
 
 .message-actions{
   position:relative;
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:6px;
   margin-top:10px;
   padding-top:8px;
   border-top:1px solid rgba(255,255,255,.055);
 }
 
 .message-action-btn{
-  width:28px;
-  height:28px;
-
+  width:27px;
+  height:27px;
   display:flex;
   align-items:center;
   justify-content:center;
-
   padding:0;
   margin:0;
-
-  border:0;
+  background:transparent!important;
   border-radius:7px;
-
-  background:transparent !important;
-  color:#8e95a5;
-
-  cursor:pointer;
+  color:#9299aa;
   opacity:.82;
-
   -webkit-appearance:none;
   appearance:none;
-
-  transition:
-    background .15s ease,
-    color .15s ease,
-    opacity .15s ease,
-    transform .12s ease;
 }
 
 .message-action-btn svg{
   width:17px;
   height:17px;
-
-  display:block;
-
   fill:none;
   stroke:currentColor;
   stroke-width:1.8;
@@ -272,14 +235,8 @@ header{
   stroke-linejoin:round;
 }
 
-.message-action-btn:hover{
-  background:rgba(255,255,255,.065) !important;
-  color:#e8eaf0;
-  opacity:1;
-}
-
 .message-action-btn:active{
-  transform:scale(.90);
+  transform:scale(.9);
 }
 
 .message-action-btn.active{
@@ -287,28 +244,53 @@ header{
   opacity:1;
 }
 
+/* feedback chooser */
 
-/* ============================================================
-   MORE MENU
-============================================================ */
+.feedback-choice{
+  display:none;
+  position:absolute;
+  left:55px;
+  bottom:33px;
+  width:175px;
+  padding:6px;
+  background:#1b1e29;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
+  box-shadow:0 14px 40px rgba(0,0,0,.45);
+  z-index:100;
+}
+
+.feedback-choice.active{
+  display:block;
+}
+
+.feedback-choice button{
+  width:100%;
+  padding:10px;
+  background:transparent;
+  border-radius:8px;
+  text-align:left;
+  font-size:12px;
+  color:#e7e9ef;
+}
+
+.feedback-choice button:active{
+  background:rgba(255,255,255,.07);
+}
+
+/* more */
 
 .message-more-menu{
   display:none;
   position:absolute;
-
   right:0;
   bottom:34px;
-
   width:165px;
   padding:6px;
-
   background:#1b1e29;
   border:1px solid rgba(255,255,255,.09);
   border-radius:12px;
-
-  box-shadow:
-    0 14px 40px rgba(0,0,0,.48);
-
+  box-shadow:0 14px 40px rgba(0,0,0,.48);
   z-index:100;
 }
 
@@ -318,56 +300,244 @@ header{
 
 .message-more-item{
   width:100%;
-
-  display:flex;
-  align-items:center;
-  gap:9px;
-
   padding:9px 10px;
-
-  border:0;
-  border-radius:8px;
-
   background:transparent;
-
+  border-radius:8px;
   color:#d9dce5;
   font-size:12px;
   text-align:left;
 }
 
-.message-more-item:hover{
-  background:rgba(255,255,255,.07);
+/* ============================================================
+   TOAST
+============================================================ */
+
+.naira-toast{
+  position:fixed;
+  top:calc(18px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%) translateY(-15px);
+  padding:9px 14px;
+  background:#242733;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;
+  color:#f4f4f7;
+  font-size:12px;
+  font-weight:600;
+  opacity:0;
+  pointer-events:none;
+  z-index:10000;
+  box-shadow:0 12px 35px rgba(0,0,0,.4);
+  transition:.2s ease;
 }
 
-.message-more-item.danger{
-  color:#ff9b9b;
+.naira-toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
 }
 
-.message-action-btn:hover{
-  background:rgba(255,255,255,.07);
+/* ============================================================
+   VOICE PLAYER
+============================================================ */
+
+.naira-voice-player{
+  display:none;
+  position:fixed;
+  top:calc(16px + env(safe-area-inset-top));
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 30px);
+  max-width:520px;
+  padding:11px 12px;
+  border-radius:16px;
+  background:rgba(25,28,39,.97);
+  border:1px solid rgba(255,255,255,.1);
+  box-shadow:0 15px 45px rgba(0,0,0,.5);
+  z-index:9998;
+  backdrop-filter:blur(18px);
+}
+
+.naira-voice-player.active{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.voice-player-icon{
+  width:33px;
+  height:33px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(139,92,246,.17);
+  font-size:15px;
+}
+
+.voice-player-controls{
+  flex:1;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+}
+
+.voice-player-button{
+  min-width:34px;
+  height:32px;
+  padding:0 8px;
+  border-radius:8px;
+  background:transparent;
+  color:#c5c9d3;
+  font-size:11px;
+}
+
+.voice-player-button:active{
+  background:rgba(255,255,255,.08);
+}
+
+.voice-speed{
+  font-weight:700;
+}
+
+.voice-player-close{
+  width:31px;
+  height:31px;
+  border-radius:8px;
+  background:transparent;
+  color:#aeb3c0;
+  font-size:15px;
+}
+
+/* ============================================================
+   FEEDBACK CARD
+============================================================ */
+
+.feedback-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  padding:18px;
+  background:rgba(5,6,10,.72);
+  backdrop-filter:blur(10px);
+  z-index:10020;
+  align-items:center;
+  justify-content:center;
+}
+
+.feedback-overlay.active{
+  display:flex;
+}
+
+.feedback-card{
+  width:100%;
+  max-width:480px;
+  background:#171a25;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:20px;
+  padding:18px;
+  box-shadow:0 24px 70px rgba(0,0,0,.55);
+}
+
+.feedback-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.feedback-label{
+  font-size:11px;
+  color:#9ca3af;
+  font-weight:700;
+  letter-spacing:1.2px;
+}
+
+.feedback-close{
+  width:32px;
+  height:32px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:#aaaebb;
+}
+
+.feedback-question{
+  font-size:19px;
+  font-weight:650;
+  margin-bottom:18px;
+}
+
+.feedback-field{
+  margin-bottom:14px;
+}
+
+.feedback-field-label{
+  display:block;
+  font-size:11px;
+  color:#a9aeba;
+  margin-bottom:7px;
+}
+
+.feedback-select{
+  width:100%;
+  padding:13px;
   color:#fff;
-  opacity:1;
+  background:#202330;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:11px;
+  outline:none;
+  font-size:13px;
 }
 
-.message-action-btn:active{
-  transform:scale(.92);
+.feedback-text-wrapper{
+  position:relative;
 }
 
-.message-action-btn.active{
-  color:#a78bfa;
-  opacity:1;
+.feedback-text{
+  width:100%;
+  min-height:125px;
+  padding:13px 13px 28px;
+  resize:none;
+  outline:none;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:11px;
+  background:#202330;
+  color:#fff;
+  font-size:13px;
 }
 
-.user-message{
-  align-self:flex-end;
-  background:
-    linear-gradient(
-      135deg,
-      #6d4df5,
-      #4f46e5
-    );
-  border-bottom-right-radius:5px;
+.feedback-count{
+  position:absolute;
+  right:10px;
+  bottom:9px;
+  font-size:10px;
+  color:#7e8493;
 }
+
+.feedback-actions{
+  display:flex;
+  gap:8px;
+  margin-top:15px;
+}
+
+.feedback-actions button{
+  flex:1;
+  padding:12px;
+  border-radius:11px;
+  font-size:12px;
+}
+
+.feedback-cancel{
+  background:rgba(255,255,255,.07);
+}
+
+.feedback-submit{
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+}
+
+/* ============================================================
+   MAIN INPUT
+============================================================ */
 
 .input-area{
   display:flex;
@@ -378,8 +548,7 @@ header{
   border:1px solid rgba(255,255,255,.09);
   border-radius:22px;
   backdrop-filter:blur(18px);
-  box-shadow:
-    0 12px 35px rgba(0,0,0,.3);
+  box-shadow:0 12px 35px rgba(0,0,0,.3);
 }
 
 #messageInput{
@@ -397,8 +566,7 @@ header{
   color:#777d8d;
 }
 
-.mic,
-.send{
+.mic,.send{
   width:43px;
   height:43px;
   border-radius:50%;
@@ -415,27 +583,14 @@ header{
 
 .mic.listening{
   background:rgba(239,68,68,.22);
-  box-shadow:
-    0 0 0 5px rgba(239,68,68,.08),
-    0 0 25px rgba(239,68,68,.3);
 }
 
 .mic.speaking{
   background:rgba(139,92,246,.25);
-  box-shadow:
-    0 0 0 5px rgba(139,92,246,.08),
-    0 0 25px rgba(139,92,246,.35);
 }
 
 .send{
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
-  box-shadow:
-    0 5px 18px rgba(99,72,220,.35);
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
 }
 
 .voice-status{
@@ -453,13 +608,13 @@ header{
   margin-top:12px;
 }
 
+/* typing */
+
 .typing-indicator{
   display:flex;
   align-items:center;
   gap:5px;
   min-width:58px;
-  min-height:42px;
-  padding:13px 16px;
 }
 
 .typing-indicator span{
@@ -467,31 +622,11 @@ header{
   height:7px;
   background:#9ca3af;
   border-radius:50%;
-  animation:
-    typingBounce 1.4s infinite ease-in-out;
 }
 
-.typing-indicator span:nth-child(2){
-  animation-delay:.2s;
-}
-
-.typing-indicator span:nth-child(3){
-  animation-delay:.4s;
-}
-
-@keyframes typingBounce{
-  0%,
-  60%,
-  100%{
-    transform:translateY(0);
-    opacity:.4;
-  }
-
-  30%{
-    transform:translateY(-5px);
-    opacity:1;
-  }
-}
+/* ============================================================
+   PANELS
+============================================================ */
 
 .overlay,
 .history-panel,
@@ -517,17 +652,11 @@ header{
   width:100%;
   max-width:600px;
   margin:0 auto;
-  background:
-    linear-gradient(
-      145deg,
-      rgba(31,34,50,.99),
-      rgba(13,15,24,.99)
-    );
+  background:linear-gradient(145deg,rgba(31,34,50,.99),rgba(13,15,24,.99));
   border:1px solid var(--border);
   border-radius:24px;
   padding:18px;
-  box-shadow:
-    0 20px 60px rgba(0,0,0,.5);
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
 .panel-header,
@@ -587,7 +716,6 @@ header{
   width:47px;
   border-radius:13px;
   background:rgba(255,255,255,.08);
-  font-size:17px;
 }
 
 .new-conversation,
@@ -595,12 +723,7 @@ header{
   width:100%;
   padding:14px;
   border-radius:15px;
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
   font-size:14px;
   margin-bottom:14px;
 }
@@ -613,6 +736,15 @@ header{
   margin-bottom:14px;
 }
 
+.history-card,
+.memory-card{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:15px;
+  padding:14px;
+  margin-bottom:8px;
+}
+
 .history-day,
 .memory-category{
   margin-bottom:22px;
@@ -622,19 +754,9 @@ header{
 .category-title{
   display:flex;
   justify-content:space-between;
-  align-items:center;
   color:#cfd2dc;
   font-size:14px;
   margin-bottom:9px;
-}
-
-.history-card,
-.memory-card{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  padding:14px;
-  margin-bottom:8px;
 }
 
 .history-title{
@@ -646,7 +768,6 @@ header{
 .history-preview{
   color:#a7adbd;
   font-size:12px;
-  line-height:1.45;
   margin-bottom:9px;
 }
 
@@ -669,7 +790,6 @@ header{
   padding:9px;
   border-radius:9px;
   background:rgba(255,255,255,.08);
-  font-size:11px;
 }
 
 .history-delete,
@@ -682,26 +802,20 @@ header{
 .empty-state{
   text-align:center;
   color:#777d8d;
-  font-size:13px;
   padding:35px 15px;
 }
 
 .category-filter{
   width:100%;
-  padding:12px 13px;
+  padding:12px;
   border-radius:13px;
-  border:1px solid rgba(255,255,255,.08);
   background:#1b1e2b;
   color:#fff;
-  font-size:13px;
+  border:1px solid rgba(255,255,255,.08);
   margin-bottom:12px;
 }
 
-.memory-text{
-  font-size:14px;
-  line-height:1.5;
-  margin-bottom:9px;
-}
+/* memory form */
 
 .memory-form-overlay{
   z-index:2000;
@@ -717,20 +831,16 @@ header{
   width:100%;
   max-width:520px;
   background:#171a26;
-  border:1px solid var(--border);
   border-radius:22px;
   padding:20px;
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.55);
 }
 
 .memory-form h3{
-  font-size:20px;
   margin-bottom:5px;
 }
 
 .memory-form-subtitle{
-  color:var(--muted);
+  color:#858b9c;
   font-size:12px;
   margin-bottom:18px;
 }
@@ -750,28 +860,20 @@ header{
 .form-group select,
 .form-group textarea{
   width:100%;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  outline:0;
   padding:12px;
-  font-size:14px;
+  background:#1b1e2b;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
 }
 
 .form-group textarea{
   min-height:90px;
-  resize:vertical;
-}
-
-.form-group select{
-  background:#1b1e2b;
 }
 
 .form-actions{
   display:flex;
   gap:9px;
-  margin-top:18px;
 }
 
 .form-actions button{
@@ -785,21 +887,15 @@ header{
 }
 
 .save-button{
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
 }
 
 /* ============================================================
-   VOICE CENTER — ELEVENLABS ONLY
+   VOICE CENTER
 ============================================================ */
 
 .voice-center-box{
-  max-height:
-    calc(100dvh - 36px);
+  max-height:calc(100dvh - 36px);
   overflow-y:auto;
 }
 
@@ -809,7 +905,6 @@ header{
 
 .voice-section-title{
   font-size:14px;
-  font-weight:650;
   color:#d8dbe5;
   margin-bottom:10px;
 }
@@ -821,10 +916,8 @@ header{
 }
 
 .voice-chip{
-  border:
-    1px solid var(--border);
-  background:
-    rgba(255,255,255,.06);
+  border:1px solid var(--border);
+  background:rgba(255,255,255,.06);
   color:#dfe2ea;
   border-radius:14px;
   padding:10px 12px;
@@ -832,24 +925,16 @@ header{
 }
 
 .voice-chip.active{
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
 }
 
 .voice-select{
   width:100%;
   padding:13px;
   border-radius:13px;
-  border:
-    1px solid var(--border);
+  border:1px solid var(--border);
   background:#1b1e2b;
   color:#fff;
-  outline:none;
-  font-size:13px;
 }
 
 .voice-controls{
@@ -860,10 +945,7 @@ header{
 }
 
 .voice-control{
-  background:
-    rgba(255,255,255,.045);
-  border:
-    1px solid rgba(255,255,255,.06);
+  background:rgba(255,255,255,.045);
   border-radius:14px;
   padding:12px;
 }
@@ -873,35 +955,26 @@ header{
   justify-content:space-between;
   margin-bottom:9px;
   font-size:12px;
-  color:#b8bdc9;
 }
 
 .voice-control input{
   width:100%;
-  accent-color:var(--purple);
 }
 
 .voice-preview{
-  background:
-    rgba(255,255,255,.045);
-  border-radius:15px;
   padding:12px;
-  margin-bottom:10px;
+  background:rgba(255,255,255,.045);
+  border-radius:15px;
 }
 
 #voicePreviewText{
   width:100%;
   min-height:90px;
-  resize:vertical;
-  border:
-    1px solid rgba(255,255,255,.08);
-  border-radius:12px;
-  background:
-    rgba(0,0,0,.18);
+  background:rgba(0,0,0,.18);
   color:#fff;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
   padding:12px;
-  outline:none;
-  font-size:13px;
   margin-bottom:9px;
 }
 
@@ -910,64 +983,200 @@ header{
   width:100%;
   padding:13px;
   border-radius:13px;
-  font-size:13px;
 }
 
 .voice-preview-button{
-  background:
-    rgba(139,92,246,.18);
-  border:
-    1px solid rgba(139,92,246,.2);
+  background:rgba(139,92,246,.18);
 }
 
 .voice-save-button{
-  background:
-    linear-gradient(
-      135deg,
-      var(--purple),
-      var(--purple2)
-    );
-  margin-top:3px;
+  background:linear-gradient(135deg,var(--purple),var(--purple2));
+  margin-top:10px;
 }
 
 .voice-center-status{
   text-align:center;
-  min-height:18px;
-  color:var(--muted);
   font-size:11px;
+  color:#858b9c;
   margin-top:10px;
-}
-
-.voice-note{
-  font-size:10px;
-  color:#777d8d;
-  line-height:1.5;
-  margin-top:12px;
-}
-
-@media(max-height:700px){
-  .welcome{
-    margin-top:15px;
-    margin-bottom:15px;
-  }
-
-  .welcome-orb{
-    width:85px;
-    height:85px;
-  }
-
-  .welcome h2{
-    font-size:24px;
-  }
 }
 </style>
 </head>
 
 <body>
 
+<!-- TOAST -->
+
+<div
+  class="naira-toast"
+  id="nairaToast"
+></div>
+
+<!-- VOICE PLAYER -->
+
+<div
+  class="naira-voice-player"
+  id="nairaVoicePlayer"
+>
+  <div class="voice-player-icon">
+    🔊
+  </div>
+
+  <div class="voice-player-controls">
+
+    <button
+      class="voice-player-button"
+      id="voiceBack15"
+      type="button"
+    >
+      ↶ 15
+    </button>
+
+    <button
+      class="voice-player-button voice-speed"
+      id="voiceSpeedButton"
+      type="button"
+    >
+      1x
+    </button>
+
+    <button
+      class="voice-player-button"
+      id="voiceForward15"
+      type="button"
+    >
+      15 ↷
+    </button>
+
+  </div>
+
+  <button
+    class="voice-player-close"
+    id="voicePlayerClose"
+    type="button"
+  >
+    ✕
+  </button>
+</div>
+
+<!-- FEEDBACK MODAL -->
+
+<div
+  class="feedback-overlay"
+  id="feedbackOverlay"
+>
+  <div class="feedback-card">
+
+    <div class="feedback-top">
+
+      <div class="feedback-label">
+        FEEDBACK
+      </div>
+
+      <button
+        class="feedback-close"
+        id="closeFeedback"
+        type="button"
+      >
+        ✕
+      </button>
+
+    </div>
+
+    <div class="feedback-question">
+      What could have been better?
+    </div>
+
+    <div class="feedback-field">
+
+      <label class="feedback-field-label">
+        Issue
+      </label>
+
+      <select
+        class="feedback-select"
+        id="feedbackIssue"
+      >
+        <option value="">
+          None
+        </option>
+
+        <option value="incorrect">
+          Incorrect or Incomplete
+        </option>
+
+        <option value="not-asked">
+          Not what I asked for
+        </option>
+
+        <option value="slow">
+          Slow or buggy
+        </option>
+
+        <option value="style">
+          Style or tone
+        </option>
+
+        <option value="safety">
+          Safety or legal concern
+        </option>
+
+        <option value="other">
+          Other
+        </option>
+      </select>
+
+    </div>
+
+    <div class="feedback-field">
+
+      <div class="feedback-text-wrapper">
+
+        <textarea
+          class="feedback-text"
+          id="feedbackDetails"
+          maxlength="2000"
+          placeholder="Share details (optional)"
+        ></textarea>
+
+        <div
+          class="feedback-count"
+          id="feedbackCount"
+        >
+          0/2000
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="feedback-actions">
+
+      <button
+        class="feedback-cancel"
+        id="cancelFeedback"
+        type="button"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="feedback-submit"
+        id="submitFeedback"
+        type="button"
+      >
+        Submit
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
 <main class="app">
 
 <header>
+
   <div class="brand">
 
     <div class="avatar">
@@ -978,9 +1187,7 @@ header{
       <h1>Naira</h1>
 
       <div class="status">
-        <span class="online">
-          ●
-        </span>
+        <span class="online">●</span>
         Personal Assistant
       </div>
     </div>
@@ -1014,12 +1221,12 @@ header{
     </button>
 
   </div>
+
 </header>
 
 <section class="welcome">
 
-  <div class="welcome-orb">
-  </div>
+  <div class="welcome-orb"></div>
 
   <h2>
     Hai, Cik Amirul 👋
@@ -1035,9 +1242,7 @@ header{
   class="chat"
   id="chat"
 >
-  <div
-    class="message naira-message"
-  >
+  <div class="message naira-message">
     Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
   </div>
 </section>
@@ -1048,7 +1253,6 @@ header{
     class="mic"
     id="micButton"
     type="button"
-    aria-label="Voice"
   >
     🎙️
   </button>
@@ -1081,29 +1285,19 @@ header{
 
 </main>
 
-<!-- =========================================================
-     HISTORY
-========================================================= -->
+<!-- HISTORY -->
 
 <div
   class="history-panel"
   id="historyPanel"
 >
-
   <div class="history-box">
 
     <div class="history-header">
 
       <div>
-
-        <h2>
-          🕘 Conversation History
-        </h2>
-
-        <p>
-          Semua perbualan Tuan dengan Naira
-        </p>
-
+        <h2>🕘 Conversation History</h2>
+        <p>Semua perbualan Tuan dengan Naira</p>
       </div>
 
       <button
@@ -1123,7 +1317,6 @@ header{
         id="historySearch"
         type="search"
         placeholder="🔍 Cari conversation..."
-        autocomplete="off"
       >
 
       <button
@@ -1151,36 +1344,24 @@ header{
       Memuatkan history...
     </div>
 
-    <div id="historyList">
-    </div>
+    <div id="historyList"></div>
 
   </div>
-
 </div>
 
-<!-- =========================================================
-     MEMORY
-========================================================= -->
+<!-- MEMORY -->
 
 <div
   class="overlay"
   id="memoryPanel"
 >
-
   <div class="panel-box">
 
     <div class="panel-header">
 
       <div>
-
-        <h2>
-          🧠 Memory Center
-        </h2>
-
-        <p>
-          Ingatan yang Naira simpan tentang Tuan
-        </p>
-
+        <h2>🧠 Memory Center</h2>
+        <p>Ingatan yang Naira simpan tentang Tuan</p>
       </div>
 
       <button
@@ -1200,7 +1381,6 @@ header{
         id="memorySearch"
         type="search"
         placeholder="🔍 Cari memory..."
-        autocomplete="off"
       >
 
       <button
@@ -1217,49 +1397,17 @@ header{
       class="category-filter"
       id="categoryFilter"
     >
-      <option value="all">
-        📂 Semua kategori
-      </option>
-
-      <option value="profile">
-        👤 Profile
-      </option>
-
-      <option value="fashion">
-        👕 Fashion
-      </option>
-
-      <option value="food">
-        🍔 Food
-      </option>
-
-      <option value="game">
-        🎮 Game
-      </option>
-
-      <option value="hobby">
-        🎨 Hobby
-      </option>
-
-      <option value="work">
-        💼 Work
-      </option>
-
-      <option value="project">
-        🚀 Project
-      </option>
-
-      <option value="preference">
-        ❤️ Preference
-      </option>
-
-      <option value="family">
-        👨‍👩‍👧 Family
-      </option>
-
-      <option value="general">
-        📁 General
-      </option>
+      <option value="all">📂 Semua kategori</option>
+      <option value="profile">👤 Profile</option>
+      <option value="fashion">👕 Fashion</option>
+      <option value="food">🍔 Food</option>
+      <option value="game">🎮 Game</option>
+      <option value="hobby">🎨 Hobby</option>
+      <option value="work">💼 Work</option>
+      <option value="project">🚀 Project</option>
+      <option value="preference">❤️ Preference</option>
+      <option value="family">👨‍👩‍👧 Family</option>
+      <option value="general">📁 General</option>
     </select>
 
     <div
@@ -1277,16 +1425,12 @@ header{
       ＋ Tambah Memory
     </button>
 
-    <div id="memoryList">
-    </div>
+    <div id="memoryList"></div>
 
   </div>
-
 </div>
 
-<!-- =========================================================
-     MEMORY FORM
-========================================================= -->
+<!-- MEMORY FORM -->
 
 <div
   class="memory-form-overlay"
@@ -1303,7 +1447,8 @@ header{
     </div>
 
     <div class="form-group">
-      <label for="memoryText">
+
+      <label>
         Memory
       </label>
 
@@ -1311,89 +1456,55 @@ header{
         id="memoryText"
         placeholder="Contoh: Tuan suka warna biru."
       ></textarea>
+
     </div>
 
     <div class="form-group">
-      <label for="memoryCategory">
+
+      <label>
         Kategori
       </label>
 
       <select id="memoryCategory">
-        <option value="profile">
-          👤 Profile
-        </option>
-
-        <option value="fashion">
-          👕 Fashion
-        </option>
-
-        <option value="food">
-          🍔 Food
-        </option>
-
-        <option value="game">
-          🎮 Game
-        </option>
-
-        <option value="hobby">
-          🎨 Hobby
-        </option>
-
-        <option value="work">
-          💼 Work
-        </option>
-
-        <option value="project">
-          🚀 Project
-        </option>
-
-        <option value="preference">
-          ❤️ Preference
-        </option>
-
-        <option value="family">
-          👨‍👩‍👧 Family
-        </option>
-
-        <option value="general">
-          📁 General
-        </option>
+        <option value="profile">👤 Profile</option>
+        <option value="fashion">👕 Fashion</option>
+        <option value="food">🍔 Food</option>
+        <option value="game">🎮 Game</option>
+        <option value="hobby">🎨 Hobby</option>
+        <option value="work">💼 Work</option>
+        <option value="project">🚀 Project</option>
+        <option value="preference">❤️ Preference</option>
+        <option value="family">👨‍👩‍👧 Family</option>
+        <option value="general">📁 General</option>
       </select>
+
     </div>
 
     <div class="form-group">
-      <label for="memorySubcategory">
+
+      <label>
         Subkategori
       </label>
 
       <input
         id="memorySubcategory"
         type="text"
-        placeholder="Contoh: color"
       >
+
     </div>
 
     <div class="form-group">
-      <label for="memoryImportance">
+
+      <label>
         Importance
       </label>
 
       <select id="memoryImportance">
-        <option value="1">
-          ⭐ Biasa
-        </option>
-
-        <option
-          value="2"
-          selected
-        >
-          ⭐⭐ Penting
-        </option>
-
-        <option value="3">
-          ⭐⭐⭐ Sangat penting
-        </option>
+        <option value="1">⭐ Biasa</option>
+        <option value="2" selected>⭐⭐ Penting</option>
+        <option value="3">⭐⭐⭐ Sangat penting</option>
       </select>
+
     </div>
 
     <div class="form-actions">
@@ -1419,10 +1530,7 @@ header{
   </div>
 </div>
 
-
-<!-- =========================================================
-     VOICE CENTER — ELEVENLABS
-========================================================= -->
+<!-- VOICE CENTER -->
 
 <div
   class="overlay"
@@ -1433,13 +1541,8 @@ header{
     <div class="panel-header">
 
       <div>
-        <h2>
-          🎙️ Voice Center
-        </h2>
-
-        <p>
-          ElevenLabs Voice Engine
-        </p>
+        <h2>🎙️ Voice Center</h2>
+        <p>ElevenLabs Voice Engine</p>
       </div>
 
       <button
@@ -1452,25 +1555,16 @@ header{
 
     </div>
 
-
-    <!-- SEARCH -->
-
-    <div
-      class="voice-section"
-    >
+    <div class="voice-section">
 
       <input
         class="search-box"
         id="voiceSearch"
         type="search"
         placeholder="🔍 Cari character / emotion..."
-        autocomplete="off"
       >
 
     </div>
-
-
-    <!-- CHARACTER -->
 
     <div class="voice-section">
 
@@ -1485,9 +1579,6 @@ header{
 
     </div>
 
-
-    <!-- EMOTION -->
-
     <div class="voice-section">
 
       <div class="voice-section-title">
@@ -1500,9 +1591,6 @@ header{
       ></div>
 
     </div>
-
-
-    <!-- REAL ELEVENLABS VOICES -->
 
     <div class="voice-section">
 
@@ -1521,69 +1609,49 @@ header{
 
     </div>
 
-
-    <!-- CONTROLS -->
-
     <div class="voice-controls">
 
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>
-            ⚡ Speed
-          </span>
-
-          <span id="rateValue">
-            0.90
-          </span>
+          <span>⚡ Speed</span>
+          <span id="rateValue">0.90</span>
         </div>
 
         <input
           id="rateControl"
           type="range"
-          min="0.50"
+          min=".5"
           max="2"
-          step="0.05"
-          value="0.90"
+          step=".05"
+          value=".9"
         >
 
       </div>
 
-
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>
-            🎵 Pitch
-          </span>
-
-          <span id="pitchValue">
-            1.00
-          </span>
+          <span>🎵 Pitch</span>
+          <span id="pitchValue">1.00</span>
         </div>
 
         <input
           id="pitchControl"
           type="range"
-          min="0.50"
+          min=".5"
           max="2"
-          step="0.05"
+          step=".05"
           value="1"
         >
 
       </div>
 
-
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>
-            🔊 Volume
-          </span>
-
-          <span id="volumeValue">
-            1.00
-          </span>
+          <span>🔊 Volume</span>
+          <span id="volumeValue">1.00</span>
         </div>
 
         <input
@@ -1591,7 +1659,7 @@ header{
           type="range"
           min="0"
           max="1"
-          step="0.05"
+          step=".05"
           value="1"
         >
 
@@ -1599,14 +1667,10 @@ header{
 
     </div>
 
-
-    <!-- PREVIEW -->
-
     <div class="voice-preview">
 
       <textarea
         id="voicePreviewText"
-        placeholder="Tulis ayat untuk test suara..."
       >Hai Tuan, saya Naira. Ini suara ElevenLabs pilihan Tuan.</textarea>
 
       <button
@@ -1619,9 +1683,6 @@ header{
 
     </div>
 
-
-    <!-- SAVE -->
-
     <button
       class="voice-save-button"
       id="saveVoiceSettings"
@@ -1630,30 +1691,15 @@ header{
       ⭐ Simpan Voice Ini
     </button>
 
-
     <div
       class="voice-center-status"
       id="voiceCenterStatus"
     ></div>
 
-
-    <div class="voice-note">
-      Voice sebenar datang terus daripada akaun ElevenLabs Tuan melalui
-      <strong>/api/voices</strong>.
-      Audio pula dijana melalui
-      <strong>/api/speak</strong>.
-    </div>
-
   </div>
 </div>
 
-
 <script>
-
-/* ============================================================
-   NAIRA MAIN APP
-============================================================ */
-
 
 /* ============================================================
    CONFIG
@@ -1664,7 +1710,7 @@ const API_BASE =
 
 
 /* ============================================================
-   CONVERSATION
+   STATE
 ============================================================ */
 
 let currentConversationId =
@@ -1672,55 +1718,32 @@ let currentConversationId =
     "naira_conversation_id"
   );
 
+let recognition =
+  null;
 
-function createConversationId() {
+let listening =
+  false;
 
-  return (
-    "conv_" +
-    Date.now() +
-    "_" +
-    Math.random()
-      .toString(36)
-      .substring(2, 10)
-  );
+let speaking =
+  false;
 
-}
+let allHistory =
+  [];
 
+let allMemories =
+  [];
 
-function ensureConversationId() {
+let editingMemoryId =
+  null;
 
-  if (!currentConversationId) {
+let currentFeedbackText =
+  "";
 
-    currentConversationId =
-      createConversationId();
+let voicePlayerSpeedIndex =
+  0;
 
-    localStorage.setItem(
-      "naira_conversation_id",
-      currentConversationId
-    );
-
-  }
-
-}
-
-
-ensureConversationId();
-
-
-/* ============================================================
-   HELPERS
-============================================================ */
-
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-
-}
+const voicePlayerSpeeds =
+  [1,1.25,1.5,2];
 
 
 /* ============================================================
@@ -1754,13 +1777,424 @@ const voiceStatus =
 
 
 /* ============================================================
+   HELPERS
+============================================================ */
+
+function escapeHTML(value){
+
+  return String(
+    value ?? ""
+  )
+  .replace(/&/g,"&amp;")
+  .replace(/</g,"&lt;")
+  .replace(/>/g,"&gt;")
+  .replace(/"/g,"&quot;")
+  .replace(/'/g,"&#039;");
+
+}
+
+
+function createConversationId(){
+
+  return (
+    "conv_" +
+    Date.now() +
+    "_" +
+    Math.random()
+      .toString(36)
+      .substring(2,10)
+  );
+
+}
+
+
+function ensureConversationId(){
+
+  if (
+    !currentConversationId
+  ){
+
+    currentConversationId =
+      createConversationId();
+
+    localStorage.setItem(
+      "naira_conversation_id",
+      currentConversationId
+    );
+
+  }
+
+}
+
+
+ensureConversationId();
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+function showNairaToast(
+  message
+){
+
+  const toast =
+    document.getElementById(
+      "nairaToast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+  clearTimeout(
+    window.nairaToastTimer
+  );
+
+  window.nairaToastTimer =
+    setTimeout(
+      function(){
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      1500
+    );
+
+}
+
+
+/* ============================================================
+   VOICE PLAYER
+============================================================ */
+
+const nairaVoicePlayer =
+  document.getElementById(
+    "nairaVoicePlayer"
+  );
+
+const voiceBack15 =
+  document.getElementById(
+    "voiceBack15"
+  );
+
+const voiceForward15 =
+  document.getElementById(
+    "voiceForward15"
+  );
+
+const voiceSpeedButton =
+  document.getElementById(
+    "voiceSpeedButton"
+  );
+
+const voicePlayerClose =
+  document.getElementById(
+    "voicePlayerClose"
+  );
+
+
+function openVoicePlayer(){
+
+  nairaVoicePlayer.classList.add(
+    "active"
+  );
+
+}
+
+
+function closeVoicePlayer(){
+
+  nairaVoicePlayer.classList.remove(
+    "active"
+  );
+
+}
+
+
+function resetVoiceSpeed(){
+
+  voicePlayerSpeedIndex =
+    0;
+
+  voiceSpeedButton.textContent =
+    "1x";
+
+  if (
+    window.nairaAudio
+  ){
+
+    window.nairaAudio.playbackRate =
+      1;
+
+  }
+
+}
+
+
+voiceSpeedButton.addEventListener(
+  "click",
+  function(){
+
+    voicePlayerSpeedIndex++;
+
+    if (
+      voicePlayerSpeedIndex >=
+      voicePlayerSpeeds.length
+    ){
+
+      voicePlayerSpeedIndex =
+        0;
+
+    }
+
+    const speed =
+      voicePlayerSpeeds[
+        voicePlayerSpeedIndex
+      ];
+
+    voiceSpeedButton.textContent =
+      speed + "x";
+
+    if (
+      window.nairaAudio
+    ){
+
+      window.nairaAudio.playbackRate =
+        speed;
+
+    }
+
+  }
+);
+
+
+voiceBack15.addEventListener(
+  "click",
+  function(){
+
+    const audio =
+      window.nairaAudio;
+
+    if (!audio){
+      return;
+    }
+
+    try{
+
+      audio.currentTime =
+        Math.max(
+          0,
+          audio.currentTime - 15
+        );
+
+    }catch(error){}
+
+  }
+);
+
+
+voiceForward15.addEventListener(
+  "click",
+  function(){
+
+    const audio =
+      window.nairaAudio;
+
+    if (!audio){
+      return;
+    }
+
+    try{
+
+      audio.currentTime =
+        Math.min(
+          audio.duration || Infinity,
+          audio.currentTime + 15
+        );
+
+    }catch(error){}
+
+  }
+);
+
+
+voicePlayerClose.addEventListener(
+  "click",
+  function(){
+
+    if (
+      typeof window.stopNairaSpeech ===
+      "function"
+    ){
+
+      window.stopNairaSpeech();
+
+    }
+
+    closeVoicePlayer();
+
+    resetVoiceSpeed();
+
+  }
+);
+
+
+/* ============================================================
+   FEEDBACK
+============================================================ */
+
+const feedbackOverlay =
+  document.getElementById(
+    "feedbackOverlay"
+  );
+
+const feedbackIssue =
+  document.getElementById(
+    "feedbackIssue"
+  );
+
+const feedbackDetails =
+  document.getElementById(
+    "feedbackDetails"
+  );
+
+const feedbackCount =
+  document.getElementById(
+    "feedbackCount"
+  );
+
+const closeFeedback =
+  document.getElementById(
+    "closeFeedback"
+  );
+
+const cancelFeedback =
+  document.getElementById(
+    "cancelFeedback"
+  );
+
+const submitFeedback =
+  document.getElementById(
+    "submitFeedback"
+  );
+
+
+function openBadFeedback(
+  messageText
+){
+
+  currentFeedbackText =
+    messageText;
+
+  feedbackIssue.value =
+    "";
+
+  feedbackDetails.value =
+    "";
+
+  feedbackCount.textContent =
+    "0/2000";
+
+  feedbackOverlay.classList.add(
+    "active"
+  );
+
+}
+
+
+function closeFeedbackCard(){
+
+  feedbackOverlay.classList.remove(
+    "active"
+  );
+
+}
+
+
+feedbackDetails.addEventListener(
+  "input",
+  function(){
+
+    feedbackCount.textContent =
+      feedbackDetails.value.length +
+      "/2000";
+
+  }
+);
+
+
+closeFeedback.addEventListener(
+  "click",
+  closeFeedbackCard
+);
+
+
+cancelFeedback.addEventListener(
+  "click",
+  closeFeedbackCard
+);
+
+
+feedbackOverlay.addEventListener(
+  "click",
+  function(event){
+
+    if (
+      event.target ===
+      feedbackOverlay
+    ){
+
+      closeFeedbackCard();
+
+    }
+
+  }
+);
+
+
+submitFeedback.addEventListener(
+  "click",
+  function(){
+
+    console.log(
+      "NAIRA FEEDBACK:",
+      {
+        response:
+          currentFeedbackText,
+
+        issue:
+          feedbackIssue.value ||
+          "none",
+
+        details:
+          feedbackDetails.value
+      }
+    );
+
+    closeFeedbackCard();
+
+    showNairaToast(
+      "Thank you for your feedback"
+    );
+
+  }
+);
+
+
+/* ============================================================
    MESSAGE
 ============================================================ */
 
 function addMessage(
   text,
   type
-) {
+){
 
   const wrapper =
     document.createElement(
@@ -1787,13 +2221,10 @@ function addMessage(
   );
 
 
-  /* =========================================================
-     ACTION BAR UNTUK REPLY NAIRA SAHAJA
-  ========================================================= */
-
   if (
-    type === "naira-message"
-  ) {
+    type ===
+    "naira-message"
+  ){
 
     const actions =
       document.createElement(
@@ -1806,158 +2237,79 @@ function addMessage(
 
     actions.innerHTML = `
 
-      <!-- COPY -->
-
       <button
         type="button"
         class="message-action-btn copy-btn"
         title="Copy"
-        aria-label="Copy"
       >
         <svg viewBox="0 0 24 24">
-          <rect
-            x="8"
-            y="8"
-            width="11"
-            height="11"
-            rx="2"
-          ></rect>
-
-          <path
-            d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
-          ></path>
+          <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+          <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
         </svg>
       </button>
-
-
-      <!-- SPEAKER -->
 
       <button
         type="button"
         class="message-action-btn speaker-btn"
         title="Read aloud"
-        aria-label="Read aloud"
       >
         <svg viewBox="0 0 24 24">
-          <path
-            d="M11 5 6 9H3v6h3l5 4z"
-          ></path>
-
-          <path
-            d="M15 9a4 4 0 0 1 0 6"
-          ></path>
-
-          <path
-            d="M17.5 6.5a8 8 0 0 1 0 11"
-          ></path>
+          <path d="M11 5 6 9H3v6h3l5 4z"></path>
+          <path d="M15 9a4 4 0 0 1 0 6"></path>
+          <path d="M17.5 6.5a8 8 0 0 1 0 11"></path>
         </svg>
       </button>
-
-
-      <!-- LIKE -->
 
       <button
         type="button"
         class="message-action-btn like-btn"
-        title="Like"
-        aria-label="Like"
+        title="Feedback"
       >
         <svg viewBox="0 0 24 24">
-          <path
-            d="M7 10v10H4V10z"
-          ></path>
-
-          <path
-            d="M7 18h9.5a2 2 0 0 0 2-1.6l1-5A2 2 0 0 0 17.5 9H14l.5-3a2 2 0 0 0-3.5-1.5L7 10"
-          ></path>
+          <path d="M7 10v10H4V10z"></path>
+          <path d="M7 18h9.5a2 2 0 0 0 2-1.6l1-5A2 2 0 0 0 17.5 9H14l.5-3a2 2 0 0 0-3.5-1.5L7 10"></path>
         </svg>
       </button>
-
-
-      <!-- DISLIKE -->
 
       <button
         type="button"
         class="message-action-btn dislike-btn"
-        title="Dislike"
-        aria-label="Dislike"
+        title="Feedback"
       >
         <svg viewBox="0 0 24 24">
-          <path
-            d="M7 14V4H4v10z"
-          ></path>
-
-          <path
-            d="M7 6h9.5a2 2 0 0 1 2 1.6l1 5A2 2 0 0 1 17.5 15H14l.5 3a2 2 0 0 1-3.5 1.5L7 14"
-          ></path>
+          <path d="M7 14V4H4v10z"></path>
+          <path d="M7 6h9.5a2 2 0 0 1 2 1.6l1 5A2 2 0 0 1 17.5 15H14l.5 3a2 2 0 0 1-3.5 1.5L7 14"></path>
         </svg>
       </button>
-
-
-      <!-- SHARE -->
 
       <button
         type="button"
         class="message-action-btn share-btn"
         title="Share"
-        aria-label="Share"
       >
         <svg viewBox="0 0 24 24">
-          <path
-            d="M12 16V4"
-          ></path>
-
-          <path
-            d="m8 8 4-4 4 4"
-          ></path>
-
-          <path
-            d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"
-          ></path>
+          <path d="M12 16V4"></path>
+          <path d="m8 8 4-4 4 4"></path>
+          <path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"></path>
         </svg>
       </button>
-
-
-      <!-- MORE -->
 
       <button
         type="button"
         class="message-action-btn more-btn"
         title="More"
-        aria-label="More"
       >
         <svg viewBox="0 0 24 24">
-          <circle
-            cx="5"
-            cy="12"
-            r="1"
-            fill="currentColor"
-            stroke="none"
-          ></circle>
-
-          <circle
-            cx="12"
-            cy="12"
-            r="1"
-            fill="currentColor"
-            stroke="none"
-          ></circle>
-
-          <circle
-            cx="19"
-            cy="12"
-            r="1"
-            fill="currentColor"
-            stroke="none"
-          ></circle>
+          <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"></circle>
+          <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"></circle>
+          <circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"></circle>
         </svg>
       </button>
+
     `;
 
 
-    /* =======================================================
-       COPY
-    ======================================================= */
+    /* COPY */
 
     const copyButton =
       actions.querySelector(
@@ -1967,32 +2319,47 @@ function addMessage(
 
     copyButton.addEventListener(
       "click",
-      async function() {
+      async function(){
 
-        try {
+        try{
 
           await navigator.clipboard.writeText(
             text
           );
 
+          copyButton.innerHTML = `
+            <svg viewBox="0 0 24 24">
+              <path d="m5 12 4 4L19 6"></path>
+            </svg>
+          `;
 
           copyButton.classList.add(
             "active"
           );
 
+          showNairaToast(
+            "Copied"
+          );
 
           setTimeout(
-            function() {
+            function(){
+
+              copyButton.innerHTML = `
+                <svg viewBox="0 0 24 24">
+                  <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+                  <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+                </svg>
+              `;
 
               copyButton.classList.remove(
                 "active"
               );
 
             },
-            900
+            1200
           );
 
-        } catch (error) {
+        }catch(error){
 
           console.error(
             "COPY ERROR:",
@@ -2005,9 +2372,7 @@ function addMessage(
     );
 
 
-    /* =======================================================
-       SPEAKER
-    ======================================================= */
+    /* SPEAKER */
 
     const speakerButton =
       actions.querySelector(
@@ -2017,38 +2382,67 @@ function addMessage(
 
     speakerButton.addEventListener(
       "click",
-      function() {
+      function(){
 
         if (
-          typeof window.speakNaira ===
+          typeof window.speakNaira !==
           "function"
-        ) {
+        ){
 
-          window.speakNaira(
-            text
+          showNairaToast(
+            "Voice engine belum tersedia"
           );
 
-        } else {
-
-          console.error(
-            "speakNaira belum tersedia."
-          );
-
+          return;
         }
+
+        resetVoiceSpeed();
+
+        openVoicePlayer();
+
+        window.speakNaira(
+          text
+        );
 
       }
     );
 
 
-    /* =======================================================
-       LIKE / DISLIKE
-    ======================================================= */
+    /* FEEDBACK CHOICE */
+
+    const feedbackChoice =
+      document.createElement(
+        "div"
+      );
+
+    feedbackChoice.className =
+      "feedback-choice";
+
+    feedbackChoice.innerHTML = `
+      <button
+        type="button"
+        class="feedback-good"
+      >
+        👍🏻 Good response
+      </button>
+
+      <button
+        type="button"
+        class="feedback-bad"
+      >
+        👎🏻 Bad response
+      </button>
+    `;
+
+    actions.appendChild(
+      feedbackChoice
+    );
+
 
     const likeButton =
       actions.querySelector(
         ".like-btn"
       );
-
 
     const dislikeButton =
       actions.querySelector(
@@ -2056,57 +2450,88 @@ function addMessage(
       );
 
 
+    function toggleFeedbackChoice(
+      event
+    ){
+
+      event.stopPropagation();
+
+      feedbackChoice.classList.toggle(
+        "active"
+      );
+
+    }
+
+
     likeButton.addEventListener(
       "click",
-      function() {
-
-        const active =
-          likeButton.classList.contains(
-            "active"
-          );
-
-
-        likeButton.classList.toggle(
-          "active",
-          !active
-        );
-
-
-        dislikeButton.classList.remove(
-          "active"
-        );
-
-      }
+      toggleFeedbackChoice
     );
 
 
     dislikeButton.addEventListener(
       "click",
-      function() {
-
-        const active =
-          dislikeButton.classList.contains(
-            "active"
-          );
-
-
-        dislikeButton.classList.toggle(
-          "active",
-          !active
-        );
-
-
-        likeButton.classList.remove(
-          "active"
-        );
-
-      }
+      toggleFeedbackChoice
     );
 
 
-    /* =======================================================
-       SHARE
-    ======================================================= */
+    feedbackChoice
+      .querySelector(
+        ".feedback-good"
+      )
+      .addEventListener(
+        "click",
+        function(){
+
+          feedbackChoice.classList.remove(
+            "active"
+          );
+
+          likeButton.classList.add(
+            "active"
+          );
+
+          dislikeButton.classList.remove(
+            "active"
+          );
+
+          showNairaToast(
+            "Thank you for your feedback"
+          );
+
+        }
+      );
+
+
+    feedbackChoice
+      .querySelector(
+        ".feedback-bad"
+      )
+      .addEventListener(
+        "click",
+        function(){
+
+          feedbackChoice.classList.remove(
+            "active"
+          );
+
+          dislikeButton.classList.add(
+            "active"
+          );
+
+          likeButton.classList.remove(
+            "active"
+          );
+
+          openBadFeedback(
+            text
+          );
+
+        }
+      );
+
+
+    /* SHARE */
 
     const shareButton =
       actions.querySelector(
@@ -2116,36 +2541,37 @@ function addMessage(
 
     shareButton.addEventListener(
       "click",
-      async function() {
+      async function(){
 
-        try {
+        try{
 
           if (
             navigator.share
-          ) {
+          ){
 
             await navigator.share({
-              title:
-                "Naira",
-
-              text:
-                text
+              title:"Naira",
+              text:text
             });
 
-          } else {
+          }else{
 
             await navigator.clipboard.writeText(
               text
             );
 
+            showNairaToast(
+              "Copied for sharing"
+            );
+
           }
 
-        } catch (error) {
+        }catch(error){
 
           if (
             error.name !==
             "AbortError"
-          ) {
+          ){
 
             console.error(
               "SHARE ERROR:",
@@ -2160,9 +2586,7 @@ function addMessage(
     );
 
 
-    /* =======================================================
-       MORE
-    ======================================================= */
+    /* MORE */
 
     const moreButton =
       actions.querySelector(
@@ -2175,10 +2599,8 @@ function addMessage(
         "div"
       );
 
-
     moreMenu.className =
       "message-more-menu";
-
 
     moreMenu.innerHTML = `
       <button
@@ -2203,7 +2625,6 @@ function addMessage(
       </button>
     `;
 
-
     actions.appendChild(
       moreMenu
     );
@@ -2211,10 +2632,9 @@ function addMessage(
 
     moreButton.addEventListener(
       "click",
-      function(event) {
+      function(event){
 
         event.stopPropagation();
-
 
         moreMenu.classList.toggle(
           "active"
@@ -2224,101 +2644,83 @@ function addMessage(
     );
 
 
-    /* =======================================================
-       MORE COPY
-    ======================================================= */
-
-    const moreCopy =
-      moreMenu.querySelector(
+    moreMenu
+      .querySelector(
         ".more-copy"
-      );
+      )
+      .addEventListener(
+        "click",
+        async function(){
 
-
-    moreCopy.addEventListener(
-      "click",
-      async function() {
-
-        await navigator.clipboard.writeText(
-          text
-        );
-
-
-        moreMenu.classList.remove(
-          "active"
-        );
-
-      }
-    );
-
-
-    /* =======================================================
-       MORE SPEAKER
-    ======================================================= */
-
-    const moreSpeak =
-      moreMenu.querySelector(
-        ".more-speak"
-      );
-
-
-    moreSpeak.addEventListener(
-      "click",
-      function() {
-
-        moreMenu.classList.remove(
-          "active"
-        );
-
-
-        if (
-          typeof window.speakNaira ===
-          "function"
-        ) {
-
-          window.speakNaira(
+          await navigator.clipboard.writeText(
             text
           );
 
+          moreMenu.classList.remove(
+            "active"
+          );
+
+          showNairaToast(
+            "Copied"
+          );
+
         }
-
-      }
-    );
-
-
-    /* =======================================================
-       MORE SHARE
-    ======================================================= */
-
-    const moreShare =
-      moreMenu.querySelector(
-        ".more-share"
       );
 
 
-    moreShare.addEventListener(
-      "click",
-      async function() {
+    moreMenu
+      .querySelector(
+        ".more-speak"
+      )
+      .addEventListener(
+        "click",
+        function(){
 
-        moreMenu.classList.remove(
-          "active"
-        );
+          moreMenu.classList.remove(
+            "active"
+          );
+
+          resetVoiceSpeed();
+
+          openVoicePlayer();
+
+          if (
+            typeof window.speakNaira ===
+            "function"
+          ){
+
+            window.speakNaira(
+              text
+            );
+
+          }
+
+        }
+      );
 
 
-        try {
+    moreMenu
+      .querySelector(
+        ".more-share"
+      )
+      .addEventListener(
+        "click",
+        async function(){
+
+          moreMenu.classList.remove(
+            "active"
+          );
 
           if (
             navigator.share
-          ) {
+          ){
 
             await navigator.share({
-              title:
-                "Naira",
-
-              text:
-                text
+              title:"Naira",
+              text:text
             });
 
-          } else {
+          }else{
 
             await navigator.clipboard.writeText(
               text
@@ -2326,24 +2728,8 @@ function addMessage(
 
           }
 
-        } catch (error) {
-
-          if (
-            error.name !==
-            "AbortError"
-          ) {
-
-            console.error(
-              "SHARE ERROR:",
-              error
-            );
-
-          }
-
         }
-
-      }
-    );
+      );
 
 
     wrapper.appendChild(
@@ -2359,42 +2745,9 @@ function addMessage(
 
 
   wrapper.scrollIntoView({
-    behavior:
-      "smooth",
-
-    block:
-      "end"
+    behavior:"smooth",
+    block:"end"
   });
-
-}
-
-
-/* ============================================================
-   VOICE / MICROPHONE STATE
-============================================================ */
-
-let recognition =
-  null;
-
-let listening =
-  false;
-
-let speaking =
-  false;
-
-
-/* ============================================================
-   VOICE STATUS
-============================================================ */
-
-function setVoiceStatus(text) {
-
-  if (!voiceStatus) {
-    return;
-  }
-
-  voiceStatus.textContent =
-    text || "";
 
 }
 
@@ -2403,23 +2756,26 @@ function setVoiceStatus(text) {
    VOICE UI
 ============================================================ */
 
-function updateVoiceUI() {
+function setVoiceStatus(
+  text
+){
 
-  if (!micButton) {
-    return;
-  }
+  voiceStatus.textContent =
+    text || "";
+
+}
+
+
+function updateVoiceUI(){
 
   micButton.classList.remove(
     "listening",
     "speaking"
   );
 
-
-  /*
-   * LISTENING
-   */
-
-  if (listening) {
+  if (
+    listening
+  ){
 
     micButton.classList.add(
       "listening"
@@ -2428,26 +2784,14 @@ function updateVoiceUI() {
     micButton.textContent =
       "🔴";
 
-    micButton.title =
-      "Sedang mendengar";
-
-    setVoiceStatus(
-      "🎙️ Naira sedang mendengar..."
-    );
-
     return;
 
   }
 
-
-  /*
-   * SPEAKING
-   */
-
   if (
     speaking ||
     window.nairaSpeaking
-  ) {
+  ){
 
     micButton.classList.add(
       "speaking"
@@ -2456,23 +2800,12 @@ function updateVoiceUI() {
     micButton.textContent =
       "🔊";
 
-    micButton.title =
-      "Tekan untuk hentikan suara Naira";
-
     return;
 
   }
 
-
-  /*
-   * IDLE
-   */
-
   micButton.textContent =
     "🎙️";
-
-  micButton.title =
-    "Tekan untuk bercakap";
 
 }
 
@@ -2481,27 +2814,22 @@ function updateVoiceUI() {
    SPEECH RECOGNITION
 ============================================================ */
 
-function setupRecognition() {
+function setupRecognition(){
 
   const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-
-  if (!Recognition) {
-
-    console.warn(
-      "Speech Recognition tidak disokong oleh browser."
-    );
+  if (
+    !Recognition
+  ){
 
     return;
 
   }
 
-
   recognition =
     new Recognition();
-
 
   recognition.lang =
     "ms-MY";
@@ -2512,12 +2840,9 @@ function setupRecognition() {
   recognition.continuous =
     false;
 
-  recognition.maxAlternatives =
-    1;
-
 
   recognition.onstart =
-    function() {
+    function(){
 
       listening =
         true;
@@ -2528,40 +2853,32 @@ function setupRecognition() {
 
 
   recognition.onresult =
-    function(event) {
+    function(event){
 
       const transcript =
         event.results?.[0]?.[0]
           ?.transcript
           ?.trim();
 
+      if (
+        transcript
+      ){
 
-      if (!transcript) {
-        return;
+        input.value =
+          transcript;
+
+        sendMessage();
+
       }
-
-
-      input.value =
-        transcript;
-
-
-      sendMessage();
 
     };
 
 
   recognition.onerror =
-    function(event) {
-
-      console.error(
-        "Recognition error:",
-        event.error
-      );
-
+    function(){
 
       listening =
         false;
-
 
       updateVoiceUI();
 
@@ -2569,7 +2886,7 @@ function setupRecognition() {
 
 
   recognition.onend =
-    function() {
+    function(){
 
       listening =
         false;
@@ -2581,28 +2898,11 @@ function setupRecognition() {
 }
 
 
-/* ============================================================
-   START LISTENING
-============================================================ */
-
-function startListening() {
-
-  /*
-   * iPhone/browser mungkin perlukan
-   * user interaction sebelum audio.
-   */
+function startListening(){
 
   if (
-    typeof unlockSpeech ===
-    "function"
-  ) {
-
-    unlockSpeech();
-
-  }
-
-
-  if (!recognition) {
+    !recognition
+  ){
 
     addMessage(
       "🎙️ Voice recognition tidak disokong oleh browser ini.",
@@ -2613,125 +2913,68 @@ function startListening() {
 
   }
 
-
-  /*
-   * Stop Naira jika sedang bercakap.
-   */
-
   if (
-    speaking ||
-    window.nairaSpeaking
-  ) {
+    typeof window.stopNairaSpeech ===
+    "function"
+  ){
 
-    if (
-      typeof stopNairaSpeech ===
-      "function"
-    ) {
-
-      stopNairaSpeech();
-
-    }
+    window.stopNairaSpeech();
 
   }
 
-
-  if (listening) {
-    return;
-  }
-
-
-  try {
+  try{
 
     recognition.start();
 
-  } catch (error) {
-
-    console.error(
-      "Recognition start error:",
-      error
-    );
-
-  }
+  }catch(error){}
 
 }
 
 
-/* ============================================================
-   STOP LISTENING
-============================================================ */
+function stopListening(){
 
-function stopListening() {
+  try{
 
-  if (!recognition) {
-    return;
-  }
+    recognition?.stop();
 
-
-  try {
-
-    recognition.stop();
-
-  } catch (error) {
-
-    console.error(
-      "Recognition stop error:",
-      error
-    );
-
-  }
+  }catch(error){}
 
 }
 
-
-/* ============================================================
-   MIC BUTTON
-============================================================ */
 
 micButton.addEventListener(
   "click",
-  function() {
-
-    /*
-     * Kalau Naira sedang bercakap,
-     * tekan mic = stop suara.
-     */
+  function(){
 
     if (
       speaking ||
       window.nairaSpeaking
-    ) {
+    ){
 
       if (
-        typeof stopNairaSpeech ===
+        typeof window.stopNairaSpeech ===
         "function"
-      ) {
+      ){
 
-        stopNairaSpeech();
+        window.stopNairaSpeech();
 
       }
+
+      closeVoicePlayer();
 
       return;
 
     }
 
-
-    /*
-     * Kalau sedang mendengar,
-     * tekan sekali lagi = stop.
-     */
-
-    if (listening) {
+    if (
+      listening
+    ){
 
       stopListening();
 
       return;
 
     }
-
-
-    /*
-     * Start microphone.
-     */
 
     startListening();
 
@@ -2743,115 +2986,68 @@ micButton.addEventListener(
    SEND MESSAGE
 ============================================================ */
 
-async function sendMessage() {
+async function sendMessage(){
 
   const text =
     input.value.trim();
 
+  if (
+    !text
+  ){
 
-  if (!text) {
     return;
-  }
 
+  }
 
   ensureConversationId();
-
-
-  /*
-   * Stop suara lama.
-   */
-
-  if (
-    typeof stopNairaSpeech ===
-    "function"
-  ) {
-
-    stopNairaSpeech();
-
-  }
-
-
-  /*
-   * Add user message.
-   */
 
   addMessage(
     text,
     "user-message"
   );
 
-
   input.value =
     "";
-
 
   sendButton.disabled =
     true;
 
-
-  /*
-   * Typing indicator.
-   */
 
   const loading =
     document.createElement(
       "div"
     );
 
-
   loading.className =
     "message naira-message typing-indicator";
 
-
-  loading.innerHTML = `
-    <span></span>
-    <span></span>
-    <span></span>
-  `;
-
+  loading.innerHTML =
+    "<span></span><span></span><span></span>";
 
   chat.appendChild(
     loading
   );
 
 
-  loading.scrollIntoView({
-    behavior: "smooth",
-    block: "end"
-  });
-
-
-  try {
-
-    /*
-     * CHAT API
-     */
+  try{
 
     const response =
       await fetch(
         API_BASE +
         "/api/chat",
         {
+          method:"POST",
 
-          method:
-            "POST",
-
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
 
-          body:
-            JSON.stringify({
-
-              message:
-                text,
-
-              conversationId:
-                currentConversationId
-
-            })
-
+          body:JSON.stringify({
+            message:text,
+            conversationId:
+              currentConversationId
+          })
         }
       );
 
@@ -2859,25 +3055,20 @@ async function sendMessage() {
     const raw =
       await response.text();
 
-
     let data =
       {};
 
-
-    try {
+    try{
 
       data =
         raw
           ? JSON.parse(raw)
           : {};
 
-    } catch (error) {
+    }catch(error){
 
-      data = {
-        error:
-          raw ||
-          "Server response tidak sah."
-      };
+      data =
+        {};
 
     }
 
@@ -2885,17 +3076,13 @@ async function sendMessage() {
     loading.remove();
 
 
-    /*
-     * SERVER ERROR
-     */
-
-    if (!response.ok) {
+    if (
+      !response.ok
+    ){
 
       addMessage(
         data.error ||
-        "Server error (" +
-        response.status +
-        ")",
+        "Server error",
         "naira-message"
       );
 
@@ -2903,10 +3090,6 @@ async function sendMessage() {
 
     }
 
-
-    /*
-     * NAIRA REPLY
-     */
 
     const nairaReply =
       data.reply ||
@@ -2920,128 +3103,56 @@ async function sendMessage() {
     );
 
 
-    /*
-     * ELEVENLABS SPEAK
-     *
-     * speakNaira() datang daripada
-     * speakNaira.js
-     */
-
-    setTimeout(
-  function() {
-
     if (
       typeof window.speakNaira ===
       "function"
-    ) {
+    ){
 
       window.speakNaira(
         nairaReply
       );
 
-    } else {
-
-      console.error(
-        "speakNaira.js belum loaded."
-      );
-
-      setVoiceStatus(
-        "❌ ElevenLabs Voice Engine belum loaded."
-      );
-
     }
 
-  },
-  100
-);
 
-
-    /*
-     * Refresh history.
-     */
-
-    if (
-      typeof loadHistory ===
-      "function"
-    ) {
-
-      loadHistory(
-        true
-      );
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "CHAT ERROR:",
-      error
+    loadHistory(
+      true
     );
 
 
-    if (
-      loading &&
-      loading.isConnected
-    ) {
+  }catch(error){
 
-      loading.remove();
-
-    }
-
+    loading.remove();
 
     addMessage(
-      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.\n\n" +
-      error.message,
+      "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
       "naira-message"
     );
 
-  } finally {
+  }finally{
 
     sendButton.disabled =
       false;
-
-
-    input.focus();
 
   }
 
 }
 
 
-/* ============================================================
-   GLOBAL SEND
-============================================================ */
-
-window.sendMessage =
-  sendMessage;
-
-
-/* ============================================================
-   SEND BUTTON
-============================================================ */
-
 sendButton.addEventListener(
   "click",
-  function() {
-
-    sendMessage();
-
-  }
+  sendMessage
 );
 
 
-/* ============================================================
-   ENTER
-============================================================ */
-
 input.addEventListener(
   "keydown",
-  function(event) {
+  function(event){
 
     if (
       event.key ===
       "Enter"
-    ) {
+    ){
 
       event.preventDefault();
 
@@ -3054,7 +3165,7 @@ input.addEventListener(
 
 
 /* ============================================================
-   HISTORY DOM
+   HISTORY
 ============================================================ */
 
 const historyButton =
@@ -3098,17 +3209,9 @@ const newConversation =
   );
 
 
-let allHistory =
-  [];
-
-
-/* ============================================================
-   HISTORY EVENTS
-============================================================ */
-
 historyButton.addEventListener(
   "click",
-  function() {
+  function(){
 
     historyPanel.classList.add(
       "active"
@@ -3122,7 +3225,7 @@ historyButton.addEventListener(
 
 closeHistory.addEventListener(
   "click",
-  function() {
+  function(){
 
     historyPanel.classList.remove(
       "active"
@@ -3134,7 +3237,7 @@ closeHistory.addEventListener(
 
 refreshHistory.addEventListener(
   "click",
-  function() {
+  function(){
 
     loadHistory();
 
@@ -3148,522 +3251,152 @@ historySearch.addEventListener(
 );
 
 
-/* ============================================================
-   LOAD HISTORY
-============================================================ */
-
 async function loadHistory(
-  silent = false
-) {
+  silent=false
+){
 
-  if (!silent) {
+  if (
+    !silent
+  ){
 
     historyStatus.textContent =
       "Memuatkan conversation...";
 
-    historyList.innerHTML =
-      "";
-
   }
 
-
-  try {
-
-    const search =
-      historySearch.value.trim();
-
-
-    const params =
-      new URLSearchParams();
-
-
-    if (search) {
-
-      params.set(
-        "search",
-        search
-      );
-
-    }
-
-
-    const url =
-      API_BASE +
-      "/api/history" +
-      (
-        params.toString()
-          ? "?" +
-            params.toString()
-          : ""
-      );
-
+  try{
 
     const response =
       await fetch(
-        url
+        API_BASE +
+        "/api/history"
       );
 
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "History error (" +
-        response.status +
-        ")"
-      );
-
-    }
-
+    const data =
+      await response.json();
 
     allHistory =
       data.conversations ||
       [];
 
-
     historyStatus.textContent =
       allHistory.length +
       " conversation";
 
-
     renderHistory();
 
-  } catch (error) {
-
-    console.error(
-      "HISTORY ERROR:",
-      error
-    );
-
+  }catch(error){
 
     historyStatus.textContent =
       "Gagal memuatkan history.";
-
-
-    if (!silent) {
-
-      historyList.innerHTML = `
-        <div class="empty-history">
-          ❌ ${escapeHTML(error.message)}
-        </div>
-      `;
-
-    }
 
   }
 
 }
 
 
-/* ============================================================
-   RENDER HISTORY
-============================================================ */
-
-function renderHistory() {
+function renderHistory(){
 
   const search =
     historySearch.value
       .trim()
       .toLowerCase();
 
-
   const filtered =
     allHistory.filter(
-      function(conversation) {
+      function(item){
 
-        if (!search) {
-          return true;
-        }
-
-
-        const text = [
-
-          conversation.title,
-
-          conversation.user_message,
-
-          conversation.naira_response,
-
-          conversation.category,
-
-          conversation.subcategory
-
-        ]
-          .join(" ")
-          .toLowerCase();
-
-
-        return text.includes(
-          search
+        return (
+          !search ||
+          JSON.stringify(item)
+            .toLowerCase()
+            .includes(search)
         );
 
       }
     );
-
 
   historyList.innerHTML =
     "";
 
-
-  if (!filtered.length) {
-
-    historyList.innerHTML = `
-      <div class="empty-history">
-        🕘 Tiada conversation dijumpai.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  const groups =
-    {};
-
-
   filtered.forEach(
-    function(conversation) {
+    function(conversation){
 
-      const date =
-        new Date(
-          conversation.created_at
+      const card =
+        document.createElement(
+          "div"
         );
 
+      card.className =
+        "history-card";
 
-      const dateKey =
-        date.toLocaleDateString(
-          "ms-MY",
-          {
-            weekday:
-              "long",
+      card.innerHTML = `
+        <div class="history-title">
+          ${escapeHTML(
+            conversation.title ||
+            "Conversation Naira"
+          )}
+        </div>
 
-            year:
-              "numeric",
+        <div class="history-preview">
+          ${escapeHTML(
+            conversation.user_message ||
+            ""
+          )}
+        </div>
 
-            month:
-              "long",
+        <div class="history-actions">
 
-            day:
-              "numeric"
+          <button
+            class="open-history"
+          >
+            👁️ Buka
+          </button>
+
+          <button
+            class="history-delete"
+          >
+            🗑️ Delete
+          </button>
+
+        </div>
+      `;
+
+
+      card
+        .querySelector(
+          ".open-history"
+        )
+        .addEventListener(
+          "click",
+          function(){
+
+            openConversation(
+              conversation.conversation_id
+            );
+
           }
         );
 
 
-      if (!groups[dateKey]) {
+      card
+        .querySelector(
+          ".history-delete"
+        )
+        .addEventListener(
+          "click",
+          function(){
 
-        groups[dateKey] =
-          [];
+            deleteConversation(
+              conversation.conversation_id
+            );
 
-      }
-
-
-      groups[dateKey].push(
-        conversation
-      );
-
-    }
-  );
-
-
-  Object.keys(
-    groups
-  ).forEach(
-    function(dateKey) {
-
-      const conversations =
-        groups[dateKey];
-
-
-      const day =
-        document.createElement(
-          "div"
+          }
         );
-
-
-      day.className =
-        "history-day";
-
-
-      const dayTitle =
-        document.createElement(
-          "div"
-        );
-
-
-      dayTitle.className =
-        "history-day-title";
-
-
-      dayTitle.innerHTML = `
-        <span>
-          📅 ${escapeHTML(dateKey)}
-        </span>
-
-        <span class="category-count">
-          ${conversations.length}
-        </span>
-      `;
-
-
-      day.appendChild(
-        dayTitle
-      );
-
-
-      conversations.forEach(
-        function(conversation) {
-
-          const card =
-            document.createElement(
-              "div"
-            );
-
-
-          card.className =
-            "history-card";
-
-
-          const title =
-            document.createElement(
-              "div"
-            );
-
-
-          title.className =
-            "history-title";
-
-
-          title.textContent =
-            conversation.title ||
-            "Conversation Naira";
-
-
-          const preview =
-            document.createElement(
-              "div"
-            );
-
-
-          preview.className =
-            "history-preview";
-
-
-          preview.textContent =
-            conversation.user_message ||
-            "Tiada mesej";
-
-
-          const date =
-            new Date(
-              conversation.created_at
-            );
-
-
-          const time =
-            date.toLocaleTimeString(
-              "ms-MY",
-              {
-                hour:
-                  "2-digit",
-
-                minute:
-                  "2-digit"
-              }
-            );
-
-
-          const meta =
-            document.createElement(
-              "div"
-            );
-
-
-          meta.className =
-            "history-meta";
-
-
-          meta.textContent =
-            time +
-            " • " +
-            (
-              conversation.category ||
-              "general"
-            );
-
-
-          const actions =
-            document.createElement(
-              "div"
-            );
-
-
-          actions.className =
-            "history-actions";
-
-
-          /*
-           * OPEN
-           */
-
-          const openButton =
-            document.createElement(
-              "button"
-            );
-
-
-          openButton.type =
-            "button";
-
-
-          openButton.textContent =
-            "👁️ Buka";
-
-
-          openButton.addEventListener(
-            "click",
-            function() {
-
-              openConversation(
-                conversation.conversation_id
-              );
-
-            }
-          );
-
-
-          /*
-           * EDIT
-           */
-
-          const editButton =
-            document.createElement(
-              "button"
-            );
-
-
-          editButton.type =
-            "button";
-
-
-          editButton.textContent =
-            "✏️ Edit";
-
-
-          editButton.addEventListener(
-            "click",
-            function() {
-
-              editConversation(
-                conversation
-              );
-
-            }
-          );
-
-
-          /*
-           * DELETE
-           */
-
-          const deleteButton =
-            document.createElement(
-              "button"
-            );
-
-
-          deleteButton.type =
-            "button";
-
-
-          deleteButton.className =
-            "history-delete";
-
-
-          deleteButton.textContent =
-            "🗑️ Delete";
-
-
-          deleteButton.addEventListener(
-            "click",
-            function() {
-
-              deleteConversation(
-                conversation.conversation_id
-              );
-
-            }
-          );
-
-
-          actions.appendChild(
-            openButton
-          );
-
-
-          actions.appendChild(
-            editButton
-          );
-
-
-          actions.appendChild(
-            deleteButton
-          );
-
-
-          card.appendChild(
-            title
-          );
-
-
-          card.appendChild(
-            preview
-          );
-
-
-          card.appendChild(
-            meta
-          );
-
-
-          card.appendChild(
-            actions
-          );
-
-
-          day.appendChild(
-            card
-          );
-
-        }
-      );
 
 
       historyList.appendChild(
-        day
+        card
       );
 
     }
@@ -3672,480 +3405,138 @@ function renderHistory() {
 }
 
 
-/* ============================================================
-   OPEN CONVERSATION
-============================================================ */
-
 async function openConversation(
   conversationId
-) {
+){
 
-  if (!conversationId) {
-
-    alert(
-      "❌ Conversation ID tidak dijumpai."
+  const response =
+    await fetch(
+      API_BASE +
+      "/api/history?conversationId=" +
+      encodeURIComponent(
+        conversationId
+      )
     );
+
+  const data =
+    await response.json();
+
+  const messages =
+    data.conversations ||
+    [];
+
+  currentConversationId =
+    conversationId;
+
+  localStorage.setItem(
+    "naira_conversation_id",
+    conversationId
+  );
+
+  chat.innerHTML =
+    "";
+
+  messages.forEach(
+    function(message){
+
+      if (
+        message.user_message
+      ){
+
+        addMessage(
+          message.user_message,
+          "user-message"
+        );
+
+      }
+
+      if (
+        message.naira_response
+      ){
+
+        addMessage(
+          message.naira_response,
+          "naira-message"
+        );
+
+      }
+
+    }
+  );
+
+  historyPanel.classList.remove(
+    "active"
+  );
+
+}
+
+
+async function deleteConversation(
+  conversationId
+){
+
+  if (
+    !confirm(
+      "Padam conversation ini?"
+    )
+  ){
 
     return;
 
   }
 
+  await fetch(
+    API_BASE +
+    "/api/history",
+    {
+      method:"DELETE",
 
-  try {
+      headers:{
+        "Content-Type":
+          "application/json"
+      },
 
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/history?conversationId=" +
-        encodeURIComponent(
-          conversationId
-        )
-      );
-
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
+      body:JSON.stringify({
+        conversationId
+      })
     }
+  );
 
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Conversation gagal dibuka."
-      );
-
-    }
-
-
-    const messages =
-      data.conversations ||
-      [];
-
-
-    currentConversationId =
-      conversationId;
-
-
-    localStorage.setItem(
-      "naira_conversation_id",
-      currentConversationId
-    );
-
-
-    historyPanel.classList.remove(
-      "active"
-    );
-
-
-    chat.innerHTML =
-      "";
-
-
-    messages.forEach(
-      function(message) {
-
-        if (
-          message.user_message
-        ) {
-
-          addMessage(
-            message.user_message,
-            "user-message"
-          );
-
-        }
-
-
-        if (
-          message.naira_response
-        ) {
-
-          addMessage(
-            message.naira_response,
-            "naira-message"
-          );
-
-        }
-
-      }
-    );
-
-
-    if (!messages.length) {
-
-      addMessage(
-        "Conversation ini kosong.",
-        "naira-message"
-      );
-
-    }
-
-  } catch (error) {
-
-    console.error(
-      "OPEN HISTORY ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ " +
-      error.message
-    );
-
-  }
+  loadHistory();
 
 }
 
-/* ============================================================
-   NEW CONVERSATION
-============================================================ */
 
 newConversation.addEventListener(
   "click",
-  function() {
-
-    const confirmed =
-      confirm(
-        "Mulakan conversation baru dengan Naira?"
-      );
-
-    if (!confirmed) {
-      return;
-    }
-
-
-    if (
-      typeof stopNairaSpeech ===
-      "function"
-    ) {
-
-      stopNairaSpeech();
-
-    }
-
+  function(){
 
     currentConversationId =
       createConversationId();
 
-
     localStorage.setItem(
       "naira_conversation_id",
       currentConversationId
     );
 
+    chat.innerHTML =
+      "";
 
-    chat.innerHTML = `
-      <div class="message naira-message">
-        Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
-      </div>
-    `;
-
+    addMessage(
+      "Hai Tuan ❤️ Kita mulakan conversation baru.",
+      "naira-message"
+    );
 
     historyPanel.classList.remove(
       "active"
     );
-
-
-    input.value =
-      "";
-
-
-    input.focus();
 
   }
 );
 
 
 /* ============================================================
-   EDIT HISTORY
-============================================================ */
-
-async function editConversation(
-  conversation
-) {
-
-  const currentTitle =
-    conversation.title ||
-    "Conversation Naira";
-
-
-  const newTitle =
-    prompt(
-      "✏️ Masukkan tajuk baru:",
-      currentTitle
-    );
-
-
-  if (
-    newTitle === null
-  ) {
-
-    return;
-
-  }
-
-
-  const cleanTitle =
-    newTitle.trim();
-
-
-  if (!cleanTitle) {
-
-    alert(
-      "⚠️ Tajuk tidak boleh kosong."
-    );
-
-    return;
-
-  }
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/history",
-        {
-
-          method:
-            "PATCH",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              conversationId:
-                conversation.conversation_id,
-
-              title:
-                cleanTitle
-
-            })
-
-        }
-      );
-
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Gagal edit history (" +
-        response.status +
-        ")"
-      );
-
-    }
-
-
-    await loadHistory();
-
-  } catch (error) {
-
-    console.error(
-      "EDIT HISTORY ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ Gagal edit conversation.\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   DELETE HISTORY
-============================================================ */
-
-async function deleteConversation(
-  conversationId
-) {
-
-  if (!conversationId) {
-
-    alert(
-      "❌ Conversation ID tidak dijumpai."
-    );
-
-    return;
-
-  }
-
-
-  const confirmed =
-    confirm(
-      "🗑️ Tuan pasti mahu padam conversation ini?\n\n" +
-      "Semua mesej dalam conversation ini akan dipadam dari database."
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/history",
-        {
-
-          method:
-            "DELETE",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              conversationId:
-                conversationId
-
-            })
-
-        }
-      );
-
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Gagal delete history (" +
-        response.status +
-        ")"
-      );
-
-    }
-
-
-    if (
-      currentConversationId ===
-      conversationId
-    ) {
-
-      currentConversationId =
-        createConversationId();
-
-
-      localStorage.setItem(
-        "naira_conversation_id",
-        currentConversationId
-      );
-
-
-      chat.innerHTML = `
-        <div class="message naira-message">
-          Hai Tuan ❤️ Saya Naira. Kita mulakan conversation baru.
-        </div>
-      `;
-
-    }
-
-
-    await loadHistory();
-
-  } catch (error) {
-
-    console.error(
-      "DELETE HISTORY ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ Gagal padam conversation.\n\n" +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   MEMORY DOM
+   MEMORY
 ============================================================ */
 
 const memoryButton =
@@ -4234,21 +3625,9 @@ const cancelMemory =
   );
 
 
-let allMemories =
-  [];
-
-
-let editingMemoryId =
-  null;
-
-
-/* ============================================================
-   MEMORY EVENTS
-============================================================ */
-
 memoryButton.addEventListener(
   "click",
-  function() {
+  function(){
 
     memoryPanel.classList.add(
       "active"
@@ -4262,7 +3641,7 @@ memoryButton.addEventListener(
 
 closeMemory.addEventListener(
   "click",
-  function() {
+  function(){
 
     memoryPanel.classList.remove(
       "active"
@@ -4280,494 +3659,201 @@ refreshMemory.addEventListener(
 
 memorySearch.addEventListener(
   "input",
-  renderFilteredMemories
+  renderMemories
 );
 
 
 categoryFilter.addEventListener(
   "change",
-  renderFilteredMemories
+  renderMemories
 );
 
 
-/* ============================================================
-   LOAD MEMORY
-============================================================ */
+async function loadMemories(){
 
-async function loadMemories() {
-
-  memoryStatus.textContent =
-    "Memuatkan memory...";
-
-
-  memoryList.innerHTML =
-    "";
-
-
-  try {
+  try{
 
     const response =
       await fetch(
         API_BASE +
         "/api/memory",
         {
+          method:"POST",
 
-          method:
-            "POST",
-
-          headers: {
+          headers:{
             "Content-Type":
               "application/json"
           },
 
-          body:
-            JSON.stringify({
-              action:
-                "list"
-            })
-
+          body:JSON.stringify({
+            action:"list"
+          })
         }
       );
 
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Memory error (" +
-        response.status +
-        ")"
-      );
-
-    }
-
+    const data =
+      await response.json();
 
     allMemories =
       data.memories ||
       [];
 
-
     memoryStatus.textContent =
       allMemories.length +
       " memory disimpan";
 
+    renderMemories();
 
-    renderFilteredMemories();
-
-  } catch (error) {
-
-    console.error(
-      "MEMORY ERROR:",
-      error
-    );
-
+  }catch(error){
 
     memoryStatus.textContent =
       "Gagal memuatkan memory.";
-
-
-    memoryList.innerHTML = `
-      <div class="empty-state">
-        ❌ ${escapeHTML(error.message)}
-      </div>
-    `;
 
   }
 
 }
 
 
-/* ============================================================
-   FILTER MEMORY
-============================================================ */
-
-function renderFilteredMemories() {
+function renderMemories(){
 
   const search =
     memorySearch.value
       .trim()
       .toLowerCase();
 
-
   const category =
     categoryFilter.value;
 
-
   const filtered =
     allMemories.filter(
-      function(memory) {
+      function(memory){
 
-        const text = [
-
-          memory.memory,
-
-          memory.category,
-
-          memory.subcategory
-
-        ]
-          .join(" ")
-          .toLowerCase();
-
-
-        const matchesSearch =
+        const matchSearch =
           !search ||
-          text.includes(
-            search
-          );
+          JSON.stringify(memory)
+            .toLowerCase()
+            .includes(search);
 
-
-        const matchesCategory =
+        const matchCategory =
           category ===
-            "all" ||
+          "all" ||
           memory.category ===
-            category;
-
+          category;
 
         return (
-          matchesSearch &&
-          matchesCategory
+          matchSearch &&
+          matchCategory
         );
 
       }
     );
 
-
-  renderMemories(
-    filtered
-  );
-
-}
-
-
-/* ============================================================
-   RENDER MEMORY
-============================================================ */
-
-function renderMemories(
-  memories
-) {
-
   memoryList.innerHTML =
     "";
 
+  filtered.forEach(
+    function(memory){
 
-  if (!memories.length) {
-
-    memoryList.innerHTML = `
-      <div class="empty-state">
-        🧠 Tiada memory dijumpai.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  const groups =
-    {};
-
-
-  memories.forEach(
-    function(memory) {
-
-      const category =
-        memory.category ||
-        "general";
-
-
-      if (!groups[category]) {
-
-        groups[category] =
-          [];
-
-      }
-
-
-      groups[category].push(
-        memory
-      );
-
-    }
-  );
-
-
-  const categoryInfo = {
-
-    profile:
-      "👤 Profile",
-
-    fashion:
-      "👕 Fashion",
-
-    food:
-      "🍔 Food",
-
-    game:
-      "🎮 Game",
-
-    hobby:
-      "🎨 Hobby",
-
-    work:
-      "💼 Work",
-
-    project:
-      "🚀 Project",
-
-    preference:
-      "❤️ Preference",
-
-    family:
-      "👨‍👩‍👧 Family",
-
-    general:
-      "📁 General"
-
-  };
-
-
-  Object.keys(
-    groups
-  ).forEach(
-    function(category) {
-
-      const section =
+      const card =
         document.createElement(
           "div"
         );
 
+      card.className =
+        "memory-card";
 
-      section.className =
-        "memory-category";
+      card.innerHTML = `
+        <div class="memory-text">
+          ${escapeHTML(
+            memory.memory
+          )}
+        </div>
 
+        <div class="memory-actions">
 
-      const title =
-        document.createElement(
-          "div"
-        );
+          <button class="edit-memory">
+            ✏️ Edit
+          </button>
 
+          <button class="delete">
+            🗑️ Delete
+          </button>
 
-      title.className =
-        "category-title";
-
-
-      title.innerHTML = `
-        <span>
-          ${
-            categoryInfo[category] ||
-            "📁 " +
-            escapeHTML(category)
-          }
-        </span>
-
-        <span>
-          ${groups[category].length}
-        </span>
+        </div>
       `;
 
 
-      section.appendChild(
-        title
-      );
+      card
+        .querySelector(
+          ".edit-memory"
+        )
+        .addEventListener(
+          "click",
+          function(){
 
+            editingMemoryId =
+              memory.id;
 
-      groups[category]
-        .forEach(
-          function(memory) {
-
-            const card =
-              document.createElement(
-                "div"
-              );
-
-
-            card.className =
-              "memory-card";
-
-
-            const text =
-              document.createElement(
-                "div"
-              );
-
-
-            text.className =
-              "memory-text";
-
-
-            text.textContent =
+            memoryText.value =
               memory.memory ||
               "";
 
+            memoryCategory.value =
+              memory.category ||
+              "general";
 
-            const stars =
-              "⭐".repeat(
-                Math.max(
-                  1,
-                  Math.min(
-                    3,
-                    Number(
-                      memory.importance
-                    ) || 1
-                  )
-                )
+            memorySubcategory.value =
+              memory.subcategory ||
+              "";
+
+            memoryImportance.value =
+              String(
+                memory.importance ||
+                1
               );
 
+            memoryFormOverlay.classList.add(
+              "active"
+            );
 
-            const meta =
-              document.createElement(
-                "div"
-              );
-
-
-            meta.className =
-              "memory-meta";
+          }
+        );
 
 
-            meta.innerHTML = `
-              ${stars}
-              &nbsp; • &nbsp;
-              ${escapeHTML(
-                memory.subcategory ||
-                "general"
-              )}
-            `;
+      card
+        .querySelector(
+          ".delete"
+        )
+        .addEventListener(
+          "click",
+          async function(){
 
+            await fetch(
+              API_BASE +
+              "/api/memory",
+              {
+                method:"POST",
 
-            const actions =
-              document.createElement(
-                "div"
-              );
+                headers:{
+                  "Content-Type":
+                    "application/json"
+                },
 
-
-            actions.className =
-              "memory-actions";
-
-
-            /*
-             * EDIT
-             */
-
-            const edit =
-              document.createElement(
-                "button"
-              );
-
-
-            edit.type =
-              "button";
-
-
-            edit.textContent =
-              "✏️ Edit";
-
-
-            edit.addEventListener(
-              "click",
-              function() {
-
-                openEditForm(
-                  memory
-                );
-
+                body:JSON.stringify({
+                  action:"delete",
+                  id:memory.id
+                })
               }
             );
 
-
-            /*
-             * DELETE
-             */
-
-            const deleteButton =
-              document.createElement(
-                "button"
-              );
-
-
-            deleteButton.type =
-              "button";
-
-
-            deleteButton.className =
-              "delete";
-
-
-            deleteButton.textContent =
-              "🗑️ Delete";
-
-
-            deleteButton.addEventListener(
-              "click",
-              function() {
-
-                deleteMemory(
-                  memory.id
-                );
-
-              }
-            );
-
-
-            actions.appendChild(
-              edit
-            );
-
-
-            actions.appendChild(
-              deleteButton
-            );
-
-
-            card.appendChild(
-              text
-            );
-
-
-            card.appendChild(
-              meta
-            );
-
-
-            card.appendChild(
-              actions
-            );
-
-
-            section.appendChild(
-              card
-            );
+            loadMemories();
 
           }
         );
 
 
       memoryList.appendChild(
-        section
+        card
       );
 
     }
@@ -4776,465 +3862,120 @@ function renderMemories(
 }
 
 
-/* ============================================================
-   ADD MEMORY
-============================================================ */
-
 addMemoryButton.addEventListener(
   "click",
-  function() {
+  function(){
 
     editingMemoryId =
       null;
 
-
-    memoryFormTitle.textContent =
-      "➕ Tambah Memory";
-
-
     memoryText.value =
       "";
-
-
-    memoryCategory.value =
-      "general";
-
-
-    memorySubcategory.value =
-      "general";
-
-
-    memoryImportance.value =
-      "2";
-
 
     memoryFormOverlay.classList.add(
       "active"
     );
 
-
-    setTimeout(
-      function() {
-
-        memoryText.focus();
-
-      },
-      100
-    );
-
   }
 );
 
-
-/* ============================================================
-   EDIT MEMORY
-============================================================ */
-
-function openEditForm(
-  memory
-) {
-
-  editingMemoryId =
-    memory.id;
-
-
-  memoryFormTitle.textContent =
-    "✏️ Edit Memory";
-
-
-  memoryText.value =
-    memory.memory ||
-    "";
-
-
-  memoryCategory.value =
-    memory.category ||
-    "general";
-
-
-  memorySubcategory.value =
-    memory.subcategory ||
-    "general";
-
-
-  memoryImportance.value =
-    String(
-      memory.importance ||
-      1
-    );
-
-
-  memoryFormOverlay.classList.add(
-    "active"
-  );
-
-
-  setTimeout(
-    function() {
-
-      memoryText.focus();
-
-    },
-    100
-  );
-
-}
-
-
-/* ============================================================
-   CLOSE MEMORY FORM
-============================================================ */
 
 cancelMemory.addEventListener(
   "click",
-  closeMemoryForm
-);
+  function(){
 
-
-memoryFormOverlay.addEventListener(
-  "click",
-  function(event) {
-
-    if (
-      event.target ===
-      memoryFormOverlay
-    ) {
-
-      closeMemoryForm();
-
-    }
+    memoryFormOverlay.classList.remove(
+      "active"
+    );
 
   }
 );
 
 
-function closeMemoryForm() {
-
-  memoryFormOverlay.classList.remove(
-    "active"
-  );
-
-
-  editingMemoryId =
-    null;
-
-}
-
-
-/* ============================================================
-   SAVE MEMORY
-============================================================ */
-
 saveMemoryButton.addEventListener(
   "click",
-  async function() {
+  async function(){
 
     const text =
       memoryText.value.trim();
 
-
-    if (!text) {
-
-      alert(
-        "⚠️ Sila masukkan memory."
-      );
+    if (
+      !text
+    ){
 
       return;
 
     }
 
-
-    saveMemoryButton.disabled =
-      true;
-
-
-    saveMemoryButton.textContent =
-      "Menyimpan...";
-
-
-    try {
-
-      const action =
+    const body = {
+      action:
         editingMemoryId
           ? "update"
-          : "save";
+          : "save",
 
+      memory:
+        text,
 
-      const body = {
+      category:
+        memoryCategory.value,
 
-        action:
-          action,
+      subcategory:
+        memorySubcategory.value,
 
-        memory:
-          text,
+      importance:
+        Number(
+          memoryImportance.value
+        )
+    };
 
-        category:
-          memoryCategory.value,
+    if (
+      editingMemoryId
+    ){
 
-        subcategory:
-          memorySubcategory.value
-            .trim() ||
-          "general",
-
-        importance:
-          Number(
-            memoryImportance.value
-          )
-
-      };
-
-
-      if (
-        editingMemoryId
-      ) {
-
-        body.id =
-          editingMemoryId;
-
-      }
-
-
-      const response =
-        await fetch(
-          API_BASE +
-          "/api/memory",
-          {
-
-            method:
-              "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            body:
-              JSON.stringify(
-                body
-              )
-
-          }
-        );
-
-
-      const raw =
-        await response.text();
-
-
-      let data =
-        {};
-
-
-      try {
-
-        data =
-          raw
-            ? JSON.parse(raw)
-            : {};
-
-      } catch (error) {
-
-        data =
-          {};
-
-      }
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          data.error ||
-          "Memory gagal disimpan (" +
-          response.status +
-          ")"
-        );
-
-      }
-
-
-      closeMemoryForm();
-
-
-      await loadMemories();
-
-    } catch (error) {
-
-      console.error(
-        "SAVE MEMORY ERROR:",
-        error
-      );
-
-
-      alert(
-        "❌ " +
-        error.message
-      );
-
-    } finally {
-
-      saveMemoryButton.disabled =
-        false;
-
-
-      saveMemoryButton.textContent =
-        "💾 Simpan";
+      body.id =
+        editingMemoryId;
 
     }
+
+    await fetch(
+      API_BASE +
+      "/api/memory",
+      {
+        method:"POST",
+
+        headers:{
+          "Content-Type":
+            "application/json"
+        },
+
+        body:
+          JSON.stringify(body)
+      }
+    );
+
+    memoryFormOverlay.classList.remove(
+      "active"
+    );
+
+    loadMemories();
 
   }
 );
 
 
 /* ============================================================
-   DELETE MEMORY
-============================================================ */
-
-async function deleteMemory(
-  id
-) {
-
-  const confirmed =
-    confirm(
-      "Tuan pasti mahu padam memory ini?\n\n" +
-      "Naira tidak akan menggunakan memory tersebut lagi."
-    );
-
-
-  if (!confirmed) {
-    return;
-  }
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/memory",
-        {
-
-          method:
-            "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body:
-            JSON.stringify({
-
-              action:
-                "delete",
-
-              id:
-                id
-
-            })
-
-        }
-      );
-
-
-    const raw =
-      await response.text();
-
-
-    let data =
-      {};
-
-
-    try {
-
-      data =
-        raw
-          ? JSON.parse(raw)
-          : {};
-
-    } catch (error) {
-
-      data =
-        {};
-
-    }
-
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error ||
-        "Memory gagal dipadam (" +
-        response.status +
-        ")"
-      );
-
-    }
-
-
-    await loadMemories();
-
-  } catch (error) {
-
-    console.error(
-      "DELETE MEMORY ERROR:",
-      error
-    );
-
-
-    alert(
-      "❌ " +
-      error.message
-    );
-
-  }
-
-}
-
-
-/* ============================================================
-   INITIALIZE MAIN APP
+   INIT
 ============================================================ */
 
 setupRecognition();
 
 updateVoiceUI();
 
-
-console.log(
-  "===================================="
-);
-
-console.log(
-  "✅ NAIRA MAIN APP LOADED"
-);
-
-console.log(
-  "API:",
-  API_BASE
-);
-
-console.log(
-  "Speech Recognition:",
-  !!(
-    window.SpeechRecognition ||
-    window.webkitSpeechRecognition
-  )
-);
-
-console.log(
-  "===================================="
-);
-
 </script>
 
+<!-- ELEVENLABS ENGINE - SATU SAHAJA -->
 
-<!-- =========================================================
-     ELEVENLABS VOICE ENGINE
-========================================================= -->
-
-<!-- =========================================================
-     END
-========================================================= -->
 <script src="speakNaira.js"></script>
+
 </body>
 </html>
