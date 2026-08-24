@@ -1794,6 +1794,59 @@ copyButton.addEventListener(
   }
 );
 
+const likeButton =
+  actions.querySelector(
+    ".like-btn"
+  );
+
+const dislikeButton =
+  actions.querySelector(
+    ".dislike-btn"
+  );
+
+likeButton.addEventListener(
+  "click",
+  function() {
+
+    const isActive =
+      likeButton.classList.contains(
+        "active"
+      );
+
+    likeButton.classList.toggle(
+      "active",
+      !isActive
+    );
+
+    dislikeButton.classList.remove(
+      "active"
+    );
+
+  }
+);
+
+
+dislikeButton.addEventListener(
+  "click",
+  function() {
+
+    const isActive =
+      dislikeButton.classList.contains(
+        "active"
+      );
+
+    dislikeButton.classList.toggle(
+      "active",
+      !isActive
+    );
+
+    likeButton.classList.remove(
+      "active"
+    );
+
+  }
+);
+
     wrapper.appendChild(
       actions
     );
