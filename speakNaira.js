@@ -492,7 +492,7 @@ async function loadElevenLabsVoices() {
   try {
     const response =
       await fetch(
-        "/api/voices",
+  "https://naira-tawny.vercel.app/api/voice",,
         {
           method: "GET",
           cache: "no-store"
