@@ -1919,53 +1919,58 @@ shareButton.addEventListener(
   }
 );
 
-const moreButton =
-  actions.querySelector(
-    ".more-btn"
-  );
+.message-actions{
+  position:relative;
+}
 
-moreButton.addEventListener(
-  "click",
-  function() {
+.message-more-menu{
+  display:none;
+  position:absolute;
 
-    alert(
-      "More options akan ditambah selepas ini."
-    );
+  left:105px;
+  bottom:30px;
 
-  }
-);
-    wrapper.appendChild(
-      actions
-    );
+  min-width:155px;
+  padding:6px;
 
-  }
+  background:#1b1e29;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:12px;
 
-const speakerButton =
-  actions.querySelector(
-    ".speaker-btn"
-  );
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.45);
 
-speakerButton.addEventListener(
-  "click",
-  function() {
+  z-index:50;
+}
 
-    if (
-      typeof window.speakNaira ===
-      "function"
-    ) {
+.message-more-menu.active{
+  display:block;
+}
 
-      window.speakNaira(text);
+.message-more-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:9px;
 
-    } else {
+  padding:9px 10px;
 
-      console.error(
-        "speakNaira belum tersedia."
-      );
+  background:transparent;
+  border:0;
+  border-radius:8px;
 
-    }
+  color:#e5e7eb;
+  font-size:12px;
+  text-align:left;
+}
 
-  }
-);
+.message-more-item:hover{
+  background:rgba(255,255,255,.07);
+}
+
+.message-more-item.danger{
+  color:#ff9b9b;
+}
 
   chat.appendChild(
     wrapper
