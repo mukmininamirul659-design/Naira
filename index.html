@@ -2201,16 +2201,22 @@ async function sendMessage() {
      */
 
     setTimeout(
-      function() {
+  function() {
 
-        if (
-          typeof window.speakNaira ===
-          "function"
-        ) {
+    if (
+      typeof window.speakNaira ===
+      "function"
+    ) {
 
-          window.speakNaira(
-            nairaReply
-          );
+      window.speakNaira(
+        nairaReply
+      );
+
+    }
+
+  },
+  100
+);
 
         } else {
 
