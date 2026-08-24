@@ -1647,22 +1647,107 @@ function addMessage(
   type
 ) {
 
-  const message =
+  const wrapper =
     document.createElement(
       "div"
     );
 
-  message.className =
+  wrapper.className =
     "message " + type;
 
-  message.textContent =
+  const content =
+    document.createElement(
+      "div"
+    );
+
+  content.className =
+    "message-content";
+
+  content.textContent =
     text;
 
-  chat.appendChild(
-    message
+  wrapper.appendChild(
+    content
   );
 
-  message.scrollIntoView({
+
+  if (
+    type === "naira-message"
+  ) {
+
+    const actions =
+      document.createElement(
+        "div"
+      );
+
+    actions.className =
+      "message-actions";
+
+
+    actions.innerHTML = `
+      <button
+        type="button"
+        class="message-action-btn copy-btn"
+        title="Copy"
+      >
+        📋
+      </button>
+
+      <button
+        type="button"
+        class="message-action-btn speaker-btn"
+        title="Dengar semula"
+      >
+        🔊
+      </button>
+
+      <button
+        type="button"
+        class="message-action-btn like-btn"
+        title="Like"
+      >
+        👍
+      </button>
+
+      <button
+        type="button"
+        class="message-action-btn dislike-btn"
+        title="Dislike"
+      >
+        👎
+      </button>
+
+      <button
+        type="button"
+        class="message-action-btn share-btn"
+        title="Share"
+      >
+        ↗️
+      </button>
+
+      <button
+        type="button"
+        class="message-action-btn more-btn"
+        title="More"
+      >
+        •••
+      </button>
+    `;
+
+
+    wrapper.appendChild(
+      actions
+    );
+
+  }
+
+
+  chat.appendChild(
+    wrapper
+  );
+
+
+  wrapper.scrollIntoView({
     behavior: "smooth",
     block: "end"
   });
