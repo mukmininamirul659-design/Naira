@@ -1695,6 +1695,7 @@ function addMessage(
   wrapper.className =
     "message " + type;
 
+
   const content =
     document.createElement(
       "div"
@@ -1710,6 +1711,10 @@ function addMessage(
     content
   );
 
+
+  /* =========================================================
+     NAIRA MESSAGE ACTIONS
+  ========================================================= */
 
   if (
     type === "naira-message"
@@ -1736,7 +1741,7 @@ function addMessage(
       <button
         type="button"
         class="message-action-btn speaker-btn"
-        title="Dengar semula"
+        title="Read aloud"
       >
         🔊
       </button>
@@ -1775,202 +1780,415 @@ function addMessage(
     `;
 
 
-actions.innerHTML = `
-  ...
-`;
+    /* =======================================================
+       COPY
+    ======================================================= */
 
-const copyButton =
-  actions.querySelector(
-    ".copy-btn"
-  );
-
-copyButton.addEventListener(
-  "click",
-  async function() {
-
-    try {
-
-      await navigator.clipboard.writeText(
-        text
+    const copyButton =
+      actions.querySelector(
+        ".copy-btn"
       );
 
-      copyButton.textContent = "✓";
 
-      setTimeout(
-        function() {
-          copyButton.textContent = "📋";
-        },
-        1200
-      );
+    copyButton.addEventListener(
+      "click",
+      async function() {
 
-    } catch (error) {
+        try {
 
-      console.error(
-        "COPY ERROR:",
-        error
-      );
+          await navigator.clipboard.writeText(
+            text
+          );
 
-    }
 
-  }
-);
+          copyButton.textContent =
+            "✓";
 
-const likeButton =
-  actions.querySelector(
-    ".like-btn"
-  );
 
-const dislikeButton =
-  actions.querySelector(
-    ".dislike-btn"
-  );
+          setTimeout(
+            function() {
 
-likeButton.addEventListener(
-  "click",
-  function() {
+              copyButton.textContent =
+                "📋";
 
-    const isActive =
-      likeButton.classList.contains(
-        "active"
-      );
+            },
+            1000
+          );
 
-    likeButton.classList.toggle(
-      "active",
-      !isActive
+        } catch (error) {
+
+          console.error(
+            "COPY ERROR:",
+            error
+          );
+
+        }
+
+      }
     );
 
-    dislikeButton.classList.remove(
-      "active"
-    );
 
-  }
-);
+    /* =======================================================
+       SPEAKER
+    ======================================================= */
 
-
-dislikeButton.addEventListener(
-  "click",
-  function() {
-
-    const isActive =
-      dislikeButton.classList.contains(
-        "active"
+    const speakerButton =
+      actions.querySelector(
+        ".speaker-btn"
       );
 
-    dislikeButton.classList.toggle(
-      "active",
-      !isActive
+
+    speakerButton.addEventListener(
+      "click",
+      function() {
+
+        if (
+          typeof window.speakNaira ===
+          "function"
+        ) {
+
+          window.speakNaira(
+            text
+          );
+
+        } else {
+
+          console.error(
+            "speakNaira belum tersedia."
+          );
+
+        }
+
+      }
     );
 
-    likeButton.classList.remove(
-      "active"
-    );
 
-  }
-);
+    /* =======================================================
+       LIKE / DISLIKE
+    ======================================================= */
 
-const shareButton =
-  actions.querySelector(
-    ".share-btn"
-  );
+    const likeButton =
+      actions.querySelector(
+        ".like-btn"
+      );
 
-shareButton.addEventListener(
-  "click",
-  async function() {
 
-    try {
+    const dislikeButton =
+      actions.querySelector(
+        ".dislike-btn"
+      );
 
-      if (navigator.share) {
 
-        await navigator.share({
-          title: "Naira",
-          text: text
-        });
+    likeButton.addEventListener(
+      "click",
+      function() {
 
-      } else {
+        const active =
+          likeButton.classList.contains(
+            "active"
+          );
 
-        await navigator.clipboard.writeText(
-          text
+
+        likeButton.classList.toggle(
+          "active",
+          !active
         );
 
-        shareButton.textContent = "✓";
 
-        setTimeout(
-          function() {
-            shareButton.textContent = "↗️";
-          },
-          1200
+        dislikeButton.classList.remove(
+          "active"
         );
 
       }
+    );
 
-    } catch (error) {
 
-      if (
-        error.name !== "AbortError"
-      ) {
-        console.error(
-          "SHARE ERROR:",
-          error
+    dislikeButton.addEventListener(
+      "click",
+      function() {
+
+        const active =
+          dislikeButton.classList.contains(
+            "active"
+          );
+
+
+        dislikeButton.classList.toggle(
+          "active",
+          !active
         );
-      }
 
-    }
+
+        likeButton.classList.remove(
+          "active"
+        );
+
+      }
+    );
+
+
+    /* =======================================================
+       SHARE
+    ======================================================= */
+
+    const shareButton =
+      actions.querySelector(
+        ".share-btn"
+      );
+
+
+    shareButton.addEventListener(
+      "click",
+      async function() {
+
+        try {
+
+          if (
+            navigator.share
+          ) {
+
+            await navigator.share({
+              title: "Naira",
+              text: text
+            });
+
+          } else {
+
+            await navigator.clipboard.writeText(
+              text
+            );
+
+
+            shareButton.textContent =
+              "✓";
+
+
+            setTimeout(
+              function() {
+
+                shareButton.textContent =
+                  "↗️";
+
+              },
+              1000
+            );
+
+          }
+
+        } catch (error) {
+
+          if (
+            error.name !==
+            "AbortError"
+          ) {
+
+            console.error(
+              "SHARE ERROR:",
+              error
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+
+    /* =======================================================
+       MORE MENU
+    ======================================================= */
+
+    const moreButton =
+      actions.querySelector(
+        ".more-btn"
+      );
+
+
+    const moreMenu =
+      document.createElement(
+        "div"
+      );
+
+
+    moreMenu.className =
+      "message-more-menu";
+
+
+    moreMenu.innerHTML = `
+      <button
+        type="button"
+        class="message-more-item more-copy"
+      >
+        📋 Copy
+      </button>
+
+      <button
+        type="button"
+        class="message-more-item more-speak"
+      >
+        🔊 Read aloud
+      </button>
+
+      <button
+        type="button"
+        class="message-more-item more-share"
+      >
+        ↗️ Share
+      </button>
+    `;
+
+
+    actions.appendChild(
+      moreMenu
+    );
+
+
+    moreButton.addEventListener(
+      "click",
+      function(event) {
+
+        event.stopPropagation();
+
+
+        moreMenu.classList.toggle(
+          "active"
+        );
+
+      }
+    );
+
+
+    /* MORE → COPY */
+
+    const moreCopy =
+      moreMenu.querySelector(
+        ".more-copy"
+      );
+
+
+    moreCopy.addEventListener(
+      "click",
+      async function() {
+
+        try {
+
+          await navigator.clipboard.writeText(
+            text
+          );
+
+
+          moreMenu.classList.remove(
+            "active"
+          );
+
+        } catch (error) {
+
+          console.error(
+            "MORE COPY ERROR:",
+            error
+          );
+
+        }
+
+      }
+    );
+
+
+    /* MORE → READ ALOUD */
+
+    const moreSpeak =
+      moreMenu.querySelector(
+        ".more-speak"
+      );
+
+
+    moreSpeak.addEventListener(
+      "click",
+      function() {
+
+        moreMenu.classList.remove(
+          "active"
+        );
+
+
+        if (
+          typeof window.speakNaira ===
+          "function"
+        ) {
+
+          window.speakNaira(
+            text
+          );
+
+        }
+
+      }
+    );
+
+
+    /* MORE → SHARE */
+
+    const moreShare =
+      moreMenu.querySelector(
+        ".more-share"
+      );
+
+
+    moreShare.addEventListener(
+      "click",
+      async function() {
+
+        moreMenu.classList.remove(
+          "active"
+        );
+
+
+        try {
+
+          if (
+            navigator.share
+          ) {
+
+            await navigator.share({
+              title: "Naira",
+              text: text
+            });
+
+          } else {
+
+            await navigator.clipboard.writeText(
+              text
+            );
+
+          }
+
+        } catch (error) {
+
+          if (
+            error.name !==
+            "AbortError"
+          ) {
+
+            console.error(
+              "MORE SHARE ERROR:",
+              error
+            );
+
+          }
+
+        }
+
+      }
+    );
+
+
+    wrapper.appendChild(
+      actions
+    );
 
   }
-);
 
-.message-actions{
-  position:relative;
-}
-
-.message-more-menu{
-  display:none;
-  position:absolute;
-
-  left:105px;
-  bottom:30px;
-
-  min-width:155px;
-  padding:6px;
-
-  background:#1b1e29;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:12px;
-
-  box-shadow:
-    0 12px 35px rgba(0,0,0,.45);
-
-  z-index:50;
-}
-
-.message-more-menu.active{
-  display:block;
-}
-
-.message-more-item{
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:9px;
-
-  padding:9px 10px;
-
-  background:transparent;
-  border:0;
-  border-radius:8px;
-
-  color:#e5e7eb;
-  font-size:12px;
-  text-align:left;
-}
-
-.message-more-item:hover{
-  background:rgba(255,255,255,.07);
-}
-
-.message-more-item.danger{
-  color:#ff9b9b;
-}
 
   chat.appendChild(
     wrapper
@@ -4847,9 +5065,6 @@ console.log(
 <!-- =========================================================
      ELEVENLABS VOICE ENGINE
 ========================================================= -->
-
-<script src="speakNaira.js"></script>
-
 
 <!-- =========================================================
      END
