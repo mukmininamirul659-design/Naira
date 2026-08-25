@@ -2375,17 +2375,57 @@ header {
   </option>
 </select>
 
-<!-- MULA CODE BARU DI SINI -->
+<!-- ==========================================================
+     UPLOAD VOICE SAMPLE
+=========================================================== -->
 
 <div class="voice-section">
 
-  <!-- semua code Upload Voice
-       yang Naira bagi tadi -->
+  <div class="voice-section-title">
+    🎤 Upload Voice Sample
+  </div>
+
+  <div class="media-upload-description">
+    Upload rakaman suara untuk dihantar ke Voice API.
+    Format MP3, M4A, WAV, AAC, OGG atau video disokong.
+    Maksimum 25MB.
+  </div>
+
+  <input
+    class="hidden-file-input"
+    id="voiceCloneFileInput"
+    type="file"
+    accept="audio/*,video/*,.mp3,.m4a,.wav,.aac,.ogg,.mp4,.mov,.webm"
+  >
+
+  <button
+    class="voice-preview-button"
+    id="selectVoiceCloneFile"
+    type="button"
+  >
+    🎙️ Pilih Sample Suara
+  </button>
+
+  <div
+    class="media-file-info"
+    id="voiceCloneFileInfo"
+  ></div>
+
+  <button
+    class="voice-save-button"
+    id="uploadVoiceClone"
+    type="button"
+    disabled
+  >
+    ⬆️ Upload Sample Suara
+  </button>
+
+  <div
+    class="voice-center-status"
+    id="voiceCloneStatus"
+  ></div>
 
 </div>
-
-<!-- TAMAT CODE BARU DI SINI -->
-
 <div class="voice-controls">
     <!-- CONTROLS -->
 
