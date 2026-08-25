@@ -1,6 +1,6 @@
 /* ============================================================
    NAIRA VOICE UPLOAD API
-   Audio Upload Parser
+   Upload Audio -> ElevenLabs Instant Voice Clone
    Formidable v3
 ============================================================ */
 
@@ -20,7 +20,27 @@ export const config = {
 
 
 /* ============================================================
+   CONFIG
+============================================================ */
+
+const ELEVENLABS_CLONE_URL =
+  "https://api.elevenlabs.io/v1/voices/add";
+
+const MAX_FILE_SIZE =
+  25 * 1024 * 1024;
+
+
+/* ============================================================
    ALLOWED FILE TYPES
+
+   NOTE:
+   ElevenLabs voice cloning needs AUDIO.
+
+   Video upload can be added later by extracting
+   the audio track first.
+
+   For this step:
+   MP3 / WAV / M4A / AAC / OGG / WEBM audio.
 ============================================================ */
 
 const ALLOWED_MIME_TYPES = [
@@ -33,15 +53,23 @@ const ALLOWED_MIME_TYPES = [
   "audio/x-m4a",
   "audio/aac",
   "audio/ogg",
-  "audio/webm",
-  "video/mp4",
-  "video/quicktime",
-  "video/webm"
+  "audio/webm"
 ];
 
 
-const MAX_FILE_SIZE =
-  25 * 1024 * 1024;
+/* ============================================================
+   GET FIRST VALUE
+============================================================ */
+
+function getFirstValue(value) {
+
+  if (Array.isArray(value)) {
+    return value[0];
+  }
+
+  return value;
+
+}
 
 
 /* ============================================================
@@ -56,7 +84,7 @@ function getFirstFile(files) {
 
 
   /*
-   * Preferred field name:
+   * Preferred:
    *
    * file
    */
@@ -75,25 +103,19 @@ function getFirstFile(files) {
    *
    * audio
    * voice
-   * video
    */
 
   const possibleFields = [
     "audio",
-    "voice",
-    "video"
+    "voice"
   ];
 
 
-  for (
-    const field of possibleFields
-  ) {
+  for (const field of possibleFields) {
 
     if (files[field]) {
 
-      return Array.isArray(
-        files[field]
-      )
+      return Array.isArray(files[field])
         ? files[field][0]
         : files[field];
 
@@ -104,7 +126,7 @@ function getFirstFile(files) {
 
   /*
    * Fallback:
-   * take first uploaded file.
+   * first uploaded file.
    */
 
   const keys =
@@ -131,9 +153,7 @@ function getFirstFile(files) {
    DELETE TEMP FILE
 ============================================================ */
 
-async function removeTempFile(
-  filepath
-) {
+async function removeTempFile(filepath) {
 
   if (!filepath) {
     return;
@@ -148,16 +168,67 @@ async function removeTempFile(
 
   } catch (error) {
 
-    /*
-     * Ignore cleanup errors.
-     */
-
     console.warn(
       "TEMP FILE CLEANUP:",
       error?.message
     );
 
   }
+
+}
+
+
+/* ============================================================
+   CLEAN VOICE NAME
+============================================================ */
+
+function createVoiceName(
+  requestedName,
+  originalFilename
+) {
+
+  /*
+   * If frontend sends a name,
+   * use it.
+   */
+
+  const customName =
+    String(
+      requestedName || ""
+    )
+      .trim()
+      .slice(0, 100);
+
+
+  if (customName) {
+    return customName;
+  }
+
+
+  /*
+   * Otherwise build name from filename.
+   */
+
+  const baseName =
+    String(
+      originalFilename ||
+      "Uploaded Voice"
+    )
+      .replace(
+        /\.[^/.]+$/,
+        ""
+      )
+      .trim()
+      .slice(0, 60);
+
+
+  return (
+    "Naira - " +
+    (
+      baseName ||
+      "Uploaded Voice"
+    )
+  );
 
 }
 
@@ -207,7 +278,7 @@ export default async function handler(
 
 
   /* ==========================================================
-     METHOD
+     METHOD CHECK
   ========================================================== */
 
   if (
@@ -222,6 +293,30 @@ export default async function handler(
 
         error:
           "Method not allowed"
+
+      });
+
+  }
+
+
+  /* ==========================================================
+     ELEVENLABS API KEY
+  ========================================================== */
+
+  const apiKey =
+    process.env.ELEVENLABS_API_KEY;
+
+
+  if (!apiKey) {
+
+    return res
+      .status(500)
+      .json({
+
+        success: false,
+
+        error:
+          "ELEVENLABS_API_KEY belum diset di Vercel."
 
       });
 
@@ -316,7 +411,7 @@ export default async function handler(
           success: false,
 
           error:
-            "Tiada fail audio atau video diterima."
+            "Tiada fail audio diterima."
 
         });
 
@@ -324,17 +419,17 @@ export default async function handler(
 
 
     /* ========================================================
-       FILE INFO
+       FILE INFORMATION
     ======================================================== */
 
     const originalFilename =
       uploadedFile.originalFilename ||
-      "voice-file";
+      "voice-sample.mp3";
 
 
     const mimetype =
       uploadedFile.mimetype ||
-      "";
+      "application/octet-stream";
 
 
     const size =
@@ -348,18 +443,20 @@ export default async function handler(
 
 
     /* ========================================================
-       SIZE VALIDATION
+       FILE SIZE VALIDATION
     ======================================================== */
 
     if (
       !size ||
-      size >
-        MAX_FILE_SIZE
+      size > MAX_FILE_SIZE
     ) {
 
       await removeTempFile(
         filepath
       );
+
+
+      uploadedFile = null;
 
 
       return res
@@ -392,6 +489,9 @@ export default async function handler(
       );
 
 
+      uploadedFile = null;
+
+
       return res
         .status(415)
         .json({
@@ -399,7 +499,7 @@ export default async function handler(
           success: false,
 
           error:
-            "Format fail tidak disokong.",
+            "Format audio tidak disokong.",
 
           mimetype:
             mimetype
@@ -410,7 +510,7 @@ export default async function handler(
 
 
     /* ========================================================
-       READ ACTUAL FILE
+       READ ACTUAL AUDIO
     ======================================================== */
 
     const fileBuffer =
@@ -429,6 +529,9 @@ export default async function handler(
       );
 
 
+      uploadedFile = null;
+
+
       return res
         .status(400)
         .json({
@@ -436,7 +539,7 @@ export default async function handler(
           success: false,
 
           error:
-            "Fail yang diterima kosong."
+            "Fail audio kosong."
 
         });
 
@@ -444,7 +547,60 @@ export default async function handler(
 
 
     /* ========================================================
-       LOG
+       VOICE NAME
+    ======================================================== */
+
+    const requestedVoiceName =
+      getFirstValue(
+        fields?.name
+      );
+
+
+    const voiceName =
+      createVoiceName(
+        requestedVoiceName,
+        originalFilename
+      );
+
+
+    /* ========================================================
+       OPTIONAL DESCRIPTION
+    ======================================================== */
+
+    const requestedDescription =
+      getFirstValue(
+        fields?.description
+      );
+
+
+    const description =
+      String(
+        requestedDescription ||
+        "Voice uploaded through Naira Voice Center."
+      )
+        .trim()
+        .slice(0, 500);
+
+
+    /* ========================================================
+       OPTIONAL BACKGROUND NOISE REMOVAL
+    ======================================================== */
+
+    const removeNoiseValue =
+      String(
+        getFirstValue(
+          fields?.remove_background_noise
+        ) || "false"
+      )
+        .toLowerCase();
+
+
+    const removeBackgroundNoise =
+      removeNoiseValue === "true";
+
+
+    /* ========================================================
+       LOG UPLOAD
     ======================================================== */
 
     console.log(
@@ -452,7 +608,12 @@ export default async function handler(
     );
 
     console.log(
-      "🎙️ NAIRA VOICE FILE RECEIVED"
+      "🎙️ NAIRA VOICE CLONE START"
+    );
+
+    console.log(
+      "Voice Name:",
+      voiceName
     );
 
     console.log(
@@ -472,14 +633,263 @@ export default async function handler(
     );
 
     console.log(
-      "Buffer:",
-      fileBuffer.length,
-      "bytes"
+      "Remove Noise:",
+      removeBackgroundNoise
     );
 
     console.log(
       "========================================"
     );
+
+
+    /* ========================================================
+       CREATE FORM DATA FOR ELEVENLABS
+    ======================================================== */
+
+    const elevenForm =
+      new FormData();
+
+
+    /*
+     * Required:
+     * voice name
+     */
+
+    elevenForm.append(
+      "name",
+      voiceName
+    );
+
+
+    /*
+     * Optional:
+     * description
+     */
+
+    elevenForm.append(
+      "description",
+      description
+    );
+
+
+    /*
+     * Optional:
+     * background noise removal
+     */
+
+    elevenForm.append(
+      "remove_background_noise",
+      String(
+        removeBackgroundNoise
+      )
+    );
+
+
+    /*
+     * Required:
+     * audio sample
+     *
+     * Node/Vercel supports Blob + FormData.
+     */
+
+    const audioBlob =
+      new Blob(
+        [fileBuffer],
+        {
+          type:
+            mimetype ||
+            "audio/mpeg"
+        }
+      );
+
+
+    /*
+     * ElevenLabs endpoint expects:
+     *
+     * files
+     */
+
+    elevenForm.append(
+      "files",
+      audioBlob,
+      originalFilename
+    );
+
+
+    /* ========================================================
+       SEND TO ELEVENLABS
+    ======================================================== */
+
+    console.log(
+      "📤 Sending voice sample to ElevenLabs..."
+    );
+
+
+    const elevenResponse =
+      await fetch(
+        ELEVENLABS_CLONE_URL,
+        {
+
+          method: "POST",
+
+          headers: {
+
+            /*
+             * IMPORTANT:
+             *
+             * Do NOT manually set
+             * Content-Type here.
+             *
+             * fetch automatically creates
+             * multipart boundary.
+             */
+
+            "xi-api-key":
+              apiKey,
+
+            "Accept":
+              "application/json"
+
+          },
+
+          body:
+            elevenForm
+
+        }
+      );
+
+
+    /* ========================================================
+       READ ELEVENLABS RESPONSE
+    ======================================================== */
+
+    const elevenRaw =
+      await elevenResponse.text();
+
+
+    let elevenData = {};
+
+
+    try {
+
+      elevenData =
+        elevenRaw
+          ? JSON.parse(
+              elevenRaw
+            )
+          : {};
+
+    } catch (error) {
+
+      elevenData = {};
+
+    }
+
+
+    /* ========================================================
+       ELEVENLABS ERROR
+    ======================================================== */
+
+    if (
+      !elevenResponse.ok
+    ) {
+
+      console.error(
+        "========================================"
+      );
+
+      console.error(
+        "❌ ELEVENLABS CLONE ERROR"
+      );
+
+      console.error(
+        "Status:",
+        elevenResponse.status
+      );
+
+      console.error(
+        "Response:",
+        elevenRaw
+      );
+
+      console.error(
+        "========================================"
+      );
+
+
+      await removeTempFile(
+        filepath
+      );
+
+
+      uploadedFile = null;
+
+
+      return res
+        .status(
+          elevenResponse.status
+        )
+        .json({
+
+          success: false,
+
+          error:
+            "ElevenLabs gagal mencipta voice clone.",
+
+          elevenLabsStatus:
+            elevenResponse.status,
+
+          details:
+            elevenData?.detail ||
+            elevenData?.error ||
+            elevenData?.message ||
+            elevenRaw ||
+            "Unknown ElevenLabs error"
+
+        });
+
+    }
+
+
+    /* ========================================================
+       GET VOICE ID
+    ======================================================== */
+
+    const voiceId =
+      elevenData?.voice_id;
+
+
+    if (!voiceId) {
+
+      console.error(
+        "ElevenLabs response missing voice_id:",
+        elevenData
+      );
+
+
+      await removeTempFile(
+        filepath
+      );
+
+
+      uploadedFile = null;
+
+
+      return res
+        .status(502)
+        .json({
+
+          success: false,
+
+          error:
+            "ElevenLabs tidak memulangkan voice_id.",
+
+          details:
+            elevenData
+
+        });
+
+    }
 
 
     /* ========================================================
@@ -495,14 +905,39 @@ export default async function handler(
 
 
     /* ========================================================
-       SUCCESS
+       SUCCESS LOG
+    ======================================================== */
 
-       IMPORTANT:
-       We have now confirmed that the actual uploaded
-       audio/video file can be parsed and read.
+    console.log(
+      "========================================"
+    );
 
-       Next step will send the sample to ElevenLabs
-       to create a usable voice.
+    console.log(
+      "✅ NAIRA VOICE CLONE CREATED"
+    );
+
+    console.log(
+      "Voice Name:",
+      voiceName
+    );
+
+    console.log(
+      "Voice ID:",
+      voiceId
+    );
+
+    console.log(
+      "Requires Verification:",
+      elevenData?.requires_verification
+    );
+
+    console.log(
+      "========================================"
+    );
+
+
+    /* ========================================================
+       RETURN TO FRONTEND
     ======================================================== */
 
     return res
@@ -512,7 +947,23 @@ export default async function handler(
         success: true,
 
         message:
-          "Naira berjaya membaca fail suara.",
+          "Voice berjaya dicipta di ElevenLabs.",
+
+        voice: {
+
+          voice_id:
+            voiceId,
+
+          name:
+            voiceName,
+
+          requires_verification:
+            Boolean(
+              elevenData
+                ?.requires_verification
+            )
+
+        },
 
         file: {
 
@@ -548,13 +999,24 @@ export default async function handler(
 
 
     console.error(
-      "NAIRA UPLOAD VOICE ERROR:",
+      "========================================"
+    );
+
+    console.error(
+      "❌ NAIRA UPLOAD VOICE ERROR"
+    );
+
+    console.error(
       error
+    );
+
+    console.error(
+      "========================================"
     );
 
 
     /* ========================================================
-       FORMIDABLE FILE TOO LARGE
+       FILE TOO LARGE
     ======================================================== */
 
     if (
@@ -593,7 +1055,7 @@ export default async function handler(
         success: false,
 
         error:
-          "Server gagal memproses fail suara.",
+          "Server gagal memproses voice clone.",
 
         details:
           error?.message ||
