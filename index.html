@@ -2,36 +2,56 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
-<meta name="theme-color" content="#10131c">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#10131c"
+>
+
 <title>Naira — Personal Assistant</title>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+
+/* ============================================================
+   RESET
+============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-:root{
-  --bg:#07080d;
-  --panel:#171a26;
-  --panel2:#1b1e2b;
-  --purple:#8b5cf6;
-  --purple2:#4f46e5;
-  --text:#fff;
-  --muted:#858b9c;
-  --border:rgba(255,255,255,.09);
+:root {
+  --bg: #07080d;
+  --panel: #171a26;
+  --panel2: #1b1e2b;
+  --purple: #8b5cf6;
+  --purple2: #4f46e5;
+  --text: #ffffff;
+  --muted: #858b9c;
+  --border: rgba(255, 255, 255, 0.09);
 }
 
-html,body{
-  min-height:100%;
-  background:var(--bg);
+html,
+body {
+  min-height: 100%;
+  background: var(--bg);
 }
 
-body{
-  min-height:100vh;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+body {
+  min-height: 100vh;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
   background:
     radial-gradient(
       circle at top,
@@ -39,105 +59,147 @@ body{
       #10131c 45%,
       #07080d 100%
     );
-  color:#fff;
-  display:flex;
-  justify-content:center;
+
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
 }
 
-button{
-  border:0;
-  cursor:pointer;
-  color:#fff;
-  -webkit-tap-highlight-color:transparent;
+button {
+  border: 0;
+  cursor: pointer;
+  color: #ffffff;
+  -webkit-tap-highlight-color: transparent;
 }
 
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
 }
 
-input,select,textarea{
-  font-family:inherit;
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
-.app{
-  width:100%;
-  max-width:600px;
-  min-height:100vh;
-  min-height:100dvh;
-  display:flex;
-  flex-direction:column;
+
+/* ============================================================
+   APP
+============================================================ */
+
+.app {
+  width: 100%;
+  max-width: 600px;
+
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
   padding:
     calc(18px + env(safe-area-inset-top))
     18px
     calc(14px + env(safe-area-inset-bottom));
 }
 
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:8px 4px 20px;
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px 20px;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-.avatar{
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
-  box-shadow:0 0 25px rgba(124,92,246,.45);
-  font-size:22px;
+.avatar {
+  width: 46px;
+  height: 46px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  box-shadow:
+    0 0 25px rgba(124, 92, 246, 0.45);
+
+  font-size: 22px;
 }
 
-.brand h1{
-  font-size:21px;
-  font-weight:650;
+.brand h1 {
+  font-size: 21px;
+  font-weight: 650;
 }
 
-.status{
-  font-size:12px;
-  color:#9ca3af;
-  margin-top:3px;
+.status {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-top: 3px;
 }
 
-.online{
-  color:#65e6a8;
+.online {
+  color: #65e6a8;
 }
 
-.header-buttons{
-  display:flex;
-  gap:8px;
+.header-buttons {
+  display: flex;
+  gap: 8px;
 }
 
-.header-button{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.08);
-  font-size:19px;
+.header-button {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  font-size: 19px;
 }
 
-.welcome{
-  text-align:center;
-  margin-top:35px;
-  margin-bottom:25px;
+
+/* ============================================================
+   WELCOME
+============================================================ */
+
+.welcome {
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 25px;
 }
 
-.welcome-orb{
-  width:110px;
-  height:110px;
-  margin:0 auto 25px;
-  border-radius:50%;
+.welcome-orb {
+  width: 110px;
+  height: 110px;
+
+  margin:
+    0 auto 25px;
+
+  border-radius: 50%;
+
   background:
     radial-gradient(
       circle at 35% 30%,
@@ -146,483 +208,751 @@ header{
       #4338ca 70%,
       #17122e
     );
+
   box-shadow:
-    0 0 35px rgba(139,92,246,.45),
-    0 0 80px rgba(79,70,229,.18);
+    0 0 35px rgba(139, 92, 246, 0.45),
+    0 0 80px rgba(79, 70, 229, 0.18);
 }
 
-.welcome h2{
-  font-size:28px;
-  margin-bottom:9px;
+.welcome h2 {
+  font-size: 28px;
+  margin-bottom: 9px;
 }
 
-.welcome p{
-  color:#a7adbd;
-  font-size:15px;
+.welcome p {
+  color: #a7adbd;
+  font-size: 15px;
 }
 
-.chat{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-  padding-bottom:20px;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-}
-
-.message{
-  max-width:82%;
-  padding:13px 16px;
-  border-radius:18px;
-  font-size:14px;
-  line-height:1.5;
-  white-space:pre-wrap;
-  word-break:break-word;
-}
-
-.naira-message{
-  align-self:flex-start;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.06);
-  color:#e8eaf0;
-  border-bottom-left-radius:5px;
-}
-
-.user-message{
-  align-self:flex-end;
-  background:linear-gradient(135deg,#6d4df5,#4f46e5);
-  border-bottom-right-radius:5px;
-}
 
 /* ============================================================
-   CHATGPT STYLE MESSAGE ACTIONS
+   CHAT
 ============================================================ */
 
-.message-actions{
-  position:relative;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  margin-top:10px;
-  padding-top:8px;
-  border-top:1px solid rgba(255,255,255,.055);
+.chat {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  padding-bottom: 20px;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.message-action-btn{
-  width:27px;
-  height:27px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:0;
-  margin:0;
-  background:transparent!important;
-  border-radius:7px;
-  color:#9299aa;
-  opacity:.82;
-  -webkit-appearance:none;
-  appearance:none;
+.message {
+  max-width: 82%;
+
+  padding:
+    13px 16px;
+
+  border-radius: 18px;
+
+  font-size: 14px;
+  line-height: 1.5;
+
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
-.message-action-btn svg{
-  width:17px;
-  height:17px;
-  fill:none;
-  stroke:currentColor;
-  stroke-width:1.8;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+.naira-message {
+  align-self: flex-start;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.06);
+
+  color: #e8eaf0;
+
+  border-bottom-left-radius: 5px;
 }
 
-.message-action-btn:active{
-  transform:scale(.9);
+.user-message {
+  align-self: flex-end;
+
+  background:
+    linear-gradient(
+      135deg,
+      #6d4df5,
+      #4f46e5
+    );
+
+  border-bottom-right-radius: 5px;
 }
 
-.message-action-btn.active{
-  color:#a78bfa;
-  opacity:1;
+
+/* ============================================================
+   MESSAGE ACTIONS
+============================================================ */
+
+.message-actions {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 10px;
+  padding-top: 8px;
+
+  border-top:
+    1px solid rgba(255, 255, 255, 0.055);
 }
 
-/* feedback chooser */
+.message-action-btn {
+  width: 27px;
+  height: 27px;
 
-.feedback-choice{
-  display:none;
-  position:absolute;
-  left:55px;
-  bottom:33px;
-  width:175px;
-  padding:6px;
-  background:#1b1e29;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:12px;
-  box-shadow:0 14px 40px rgba(0,0,0,.45);
-  z-index:100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  margin: 0;
+
+  background: transparent !important;
+
+  border-radius: 7px;
+
+  color: #9299aa;
+  opacity: 0.82;
+
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-.feedback-choice.active{
-  display:block;
+.message-action-btn svg {
+  width: 17px;
+  height: 17px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.feedback-choice button{
-  width:100%;
-  padding:10px;
-  background:transparent;
-  border-radius:8px;
-  text-align:left;
-  font-size:12px;
-  color:#e7e9ef;
+.message-action-btn:active {
+  transform: scale(0.9);
 }
 
-.feedback-choice button:active{
-  background:rgba(255,255,255,.07);
+.message-action-btn.active {
+  color: #a78bfa;
+  opacity: 1;
 }
 
-/* more */
 
-.message-more-menu{
-  display:none;
-  position:absolute;
-  right:0;
-  bottom:34px;
-  width:165px;
-  padding:6px;
-  background:#1b1e29;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:12px;
-  box-shadow:0 14px 40px rgba(0,0,0,.48);
-  z-index:100;
+/* ============================================================
+   FEEDBACK CHOICE
+============================================================ */
+
+.feedback-choice {
+  display: none;
+
+  position: absolute;
+
+  left: 55px;
+  bottom: 33px;
+
+  width: 175px;
+
+  padding: 6px;
+
+  background: #1b1e29;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45);
+
+  z-index: 100;
 }
 
-.message-more-menu.active{
-  display:block;
+.feedback-choice.active {
+  display: block;
 }
 
-.message-more-item{
-  width:100%;
-  padding:9px 10px;
-  background:transparent;
-  border-radius:8px;
-  color:#d9dce5;
-  font-size:12px;
-  text-align:left;
+.feedback-choice button {
+  width: 100%;
+
+  padding: 10px;
+
+  background: transparent;
+
+  border-radius: 8px;
+
+  text-align: left;
+
+  font-size: 12px;
+
+  color: #e7e9ef;
 }
+
+.feedback-choice button:active {
+  background:
+    rgba(255, 255, 255, 0.07);
+}
+
+
+/* ============================================================
+   MORE MENU
+============================================================ */
+
+.message-more-menu {
+  display: none;
+
+  position: absolute;
+
+  right: 0;
+  bottom: 34px;
+
+  width: 165px;
+
+  padding: 6px;
+
+  background: #1b1e29;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
+
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.48);
+
+  z-index: 100;
+}
+
+.message-more-menu.active {
+  display: block;
+}
+
+.message-more-item {
+  width: 100%;
+
+  padding:
+    9px 10px;
+
+  background: transparent;
+
+  border-radius: 8px;
+
+  color: #d9dce5;
+
+  font-size: 12px;
+
+  text-align: left;
+}
+
 
 /* ============================================================
    TOAST
 ============================================================ */
 
-.naira-toast{
-  position:fixed;
-  top:calc(18px + env(safe-area-inset-top));
-  left:50%;
-  transform:translateX(-50%) translateY(-15px);
-  padding:9px 14px;
-  background:#242733;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:10px;
-  color:#f4f4f7;
-  font-size:12px;
-  font-weight:600;
-  opacity:0;
-  pointer-events:none;
-  z-index:10000;
-  box-shadow:0 12px 35px rgba(0,0,0,.4);
-  transition:.2s ease;
+.naira-toast {
+  position: fixed;
+
+  top:
+    calc(
+      18px + env(safe-area-inset-top)
+    );
+
+  left: 50%;
+
+  transform:
+    translateX(-50%)
+    translateY(-15px);
+
+  padding:
+    9px 14px;
+
+  background: #242733;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 10px;
+
+  color: #f4f4f7;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  z-index: 10000;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.4);
+
+  transition:
+    0.2s ease;
 }
 
-.naira-toast.show{
-  opacity:1;
-  transform:translateX(-50%) translateY(0);
+.naira-toast.show {
+  opacity: 1;
+
+  transform:
+    translateX(-50%)
+    translateY(0);
 }
+
 
 /* ============================================================
    VOICE PLAYER
 ============================================================ */
 
-.naira-voice-player{
-  display:none;
-  position:fixed;
-  top:calc(16px + env(safe-area-inset-top));
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 30px);
-  max-width:520px;
-  padding:11px 12px;
-  border-radius:16px;
-  background:rgba(25,28,39,.97);
-  border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 15px 45px rgba(0,0,0,.5);
-  z-index:9998;
-  backdrop-filter:blur(18px);
+.naira-voice-player {
+  display: none;
+
+  position: fixed;
+
+  top:
+    calc(
+      16px + env(safe-area-inset-top)
+    );
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  width:
+    calc(100% - 30px);
+
+  max-width: 520px;
+
+  padding:
+    11px 12px;
+
+  border-radius: 16px;
+
+  background:
+    rgba(25, 28, 39, 0.97);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 15px 45px rgba(0, 0, 0, 0.5);
+
+  z-index: 9998;
+
+  backdrop-filter:
+    blur(18px);
 }
 
-.naira-voice-player.active{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.naira-voice-player.active {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.voice-player-icon{
-  width:33px;
-  height:33px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(139,92,246,.17);
-  font-size:15px;
+.voice-player-icon {
+  width: 33px;
+  height: 33px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(139, 92, 246, 0.17);
+
+  font-size: 15px;
 }
 
-.voice-player-controls{
-  flex:1;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
+.voice-player-controls {
+  flex: 1;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 5px;
 }
 
-.voice-player-button{
-  min-width:34px;
-  height:32px;
-  padding:0 8px;
-  border-radius:8px;
-  background:transparent;
-  color:#c5c9d3;
-  font-size:11px;
+.voice-player-button {
+  min-width: 34px;
+  height: 32px;
+
+  padding:
+    0 8px;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #c5c9d3;
+
+  font-size: 11px;
 }
 
-.voice-player-button:active{
-  background:rgba(255,255,255,.08);
+.voice-player-button:active {
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
-.voice-speed{
-  font-weight:700;
+.voice-speed {
+  font-weight: 700;
 }
 
-.voice-player-close{
-  width:31px;
-  height:31px;
-  border-radius:8px;
-  background:transparent;
-  color:#aeb3c0;
-  font-size:15px;
+.voice-player-close {
+  width: 31px;
+  height: 31px;
+
+  border-radius: 8px;
+
+  background: transparent;
+
+  color: #aeb3c0;
+
+  font-size: 15px;
 }
+
 
 /* ============================================================
-   FEEDBACK CARD
+   FEEDBACK MODAL
 ============================================================ */
 
-.feedback-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  padding:18px;
-  background:rgba(5,6,10,.72);
-  backdrop-filter:blur(10px);
-  z-index:10020;
-  align-items:center;
-  justify-content:center;
+.feedback-overlay {
+  display: none;
+
+  position: fixed;
+  inset: 0;
+
+  padding: 18px;
+
+  background:
+    rgba(5, 6, 10, 0.72);
+
+  backdrop-filter:
+    blur(10px);
+
+  z-index: 10020;
+
+  align-items: center;
+  justify-content: center;
 }
 
-.feedback-overlay.active{
-  display:flex;
+.feedback-overlay.active {
+  display: flex;
 }
 
-.feedback-card{
-  width:100%;
-  max-width:480px;
-  background:#171a25;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:20px;
-  padding:18px;
-  box-shadow:0 24px 70px rgba(0,0,0,.55);
+.feedback-card {
+  width: 100%;
+  max-width: 480px;
+
+  background: #171a25;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 20px;
+
+  padding: 18px;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.55);
 }
 
-.feedback-top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:18px;
+.feedback-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 18px;
 }
 
-.feedback-label{
-  font-size:11px;
-  color:#9ca3af;
-  font-weight:700;
-  letter-spacing:1.2px;
+.feedback-label {
+  font-size: 11px;
+
+  color: #9ca3af;
+
+  font-weight: 700;
+
+  letter-spacing: 1.2px;
 }
 
-.feedback-close{
-  width:32px;
-  height:32px;
-  border-radius:8px;
-  background:rgba(255,255,255,.06);
-  color:#aaaebb;
+.feedback-close {
+  width: 32px;
+  height: 32px;
+
+  border-radius: 8px;
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #aaaebb;
 }
 
-.feedback-question{
-  font-size:19px;
-  font-weight:650;
-  margin-bottom:18px;
+.feedback-question {
+  font-size: 19px;
+  font-weight: 650;
+
+  margin-bottom: 18px;
 }
 
-.feedback-field{
-  margin-bottom:14px;
+.feedback-field {
+  margin-bottom: 14px;
 }
 
-.feedback-field-label{
-  display:block;
-  font-size:11px;
-  color:#a9aeba;
-  margin-bottom:7px;
+.feedback-field-label {
+  display: block;
+
+  font-size: 11px;
+
+  color: #a9aeba;
+
+  margin-bottom: 7px;
 }
 
-.feedback-select{
-  width:100%;
-  padding:13px;
-  color:#fff;
-  background:#202330;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:11px;
-  outline:none;
-  font-size:13px;
+.feedback-select {
+  width: 100%;
+
+  padding: 13px;
+
+  color: #ffffff;
+
+  background: #202330;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 11px;
+
+  outline: none;
+
+  font-size: 13px;
 }
 
-.feedback-text-wrapper{
-  position:relative;
+.feedback-text-wrapper {
+  position: relative;
 }
 
-.feedback-text{
-  width:100%;
-  min-height:125px;
-  padding:13px 13px 28px;
-  resize:none;
-  outline:none;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:11px;
-  background:#202330;
-  color:#fff;
-  font-size:13px;
+.feedback-text {
+  width: 100%;
+
+  min-height: 125px;
+
+  padding:
+    13px 13px 28px;
+
+  resize: none;
+
+  outline: none;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 11px;
+
+  background: #202330;
+
+  color: #ffffff;
+
+  font-size: 13px;
 }
 
-.feedback-count{
-  position:absolute;
-  right:10px;
-  bottom:9px;
-  font-size:10px;
-  color:#7e8493;
+.feedback-count {
+  position: absolute;
+
+  right: 10px;
+  bottom: 9px;
+
+  font-size: 10px;
+
+  color: #7e8493;
 }
 
-.feedback-actions{
-  display:flex;
-  gap:8px;
-  margin-top:15px;
+.feedback-actions {
+  display: flex;
+  gap: 8px;
+
+  margin-top: 15px;
 }
 
-.feedback-actions button{
-  flex:1;
-  padding:12px;
-  border-radius:11px;
-  font-size:12px;
+.feedback-actions button {
+  flex: 1;
+
+  padding: 12px;
+
+  border-radius: 11px;
+
+  font-size: 12px;
 }
 
-.feedback-cancel{
-  background:rgba(255,255,255,.07);
+.feedback-cancel {
+  background:
+    rgba(255, 255, 255, 0.07);
 }
 
-.feedback-submit{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
+.feedback-submit {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
 }
+
 
 /* ============================================================
-   MAIN INPUT
+   INPUT
 ============================================================ */
 
-.input-area{
-  display:flex;
-  gap:9px;
-  align-items:center;
-  padding:10px;
-  background:rgba(20,22,32,.82);
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:22px;
-  backdrop-filter:blur(18px);
-  box-shadow:0 12px 35px rgba(0,0,0,.3);
+.input-area {
+  display: flex;
+
+  gap: 9px;
+
+  align-items: center;
+
+  padding: 10px;
+
+  background:
+    rgba(20, 22, 32, 0.82);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 22px;
+
+  backdrop-filter:
+    blur(18px);
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.3);
 }
 
-#messageInput{
-  flex:1;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:#fff;
-  font-size:15px;
-  padding:10px;
-  min-width:0;
+#messageInput {
+  flex: 1;
+
+  border: 0;
+  outline: 0;
+
+  background: transparent;
+
+  color: #ffffff;
+
+  font-size: 15px;
+
+  padding: 10px;
+
+  min-width: 0;
 }
 
-#messageInput::placeholder{
-  color:#777d8d;
+#messageInput::placeholder {
+  color: #777d8d;
 }
 
-.mic,.send{
-  width:43px;
-  height:43px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  flex-shrink:0;
+.mic,
+.send,
+.upload-media-button {
+  width: 43px;
+  height: 43px;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+
+  flex-shrink: 0;
 }
 
-.mic{
-  background:rgba(255,255,255,.08);
+.mic {
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
-.mic.listening{
-  background:rgba(239,68,68,.22);
+.upload-media-button {
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
-.mic.speaking{
-  background:rgba(139,92,246,.25);
+.mic.listening {
+  background:
+    rgba(239, 68, 68, 0.22);
 }
 
-.send{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
+.mic.speaking {
+  background:
+    rgba(139, 92, 246, 0.25);
 }
 
-.voice-status{
-  text-align:center;
-  min-height:16px;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:7px;
+.send {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
 }
 
-.footer{
-  text-align:center;
-  color:#5f6472;
-  font-size:10px;
-  margin-top:12px;
+.voice-status {
+  text-align: center;
+
+  min-height: 16px;
+
+  color: var(--muted);
+
+  font-size: 11px;
+
+  margin-top: 7px;
 }
 
-/* typing */
+.footer {
+  text-align: center;
 
-.typing-indicator{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  min-width:58px;
+  color: #5f6472;
+
+  font-size: 10px;
+
+  margin-top: 12px;
 }
 
-.typing-indicator span{
-  width:7px;
-  height:7px;
-  background:#9ca3af;
-  border-radius:50%;
+
+/* ============================================================
+   TYPING
+============================================================ */
+
+.typing-indicator {
+  display: flex;
+
+  align-items: center;
+
+  gap: 5px;
+
+  min-width: 58px;
 }
+
+.typing-indicator span {
+  width: 7px;
+  height: 7px;
+
+  background: #9ca3af;
+
+  border-radius: 50%;
+}
+
 
 /* ============================================================
    PANELS
@@ -630,394 +960,679 @@ header{
 
 .overlay,
 .history-panel,
-.memory-form-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  background:rgba(5,6,10,.9);
-  backdrop-filter:blur(16px);
-  padding:18px;
-  overflow-y:auto;
+.memory-form-overlay {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  background:
+    rgba(5, 6, 10, 0.9);
+
+  backdrop-filter:
+    blur(16px);
+
+  padding: 18px;
+
+  overflow-y: auto;
 }
 
 .overlay.active,
 .history-panel.active,
-.memory-form-overlay.active{
-  display:block;
+.memory-form-overlay.active {
+  display: block;
 }
 
 .panel-box,
-.history-box{
-  width:100%;
-  max-width:600px;
-  margin:0 auto;
-  background:linear-gradient(145deg,rgba(31,34,50,.99),rgba(13,15,24,.99));
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:18px;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
+.history-box {
+  width: 100%;
+
+  max-width: 600px;
+
+  margin:
+    0 auto;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(31, 34, 50, 0.99),
+      rgba(13, 15, 24, 0.99)
+    );
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 24px;
+
+  padding: 18px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5);
 }
 
 .panel-header,
-.history-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:16px;
+.history-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 16px;
 }
 
 .panel-header h2,
-.history-header h2{
-  font-size:22px;
+.history-header h2 {
+  font-size: 22px;
 }
 
 .panel-header p,
-.history-header p{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:4px;
+.history-header p {
+  color: var(--muted);
+
+  font-size: 11px;
+
+  margin-top: 4px;
 }
 
 .close-button,
-.close-history{
-  width:40px;
-  height:40px;
-  border-radius:50%;
-  background:rgba(255,255,255,.08);
-  font-size:18px;
+.close-history {
+  width: 40px;
+  height: 40px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+
+  font-size: 18px;
 }
 
-.history-panel{
-  z-index:1500;
+.history-panel {
+  z-index: 1500;
 }
 
 .history-tools,
-.memory-tools{
-  display:flex;
-  gap:8px;
-  margin-bottom:10px;
+.memory-tools {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 10px;
 }
 
 .history-search,
-.search-box{
-  flex:1;
-  padding:13px 14px;
-  border-radius:13px;
-  border:1px solid rgba(255,255,255,.08);
-  outline:0;
-  background:rgba(255,255,255,.06);
-  color:#fff;
-  font-size:14px;
+.search-box {
+  flex: 1;
+
+  padding:
+    13px 14px;
+
+  border-radius: 13px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  outline: 0;
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #ffffff;
+
+  font-size: 14px;
 }
 
 .history-refresh,
-.tool-button{
-  width:47px;
-  border-radius:13px;
-  background:rgba(255,255,255,.08);
+.tool-button {
+  width: 47px;
+
+  border-radius: 13px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
 .new-conversation,
-.memory-add{
-  width:100%;
-  padding:14px;
-  border-radius:15px;
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
-  font-size:14px;
-  margin-bottom:14px;
+.memory-add {
+  width: 100%;
+
+  padding: 14px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  font-size: 14px;
+
+  margin-bottom: 14px;
 }
 
 .history-status,
-.memory-status{
-  text-align:center;
-  color:#7f8799;
-  font-size:12px;
-  margin-bottom:14px;
+.memory-status {
+  text-align: center;
+
+  color: #7f8799;
+
+  font-size: 12px;
+
+  margin-bottom: 14px;
 }
 
 .history-card,
-.memory-card{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:15px;
-  padding:14px;
-  margin-bottom:8px;
+.memory-card {
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  border:
+    1px solid rgba(255, 255, 255, 0.07);
+
+  border-radius: 15px;
+
+  padding: 14px;
+
+  margin-bottom: 8px;
 }
 
-.history-day,
-.memory-category{
-  margin-bottom:22px;
+.history-title {
+  font-size: 14px;
+  font-weight: 600;
+
+  margin-bottom: 7px;
 }
 
-.history-day-title,
-.category-title{
-  display:flex;
-  justify-content:space-between;
-  color:#cfd2dc;
-  font-size:14px;
-  margin-bottom:9px;
-}
+.history-preview {
+  color: #a7adbd;
 
-.history-title{
-  font-size:14px;
-  font-weight:600;
-  margin-bottom:7px;
-}
+  font-size: 12px;
 
-.history-preview{
-  color:#a7adbd;
-  font-size:12px;
-  margin-bottom:9px;
-}
-
-.history-meta,
-.memory-meta{
-  color:#777d8d;
-  font-size:10px;
+  margin-bottom: 9px;
 }
 
 .history-actions,
-.memory-actions{
-  display:flex;
-  gap:7px;
-  margin-top:11px;
+.memory-actions {
+  display: flex;
+
+  gap: 7px;
+
+  margin-top: 11px;
 }
 
 .history-actions button,
-.memory-actions button{
-  flex:1;
-  padding:9px;
-  border-radius:9px;
-  background:rgba(255,255,255,.08);
+.memory-actions button {
+  flex: 1;
+
+  padding: 9px;
+
+  border-radius: 9px;
+
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
 .history-delete,
-.memory-actions .delete{
-  background:rgba(239,68,68,.18)!important;
-  color:#ff9b9b;
+.memory-actions .delete {
+  background:
+    rgba(239, 68, 68, 0.18) !important;
+
+  color: #ff9b9b;
 }
 
-.empty-history,
-.empty-state{
-  text-align:center;
-  color:#777d8d;
-  padding:35px 15px;
+.category-filter {
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 13px;
+
+  background: #1b1e2b;
+
+  color: #ffffff;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  margin-bottom: 12px;
 }
 
-.category-filter{
-  width:100%;
-  padding:12px;
-  border-radius:13px;
-  background:#1b1e2b;
-  color:#fff;
-  border:1px solid rgba(255,255,255,.08);
-  margin-bottom:12px;
+
+/* ============================================================
+   MEMORY FORM
+============================================================ */
+
+.memory-form-overlay {
+  z-index: 2000;
+
+  align-items: center;
+  justify-content: center;
 }
 
-/* memory form */
-
-.memory-form-overlay{
-  z-index:2000;
-  align-items:center;
-  justify-content:center;
+.memory-form-overlay.active {
+  display: flex;
 }
 
-.memory-form-overlay.active{
-  display:flex;
+.memory-form {
+  width: 100%;
+
+  max-width: 520px;
+
+  background: #171a26;
+
+  border-radius: 22px;
+
+  padding: 20px;
 }
 
-.memory-form{
-  width:100%;
-  max-width:520px;
-  background:#171a26;
-  border-radius:22px;
-  padding:20px;
+.memory-form h3 {
+  margin-bottom: 5px;
 }
 
-.memory-form h3{
-  margin-bottom:5px;
+.memory-form-subtitle {
+  color: #858b9c;
+
+  font-size: 12px;
+
+  margin-bottom: 18px;
 }
 
-.memory-form-subtitle{
-  color:#858b9c;
-  font-size:12px;
-  margin-bottom:18px;
+.form-group {
+  margin-bottom: 13px;
 }
 
-.form-group{
-  margin-bottom:13px;
-}
+.form-group label {
+  display: block;
 
-.form-group label{
-  display:block;
-  color:#aeb3c1;
-  font-size:12px;
-  margin-bottom:6px;
+  color: #aeb3c1;
+
+  font-size: 12px;
+
+  margin-bottom: 6px;
 }
 
 .form-group input,
 .form-group select,
-.form-group textarea{
-  width:100%;
-  padding:12px;
-  background:#1b1e2b;
-  color:#fff;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:12px;
+.form-group textarea {
+  width: 100%;
+
+  padding: 12px;
+
+  background: #1b1e2b;
+
+  color: #ffffff;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.09);
+
+  border-radius: 12px;
 }
 
-.form-group textarea{
-  min-height:90px;
+.form-group textarea {
+  min-height: 90px;
 }
 
-.form-actions{
-  display:flex;
-  gap:9px;
+.form-actions {
+  display: flex;
+
+  gap: 9px;
 }
 
-.form-actions button{
-  flex:1;
-  padding:13px;
-  border-radius:12px;
+.form-actions button {
+  flex: 1;
+
+  padding: 13px;
+
+  border-radius: 12px;
 }
 
-.cancel-button{
-  background:rgba(255,255,255,.08);
+.cancel-button {
+  background:
+    rgba(255, 255, 255, 0.08);
 }
 
-.save-button{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
+.save-button {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
 }
+
 
 /* ============================================================
    VOICE CENTER
 ============================================================ */
 
-.voice-center-box{
-  max-height:calc(100dvh - 36px);
-  overflow-y:auto;
+.voice-center-box {
+  max-height:
+    calc(100dvh - 36px);
+
+  overflow-y: auto;
 }
 
-.voice-section{
-  margin-bottom:20px;
+.voice-section {
+  margin-bottom: 20px;
 }
 
-.voice-section-title{
-  font-size:14px;
-  color:#d8dbe5;
-  margin-bottom:10px;
+.voice-section-title {
+  font-size: 14px;
+
+  color: #d8dbe5;
+
+  margin-bottom: 10px;
 }
 
-.voice-chips{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
+.voice-chips {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 8px;
 }
 
-.voice-chip{
-  border:1px solid var(--border);
-  background:rgba(255,255,255,.06);
-  color:#dfe2ea;
-  border-radius:14px;
-  padding:10px 12px;
-  font-size:12px;
+.voice-chip {
+  border:
+    1px solid var(--border);
+
+  background:
+    rgba(255, 255, 255, 0.06);
+
+  color: #dfe2ea;
+
+  border-radius: 14px;
+
+  padding:
+    10px 12px;
+
+  font-size: 12px;
 }
 
-.voice-chip.active{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
+.voice-chip.active {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
 }
 
-.voice-select{
-  width:100%;
-  padding:13px;
-  border-radius:13px;
-  border:1px solid var(--border);
-  background:#1b1e2b;
-  color:#fff;
+.voice-select {
+  width: 100%;
+
+  padding: 13px;
+
+  border-radius: 13px;
+
+  border:
+    1px solid var(--border);
+
+  background: #1b1e2b;
+
+  color: #ffffff;
 }
 
-.voice-controls{
-  display:flex;
-  flex-direction:column;
-  gap:14px;
-  margin-bottom:18px;
+.voice-controls {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+
+  margin-bottom: 18px;
 }
 
-.voice-control{
-  background:rgba(255,255,255,.045);
-  border-radius:14px;
-  padding:12px;
+.voice-control {
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border-radius: 14px;
+
+  padding: 12px;
 }
 
-.voice-control-header{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:9px;
-  font-size:12px;
+.voice-control-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  margin-bottom: 9px;
+
+  font-size: 12px;
 }
 
-.voice-control input{
-  width:100%;
+.voice-control input {
+  width: 100%;
 }
 
-.voice-preview{
-  padding:12px;
-  background:rgba(255,255,255,.045);
-  border-radius:15px;
+.voice-preview {
+  padding: 12px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+
+  border-radius: 15px;
 }
 
-#voicePreviewText{
-  width:100%;
-  min-height:90px;
-  background:rgba(0,0,0,.18);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:12px;
-  padding:12px;
-  margin-bottom:9px;
+#voicePreviewText {
+  width: 100%;
+
+  min-height: 90px;
+
+  background:
+    rgba(0, 0, 0, 0.18);
+
+  color: #ffffff;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  margin-bottom: 9px;
 }
 
 .voice-preview-button,
-.voice-save-button{
-  width:100%;
-  padding:13px;
-  border-radius:13px;
+.voice-save-button {
+  width: 100%;
+
+  padding: 13px;
+
+  border-radius: 13px;
 }
 
-.voice-preview-button{
-  background:rgba(139,92,246,.18);
+.voice-preview-button {
+  background:
+    rgba(139, 92, 246, 0.18);
 }
 
-.voice-save-button{
-  background:linear-gradient(135deg,var(--purple),var(--purple2));
-  margin-top:10px;
+.voice-save-button {
+  background:
+    linear-gradient(
+      135deg,
+      var(--purple),
+      var(--purple2)
+    );
+
+  margin-top: 10px;
 }
 
-.voice-center-status{
-  text-align:center;
-  font-size:11px;
-  color:#858b9c;
-  margin-top:10px;
+.voice-center-status {
+  text-align: center;
+
+  font-size: 11px;
+
+  color: #858b9c;
+
+  margin-top: 10px;
 }
+
+
+/* ============================================================
+   MEDIA UPLOAD
+============================================================ */
+
+.media-upload-area {
+  margin-top: 18px;
+
+  padding: 14px;
+
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 15px;
+
+  background:
+    rgba(255, 255, 255, 0.045);
+}
+
+.media-upload-title {
+  font-size: 14px;
+  font-weight: 600;
+
+  margin-bottom: 6px;
+}
+
+.media-upload-description {
+  color: #8f96a8;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  margin-bottom: 12px;
+}
+
+.media-upload-actions {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 9px;
+}
+
+.media-select-button {
+  padding: 12px;
+
+  border-radius: 12px;
+
+  background:
+    rgba(139, 92, 246, 0.16);
+
+  border:
+    1px solid rgba(139, 92, 246, 0.22);
+
+  font-size: 12px;
+}
+
+.media-file-info {
+  display: none;
+
+  margin-top: 10px;
+
+  padding: 10px;
+
+  border-radius: 10px;
+
+  background:
+    rgba(255, 255, 255, 0.05);
+
+  color: #c6cad5;
+
+  font-size: 11px;
+
+  line-height: 1.5;
+
+  word-break: break-word;
+}
+
+.media-file-info.active {
+  display: block;
+}
+
+.media-preview-audio,
+.media-preview-video {
+  display: none;
+
+  width: 100%;
+
+  margin-top: 10px;
+}
+
+.media-preview-audio.active,
+.media-preview-video.active {
+  display: block;
+}
+
+.media-preview-video {
+  max-height: 260px;
+
+  border-radius: 12px;
+
+  background: #000000;
+}
+
+.media-clear-button {
+  display: none;
+
+  width: 100%;
+
+  padding: 11px;
+
+  margin-top: 9px;
+
+  border-radius: 11px;
+
+  background:
+    rgba(239, 68, 68, 0.14);
+
+  color: #ffaaaa;
+
+  font-size: 12px;
+}
+
+.media-clear-button.active {
+  display: block;
+}
+
+.hidden-file-input {
+  display: none;
+}
+
 </style>
 </head>
 
 <body>
 
-<!-- TOAST -->
+
+<!-- ==========================================================
+     TOAST
+=========================================================== -->
 
 <div
   class="naira-toast"
   id="nairaToast"
 ></div>
 
-<!-- VOICE PLAYER -->
+
+<!-- ==========================================================
+     VOICE PLAYER
+=========================================================== -->
 
 <div
   class="naira-voice-player"
   id="nairaVoicePlayer"
 >
+
   <div class="voice-player-icon">
     🔊
   </div>
@@ -1057,14 +1672,19 @@ header{
   >
     ✕
   </button>
+
 </div>
 
-<!-- FEEDBACK MODAL -->
+
+<!-- ==========================================================
+     FEEDBACK
+=========================================================== -->
 
 <div
   class="feedback-overlay"
   id="feedbackOverlay"
 >
+
   <div class="feedback-card">
 
     <div class="feedback-top">
@@ -1097,6 +1717,7 @@ header{
         class="feedback-select"
         id="feedbackIssue"
       >
+
         <option value="">
           None
         </option>
@@ -1124,6 +1745,7 @@ header{
         <option value="other">
           Other
         </option>
+
       </select>
 
     </div>
@@ -1171,7 +1793,13 @@ header{
     </div>
 
   </div>
+
 </div>
+
+
+<!-- ==========================================================
+     MAIN APP
+=========================================================== -->
 
 <main class="app">
 
@@ -1184,12 +1812,18 @@ header{
     </div>
 
     <div>
-      <h1>Naira</h1>
+
+      <h1>
+        Naira
+      </h1>
 
       <div class="status">
-        <span class="online">●</span>
+        <span class="online">
+          ●
+        </span>
         Personal Assistant
       </div>
+
     </div>
 
   </div>
@@ -1224,6 +1858,7 @@ header{
 
 </header>
 
+
 <section class="welcome">
 
   <div class="welcome-orb"></div>
@@ -1238,14 +1873,18 @@ header{
 
 </section>
 
+
 <section
   class="chat"
   id="chat"
 >
+
   <div class="message naira-message">
     Hai Tuan ❤️ Saya Naira. Apa yang Tuan nak buat hari ini?
   </div>
+
 </section>
+
 
 <div class="input-area">
 
@@ -1255,6 +1894,15 @@ header{
     type="button"
   >
     🎙️
+  </button>
+
+  <button
+    class="upload-media-button"
+    id="quickMediaButton"
+    type="button"
+    title="Upload audio atau video"
+  >
+    ＋
   </button>
 
   <input
@@ -1284,20 +1932,29 @@ header{
 </div>
 
 </main>
-
-<!-- HISTORY -->
+<!-- ==========================================================
+     HISTORY
+=========================================================== -->
 
 <div
   class="history-panel"
   id="historyPanel"
 >
+
   <div class="history-box">
 
     <div class="history-header">
 
       <div>
-        <h2>🕘 Conversation History</h2>
-        <p>Semua perbualan Tuan dengan Naira</p>
+
+        <h2>
+          🕘 Conversation History
+        </h2>
+
+        <p>
+          Semua perbualan Tuan dengan Naira
+        </p>
+
       </div>
 
       <button
@@ -1347,21 +2004,33 @@ header{
     <div id="historyList"></div>
 
   </div>
+
 </div>
 
-<!-- MEMORY -->
+
+<!-- ==========================================================
+     MEMORY
+=========================================================== -->
 
 <div
   class="overlay"
   id="memoryPanel"
 >
+
   <div class="panel-box">
 
     <div class="panel-header">
 
       <div>
-        <h2>🧠 Memory Center</h2>
-        <p>Ingatan yang Naira simpan tentang Tuan</p>
+
+        <h2>
+          🧠 Memory Center
+        </h2>
+
+        <p>
+          Ingatan yang Naira simpan tentang Tuan
+        </p>
+
       </div>
 
       <button
@@ -1397,17 +2066,51 @@ header{
       class="category-filter"
       id="categoryFilter"
     >
-      <option value="all">📂 Semua kategori</option>
-      <option value="profile">👤 Profile</option>
-      <option value="fashion">👕 Fashion</option>
-      <option value="food">🍔 Food</option>
-      <option value="game">🎮 Game</option>
-      <option value="hobby">🎨 Hobby</option>
-      <option value="work">💼 Work</option>
-      <option value="project">🚀 Project</option>
-      <option value="preference">❤️ Preference</option>
-      <option value="family">👨‍👩‍👧 Family</option>
-      <option value="general">📁 General</option>
+
+      <option value="all">
+        📂 Semua kategori
+      </option>
+
+      <option value="profile">
+        👤 Profile
+      </option>
+
+      <option value="fashion">
+        👕 Fashion
+      </option>
+
+      <option value="food">
+        🍔 Food
+      </option>
+
+      <option value="game">
+        🎮 Game
+      </option>
+
+      <option value="hobby">
+        🎨 Hobby
+      </option>
+
+      <option value="work">
+        💼 Work
+      </option>
+
+      <option value="project">
+        🚀 Project
+      </option>
+
+      <option value="preference">
+        ❤️ Preference
+      </option>
+
+      <option value="family">
+        👨‍👩‍👧 Family
+      </option>
+
+      <option value="general">
+        📁 General
+      </option>
+
     </select>
 
     <div
@@ -1428,14 +2131,19 @@ header{
     <div id="memoryList"></div>
 
   </div>
+
 </div>
 
-<!-- MEMORY FORM -->
+
+<!-- ==========================================================
+     MEMORY FORM
+=========================================================== -->
 
 <div
   class="memory-form-overlay"
   id="memoryFormOverlay"
 >
+
   <div class="memory-form">
 
     <h3 id="memoryFormTitle">
@@ -1466,16 +2174,47 @@ header{
       </label>
 
       <select id="memoryCategory">
-        <option value="profile">👤 Profile</option>
-        <option value="fashion">👕 Fashion</option>
-        <option value="food">🍔 Food</option>
-        <option value="game">🎮 Game</option>
-        <option value="hobby">🎨 Hobby</option>
-        <option value="work">💼 Work</option>
-        <option value="project">🚀 Project</option>
-        <option value="preference">❤️ Preference</option>
-        <option value="family">👨‍👩‍👧 Family</option>
-        <option value="general">📁 General</option>
+
+        <option value="profile">
+          👤 Profile
+        </option>
+
+        <option value="fashion">
+          👕 Fashion
+        </option>
+
+        <option value="food">
+          🍔 Food
+        </option>
+
+        <option value="game">
+          🎮 Game
+        </option>
+
+        <option value="hobby">
+          🎨 Hobby
+        </option>
+
+        <option value="work">
+          💼 Work
+        </option>
+
+        <option value="project">
+          🚀 Project
+        </option>
+
+        <option value="preference">
+          ❤️ Preference
+        </option>
+
+        <option value="family">
+          👨‍👩‍👧 Family
+        </option>
+
+        <option value="general">
+          📁 General
+        </option>
+
       </select>
 
     </div>
@@ -1500,9 +2239,22 @@ header{
       </label>
 
       <select id="memoryImportance">
-        <option value="1">⭐ Biasa</option>
-        <option value="2" selected>⭐⭐ Penting</option>
-        <option value="3">⭐⭐⭐ Sangat penting</option>
+
+        <option value="1">
+          ⭐ Biasa
+        </option>
+
+        <option
+          value="2"
+          selected
+        >
+          ⭐⭐ Penting
+        </option>
+
+        <option value="3">
+          ⭐⭐⭐ Sangat penting
+        </option>
+
       </select>
 
     </div>
@@ -1528,21 +2280,33 @@ header{
     </div>
 
   </div>
+
 </div>
 
-<!-- VOICE CENTER -->
+
+<!-- ==========================================================
+     VOICE CENTER
+=========================================================== -->
 
 <div
   class="overlay"
   id="voiceCenterPanel"
 >
+
   <div class="panel-box voice-center-box">
 
     <div class="panel-header">
 
       <div>
-        <h2>🎙️ Voice Center</h2>
-        <p>ElevenLabs Voice Engine</p>
+
+        <h2>
+          🎙️ Voice Center
+        </h2>
+
+        <p>
+          ElevenLabs Voice Engine
+        </p>
+
       </div>
 
       <button
@@ -1555,6 +2319,9 @@ header{
 
     </div>
 
+
+    <!-- SEARCH -->
+
     <div class="voice-section">
 
       <input
@@ -1565,6 +2332,9 @@ header{
       >
 
     </div>
+
+
+    <!-- CHARACTER -->
 
     <div class="voice-section">
 
@@ -1579,6 +2349,9 @@ header{
 
     </div>
 
+
+    <!-- EMOTION -->
+
     <div class="voice-section">
 
       <div class="voice-section-title">
@@ -1592,6 +2365,9 @@ header{
 
     </div>
 
+
+    <!-- ELEVENLABS -->
+
     <div class="voice-section">
 
       <div class="voice-section-title">
@@ -1602,20 +2378,32 @@ header{
         class="voice-select"
         id="voiceSelect"
       >
+
         <option value="">
           Loading ElevenLabs voices...
         </option>
+
       </select>
 
     </div>
+
+
+    <!-- CONTROLS -->
 
     <div class="voice-controls">
 
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>⚡ Speed</span>
-          <span id="rateValue">0.90</span>
+
+          <span>
+            ⚡ Speed
+          </span>
+
+          <span id="rateValue">
+            0.90
+          </span>
+
         </div>
 
         <input
@@ -1629,11 +2417,19 @@ header{
 
       </div>
 
+
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>🎵 Pitch</span>
-          <span id="pitchValue">1.00</span>
+
+          <span>
+            🎵 Pitch
+          </span>
+
+          <span id="pitchValue">
+            1.00
+          </span>
+
         </div>
 
         <input
@@ -1647,11 +2443,19 @@ header{
 
       </div>
 
+
       <div class="voice-control">
 
         <div class="voice-control-header">
-          <span>🔊 Volume</span>
-          <span id="volumeValue">1.00</span>
+
+          <span>
+            🔊 Volume
+          </span>
+
+          <span id="volumeValue">
+            1.00
+          </span>
+
         </div>
 
         <input
@@ -1666,6 +2470,9 @@ header{
       </div>
 
     </div>
+
+
+    <!-- TEST VOICE -->
 
     <div class="voice-preview">
 
@@ -1683,6 +2490,107 @@ header{
 
     </div>
 
+
+    <!-- ======================================================
+         AUDIO / VIDEO UPLOAD
+    ======================================================= -->
+
+    <div class="media-upload-area">
+
+      <div class="media-upload-title">
+        🎧 Voice & Video Upload
+      </div>
+
+      <div class="media-upload-description">
+        Pilih fail audio seperti MP3, M4A atau WAV,
+        ataupun video yang mengandungi suara.
+        Fail boleh dipreview dahulu sebelum kita
+        sambungkan proses voice cloning di server.
+      </div>
+
+      <div class="media-upload-actions">
+
+        <button
+          class="media-select-button"
+          id="selectAudioFile"
+          type="button"
+        >
+          🎵 Pilih Audio
+        </button>
+
+        <button
+          class="media-select-button"
+          id="selectVideoFile"
+          type="button"
+        >
+          🎬 Pilih Video
+        </button>
+
+      </div>
+
+
+      <input
+        class="hidden-file-input"
+        id="audioFileInput"
+        type="file"
+        accept="
+          audio/*,
+          .mp3,
+          .m4a,
+          .wav,
+          .aac,
+          .ogg
+        "
+      >
+
+
+      <input
+        class="hidden-file-input"
+        id="videoFileInput"
+        type="file"
+        accept="
+          video/*,
+          .mp4,
+          .mov,
+          .m4v,
+          .webm
+        "
+      >
+
+
+      <div
+        class="media-file-info"
+        id="mediaFileInfo"
+      ></div>
+
+
+      <audio
+        class="media-preview-audio"
+        id="mediaAudioPreview"
+        controls
+        playsinline
+      ></audio>
+
+
+      <video
+        class="media-preview-video"
+        id="mediaVideoPreview"
+        controls
+        playsinline
+      ></video>
+
+
+      <button
+        class="media-clear-button"
+        id="clearMediaFile"
+        type="button"
+      >
+        ✕ Buang Fail Dipilih
+      </button>
+
+    </div>
+
+
     <button
       class="voice-save-button"
       id="saveVoiceSettings"
@@ -1691,13 +2599,16 @@ header{
       ⭐ Simpan Voice Ini
     </button>
 
+
     <div
       class="voice-center-status"
       id="voiceCenterStatus"
     ></div>
 
   </div>
+
 </div>
+
 
 <script>
 
@@ -1718,32 +2629,35 @@ let currentConversationId =
     "naira_conversation_id"
   );
 
-let recognition =
-  null;
+let recognition = null;
 
-let listening =
-  false;
+let listening = false;
 
-let speaking =
-  false;
+let speaking = false;
 
-let allHistory =
-  [];
+let allHistory = [];
 
-let allMemories =
-  [];
+let allMemories = [];
 
-let editingMemoryId =
-  null;
+let editingMemoryId = null;
 
-let currentFeedbackText =
-  "";
+let currentFeedbackText = "";
 
-let voicePlayerSpeedIndex =
-  0;
+let voicePlayerSpeedIndex = 0;
 
-const voicePlayerSpeeds =
-  [1,1.25,1.5,2];
+let selectedMediaFile = null;
+
+let selectedMediaType = null;
+
+let selectedMediaUrl = null;
+
+
+const voicePlayerSpeeds = [
+  1,
+  1.25,
+  1.5,
+  2
+];
 
 
 /* ============================================================
@@ -1780,21 +2694,36 @@ const voiceStatus =
    HELPERS
 ============================================================ */
 
-function escapeHTML(value){
+function escapeHTML(value) {
 
   return String(
     value ?? ""
   )
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-function createConversationId(){
+function createConversationId() {
 
   return (
     "conv_" +
@@ -1802,17 +2731,15 @@ function createConversationId(){
     "_" +
     Math.random()
       .toString(36)
-      .substring(2,10)
+      .substring(2, 10)
   );
 
 }
 
 
-function ensureConversationId(){
+function ensureConversationId() {
 
-  if (
-    !currentConversationId
-  ){
+  if (!currentConversationId) {
 
     currentConversationId =
       createConversationId();
@@ -1834,14 +2761,16 @@ ensureConversationId();
    TOAST
 ============================================================ */
 
-function showNairaToast(
-  message
-){
+function showNairaToast(message) {
 
   const toast =
     document.getElementById(
       "nairaToast"
     );
+
+  if (!toast) {
+    return;
+  }
 
   toast.textContent =
     message;
@@ -1856,7 +2785,7 @@ function showNairaToast(
 
   window.nairaToastTimer =
     setTimeout(
-      function(){
+      function() {
 
         toast.classList.remove(
           "show"
@@ -1865,6 +2794,408 @@ function showNairaToast(
       },
       1500
     );
+
+}
+
+
+/* ============================================================
+   MEDIA UPLOAD
+============================================================ */
+
+const quickMediaButton =
+  document.getElementById(
+    "quickMediaButton"
+  );
+
+const selectAudioFile =
+  document.getElementById(
+    "selectAudioFile"
+  );
+
+const selectVideoFile =
+  document.getElementById(
+    "selectVideoFile"
+  );
+
+const audioFileInput =
+  document.getElementById(
+    "audioFileInput"
+  );
+
+const videoFileInput =
+  document.getElementById(
+    "videoFileInput"
+  );
+
+const mediaFileInfo =
+  document.getElementById(
+    "mediaFileInfo"
+  );
+
+const mediaAudioPreview =
+  document.getElementById(
+    "mediaAudioPreview"
+  );
+
+const mediaVideoPreview =
+  document.getElementById(
+    "mediaVideoPreview"
+  );
+
+const clearMediaFile =
+  document.getElementById(
+    "clearMediaFile"
+  );
+
+
+function formatFileSize(bytes) {
+
+  const size =
+    Number(bytes) || 0;
+
+  if (size < 1024) {
+    return size + " B";
+  }
+
+  if (
+    size <
+    1024 * 1024
+  ) {
+
+    return (
+      (
+        size / 1024
+      ).toFixed(1) +
+      " KB"
+    );
+
+  }
+
+  return (
+    (
+      size /
+      (1024 * 1024)
+    ).toFixed(1) +
+    " MB"
+  );
+
+}
+
+
+function revokeSelectedMediaUrl() {
+
+  if (!selectedMediaUrl) {
+    return;
+  }
+
+  try {
+
+    URL.revokeObjectURL(
+      selectedMediaUrl
+    );
+
+  } catch (error) {}
+
+  selectedMediaUrl = null;
+
+}
+
+
+function clearSelectedMedia() {
+
+  revokeSelectedMediaUrl();
+
+  selectedMediaFile = null;
+  selectedMediaType = null;
+
+  if (audioFileInput) {
+    audioFileInput.value = "";
+  }
+
+  if (videoFileInput) {
+    videoFileInput.value = "";
+  }
+
+  if (mediaAudioPreview) {
+
+    mediaAudioPreview.pause();
+
+    mediaAudioPreview.removeAttribute(
+      "src"
+    );
+
+    mediaAudioPreview.load();
+
+    mediaAudioPreview.classList.remove(
+      "active"
+    );
+
+  }
+
+  if (mediaVideoPreview) {
+
+    mediaVideoPreview.pause();
+
+    mediaVideoPreview.removeAttribute(
+      "src"
+    );
+
+    mediaVideoPreview.load();
+
+    mediaVideoPreview.classList.remove(
+      "active"
+    );
+
+  }
+
+  if (mediaFileInfo) {
+
+    mediaFileInfo.textContent = "";
+
+    mediaFileInfo.classList.remove(
+      "active"
+    );
+
+  }
+
+  if (clearMediaFile) {
+
+    clearMediaFile.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+function setSelectedMedia(
+  file,
+  type
+) {
+
+  if (!file) {
+    return;
+  }
+
+  clearSelectedMedia();
+
+  selectedMediaFile = file;
+
+  selectedMediaType = type;
+
+  selectedMediaUrl =
+    URL.createObjectURL(
+      file
+    );
+
+
+  if (mediaFileInfo) {
+
+    mediaFileInfo.textContent =
+      (
+        type === "audio"
+          ? "🎵 "
+          : "🎬 "
+      ) +
+      file.name +
+      " • " +
+      formatFileSize(
+        file.size
+      );
+
+    mediaFileInfo.classList.add(
+      "active"
+    );
+
+  }
+
+
+  if (
+    type === "audio" &&
+    mediaAudioPreview
+  ) {
+
+    mediaAudioPreview.src =
+      selectedMediaUrl;
+
+    mediaAudioPreview.classList.add(
+      "active"
+    );
+
+  }
+
+
+  if (
+    type === "video" &&
+    mediaVideoPreview
+  ) {
+
+    mediaVideoPreview.src =
+      selectedMediaUrl;
+
+    mediaVideoPreview.classList.add(
+      "active"
+    );
+
+  }
+
+
+  if (clearMediaFile) {
+
+    clearMediaFile.classList.add(
+      "active"
+    );
+
+  }
+
+
+  showNairaToast(
+    type === "audio"
+      ? "Audio dipilih"
+      : "Video dipilih"
+  );
+
+}
+
+
+if (quickMediaButton) {
+
+  quickMediaButton.addEventListener(
+    "click",
+    function() {
+
+      const voiceCenterPanel =
+        document.getElementById(
+          "voiceCenterPanel"
+        );
+
+      if (voiceCenterPanel) {
+
+        voiceCenterPanel.classList.add(
+          "active"
+        );
+
+      }
+
+      setTimeout(
+        function() {
+
+          if (selectAudioFile) {
+
+            selectAudioFile.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+
+          }
+
+        },
+        100
+      );
+
+    }
+  );
+
+}
+
+
+if (
+  selectAudioFile &&
+  audioFileInput
+) {
+
+  selectAudioFile.addEventListener(
+    "click",
+    function() {
+
+      audioFileInput.click();
+
+    }
+  );
+
+}
+
+
+if (
+  selectVideoFile &&
+  videoFileInput
+) {
+
+  selectVideoFile.addEventListener(
+    "click",
+    function() {
+
+      videoFileInput.click();
+
+    }
+  );
+
+}
+
+
+if (audioFileInput) {
+
+  audioFileInput.addEventListener(
+    "change",
+    function() {
+
+      const file =
+        audioFileInput.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      setSelectedMedia(
+        file,
+        "audio"
+      );
+
+    }
+  );
+
+}
+
+
+if (videoFileInput) {
+
+  videoFileInput.addEventListener(
+    "change",
+    function() {
+
+      const file =
+        videoFileInput.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      setSelectedMedia(
+        file,
+        "video"
+      );
+
+    }
+  );
+
+}
+
+
+if (clearMediaFile) {
+
+  clearMediaFile.addEventListener(
+    "click",
+    function() {
+
+      clearSelectedMedia();
+
+      showNairaToast(
+        "Fail dibuang"
+      );
+
+    }
+  );
 
 }
 
@@ -1899,7 +3230,11 @@ const voicePlayerClose =
   );
 
 
-function openVoicePlayer(){
+function openVoicePlayer() {
+
+  if (!nairaVoicePlayer) {
+    return;
+  }
 
   nairaVoicePlayer.classList.add(
     "active"
@@ -1908,7 +3243,11 @@ function openVoicePlayer(){
 }
 
 
-function closeVoicePlayer(){
+function closeVoicePlayer() {
+
+  if (!nairaVoicePlayer) {
+    return;
+  }
 
   nairaVoicePlayer.classList.remove(
     "active"
@@ -1917,17 +3256,18 @@ function closeVoicePlayer(){
 }
 
 
-function resetVoiceSpeed(){
+function resetVoiceSpeed() {
 
-  voicePlayerSpeedIndex =
-    0;
+  voicePlayerSpeedIndex = 0;
 
-  voiceSpeedButton.textContent =
-    "1x";
+  if (voiceSpeedButton) {
 
-  if (
-    window.nairaAudio
-  ){
+    voiceSpeedButton.textContent =
+      "1x";
+
+  }
+
+  if (window.nairaAudio) {
 
     window.nairaAudio.playbackRate =
       1;
@@ -1937,112 +3277,125 @@ function resetVoiceSpeed(){
 }
 
 
-voiceSpeedButton.addEventListener(
-  "click",
-  function(){
+if (voiceSpeedButton) {
 
-    voicePlayerSpeedIndex++;
+  voiceSpeedButton.addEventListener(
+    "click",
+    function() {
 
-    if (
-      voicePlayerSpeedIndex >=
-      voicePlayerSpeeds.length
-    ){
+      voicePlayerSpeedIndex++;
 
-      voicePlayerSpeedIndex =
-        0;
+      if (
+        voicePlayerSpeedIndex >=
+        voicePlayerSpeeds.length
+      ) {
 
-    }
+        voicePlayerSpeedIndex = 0;
 
-    const speed =
-      voicePlayerSpeeds[
-        voicePlayerSpeedIndex
-      ];
+      }
 
-    voiceSpeedButton.textContent =
-      speed + "x";
+      const speed =
+        voicePlayerSpeeds[
+          voicePlayerSpeedIndex
+        ];
 
-    if (
-      window.nairaAudio
-    ){
+      voiceSpeedButton.textContent =
+        speed + "x";
 
-      window.nairaAudio.playbackRate =
-        speed;
+      if (window.nairaAudio) {
 
-    }
+        window.nairaAudio.playbackRate =
+          speed;
 
-  }
-);
-
-
-voiceBack15.addEventListener(
-  "click",
-  function(){
-
-    const audio =
-      window.nairaAudio;
-
-    if (!audio){
-      return;
-    }
-
-    try{
-
-      audio.currentTime =
-        Math.max(
-          0,
-          audio.currentTime - 15
-        );
-
-    }catch(error){}
-
-  }
-);
-
-
-voiceForward15.addEventListener(
-  "click",
-  function(){
-
-    const audio =
-      window.nairaAudio;
-
-    if (!audio){
-      return;
-    }
-
-    try{
-
-      audio.currentTime =
-        Math.min(
-          audio.duration || Infinity,
-          audio.currentTime + 15
-        );
-
-    }catch(error){}
-
-  }
-);
-
-
-voicePlayerClose.addEventListener(
-  "click",
-  function(){
-
-    if (
-      typeof window.stopNairaSpeech ===
-      "function"
-    ){
-
-      window.stopNairaSpeech();
+      }
 
     }
+  );
 
-    closeVoicePlayer();
+}
 
-    resetVoiceSpeed();
 
-  }
-);
+if (voiceBack15) {
+
+  voiceBack15.addEventListener(
+    "click",
+    function() {
+
+      const audio =
+        window.nairaAudio;
+
+      if (!audio) {
+        return;
+      }
+
+      try {
+
+        audio.currentTime =
+          Math.max(
+            0,
+            audio.currentTime - 15
+          );
+
+      } catch (error) {}
+
+    }
+  );
+
+}
+
+
+if (voiceForward15) {
+
+  voiceForward15.addEventListener(
+    "click",
+    function() {
+
+      const audio =
+        window.nairaAudio;
+
+      if (!audio) {
+        return;
+      }
+
+      try {
+
+        audio.currentTime =
+          Math.min(
+            audio.duration || Infinity,
+            audio.currentTime + 15
+          );
+
+      } catch (error) {}
+
+    }
+  );
+
+}
+
+
+if (voicePlayerClose) {
+
+  voicePlayerClose.addEventListener(
+    "click",
+    function() {
+
+      if (
+        typeof window.stopNairaSpeech ===
+        "function"
+      ) {
+
+        window.stopNairaSpeech();
+
+      }
+
+      closeVoicePlayer();
+
+      resetVoiceSpeed();
+
+    }
+  );
+
+}
 
 
 /* ============================================================
@@ -2087,16 +3440,14 @@ const submitFeedback =
 
 function openBadFeedback(
   messageText
-){
+) {
 
   currentFeedbackText =
     messageText;
 
-  feedbackIssue.value =
-    "";
+  feedbackIssue.value = "";
 
-  feedbackDetails.value =
-    "";
+  feedbackDetails.value = "";
 
   feedbackCount.textContent =
     "0/2000";
@@ -2108,7 +3459,7 @@ function openBadFeedback(
 }
 
 
-function closeFeedbackCard(){
+function closeFeedbackCard() {
 
   feedbackOverlay.classList.remove(
     "active"
@@ -2119,7 +3470,7 @@ function closeFeedbackCard(){
 
 feedbackDetails.addEventListener(
   "input",
-  function(){
+  function() {
 
     feedbackCount.textContent =
       feedbackDetails.value.length +
@@ -2143,12 +3494,12 @@ cancelFeedback.addEventListener(
 
 feedbackOverlay.addEventListener(
   "click",
-  function(event){
+  function(event) {
 
     if (
       event.target ===
       feedbackOverlay
-    ){
+    ) {
 
       closeFeedbackCard();
 
@@ -2160,7 +3511,7 @@ feedbackOverlay.addEventListener(
 
 submitFeedback.addEventListener(
   "click",
-  function(){
+  function() {
 
     console.log(
       "NAIRA FEEDBACK:",
@@ -2194,7 +3545,7 @@ submitFeedback.addEventListener(
 function addMessage(
   text,
   type
-){
+) {
 
   const wrapper =
     document.createElement(
@@ -2224,7 +3575,7 @@ function addMessage(
   if (
     type ===
     "naira-message"
-  ){
+  ) {
 
     const actions =
       document.createElement(
@@ -2243,10 +3594,20 @@ function addMessage(
         title="Copy"
       >
         <svg viewBox="0 0 24 24">
-          <rect x="8" y="8" width="11" height="11" rx="2"></rect>
-          <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+          <rect
+            x="8"
+            y="8"
+            width="11"
+            height="11"
+            rx="2"
+          ></rect>
+
+          <path
+            d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"
+          ></path>
         </svg>
       </button>
+
 
       <button
         type="button"
@@ -2260,6 +3621,7 @@ function addMessage(
         </svg>
       </button>
 
+
       <button
         type="button"
         class="message-action-btn like-btn"
@@ -2271,6 +3633,7 @@ function addMessage(
         </svg>
       </button>
 
+
       <button
         type="button"
         class="message-action-btn dislike-btn"
@@ -2281,6 +3644,7 @@ function addMessage(
           <path d="M7 6h9.5a2 2 0 0 1 2 1.6l1 5A2 2 0 0 1 17.5 15H14l.5 3a2 2 0 0 1-3.5 1.5L7 14"></path>
         </svg>
       </button>
+
 
       <button
         type="button"
@@ -2294,22 +3658,41 @@ function addMessage(
         </svg>
       </button>
 
+
       <button
         type="button"
         class="message-action-btn more-btn"
         title="More"
       >
         <svg viewBox="0 0 24 24">
-          <circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"></circle>
-          <circle cx="12" cy="12" r="1" fill="currentColor" stroke="none"></circle>
-          <circle cx="19" cy="12" r="1" fill="currentColor" stroke="none"></circle>
+          <circle
+            cx="5"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
+
+          <circle
+            cx="12"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
+
+          <circle
+            cx="19"
+            cy="12"
+            r="1"
+            fill="currentColor"
+            stroke="none"
+          ></circle>
         </svg>
       </button>
 
     `;
 
-
-    /* COPY */
 
     const copyButton =
       actions.querySelector(
@@ -2319,19 +3702,13 @@ function addMessage(
 
     copyButton.addEventListener(
       "click",
-      async function(){
+      async function() {
 
-        try{
+        try {
 
           await navigator.clipboard.writeText(
             text
           );
-
-          copyButton.innerHTML = `
-            <svg viewBox="0 0 24 24">
-              <path d="m5 12 4 4L19 6"></path>
-            </svg>
-          `;
 
           copyButton.classList.add(
             "active"
@@ -2342,14 +3719,7 @@ function addMessage(
           );
 
           setTimeout(
-            function(){
-
-              copyButton.innerHTML = `
-                <svg viewBox="0 0 24 24">
-                  <rect x="8" y="8" width="11" height="11" rx="2"></rect>
-                  <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
-                </svg>
-              `;
+            function() {
 
               copyButton.classList.remove(
                 "active"
@@ -2359,7 +3729,7 @@ function addMessage(
             1200
           );
 
-        }catch(error){
+        } catch (error) {
 
           console.error(
             "COPY ERROR:",
@@ -2372,8 +3742,6 @@ function addMessage(
     );
 
 
-    /* SPEAKER */
-
     const speakerButton =
       actions.querySelector(
         ".speaker-btn"
@@ -2382,18 +3750,19 @@ function addMessage(
 
     speakerButton.addEventListener(
       "click",
-      function(){
+      function() {
 
         if (
           typeof window.speakNaira !==
           "function"
-        ){
+        ) {
 
           showNairaToast(
             "Voice engine belum tersedia"
           );
 
           return;
+
         }
 
         resetVoiceSpeed();
@@ -2408,8 +3777,6 @@ function addMessage(
     );
 
 
-    /* FEEDBACK CHOICE */
-
     const feedbackChoice =
       document.createElement(
         "div"
@@ -2419,6 +3786,7 @@ function addMessage(
       "feedback-choice";
 
     feedbackChoice.innerHTML = `
+
       <button
         type="button"
         class="feedback-good"
@@ -2432,6 +3800,7 @@ function addMessage(
       >
         👎🏻 Bad response
       </button>
+
     `;
 
     actions.appendChild(
@@ -2452,7 +3821,7 @@ function addMessage(
 
     function toggleFeedbackChoice(
       event
-    ){
+    ) {
 
       event.stopPropagation();
 
@@ -2481,7 +3850,7 @@ function addMessage(
       )
       .addEventListener(
         "click",
-        function(){
+        function() {
 
           feedbackChoice.classList.remove(
             "active"
@@ -2509,7 +3878,7 @@ function addMessage(
       )
       .addEventListener(
         "click",
-        function(){
+        function() {
 
           feedbackChoice.classList.remove(
             "active"
@@ -2531,8 +3900,6 @@ function addMessage(
       );
 
 
-    /* SHARE */
-
     const shareButton =
       actions.querySelector(
         ".share-btn"
@@ -2541,20 +3908,18 @@ function addMessage(
 
     shareButton.addEventListener(
       "click",
-      async function(){
+      async function() {
 
-        try{
+        try {
 
-          if (
-            navigator.share
-          ){
+          if (navigator.share) {
 
             await navigator.share({
-              title:"Naira",
-              text:text
+              title: "Naira",
+              text: text
             });
 
-          }else{
+          } else {
 
             await navigator.clipboard.writeText(
               text
@@ -2566,12 +3931,12 @@ function addMessage(
 
           }
 
-        }catch(error){
+        } catch (error) {
 
           if (
             error.name !==
             "AbortError"
-          ){
+          ) {
 
             console.error(
               "SHARE ERROR:",
@@ -2585,8 +3950,6 @@ function addMessage(
       }
     );
 
-
-    /* MORE */
 
     const moreButton =
       actions.querySelector(
@@ -2603,6 +3966,7 @@ function addMessage(
       "message-more-menu";
 
     moreMenu.innerHTML = `
+
       <button
         type="button"
         class="message-more-item more-copy"
@@ -2623,6 +3987,7 @@ function addMessage(
       >
         Share
       </button>
+
     `;
 
     actions.appendChild(
@@ -2632,7 +3997,7 @@ function addMessage(
 
     moreButton.addEventListener(
       "click",
-      function(event){
+      function(event) {
 
         event.stopPropagation();
 
@@ -2650,7 +4015,7 @@ function addMessage(
       )
       .addEventListener(
         "click",
-        async function(){
+        async function() {
 
           await navigator.clipboard.writeText(
             text
@@ -2674,7 +4039,7 @@ function addMessage(
       )
       .addEventListener(
         "click",
-        function(){
+        function() {
 
           moreMenu.classList.remove(
             "active"
@@ -2687,7 +4052,7 @@ function addMessage(
           if (
             typeof window.speakNaira ===
             "function"
-          ){
+          ) {
 
             window.speakNaira(
               text
@@ -2705,22 +4070,20 @@ function addMessage(
       )
       .addEventListener(
         "click",
-        async function(){
+        async function() {
 
           moreMenu.classList.remove(
             "active"
           );
 
-          if (
-            navigator.share
-          ){
+          if (navigator.share) {
 
             await navigator.share({
-              title:"Naira",
-              text:text
+              title: "Naira",
+              text: text
             });
 
-          }else{
+          } else {
 
             await navigator.clipboard.writeText(
               text
@@ -2745,8 +4108,8 @@ function addMessage(
 
 
   wrapper.scrollIntoView({
-    behavior:"smooth",
-    block:"end"
+    behavior: "smooth",
+    block: "end"
   });
 
 }
@@ -2756,9 +4119,7 @@ function addMessage(
    VOICE UI
 ============================================================ */
 
-function setVoiceStatus(
-  text
-){
+function setVoiceStatus(text) {
 
   voiceStatus.textContent =
     text || "";
@@ -2766,16 +4127,14 @@ function setVoiceStatus(
 }
 
 
-function updateVoiceUI(){
+function updateVoiceUI() {
 
   micButton.classList.remove(
     "listening",
     "speaking"
   );
 
-  if (
-    listening
-  ){
+  if (listening) {
 
     micButton.classList.add(
       "listening"
@@ -2791,7 +4150,7 @@ function updateVoiceUI(){
   if (
     speaking ||
     window.nairaSpeaking
-  ){
+  ) {
 
     micButton.classList.add(
       "speaking"
@@ -2810,22 +4169,26 @@ function updateVoiceUI(){
 }
 
 
+/*
+ * Make this available to speakNaira.js.
+ */
+
+window.updateVoiceUI =
+  updateVoiceUI;
+
+
 /* ============================================================
    SPEECH RECOGNITION
 ============================================================ */
 
-function setupRecognition(){
+function setupRecognition() {
 
   const Recognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
 
-  if (
-    !Recognition
-  ){
-
+  if (!Recognition) {
     return;
-
   }
 
   recognition =
@@ -2842,10 +4205,9 @@ function setupRecognition(){
 
 
   recognition.onstart =
-    function(){
+    function() {
 
-      listening =
-        true;
+      listening = true;
 
       updateVoiceUI();
 
@@ -2853,16 +4215,14 @@ function setupRecognition(){
 
 
   recognition.onresult =
-    function(event){
+    function(event) {
 
       const transcript =
         event.results?.[0]?.[0]
           ?.transcript
           ?.trim();
 
-      if (
-        transcript
-      ){
+      if (transcript) {
 
         input.value =
           transcript;
@@ -2875,10 +4235,9 @@ function setupRecognition(){
 
 
   recognition.onerror =
-    function(){
+    function() {
 
-      listening =
-        false;
+      listening = false;
 
       updateVoiceUI();
 
@@ -2886,10 +4245,9 @@ function setupRecognition(){
 
 
   recognition.onend =
-    function(){
+    function() {
 
-      listening =
-        false;
+      listening = false;
 
       updateVoiceUI();
 
@@ -2898,11 +4256,9 @@ function setupRecognition(){
 }
 
 
-function startListening(){
+function startListening() {
 
-  if (
-    !recognition
-  ){
+  if (!recognition) {
 
     addMessage(
       "🎙️ Voice recognition tidak disokong oleh browser ini.",
@@ -2916,45 +4272,45 @@ function startListening(){
   if (
     typeof window.stopNairaSpeech ===
     "function"
-  ){
+  ) {
 
     window.stopNairaSpeech();
 
   }
 
-  try{
+  try {
 
     recognition.start();
 
-  }catch(error){}
+  } catch (error) {}
 
 }
 
 
-function stopListening(){
+function stopListening() {
 
-  try{
+  try {
 
     recognition?.stop();
 
-  }catch(error){}
+  } catch (error) {}
 
 }
 
 
 micButton.addEventListener(
   "click",
-  function(){
+  function() {
 
     if (
       speaking ||
       window.nairaSpeaking
-    ){
+    ) {
 
       if (
         typeof window.stopNairaSpeech ===
         "function"
-      ){
+      ) {
 
         window.stopNairaSpeech();
 
@@ -2966,9 +4322,7 @@ micButton.addEventListener(
 
     }
 
-    if (
-      listening
-    ){
+    if (listening) {
 
       stopListening();
 
@@ -2980,34 +4334,29 @@ micButton.addEventListener(
 
   }
 );
-
-
 /* ============================================================
    SEND MESSAGE
 ============================================================ */
 
-async function sendMessage(){
+async function sendMessage() {
 
   const text =
     input.value.trim();
 
-  if (
-    !text
-  ){
-
+  if (!text) {
     return;
-
   }
 
   ensureConversationId();
+
 
   addMessage(
     text,
     "user-message"
   );
 
-  input.value =
-    "";
+
+  input.value = "";
 
   sendButton.disabled =
     true;
@@ -3029,25 +4378,28 @@ async function sendMessage(){
   );
 
 
-  try{
+  try {
 
     const response =
       await fetch(
         API_BASE +
         "/api/chat",
         {
-          method:"POST",
+          method: "POST",
 
-          headers:{
+          headers: {
             "Content-Type":
               "application/json"
           },
 
-          body:JSON.stringify({
-            message:text,
-            conversationId:
-              currentConversationId
-          })
+          body:
+            JSON.stringify({
+              message:
+                text,
+
+              conversationId:
+                currentConversationId
+            })
         }
       );
 
@@ -3055,20 +4407,20 @@ async function sendMessage(){
     const raw =
       await response.text();
 
-    let data =
-      {};
 
-    try{
+    let data = {};
+
+
+    try {
 
       data =
         raw
           ? JSON.parse(raw)
           : {};
 
-    }catch(error){
+    } catch (error) {
 
-      data =
-        {};
+      data = {};
 
     }
 
@@ -3076,9 +4428,7 @@ async function sendMessage(){
     loading.remove();
 
 
-    if (
-      !response.ok
-    ){
+    if (!response.ok) {
 
       addMessage(
         data.error ||
@@ -3103,10 +4453,20 @@ async function sendMessage(){
     );
 
 
+    /*
+     * Auto speak response.
+     *
+     * Safari may block this because
+     * the network request breaks the
+     * direct user gesture chain.
+     *
+     * Speaker button still works.
+     */
+
     if (
       typeof window.speakNaira ===
       "function"
-    ){
+    ) {
 
       window.speakNaira(
         nairaReply
@@ -3120,16 +4480,18 @@ async function sendMessage(){
     );
 
 
-  }catch(error){
+  } catch (error) {
 
     loading.remove();
+
 
     addMessage(
       "Maaf Tuan ❤️ Naira tak dapat menyambung ke server sekarang.",
       "naira-message"
     );
 
-  }finally{
+
+  } finally {
 
     sendButton.disabled =
       false;
@@ -3147,12 +4509,12 @@ sendButton.addEventListener(
 
 input.addEventListener(
   "keydown",
-  function(event){
+  function(event) {
 
     if (
       event.key ===
       "Enter"
-    ){
+    ) {
 
       event.preventDefault();
 
@@ -3165,7 +4527,7 @@ input.addEventListener(
 
 
 /* ============================================================
-   HISTORY
+   HISTORY DOM
 ============================================================ */
 
 const historyButton =
@@ -3209,9 +4571,13 @@ const newConversation =
   );
 
 
+/* ============================================================
+   HISTORY EVENTS
+============================================================ */
+
 historyButton.addEventListener(
   "click",
-  function(){
+  function() {
 
     historyPanel.classList.add(
       "active"
@@ -3225,7 +4591,7 @@ historyButton.addEventListener(
 
 closeHistory.addEventListener(
   "click",
-  function(){
+  function() {
 
     historyPanel.classList.remove(
       "active"
@@ -3237,7 +4603,7 @@ closeHistory.addEventListener(
 
 refreshHistory.addEventListener(
   "click",
-  function(){
+  function() {
 
     loadHistory();
 
@@ -3251,20 +4617,23 @@ historySearch.addEventListener(
 );
 
 
-async function loadHistory(
-  silent=false
-){
+/* ============================================================
+   LOAD HISTORY
+============================================================ */
 
-  if (
-    !silent
-  ){
+async function loadHistory(
+  silent = false
+) {
+
+  if (!silent) {
 
     historyStatus.textContent =
       "Memuatkan conversation...";
 
   }
 
-  try{
+
+  try {
 
     const response =
       await fetch(
@@ -3272,20 +4641,40 @@ async function loadHistory(
         "/api/history"
       );
 
+
+    if (!response.ok) {
+
+      throw new Error(
+        "History API gagal."
+      );
+
+    }
+
+
     const data =
       await response.json();
+
 
     allHistory =
       data.conversations ||
       [];
 
+
     historyStatus.textContent =
       allHistory.length +
       " conversation";
 
+
     renderHistory();
 
-  }catch(error){
+
+  } catch (error) {
+
+    console.error(
+      "HISTORY ERROR:",
+      error
+    );
+
 
     historyStatus.textContent =
       "Gagal memuatkan history.";
@@ -3295,16 +4684,21 @@ async function loadHistory(
 }
 
 
-function renderHistory(){
+/* ============================================================
+   RENDER HISTORY
+============================================================ */
+
+function renderHistory() {
 
   const search =
     historySearch.value
       .trim()
       .toLowerCase();
 
+
   const filtered =
     allHistory.filter(
-      function(item){
+      function(item) {
 
         return (
           !search ||
@@ -3316,50 +4710,78 @@ function renderHistory(){
       }
     );
 
+
   historyList.innerHTML =
     "";
 
+
+  if (!filtered.length) {
+
+    historyList.innerHTML = `
+      <div class="empty-history">
+        Tiada conversation dijumpai.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
   filtered.forEach(
-    function(conversation){
+    function(conversation) {
 
       const card =
         document.createElement(
           "div"
         );
 
+
       card.className =
         "history-card";
 
+
       card.innerHTML = `
+
         <div class="history-title">
+
           ${escapeHTML(
             conversation.title ||
             "Conversation Naira"
           )}
+
         </div>
 
+
         <div class="history-preview">
+
           ${escapeHTML(
             conversation.user_message ||
             ""
           )}
+
         </div>
+
 
         <div class="history-actions">
 
           <button
             class="open-history"
+            type="button"
           >
             👁️ Buka
           </button>
 
+
           <button
             class="history-delete"
+            type="button"
           >
             🗑️ Delete
           </button>
 
         </div>
+
       `;
 
 
@@ -3369,7 +4791,7 @@ function renderHistory(){
         )
         .addEventListener(
           "click",
-          function(){
+          function() {
 
             openConversation(
               conversation.conversation_id
@@ -3385,7 +4807,7 @@ function renderHistory(){
         )
         .addEventListener(
           "click",
-          function(){
+          function() {
 
             deleteConversation(
               conversation.conversation_id
@@ -3405,127 +4827,208 @@ function renderHistory(){
 }
 
 
+/* ============================================================
+   OPEN CONVERSATION
+============================================================ */
+
 async function openConversation(
   conversationId
-){
+) {
 
-  const response =
-    await fetch(
-      API_BASE +
-      "/api/history?conversationId=" +
-      encodeURIComponent(
-        conversationId
-      )
-    );
+  try {
 
-  const data =
-    await response.json();
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/history?conversationId=" +
+        encodeURIComponent(
+          conversationId
+        )
+      );
 
-  const messages =
-    data.conversations ||
-    [];
 
-  currentConversationId =
-    conversationId;
+    if (!response.ok) {
 
-  localStorage.setItem(
-    "naira_conversation_id",
-    conversationId
-  );
-
-  chat.innerHTML =
-    "";
-
-  messages.forEach(
-    function(message){
-
-      if (
-        message.user_message
-      ){
-
-        addMessage(
-          message.user_message,
-          "user-message"
-        );
-
-      }
-
-      if (
-        message.naira_response
-      ){
-
-        addMessage(
-          message.naira_response,
-          "naira-message"
-        );
-
-      }
+      throw new Error(
+        "Conversation gagal dimuat."
+      );
 
     }
-  );
 
-  historyPanel.classList.remove(
-    "active"
-  );
+
+    const data =
+      await response.json();
+
+
+    const messages =
+      data.conversations ||
+      [];
+
+
+    currentConversationId =
+      conversationId;
+
+
+    localStorage.setItem(
+      "naira_conversation_id",
+      conversationId
+    );
+
+
+    chat.innerHTML =
+      "";
+
+
+    messages.forEach(
+      function(message) {
+
+        if (
+          message.user_message
+        ) {
+
+          addMessage(
+            message.user_message,
+            "user-message"
+          );
+
+        }
+
+
+        if (
+          message.naira_response
+        ) {
+
+          addMessage(
+            message.naira_response,
+            "naira-message"
+          );
+
+        }
+
+      }
+    );
+
+
+    historyPanel.classList.remove(
+      "active"
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "OPEN CONVERSATION ERROR:",
+      error
+    );
+
+
+    showNairaToast(
+      "Conversation gagal dibuka"
+    );
+
+  }
 
 }
 
 
+/* ============================================================
+   DELETE CONVERSATION
+============================================================ */
+
 async function deleteConversation(
   conversationId
-){
+) {
 
   if (
     !confirm(
       "Padam conversation ini?"
     )
-  ){
+  ) {
 
     return;
 
   }
 
-  await fetch(
-    API_BASE +
-    "/api/history",
-    {
-      method:"DELETE",
 
-      headers:{
-        "Content-Type":
-          "application/json"
-      },
+  try {
 
-      body:JSON.stringify({
-        conversationId
-      })
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/history",
+        {
+          method: "DELETE",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              conversationId:
+                conversationId
+            })
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Delete gagal."
+      );
+
     }
-  );
 
-  loadHistory();
+
+    loadHistory();
+
+
+  } catch (error) {
+
+    console.error(
+      "DELETE HISTORY ERROR:",
+      error
+    );
+
+
+    showNairaToast(
+      "Conversation gagal dipadam"
+    );
+
+  }
 
 }
 
 
+/* ============================================================
+   NEW CONVERSATION
+============================================================ */
+
 newConversation.addEventListener(
   "click",
-  function(){
+  function() {
 
     currentConversationId =
       createConversationId();
+
 
     localStorage.setItem(
       "naira_conversation_id",
       currentConversationId
     );
 
+
     chat.innerHTML =
       "";
+
 
     addMessage(
       "Hai Tuan ❤️ Kita mulakan conversation baru.",
       "naira-message"
     );
+
 
     historyPanel.classList.remove(
       "active"
@@ -3536,7 +5039,7 @@ newConversation.addEventListener(
 
 
 /* ============================================================
-   MEMORY
+   MEMORY DOM
 ============================================================ */
 
 const memoryButton =
@@ -3625,9 +5128,13 @@ const cancelMemory =
   );
 
 
+/* ============================================================
+   MEMORY EVENTS
+============================================================ */
+
 memoryButton.addEventListener(
   "click",
-  function(){
+  function() {
 
     memoryPanel.classList.add(
       "active"
@@ -3641,7 +5148,7 @@ memoryButton.addEventListener(
 
 closeMemory.addEventListener(
   "click",
-  function(){
+  function() {
 
     memoryPanel.classList.remove(
       "active"
@@ -3669,42 +5176,72 @@ categoryFilter.addEventListener(
 );
 
 
-async function loadMemories(){
+/* ============================================================
+   LOAD MEMORIES
+============================================================ */
 
-  try{
+async function loadMemories() {
+
+  memoryStatus.textContent =
+    "Memuatkan memory...";
+
+
+  try {
 
     const response =
       await fetch(
         API_BASE +
         "/api/memory",
         {
-          method:"POST",
+          method: "POST",
 
-          headers:{
+          headers: {
             "Content-Type":
               "application/json"
           },
 
-          body:JSON.stringify({
-            action:"list"
-          })
+          body:
+            JSON.stringify({
+              action:
+                "list"
+            })
         }
       );
 
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Memory API gagal."
+      );
+
+    }
+
+
     const data =
       await response.json();
+
 
     allMemories =
       data.memories ||
       [];
 
+
     memoryStatus.textContent =
       allMemories.length +
       " memory disimpan";
 
+
     renderMemories();
 
-  }catch(error){
+
+  } catch (error) {
+
+    console.error(
+      "MEMORY ERROR:",
+      error
+    );
+
 
     memoryStatus.textContent =
       "Gagal memuatkan memory.";
@@ -3714,19 +5251,25 @@ async function loadMemories(){
 }
 
 
-function renderMemories(){
+/* ============================================================
+   RENDER MEMORIES
+============================================================ */
+
+function renderMemories() {
 
   const search =
     memorySearch.value
       .trim()
       .toLowerCase();
 
+
   const category =
     categoryFilter.value;
 
+
   const filtered =
     allMemories.filter(
-      function(memory){
+      function(memory) {
 
         const matchSearch =
           !search ||
@@ -3734,11 +5277,13 @@ function renderMemories(){
             .toLowerCase()
             .includes(search);
 
+
         const matchCategory =
           category ===
           "all" ||
           memory.category ===
           category;
+
 
         return (
           matchSearch &&
@@ -3748,38 +5293,85 @@ function renderMemories(){
       }
     );
 
+
   memoryList.innerHTML =
     "";
 
+
+  if (!filtered.length) {
+
+    memoryList.innerHTML = `
+      <div class="empty-state">
+        Tiada memory dijumpai.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
   filtered.forEach(
-    function(memory){
+    function(memory) {
 
       const card =
         document.createElement(
           "div"
         );
 
+
       card.className =
         "memory-card";
 
+
       card.innerHTML = `
+
         <div class="memory-text">
+
           ${escapeHTML(
             memory.memory
           )}
+
         </div>
+
+
+        <div class="memory-meta">
+
+          ${escapeHTML(
+            memory.category ||
+            "general"
+          )}
+
+          ${memory.subcategory
+            ? " • " +
+              escapeHTML(
+                memory.subcategory
+              )
+            : ""
+          }
+
+        </div>
+
 
         <div class="memory-actions">
 
-          <button class="edit-memory">
+          <button
+            class="edit-memory"
+            type="button"
+          >
             ✏️ Edit
           </button>
 
-          <button class="delete">
+
+          <button
+            class="delete"
+            type="button"
+          >
             🗑️ Delete
           </button>
 
         </div>
+
       `;
 
 
@@ -3789,28 +5381,37 @@ function renderMemories(){
         )
         .addEventListener(
           "click",
-          function(){
+          function() {
 
             editingMemoryId =
               memory.id;
+
+
+            memoryFormTitle.textContent =
+              "✏️ Edit Memory";
+
 
             memoryText.value =
               memory.memory ||
               "";
 
+
             memoryCategory.value =
               memory.category ||
               "general";
 
+
             memorySubcategory.value =
               memory.subcategory ||
               "";
+
 
             memoryImportance.value =
               String(
                 memory.importance ||
                 1
               );
+
 
             memoryFormOverlay.classList.add(
               "active"
@@ -3826,27 +5427,76 @@ function renderMemories(){
         )
         .addEventListener(
           "click",
-          async function(){
+          async function() {
 
-            await fetch(
-              API_BASE +
-              "/api/memory",
-              {
-                method:"POST",
+            if (
+              !confirm(
+                "Padam memory ini?"
+              )
+            ) {
 
-                headers:{
-                  "Content-Type":
-                    "application/json"
-                },
+              return;
 
-                body:JSON.stringify({
-                  action:"delete",
-                  id:memory.id
-                })
+            }
+
+
+            try {
+
+              const response =
+                await fetch(
+                  API_BASE +
+                  "/api/memory",
+                  {
+                    method:
+                      "POST",
+
+                    headers: {
+                      "Content-Type":
+                        "application/json"
+                    },
+
+                    body:
+                      JSON.stringify({
+                        action:
+                          "delete",
+
+                        id:
+                          memory.id
+                      })
+                  }
+                );
+
+
+              if (!response.ok) {
+
+                throw new Error(
+                  "Delete memory gagal."
+                );
+
               }
-            );
 
-            loadMemories();
+
+              showNairaToast(
+                "Memory dipadam"
+              );
+
+
+              loadMemories();
+
+
+            } catch (error) {
+
+              console.error(
+                "DELETE MEMORY ERROR:",
+                error
+              );
+
+
+              showNairaToast(
+                "Memory gagal dipadam"
+              );
+
+            }
 
           }
         );
@@ -3862,15 +5512,37 @@ function renderMemories(){
 }
 
 
+/* ============================================================
+   ADD MEMORY
+============================================================ */
+
 addMemoryButton.addEventListener(
   "click",
-  function(){
+  function() {
 
     editingMemoryId =
       null;
 
+
+    memoryFormTitle.textContent =
+      "➕ Tambah Memory";
+
+
     memoryText.value =
       "";
+
+
+    memoryCategory.value =
+      "general";
+
+
+    memorySubcategory.value =
+      "";
+
+
+    memoryImportance.value =
+      "2";
+
 
     memoryFormOverlay.classList.add(
       "active"
@@ -3880,9 +5552,13 @@ addMemoryButton.addEventListener(
 );
 
 
+/* ============================================================
+   CANCEL MEMORY
+============================================================ */
+
 cancelMemory.addEventListener(
   "click",
-  function(){
+  function() {
 
     memoryFormOverlay.classList.remove(
       "active"
@@ -3892,22 +5568,31 @@ cancelMemory.addEventListener(
 );
 
 
+/* ============================================================
+   SAVE MEMORY
+============================================================ */
+
 saveMemoryButton.addEventListener(
   "click",
-  async function(){
+  async function() {
 
     const text =
       memoryText.value.trim();
 
-    if (
-      !text
-    ){
+
+    if (!text) {
+
+      showNairaToast(
+        "Masukkan memory dahulu"
+      );
 
       return;
 
     }
 
+
     const body = {
+
       action:
         editingMemoryId
           ? "update"
@@ -3926,56 +5611,207 @@ saveMemoryButton.addEventListener(
         Number(
           memoryImportance.value
         )
+
     };
 
-    if (
-      editingMemoryId
-    ){
+
+    if (editingMemoryId) {
 
       body.id =
         editingMemoryId;
 
     }
 
-    await fetch(
-      API_BASE +
-      "/api/memory",
-      {
-        method:"POST",
 
-        headers:{
-          "Content-Type":
-            "application/json"
-        },
+    saveMemoryButton.disabled =
+      true;
 
-        body:
-          JSON.stringify(body)
+
+    try {
+
+      const response =
+        await fetch(
+          API_BASE +
+          "/api/memory",
+          {
+            method:
+              "POST",
+
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+
+            body:
+              JSON.stringify(
+                body
+              )
+          }
+        );
+
+
+      if (!response.ok) {
+
+        const errorText =
+          await response.text();
+
+
+        throw new Error(
+          errorText ||
+          "Memory gagal disimpan."
+        );
+
       }
-    );
 
-    memoryFormOverlay.classList.remove(
-      "active"
-    );
 
-    loadMemories();
+      memoryFormOverlay.classList.remove(
+        "active"
+      );
+
+
+      editingMemoryId =
+        null;
+
+
+      showNairaToast(
+        "Memory disimpan"
+      );
+
+
+      loadMemories();
+
+
+    } catch (error) {
+
+      console.error(
+        "SAVE MEMORY ERROR:",
+        error
+      );
+
+
+      showNairaToast(
+        "Memory gagal disimpan"
+      );
+
+
+    } finally {
+
+      saveMemoryButton.disabled =
+        false;
+
+    }
 
   }
 );
 
 
 /* ============================================================
-   INIT
+   CLOSE MENUS WHEN CLICKING OUTSIDE
+============================================================ */
+
+document.addEventListener(
+  "click",
+  function(event) {
+
+    document
+      .querySelectorAll(
+        ".feedback-choice.active"
+      )
+      .forEach(
+        function(menu) {
+
+          if (
+            !menu.contains(
+              event.target
+            )
+          ) {
+
+            menu.classList.remove(
+              "active"
+            );
+
+          }
+
+        }
+      );
+
+
+    document
+      .querySelectorAll(
+        ".message-more-menu.active"
+      )
+      .forEach(
+        function(menu) {
+
+          if (
+            !menu.contains(
+              event.target
+            )
+          ) {
+
+            menu.classList.remove(
+              "active"
+            );
+
+          }
+
+        }
+      );
+
+  }
+);
+
+
+/* ============================================================
+   PAGE CLEANUP
+============================================================ */
+
+window.addEventListener(
+  "beforeunload",
+  function() {
+
+    revokeSelectedMediaUrl();
+
+  }
+);
+
+
+/* ============================================================
+   INITIALIZE
 ============================================================ */
 
 setupRecognition();
 
 updateVoiceUI();
 
+
+console.log(
+  "========================================"
+);
+
+console.log(
+  "🌸 Naira main interface loaded"
+);
+
+console.log(
+  "API:",
+  API_BASE
+);
+
+console.log(
+  "========================================"
+);
+
 </script>
 
-<!-- ELEVENLABS ENGINE - SATU SAHAJA -->
+
+<!-- ==========================================================
+     ELEVENLABS ENGINE
+     Keep speakNaira.js as separate file.
+=========================================================== -->
 
 <script src="speakNaira.js"></script>
+
 
 </body>
 </html>
