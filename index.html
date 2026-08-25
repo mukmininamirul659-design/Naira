@@ -3335,7 +3335,7 @@ if (clearMediaFile) {
 }
 
 /* ============================================================
-   UPLOAD VOICE CLONE TO API
+   UPLOAD VOICE CLONE TO BLOB + CREATE VOICE
 ============================================================ */
 
 if (uploadVoiceClone) {
@@ -3351,7 +3351,35 @@ if (uploadVoiceClone) {
         );
 
         return;
+      }
 
+
+      const file =
+        selectedVoiceCloneFile;
+
+
+      /* ======================================================
+         VALIDATE 25MB
+      ====================================================== */
+
+      const MAX_VOICE_SIZE =
+        25 * 1024 * 1024;
+
+
+      if (file.size > MAX_VOICE_SIZE) {
+
+        showNairaToast(
+          "Fail melebihi 25MB"
+        );
+
+        if (voiceCloneStatus) {
+
+          voiceCloneStatus.textContent =
+            "❌ Maksimum saiz fail ialah 25MB.";
+
+        }
+
+        return;
       }
 
 
@@ -3365,53 +3393,237 @@ if (uploadVoiceClone) {
       if (voiceCloneStatus) {
 
         voiceCloneStatus.textContent =
-          "Sedang menghantar sample ke ElevenLabs...";
+          "Sedang upload sample suara...";
 
       }
 
 
       try {
 
-        const formData =
-          new FormData();
+        /* ====================================================
+           STEP 1
+           GET BLOB UPLOAD TOKEN / URL
+        ==================================================== */
 
-
-        formData.append(
-          "name",
-          "Naira Custom Voice"
-        );
-
-
-        formData.append(
-          "description",
-          "Custom voice uploaded from Naira Voice Center"
-        );
-
-
-        formData.append(
-          "files[]",
-          selectedVoiceCloneFile
-        );
-
-
-        const response =
+        const prepareResponse =
           await fetch(
             API_BASE +
-            "/api/voice-clone",
+            "/api/upload-voice",
             {
+              method: "POST",
 
-              method:
-                "POST",
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
 
               body:
-                formData
+                JSON.stringify({
+                  filename:
+                    file.name,
 
+                  contentType:
+                    file.type ||
+                    "application/octet-stream",
+
+                  size:
+                    file.size
+                })
             }
           );
 
 
-        const raw =
-          await response.text();
+        const prepareRaw =
+          await prepareResponse.text();
+
+
+        let prepareData = {};
+
+
+        try {
+
+          prepareData =
+            prepareRaw
+              ? JSON.parse(
+                  prepareRaw
+                )
+              : {};
+
+        } catch (error) {
+
+          throw new Error(
+            prepareRaw ||
+            "Upload API response tidak sah."
+          );
+
+        }
+
+
+        if (!prepareResponse.ok) {
+
+          throw new Error(
+            prepareData.error ||
+            "Server gagal menyediakan voice upload."
+          );
+
+        }
+
+
+        /*
+         * API boleh pulangkan sama ada:
+         *
+         * uploadUrl
+         * atau
+         * url
+         */
+
+        const uploadUrl =
+          prepareData.uploadUrl ||
+          prepareData.url;
+
+
+        if (!uploadUrl) {
+
+          throw new Error(
+            "Upload URL tidak diterima."
+          );
+
+        }
+
+
+        /* ====================================================
+           STEP 2
+           UPLOAD FILE DIRECTLY
+           FILE TIDAK MELALUI VERCEL FUNCTION
+        ==================================================== */
+
+        if (voiceCloneStatus) {
+
+          voiceCloneStatus.textContent =
+            "⏳ Menghantar fail ke storage...";
+
+        }
+
+
+        const blobResponse =
+          await fetch(
+            uploadUrl,
+            {
+              method: "PUT",
+
+              headers: {
+                "Content-Type":
+                  file.type ||
+                  "application/octet-stream"
+              },
+
+              body:
+                file
+            }
+          );
+
+
+        if (!blobResponse.ok) {
+
+          const blobError =
+            await blobResponse.text();
+
+          throw new Error(
+            blobError ||
+            "Upload fail ke storage gagal."
+          );
+
+        }
+
+
+        /*
+         * Sesetengah upload endpoint
+         * pulangkan JSON.
+         */
+
+        let blobData = {};
+
+
+        try {
+
+          const blobRaw =
+            await blobResponse.text();
+
+          blobData =
+            blobRaw
+              ? JSON.parse(blobRaw)
+              : {};
+
+        } catch (error) {}
+
+
+        const blobUrl =
+          blobData.url ||
+          prepareData.blobUrl ||
+          prepareData.fileUrl ||
+          uploadUrl.split("?")[0];
+
+
+        if (!blobUrl) {
+
+          throw new Error(
+            "URL sample suara tidak diterima."
+          );
+
+        }
+
+
+        /* ====================================================
+           STEP 3
+           CREATE ELEVENLABS VOICE
+        ==================================================== */
+
+        if (voiceCloneStatus) {
+
+          voiceCloneStatus.textContent =
+            "🎙️ Sedang mencipta voice ElevenLabs...";
+
+        }
+
+
+        const createResponse =
+          await fetch(
+            API_BASE +
+            "/api/voice-upload",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+
+                  name:
+                    "Naira Custom Voice",
+
+                  description:
+                    "Custom voice uploaded from Naira Voice Center",
+
+                  fileUrl:
+                    blobUrl,
+
+                  filename:
+                    file.name,
+
+                  contentType:
+                    file.type ||
+                    "audio/mpeg"
+
+                })
+            }
+          );
+
+
+        const createRaw =
+          await createResponse.text();
 
 
         let data = {};
@@ -3420,33 +3632,40 @@ if (uploadVoiceClone) {
         try {
 
           data =
-            raw
-              ? JSON.parse(raw)
+            createRaw
+              ? JSON.parse(
+                  createRaw
+                )
               : {};
 
         } catch (error) {
 
-          data = {
-            error:
-              raw ||
-              "Server response tidak sah."
-          };
+          throw new Error(
+            createRaw ||
+            "Voice API response tidak sah."
+          );
 
         }
 
 
-        if (!response.ok) {
+        if (!createResponse.ok) {
 
           throw new Error(
             data.error ||
+            data.message ||
             "Voice clone gagal."
           );
 
         }
 
 
+        /* ====================================================
+           GET VOICE ID
+        ==================================================== */
+
         const voiceId =
           data.voice_id ||
+          data.voiceId ||
           data.voice?.voice_id ||
           "";
 
@@ -3467,7 +3686,7 @@ if (uploadVoiceClone) {
 
 
         /* ====================================================
-           SAVE NEW VOICE AS ACTIVE VOICE
+           SAVE ACTIVE VOICE
         ==================================================== */
 
         localStorage.setItem(
@@ -3482,9 +3701,7 @@ if (uploadVoiceClone) {
         );
 
 
-        if (
-          window.voiceSettings
-        ) {
+        if (window.voiceSettings) {
 
           window.voiceSettings.voiceId =
             voiceId;
@@ -3496,7 +3713,7 @@ if (uploadVoiceClone) {
 
 
         /* ====================================================
-           RELOAD ELEVENLABS VOICE LIST
+           RELOAD ELEVENLABS VOICES
         ==================================================== */
 
         if (
@@ -3510,9 +3727,7 @@ if (uploadVoiceClone) {
 
 
         /* ====================================================
-           REFRESH SELECT
-           speakNaira.js may own renderVoiceSelect,
-           so update manually if needed.
+           SELECT NEW VOICE
         ==================================================== */
 
         const voiceSelect =
@@ -3564,6 +3779,10 @@ if (uploadVoiceClone) {
         }
 
 
+        /* ====================================================
+           SUCCESS
+        ==================================================== */
+
         if (voiceCloneStatus) {
 
           voiceCloneStatus.textContent =
@@ -3576,10 +3795,6 @@ if (uploadVoiceClone) {
           "Voice berjaya dibuat 🎙️"
         );
 
-
-        /* ====================================================
-           RESET FILE INPUT
-        ==================================================== */
 
         selectedVoiceCloneFile =
           null;
@@ -3608,7 +3823,7 @@ if (uploadVoiceClone) {
       } catch (error) {
 
         console.error(
-          "VOICE CLONE UPLOAD ERROR:",
+          "VOICE UPLOAD ERROR:",
           error
         );
 
@@ -3619,14 +3834,14 @@ if (uploadVoiceClone) {
             "❌ " +
             (
               error.message ||
-              "Voice clone gagal."
+              "Voice upload gagal."
             );
 
         }
 
 
         showNairaToast(
-          "Voice clone gagal"
+          "Voice upload gagal"
         );
 
 
