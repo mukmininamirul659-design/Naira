@@ -3334,7 +3334,319 @@ if (clearMediaFile) {
 
 }
 
+/* ============================================================
+   UPLOAD VOICE CLONE TO API
+============================================================ */
 
+if (uploadVoiceClone) {
+
+  uploadVoiceClone.addEventListener(
+    "click",
+    async function() {
+
+      if (!selectedVoiceCloneFile) {
+
+        showNairaToast(
+          "Pilih sample suara dahulu"
+        );
+
+        return;
+
+      }
+
+
+      uploadVoiceClone.disabled =
+        true;
+
+      uploadVoiceClone.textContent =
+        "⏳ Uploading...";
+
+
+      if (voiceCloneStatus) {
+
+        voiceCloneStatus.textContent =
+          "Sedang menghantar sample ke ElevenLabs...";
+
+      }
+
+
+      try {
+
+        const formData =
+          new FormData();
+
+
+        formData.append(
+          "name",
+          "Naira Custom Voice"
+        );
+
+
+        formData.append(
+          "description",
+          "Custom voice uploaded from Naira Voice Center"
+        );
+
+
+        formData.append(
+          "files[]",
+          selectedVoiceCloneFile
+        );
+
+
+        const response =
+          await fetch(
+            API_BASE +
+            "/api/voice-clone",
+            {
+
+              method:
+                "POST",
+
+              body:
+                formData
+
+            }
+          );
+
+
+        const raw =
+          await response.text();
+
+
+        let data = {};
+
+
+        try {
+
+          data =
+            raw
+              ? JSON.parse(raw)
+              : {};
+
+        } catch (error) {
+
+          data = {
+            error:
+              raw ||
+              "Server response tidak sah."
+          };
+
+        }
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.error ||
+            "Voice clone gagal."
+          );
+
+        }
+
+
+        const voiceId =
+          data.voice_id ||
+          data.voice?.voice_id ||
+          "";
+
+
+        const voiceName =
+          data.name ||
+          data.voice?.name ||
+          "Naira Custom Voice";
+
+
+        if (!voiceId) {
+
+          throw new Error(
+            "Voice ID tidak diterima."
+          );
+
+        }
+
+
+        /* ====================================================
+           SAVE NEW VOICE AS ACTIVE VOICE
+        ==================================================== */
+
+        localStorage.setItem(
+          "naira_eleven_voice_id",
+          voiceId
+        );
+
+
+        localStorage.setItem(
+          "naira_voice_name",
+          voiceName
+        );
+
+
+        if (
+          window.voiceSettings
+        ) {
+
+          window.voiceSettings.voiceId =
+            voiceId;
+
+          window.voiceSettings.voiceName =
+            voiceName;
+
+        }
+
+
+        /* ====================================================
+           RELOAD ELEVENLABS VOICE LIST
+        ==================================================== */
+
+        if (
+          typeof window.loadElevenLabsVoices ===
+          "function"
+        ) {
+
+          await window.loadElevenLabsVoices();
+
+        }
+
+
+        /* ====================================================
+           REFRESH SELECT
+           speakNaira.js may own renderVoiceSelect,
+           so update manually if needed.
+        ==================================================== */
+
+        const voiceSelect =
+          document.getElementById(
+            "voiceSelect"
+          );
+
+
+        if (voiceSelect) {
+
+          const exists =
+            Array.from(
+              voiceSelect.options
+            ).some(
+              function(option) {
+
+                return (
+                  option.value ===
+                  voiceId
+                );
+
+              }
+            );
+
+
+          if (!exists) {
+
+            const option =
+              document.createElement(
+                "option"
+              );
+
+            option.value =
+              voiceId;
+
+            option.textContent =
+              voiceName;
+
+            voiceSelect.appendChild(
+              option
+            );
+
+          }
+
+
+          voiceSelect.value =
+            voiceId;
+
+        }
+
+
+        if (voiceCloneStatus) {
+
+          voiceCloneStatus.textContent =
+            "✅ Voice berjaya dibuat dan dipilih.";
+
+        }
+
+
+        showNairaToast(
+          "Voice berjaya dibuat 🎙️"
+        );
+
+
+        /* ====================================================
+           RESET FILE INPUT
+        ==================================================== */
+
+        selectedVoiceCloneFile =
+          null;
+
+
+        if (voiceCloneFileInput) {
+
+          voiceCloneFileInput.value =
+            "";
+
+        }
+
+
+        if (voiceCloneFileInfo) {
+
+          voiceCloneFileInfo.textContent =
+            "";
+
+          voiceCloneFileInfo.classList.remove(
+            "active"
+          );
+
+        }
+
+
+      } catch (error) {
+
+        console.error(
+          "VOICE CLONE UPLOAD ERROR:",
+          error
+        );
+
+
+        if (voiceCloneStatus) {
+
+          voiceCloneStatus.textContent =
+            "❌ " +
+            (
+              error.message ||
+              "Voice clone gagal."
+            );
+
+        }
+
+
+        showNairaToast(
+          "Voice clone gagal"
+        );
+
+
+      } finally {
+
+        uploadVoiceClone.disabled =
+          selectedVoiceCloneFile
+            ? false
+            : true;
+
+
+        uploadVoiceClone.textContent =
+          "⬆️ Upload Sample Suara";
+
+      }
+
+    }
+  );
+
+}
 /* ============================================================
    VOICE PLAYER
 ============================================================ */
