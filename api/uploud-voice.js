@@ -1,6 +1,15 @@
 /* ============================================================
    NAIRA VOICE UPLOAD API
-   Step 1: Receive Audio / Video File
+   Audio Upload Parser
+   Formidable v3
+============================================================ */
+
+import formidable from "formidable";
+import fs from "fs";
+
+
+/* ============================================================
+   VERCEL CONFIG
 ============================================================ */
 
 export const config = {
@@ -11,10 +20,156 @@ export const config = {
 
 
 /* ============================================================
+   ALLOWED FILE TYPES
+============================================================ */
+
+const ALLOWED_MIME_TYPES = [
+  "audio/mpeg",
+  "audio/mp3",
+  "audio/wav",
+  "audio/x-wav",
+  "audio/mp4",
+  "audio/m4a",
+  "audio/x-m4a",
+  "audio/aac",
+  "audio/ogg",
+  "audio/webm",
+  "video/mp4",
+  "video/quicktime",
+  "video/webm"
+];
+
+
+const MAX_FILE_SIZE =
+  25 * 1024 * 1024;
+
+
+/* ============================================================
+   GET FIRST FILE
+============================================================ */
+
+function getFirstFile(files) {
+
+  if (!files) {
+    return null;
+  }
+
+
+  /*
+   * Preferred field name:
+   *
+   * file
+   */
+
+  if (files.file) {
+
+    return Array.isArray(files.file)
+      ? files.file[0]
+      : files.file;
+
+  }
+
+
+  /*
+   * Also accept:
+   *
+   * audio
+   * voice
+   * video
+   */
+
+  const possibleFields = [
+    "audio",
+    "voice",
+    "video"
+  ];
+
+
+  for (
+    const field of possibleFields
+  ) {
+
+    if (files[field]) {
+
+      return Array.isArray(
+        files[field]
+      )
+        ? files[field][0]
+        : files[field];
+
+    }
+
+  }
+
+
+  /*
+   * Fallback:
+   * take first uploaded file.
+   */
+
+  const keys =
+    Object.keys(files);
+
+
+  if (!keys.length) {
+    return null;
+  }
+
+
+  const first =
+    files[keys[0]];
+
+
+  return Array.isArray(first)
+    ? first[0]
+    : first;
+
+}
+
+
+/* ============================================================
+   DELETE TEMP FILE
+============================================================ */
+
+async function removeTempFile(
+  filepath
+) {
+
+  if (!filepath) {
+    return;
+  }
+
+
+  try {
+
+    await fs.promises.unlink(
+      filepath
+    );
+
+  } catch (error) {
+
+    /*
+     * Ignore cleanup errors.
+     */
+
+    console.warn(
+      "TEMP FILE CLEANUP:",
+      error?.message
+    );
+
+  }
+
+}
+
+
+/* ============================================================
    MAIN HANDLER
 ============================================================ */
 
-export default async function handler(req, res) {
+export default async function handler(
+  req,
+  res
+) {
 
   /* ==========================================================
      CORS
@@ -40,7 +195,9 @@ export default async function handler(req, res) {
      OPTIONS
   ========================================================== */
 
-  if (req.method === "OPTIONS") {
+  if (
+    req.method === "OPTIONS"
+  ) {
 
     return res
       .status(200)
@@ -50,29 +207,40 @@ export default async function handler(req, res) {
 
 
   /* ==========================================================
-     METHOD CHECK
+     METHOD
   ========================================================== */
 
-  if (req.method !== "POST") {
+  if (
+    req.method !== "POST"
+  ) {
 
     return res
       .status(405)
       .json({
+
         success: false,
-        error: "Method not allowed"
+
+        error:
+          "Method not allowed"
+
       });
 
   }
 
 
+  let uploadedFile = null;
+
+
   try {
 
     /* ========================================================
-       CONTENT TYPE
+       CONTENT TYPE CHECK
     ======================================================== */
 
     const contentType =
-      req.headers["content-type"] || "";
+      req.headers[
+        "content-type"
+      ] || "";
 
 
     if (
@@ -84,86 +252,199 @@ export default async function handler(req, res) {
       return res
         .status(400)
         .json({
+
           success: false,
+
           error:
             "Request mesti menggunakan multipart/form-data."
+
         });
 
     }
 
 
     /* ========================================================
-       READ RAW REQUEST
+       FORMIDABLE
     ======================================================== */
 
-    const chunks = [];
+    const form =
+      formidable({
 
+        multiples: false,
 
-    for await (
-      const chunk of req
-    ) {
+        maxFiles: 1,
 
-      chunks.push(chunk);
+        maxFileSize:
+          MAX_FILE_SIZE,
 
-    }
+        allowEmptyFiles:
+          false,
 
+        minFileSize: 1,
 
-    const buffer =
-      Buffer.concat(chunks);
+        keepExtensions:
+          true
+
+      });
 
 
     /* ========================================================
-       EMPTY FILE CHECK
+       PARSE UPLOAD
     ======================================================== */
 
-    if (!buffer.length) {
+    const [
+      fields,
+      files
+    ] =
+      await form.parse(req);
+
+
+    uploadedFile =
+      getFirstFile(files);
+
+
+    /* ========================================================
+       FILE CHECK
+    ======================================================== */
+
+    if (!uploadedFile) {
 
       return res
         .status(400)
         .json({
+
           success: false,
+
           error:
-            "Tiada data audio/video diterima."
+            "Tiada fail audio atau video diterima."
+
         });
 
     }
 
 
     /* ========================================================
-       SIZE CHECK
-       25 MB maximum for this first version
+       FILE INFO
     ======================================================== */
 
-    const MAX_FILE_SIZE =
-      25 * 1024 * 1024;
+    const originalFilename =
+      uploadedFile.originalFilename ||
+      "voice-file";
+
+
+    const mimetype =
+      uploadedFile.mimetype ||
+      "";
+
+
+    const size =
+      Number(
+        uploadedFile.size
+      ) || 0;
+
+
+    const filepath =
+      uploadedFile.filepath;
+
+
+    /* ========================================================
+       SIZE VALIDATION
+    ======================================================== */
+
+    if (
+      !size ||
+      size >
+        MAX_FILE_SIZE
+    ) {
+
+      await removeTempFile(
+        filepath
+      );
+
+
+      return res
+        .status(400)
+        .json({
+
+          success: false,
+
+          error:
+            "Saiz fail tidak sah."
+
+        });
+
+    }
+
+
+    /* ========================================================
+       MIME VALIDATION
+    ======================================================== */
+
+    if (
+      mimetype &&
+      !ALLOWED_MIME_TYPES.includes(
+        mimetype
+      )
+    ) {
+
+      await removeTempFile(
+        filepath
+      );
+
+
+      return res
+        .status(415)
+        .json({
+
+          success: false,
+
+          error:
+            "Format fail tidak disokong.",
+
+          mimetype:
+            mimetype
+
+        });
+
+    }
+
+
+    /* ========================================================
+       READ ACTUAL FILE
+    ======================================================== */
+
+    const fileBuffer =
+      await fs.promises.readFile(
+        filepath
+      );
 
 
     if (
-      buffer.length >
-      MAX_FILE_SIZE
+      !fileBuffer ||
+      !fileBuffer.length
     ) {
 
+      await removeTempFile(
+        filepath
+      );
+
+
       return res
-        .status(413)
+        .status(400)
         .json({
+
           success: false,
+
           error:
-            "Fail terlalu besar. Maksimum 25MB."
+            "Fail yang diterima kosong."
+
         });
 
     }
 
 
     /* ========================================================
-       SUCCESS
-
-       IMPORTANT:
-       At this stage we only confirm that the server
-       successfully receives the multipart upload.
-
-       Next step:
-       Parse the multipart file and send the actual audio
-       sample to ElevenLabs Voice API.
+       LOG
     ======================================================== */
 
     console.log(
@@ -171,17 +452,28 @@ export default async function handler(req, res) {
     );
 
     console.log(
-      "🎤 NAIRA VOICE UPLOAD RECEIVED"
+      "🎙️ NAIRA VOICE FILE RECEIVED"
     );
 
     console.log(
-      "Content-Type:",
-      contentType
+      "Filename:",
+      originalFilename
     );
 
     console.log(
-      "Request size:",
-      buffer.length,
+      "MIME:",
+      mimetype
+    );
+
+    console.log(
+      "Size:",
+      size,
+      "bytes"
+    );
+
+    console.log(
+      "Buffer:",
+      fileBuffer.length,
       "bytes"
     );
 
@@ -190,6 +482,29 @@ export default async function handler(req, res) {
     );
 
 
+    /* ========================================================
+       CLEAN TEMP FILE
+    ======================================================== */
+
+    await removeTempFile(
+      filepath
+    );
+
+
+    uploadedFile = null;
+
+
+    /* ========================================================
+       SUCCESS
+
+       IMPORTANT:
+       We have now confirmed that the actual uploaded
+       audio/video file can be parsed and read.
+
+       Next step will send the sample to ElevenLabs
+       to create a usable voice.
+    ======================================================== */
+
     return res
       .status(200)
       .json({
@@ -197,10 +512,20 @@ export default async function handler(req, res) {
         success: true,
 
         message:
-          "Naira berjaya menerima fail audio/video.",
+          "Naira berjaya membaca fail suara.",
 
-        receivedBytes:
-          buffer.length
+        file: {
+
+          name:
+            originalFilename,
+
+          type:
+            mimetype,
+
+          size:
+            size
+
+        }
 
       });
 
@@ -208,14 +533,58 @@ export default async function handler(req, res) {
   } catch (error) {
 
     /* ========================================================
-       SERVER ERROR
+       CLEANUP AFTER ERROR
     ======================================================== */
 
+    if (
+      uploadedFile?.filepath
+    ) {
+
+      await removeTempFile(
+        uploadedFile.filepath
+      );
+
+    }
+
+
     console.error(
-      "NAIRA VOICE UPLOAD ERROR:",
+      "NAIRA UPLOAD VOICE ERROR:",
       error
     );
 
+
+    /* ========================================================
+       FORMIDABLE FILE TOO LARGE
+    ======================================================== */
+
+    if (
+      error?.code === 1009 ||
+      String(
+        error?.message || ""
+      )
+        .toLowerCase()
+        .includes(
+          "maxfilesize"
+        )
+    ) {
+
+      return res
+        .status(413)
+        .json({
+
+          success: false,
+
+          error:
+            "Fail terlalu besar. Maksimum 25MB."
+
+        });
+
+    }
+
+
+    /* ========================================================
+       SERVER ERROR
+    ======================================================== */
 
     return res
       .status(500)
@@ -224,7 +593,7 @@ export default async function handler(req, res) {
         success: false,
 
         error:
-          "Server gagal menerima fail audio/video.",
+          "Server gagal memproses fail suara.",
 
         details:
           error?.message ||
