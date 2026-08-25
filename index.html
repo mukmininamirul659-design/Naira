@@ -3007,6 +3007,102 @@ function clearSelectedMedia() {
 
 }
 
+/* ============================================================
+   VOICE CLONE UPLOAD
+============================================================ */
+
+const voiceCloneFileInput =
+  document.getElementById(
+    "voiceCloneFileInput"
+  );
+
+const selectVoiceCloneFile =
+  document.getElementById(
+    "selectVoiceCloneFile"
+  );
+
+const uploadVoiceClone =
+  document.getElementById(
+    "uploadVoiceClone"
+  );
+
+const voiceCloneFileInfo =
+  document.getElementById(
+    "voiceCloneFileInfo"
+  );
+
+const voiceCloneStatus =
+  document.getElementById(
+    "voiceCloneStatus"
+  );
+
+let selectedVoiceCloneFile = null;
+
+
+if (
+  selectVoiceCloneFile &&
+  voiceCloneFileInput
+) {
+
+  selectVoiceCloneFile.addEventListener(
+    "click",
+    function() {
+
+      voiceCloneFileInput.click();
+
+    }
+  );
+
+}
+
+
+if (voiceCloneFileInput) {
+
+  voiceCloneFileInput.addEventListener(
+    "change",
+    function() {
+
+      const file =
+        voiceCloneFileInput.files?.[0];
+
+      if (!file) {
+        return;
+      }
+
+      selectedVoiceCloneFile = file;
+
+      if (voiceCloneFileInfo) {
+
+        voiceCloneFileInfo.textContent =
+          "🎙️ " +
+          file.name +
+          " • " +
+          formatFileSize(file.size);
+
+        voiceCloneFileInfo.classList.add(
+          "active"
+        );
+
+      }
+
+      if (uploadVoiceClone) {
+
+        uploadVoiceClone.disabled =
+          false;
+
+      }
+
+      if (voiceCloneStatus) {
+
+        voiceCloneStatus.textContent =
+          "Sample suara sedia untuk dihantar.";
+
+      }
+
+    }
+  );
+
+}
 
 function setSelectedMedia(
   file,
